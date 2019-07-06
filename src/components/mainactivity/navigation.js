@@ -6,9 +6,9 @@ import Register from '../login/register.js';
 import Search from './search.js';
 import Welcome from '../login/welcome.js';
 import Station from '../mainactivity/station.js';
+import SearchOption from '../mainactivity/searchOption.js';
+import AutoCompleteTrain from '../mainactivity/autoCompleteTrain.js'
 import SplashScreen from 'react-native-splash-screen';
-import Demo from '../login/ButtonExample.js';
-
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 export  class App extends Component{
@@ -45,9 +45,6 @@ const AppNavigator= createStackNavigator({
   
   Search:{
     screen:Search,
-    navigationOptions:{
-      header:null,
-    }
   },
   Register:{
     screen:Register,
@@ -55,11 +52,11 @@ const AppNavigator= createStackNavigator({
       header:null,
     }
 },
-Demo:{
-screen:Demo,
-navigationOptions:{
-  header:null,
-}
+SearchOption:{
+  screen:SearchOption,
+  navigationOptions:{
+    header:null,
+  }
 },
   Station:{
     screen:Station,
@@ -67,6 +64,12 @@ navigationOptions:{
       header:null,
     }
 },
+AutoCompleteTrain:{
+  screen:AutoCompleteTrain,
+  navigationOptions:{
+    header:null
+  }
+}
 },
 {
 
