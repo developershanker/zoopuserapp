@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text,StyleSheet,TextInput,Clipboard,Button } from 'react-native';
-import {RadioButton} from 'native-base';
+import { View,StyleSheet,TextInput,Clipboard,Button,ScrollView,Image } from 'react-native';
+import { RadioButton, Text } from 'react-native-paper';
+import { CustomButton } from '../assests/customButton';
 
 
 export default class Search extends Component {
@@ -8,57 +9,69 @@ export default class Search extends Component {
     super(props);
     this.state = {
       text:'',
-      value:'Enter PNR'|'Enter Train no.',
-      status:'',
-      placeholder:'',
-
+      value:'first',
       
     };
+  }
+  onTrain(){
+    
   }
   render() {
       
     return (
-      
       <View style={styles.slide}>
-        <Text style={styles.heading}>Kindly provide the details</Text>
+        <View style={styles.scroll}>
+        <ScrollView
+        horizontal={true}
+        showsHorizontalScrollIndicator={true}
+        alwaysBounceHorizontal={true}
+        contentContainerStyle={styles.contentContainer}
+        >
+          <Image style={styles.image} source={require('../images/roundimg2.jpg')}/>
+          <Image style={styles.image} source={require('../images/roundimg3.jpg')}/>
+          <Image style={styles.image} source={require('../images/roundimg4.jpg')}/>
+          <Image style={styles.image} source={require('../images/roundimg5.jpg')}/>
+          <Image style={styles.image} source={require('../images/roundimg6.jpg')}/>
+        </ScrollView>
+        </View>
+        <Text>Kindly provide the details</Text>
       <RadioButton.Group
         onValueChange={value => this.setState({ value })}
         value={this.state.value}
-        onValueChange={placeholder=>this.setState({ placeholder })}
         
-        
-           
       >
         <View style={styles.radioButton}>
           <Text>PNR</Text>
-          <RadioButton
-          value="Enter PNR"
-            />
-
+          <RadioButton 
+          value="first" 
+          />
+       
           <Text>Train No.</Text>
           <RadioButton 
-          value="Enter Train no."
+          value="second"        
            />
         </View>
+        </RadioButton.Group>
+        <View style={styles.radioButton}>
         
-      </RadioButton.Group>
-      <TextInput
-       
-       placeholder={this.state.placeholder}
-      //  value={this.state.placeholder}
+     <TextInput
        keyboardType='number-pad'
        maxLength={10}
+      onValueChange={placeholder=>this.setState({placeholder})}
        onChangeText={text => this.setState({ text })}
        
       />
       
-    <Button
+    <CustomButton
     onPress={()=>this.props.navigation.navigate('Station')}
-    >
-      Submit
-    </Button>
+    title='Submit'
+    />
+      
+      </View>
       </View>
 
+      
+   
     );
   }
   
@@ -66,20 +79,34 @@ export default class Search extends Component {
 const styles = StyleSheet.create({
   slide: {
     flex: 1,
-    alignItems: 'stretch',
-    justifyContent: 'center',
-    backgroundColor:'#ffffff'
+    alignItems:'stretch',
+    justifyContent:'flex-start',
+    backgroundColor:'#ffffff',
+   
   },
+  scroll:{
+    height:150,
+    marginLeft: 10,
+  },
+  image: {
+    width:100,
+    height:100,
+    marginLeft: 10,
+  },
+  contentContainer:{
+    paddingVertical: 25,
+    justifyContent: 'space-around',
+  },  
   radioButton:{
-    
     alignItems:'center',
     flexDirection: 'row',
-    alignContent: 'space-between',
+    alignContent: 'center',
     justifyContent: 'space-evenly',
   },
   heading:{
     color: 'black',
     fontWeight: 'bold',
     fontSize: 20,
-  }
+  },
+  
 })
