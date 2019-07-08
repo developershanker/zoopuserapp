@@ -23,15 +23,15 @@ export default class Search extends Component {
         <View style={styles.scroll}>
         <ScrollView
         horizontal={true}
-        showsHorizontalScrollIndicator={true}
+        showsHorizontalScrollIndicator={false}
         alwaysBounceHorizontal={true}
         contentContainerStyle={styles.contentContainer}
         >
-          <Image style={styles.image} source={require('../images/roundimg2.jpg')}/>
-          <Image style={styles.image} source={require('../images/roundimg3.jpg')}/>
-          <Image style={styles.image} source={require('../images/roundimg4.jpg')}/>
-          <Image style={styles.image} source={require('../images/roundimg5.jpg')}/>
-          <Image style={styles.image} source={require('../images/roundimg6.jpg')}/>
+          <Image style={styles.image} source={require('../images/promo.png')}/>
+          <Image style={styles.image} source={require('../images/promo1.png')}/>
+          <Image style={styles.image} source={require('../images/promo3.png')}/>
+          <Image style={styles.image} source={require('../images/promo5.png')}/>
+          <Image style={styles.image} source={require('../images/promo4.jpg')}/>
         </ScrollView>
         </View>
         <Text>Kindly provide the details</Text>
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   image: {
-    width:100,
+    width:180,
     height:100,
     marginLeft: 10,
   },

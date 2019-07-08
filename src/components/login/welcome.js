@@ -26,7 +26,8 @@ export default class Welcome extends Component {
         />
 <CustomButton
             title="LOGIN"
-            onPress={() => this.props.navigation.navigate('Login')}
+            onPress={
+              () => this.props.navigation.navigate('Login')}
             style={styles.button}
             textStyle={styles.text}
         />

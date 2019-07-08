@@ -45,6 +45,9 @@ const AppNavigator= createStackNavigator({
   
   Search:{
     screen:Search,
+    navigationOptions:{
+      headerTitle:'Zoop',
+    }
   },
   Register:{
     screen:Register,
@@ -61,8 +64,9 @@ SearchOption:{
   Station:{
     screen:Station,
     navigationOptions:{
-      header:null,
+      headerTitle:'12196   Lko-Agra Intercity',
     }
+   
 },
 AutoCompleteTrain:{
   screen:AutoCompleteTrain,
