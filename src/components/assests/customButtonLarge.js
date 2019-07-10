@@ -15,7 +15,7 @@ export const CustomButton = (props) => {
 const styles = StyleSheet.create({
     button: {
         display: 'flex',
-        width: 300,
+      width: 300,
         height: 30,
         borderRadius: 5,
         justifyContent:'center',
