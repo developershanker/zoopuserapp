@@ -5212,6 +5212,11 @@ react-native-autocomplete-search@^1.0.8:
     "@babel/preset-flow" "^7.0.0"
     lodash "^4.17.11"
 
+react-native-custom-radio-button@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-custom-radio-button/-/react-native-custom-radio-button-1.0.2.tgz#e646b970eb50f8cbcdd35faafdbe5dedbd1dcfc7"
+  integrity sha512-5HxsUIiZ4174VQyfBS2u2KoxXZtiJji57bbOU43hrKxvvGfPs+2Nl1O3zXxz6FwI35JqlMJSRtjli+ojoH4PIw==
+
 react-native-drawer@2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/react-native-drawer/-/react-native-drawer-2.5.1.tgz#08b9314184f48c724f1b467f8859797369798654"

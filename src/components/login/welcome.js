@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View ,Button, Text,Icon,TouchableOpacity,StyleSheet,Alert,Image} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {LoginButton} from 'react-native-facebook-account-kit';
-import { CustomButton } from '../assests/customButton.js';
+import { CustomButton } from '../assests/customButtonShort.js';
 import {FadeInView} from '../assests/fadeInView.js';
 
 
@@ -28,15 +28,15 @@ export default class Welcome extends Component {
             title="LOGIN"
             onPress={
               () => this.props.navigation.navigate('Login')}
-            style={styles.button}
+            // style={styles.button}
             textStyle={styles.text}
         />
 
 <CustomButton
             title="SKIP"
             onPress={() => this.props.navigation.navigate('Search')}
-            style={styles.button}
-            textStyle={styles.text}
+            // style={styles.button}
+            // textStyle={styles.text}
         />
         </FadeInView>
 
