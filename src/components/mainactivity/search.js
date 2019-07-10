@@ -1,11 +1,21 @@
 import React, { Component } from 'react';
 import { View,StyleSheet,Clipboard,Button,ScrollView,Image,TextInput } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 import { RadioButton, Text } from 'react-native-paper';
 import { CustomButton } from '../assests/customButtonLarge';
-import { Grid } from 'native-base';
-
-
+import {CustomGridIcon} from '../assests/customGridIcon';
+import {createDrawerNavigator} from 'react-navigation';
+import Contact from '../services/contact';
+import FAQ from '../services/faq';
+import Feedback from '../services/feedback';
+import MyOrders from '../services/myOrders';
+import MyWallet from '../services/myWallet';
+import Profile from '../services/profile';
+import RateUs from '../services/rateUs'; 
 export default class Search extends Component {
+  componentDidMount() {
+    SplashScreen.hide();
+}
   constructor(props) {
     super(props);
     this.state = {
@@ -19,21 +29,12 @@ export default class Search extends Component {
   render() {
       
     return (
-      <View style={styles.slide}>
-        <View style={styles.scroll}>
-        <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        alwaysBounceHorizontal={true}
-        contentContainerStyle={styles.contentContainer}
-        >
-          <Image style={styles.image} source={require('../images/promo.png')}/>
-          <Image style={styles.image} source={require('../images/promo1.png')}/>
-          <Image style={styles.image} source={require('../images/promo4.jpg')}/>
-          <Image style={styles.image} source={require('../images/promo5.png')}/>
-          <Image style={styles.image} source={require('../images/promo1.png')}/>
-        </ScrollView>
+      <View style={styles.slide} >
+        
+        <View>
+        <Image style={styles.img} source={require('../images/r.jpg')}/>
         </View>
+       
       <RadioButton.Group
         onValueChange={value => this.setState({ value })}
         value={this.state.value}
@@ -71,11 +72,23 @@ export default class Search extends Component {
     title='SEARCH'
     />
     </View>
+    <CustomGridIcon/>
     
+    <View style={styles.scroll}>
+        <ScrollView
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        alwaysBounceHorizontal={true}
+        contentContainerStyle={styles.contentContainer}
+        >
+          <Image style={styles.image} source={require('../images/promo.png')}/>
+          <Image style={styles.image} source={require('../images/promo1.png')}/>
+          <Image style={styles.image} source={require('../images/promo4.jpg')}/>
+          <Image style={styles.image} source={require('../images/promo5.png')}/>
+          <Image style={styles.image} source={require('../images/promo1.png')}/>
+        </ScrollView>
+        </View>
     </View>
-
-      
-   
     );
   }
   
@@ -84,24 +97,29 @@ const styles = StyleSheet.create({
   slide: {
     flex: 1,
     alignItems:'stretch',
-    justifyContent:'flex-start',
+    justifyContent:'center',
     backgroundColor:'#ffffff',
-   
+    flexDirection:'column',
+
   },
  main: {
-    alignItems:'stretch',
+    alignItems:'center',
     justifyContent:'center',
-   
    
   },
   scroll:{
-    height:150,
+    height:100,
     marginLeft: 10,
+    marginBottom:10
+  },
+  img:{
+    width:400,
+    height:150,
   },
   image: {
     width:200,
     height:100,
-    margin:10
+    marginLeft:5
 
   },
   contentContainer:{
@@ -128,3 +146,4 @@ const styles = StyleSheet.create({
   },
   
 })
+
