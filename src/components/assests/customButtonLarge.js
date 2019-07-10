@@ -15,14 +15,14 @@ export const CustomButton = (props) => {
 const styles = StyleSheet.create({
     button: {
         display: 'flex',
-        width: 100,
+      width: 300,
         height: 30,
         borderRadius: 5,
         justifyContent:'center',
         paddingVertical: 20,
         alignItems: 'center',
-        backgroundColor: '#000000',
-        shadowColor: '#000000',
+        backgroundColor: '#f2c744',
+        shadowColor: '#f2c744',
         shadowOpacity: 0.4,
         shadowOffset: { height: 10, width: 10 },
         shadowRadius: 20,
@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textTransform: 'uppercase',
         color: '#ffffff',
+        fontWeight:'bold',
         justifyContent:'center'
     },
 });
