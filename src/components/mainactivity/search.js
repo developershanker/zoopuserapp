@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
-import { View,StyleSheet,Clipboard,Button,ScrollView,Image,TextInput } from 'react-native';
+import { View,StyleSheet,Clipboard,Button,ScrollView,Image,TextInput,TouchableOpacity} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { RadioButton, Text } from 'react-native-paper';
 import { CustomButton } from '../assests/customButtonLarge';
 import {CustomGridIcon} from '../assests/customGridIcon';
-import {createDrawerNavigator} from 'react-navigation';
-import Contact from '../services/contact';
-import FAQ from '../services/faq';
-import Feedback from '../services/feedback';
-import MyOrders from '../services/myOrders';
-import MyWallet from '../services/myWallet';
-import Profile from '../services/profile';
-import RateUs from '../services/rateUs'; 
+
 export default class Search extends Component {
   componentDidMount() {
     SplashScreen.hide();
@@ -30,7 +23,7 @@ export default class Search extends Component {
       
     return (
       <View style={styles.slide} >
-        
+        {/* <DrawerNavigation/> */}
         <View>
         <Image style={styles.img} source={require('../images/r.jpg')}/>
         </View>
@@ -108,7 +101,8 @@ const styles = StyleSheet.create({
    
   },
   scroll:{
-    height:100,
+    alignItems:'stretch',
+    justifyContent:'center',
     marginLeft: 10,
     marginBottom:10
   },
@@ -146,4 +140,3 @@ const styles = StyleSheet.create({
   },
   
 })
-

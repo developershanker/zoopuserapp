@@ -23,7 +23,7 @@ export class CustomGridIcon extends Component {
 
   render() {
     return (
-        <View style={styles.container}>
+        <View>
           <FlatList
              data={ this.state.GridListItems }
              renderItem={ ({item}) =>

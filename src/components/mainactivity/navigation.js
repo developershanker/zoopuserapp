@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text,Button } from 'react-native';
+import { View, Text,Button,TouchableOpacity,Image } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 //////-------LOGIN RELATED VIEWS-----------//////
 import Login from '../login/login.js';
@@ -21,12 +21,15 @@ import MyOrders from '../services/myOrders';
 import MyWallet from '../services/myWallet';
 import Profile from '../services/profile';
 import RateUs from '../services/rateUs'; 
+import LogOut from '../login/logout';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { DrawerItems, SafeAreaView } from 'react-navigation';
 
 
 import { createStackNavigator, createAppContainer,createDrawerNavigator} from "react-navigation";
 
 export  class App extends Component{
-  componentDidMount() {
+  componentDidMount()  {
     SplashScreen.hide();
 }
   render(){
@@ -37,19 +40,53 @@ export  class App extends Component{
     )
   }
 }
+class NavigationDrawerStructure extends Component {
+  //Structure for the navigatin Drawer
+  toggleDrawer = () => {
+    //Props to open/close the drawer
+    this.props.navigationProps.toggleDrawer();
+  };
+  render() {
+    return (
+      <SafeAreaView>
+      <View style={{ flexDirection: 'row' }}>
+        
+        <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
+          {/*Donute Button Image */}
+         
+          <Image
+            source={require('../images/menu.png')}
+            style={{ width: 25, height: 25, marginLeft: 5 }}
+          />
+        </TouchableOpacity>
+      </View>
+      </SafeAreaView>
+    );
+  }
+}
 
+
+const DrawerConfig={
+  drawerWidth:250,
+}
 const DrawerNavigator=createDrawerNavigator({
   Search:{
     screen:Search,
     navigationOptions:{
-      headerTitle:'ZOOP',
+      drawerLabel:'Home'
     }
   },
   Contact:{
     screen:Contact,
+    navigationOptions: {
+      drawerLabel: 'Contact',
+    },
   },
   FAQ:{
     screen:FAQ,
+    navigationOptions:{
+      drawerLabel:'FAQ'
+    }
   },
   Feedback:{
     screen:Feedback,
@@ -65,15 +102,13 @@ const DrawerNavigator=createDrawerNavigator({
   },
   RateUs:{
     screen:RateUs,
+  },
+  LogOut:{
+    screen:LogOut,
   }
-  
 },
-{
-  initialRouteName:'Search',
-    drawerWidth: 300,
-    drawerPosition: 'right'
-},
-)
+DrawerConfig
+);
 const AppNavigator= createStackNavigator({
   Login:{
       screen:Login,
@@ -108,10 +143,15 @@ NotAuthenticated:{
   },
   
   Search:{
-    screen:Search,
-    navigationOptions:{
-      headerTitle:'ZOOP',
-    }
+    screen:DrawerNavigator,
+    navigationOptions: ({ navigation }) => ({
+      title: 'ZOOP',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#FF9800',
+      },
+      headerTintColor: '#fff',
+    }),
   },
   Register:{
     screen:Register,
