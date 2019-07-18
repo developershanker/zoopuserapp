@@ -3,16 +3,19 @@ package com.zoop;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.kishanjvaghela.cardview.RNCardViewPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import io.underscope.react.fbak.RNAccountKitPackage;
+// import io.underscope.react.fbak.RNAccountKitPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,10 +32,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNDeviceInfo(),
+            new RNCardViewPackage(),
             new SplashScreenReactPackage(),
             new VectorIconsPackage(),
             new AsyncStoragePackage(),
-            new RNAccountKitPackage(),
+            // new RNAccountKitPackage(),
             new RNGestureHandlerPackage()
       );
     }

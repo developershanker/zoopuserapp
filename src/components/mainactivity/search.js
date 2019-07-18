@@ -65,7 +65,8 @@ export default class Search extends Component {
     title='SEARCH'
     />
     </View>
-    <CustomGridIcon/>
+    <CustomGridIcon
+    />
     
     <View style={styles.scroll}>
         <ScrollView

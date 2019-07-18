@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text,Button,TouchableOpacity,Image } from 'react-native';
+import { View, Text,Button,TouchableOpacity,Image,Platform } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
+import Device from 'react-native-device-info';
 //////-------LOGIN RELATED VIEWS-----------//////
 import Login from '../login/login.js';
 import Authenticated from '../login/authenticated.js'
 import NotAuthenticated from '../login/notAuthenticated.js'
 import Slider from '../login/slider.js';
 import Register from '../login/register.js';
+import OtpVerify from '../login/otpVerify.js';
 //////-------INITIAL SEARCH RELATED VIEWS-----------//////
 import Search from './search.js';
 import Welcome from '../login/welcome.js';
@@ -24,9 +26,16 @@ import RateUs from '../services/rateUs';
 import LogOut from '../login/logout';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { DrawerItems, SafeAreaView } from 'react-navigation';
+////////-------Extra Services Screens------////////
+import CheckPNR from '../services/checkPnr';
+import SpotTrain from '../services/spotTrain';
+import TrainTimeTable from '../services/trainTimeTable';
+import CoachSequence from '../services/coachSequence';
+import PlatformLocator from '../services/platformLocator';
 
 
 import { createStackNavigator, createAppContainer,createDrawerNavigator} from "react-navigation";
+
 
 export  class App extends Component{
   componentDidMount()  {
@@ -45,11 +54,16 @@ class NavigationDrawerStructure extends Component {
   toggleDrawer = () => {
     //Props to open/close the drawer
     this.props.navigationProps.toggleDrawer();
+    if (Platform.OS === 'android' && Device.hasNotch()) {
+      SafeAreaView.setStatusBarHeight(
+        /* Some value for status bar height + notch height */
+      );
+    }
   };
   render() {
     return (
-      <SafeAreaView>
-      <View style={{ flexDirection: 'row' }}>
+      <SafeAreaView style={{ flexDirection: 'row' }}>
+      <View>
         
         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
           {/*Donute Button Image */}
@@ -87,6 +101,12 @@ const DrawerNavigator=createDrawerNavigator({
     navigationOptions:{
       drawerLabel:'FAQ'
     }
+  },
+  Login:{
+screen:Login,
+navigationOptions:{
+  drawerLabel:'Login'
+}
   },
   Feedback:{
     screen:Feedback,
@@ -141,6 +161,12 @@ NotAuthenticated:{
       header:null,
     }
   },
+  OtpVerify:{
+    screen:OtpVerify,
+    navigationOptions:{
+      header:null,
+    }
+  },
   
   Search:{
     screen:DrawerNavigator,
@@ -177,7 +203,38 @@ AutoCompleteTrain:{
   navigationOptions:{
     header:null
   }
+},
+CheckPNR:{
+  screen:CheckPNR,
+  navigationOptions:{
+    header:null
+  }
+},
+SpotTrain:{
+  screen:SpotTrain,
+  navigationOptions:{
+    header:null
+  }
+},
+TrainTimeTable:{
+  screen:TrainTimeTable,
+  navigationOptions:{
+    header:null
+  }
+},
+CoachSequence:{
+  screen:CoachSequence,
+  navigationOptions:{
+    header:null
+  }
+},
+PlatformLocator:{
+  screen:PlatformLocator,
+  navigationOptions:{
+    header:null
+  }
 }
+
 },
 {
 

@@ -13,7 +13,7 @@ export class CustomGridIcon extends Component {
           { key: "medkit",text:"Coach Layout"  },
           { key: "compass",text:"Check PNR"  },
           { key: "building",text:"Platform"  },
-          { key: "cab",text:"HelpLine"  },         
+          { key: "cab",text:"HelpLine"  },
           ]
     };
   }

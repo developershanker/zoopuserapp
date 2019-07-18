@@ -28,7 +28,7 @@ xmlns:tools="http://schemas.android.com/tools"
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
        <!-- Set the AccountKitActivity theme -->
-    <activity
+    <!-- <activity
       tools:replace="android:theme"
       android:name="com.facebook.accountkit.ui.AccountKitActivity"
       android:theme="@style/LoginThemeYellow" />
@@ -40,7 +40,7 @@ xmlns:tools="http://schemas.android.com/tools"
         android:value="@string/app_name" />
     <meta-data
         android:name="com.facebook.accountkit.ClientToken"
-        android:value="@string/ak_client_token" />
+        android:value="@string/ak_client_token" /> -->
     </application>
 
 </manifest>

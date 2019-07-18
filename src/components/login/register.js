@@ -1,23 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text,Button,StyleSheet,TextInput} from 'react-native';
-import RNAccountKit from 'react-native-facebook-account-kit';
+import { View, Text,Button,StyleSheet,TextInput,ToastAndroid} from 'react-native';
+// import RNAccountKit from 'react-native-facebook-account-kit';
+import { CustomButton } from '../assests/customButtonShort.js';
 import SplashScreen from 'react-native-splash-screen';
 
 
 export default class Register extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    RNAccountKit.getCurrentAccount()
-     .then((account)=>{
-       if(!account){
-         console.log('Unable to get account')
-       }
-       else{
-         console.log(`Logged in.Account: ${JSON.stringify(account)}`)
-         console.log(account)
-         AsyncStorage.setItem('akaccount',JSON.stringify(account))
-       }
-     })
+    
 }
 constructor(props) {
   super(props);
@@ -26,7 +17,9 @@ constructor(props) {
   };
 }
   
-
+entryMsg(){
+  ToastAndroid.show('Congratulations!! Registeration Successfull',ToastAndroid.LONG)
+}
   render() {
     
     return (
@@ -50,10 +43,13 @@ constructor(props) {
         onChangeText={text => this.setState({ text })}
         
         />
-        <Button
-            title="Login Here"
+        <CustomButton
+            title="Register"
             color="#1abc9c"
-            onPress={()=>this.props.navigation.navigate('Search')}
+            onPress={()=>{
+              this.entryMsg()
+              this.props.navigation.navigate('Search')
+            }}
             />
       </View>
     );

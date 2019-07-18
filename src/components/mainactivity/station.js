@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text,ScrollView,Image,StyleSheet,Animated,Easing,TouchableOpacity,FlatList } from 'react-native';
+import { Text, View,ScrollView,Image,StyleSheet,Animated,Easing,TouchableOpacity,FlatList } from 'react-native';
+import CardView from 'react-native-cardview';
 
 export default class station extends Component {
   constructor(props) {
@@ -61,7 +62,7 @@ export default class station extends Component {
       contentContainerStyle={styles.contentContainer}>
         
           <TouchableOpacity>
-          <Image style={styles.roundImage} source={require('../images/1.png')}/>
+          <Image style={styles.roundImage} source={require('../images/1.png')} />
           </TouchableOpacity>
           <TouchableOpacity>
           <Image style={styles.roundImage} source={require('../images/2.png')}/>
@@ -85,10 +86,22 @@ export default class station extends Component {
           <Image style={styles.roundImage} source={require('../images/2.png')}/>
           </TouchableOpacity>    
           </ScrollView>
-        </View>
+        </View>  
         
+        <CardView
+        style={styles.card}
+          cardElevation={0}
+          cardMaxElevation={2}
+          cornerRadius={5}>
+            <Image source={require('../images/roundimg3.jpg')} style={styles.image}/>
+            <View style={styles.text}>
+          <Text >
+              MOTI MAHAL RESTURENT
+          </Text>
+          </View>
+</CardView>
         
-      </View>
+ </View>
     );
   }
 }
@@ -97,27 +110,36 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems:'stretch',
     justifyContent:'flex-start',
-    backgroundColor:'#ffffff',
+    backgroundColor:'#d0d0d0',
    
   },
   scroll:{
     height:150,
-    marginLeft: 10,
+    // marginLeft: 10,
   },
   image: {
     width:100,
     height:100,
-    marginLeft: 10,
+    marginLeft: 5,
   },
   contentContainer:{
     paddingVertical: 25,
     justifyContent: 'space-around',
   },  
+  text:{
+    alignItems:'center',
+    fontSize: 15,
+    // justifyContent:'center'
+  },
+  card:{
+   width: '100%',
+   height:100,
+   marginLeft: 5,
+  },
   roundImage:{
     width: 50,
     height: 50,
     borderRadius: 100 / 2,
-    marginTop:10,
     marginLeft: 10,
     backgroundColor:'#f2c744'
   }
