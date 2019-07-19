@@ -5,6 +5,7 @@ import { CustomButton } from '../assests/customButtonShort.js';
 import {FadeInView} from '../assests/fadeInView.js';
 import Device from 'react-native-device-info';
 
+
 export default class Welcome extends Component {
     componentDidMount() {
         SplashScreen.hide();
@@ -19,7 +20,7 @@ export default class Welcome extends Component {
 
 
 
-  ////Sending Otp//////
+  ////Sending Otp API//////
   sendOtp(mobile){
   console.log(mobile)
   fetch('http://192.168.0.26:3000/customer/login',{
@@ -29,8 +30,8 @@ export default class Welcome extends Component {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      mobile: mobile,  
-      
+      mobile: mobile, 
+      device:{apiLevel,ip,carrier,deviceId,firstInstallTime,macAddress,systemVersion,systemName,appVersion,deviceType,osBuildId},
       
     })
   })
@@ -41,18 +42,26 @@ export default class Welcome extends Component {
       console.log('Logged with mobile No. :'+mobile),
       console.log('The status is: '+responseJson.status),
       console.log('The message is: '+responseJson.message),
-      ToastAndroid.show(responseJson.message, ToastAndroid.LONG)
+      ToastAndroid.show(responseJson.message, ToastAndroid.LONG),
+      this.props.navigation.navigate('OtpVerify') 
       )
-      }else if(responseJson.state==false){
-        return(ToastAndroid.show(responseJson.error,ToastAndroid.LONG))
+      }else {
+        return(
+          ToastAndroid.show(responseJson.error,ToastAndroid.LONG),
+        console.log(responseJson.error)
+        // this.props.navigation.navigate('OtpVerify') 
+        )
       }
     })
     .catch((error) => {
       console.error(error);
     });
 }
-
-
+// isEmpty(){
+//   if (this.state.mobile==''){
+//     ToastAndroid.show('Please Enter Valid Mobile No.',ToastAndroid.CENTER)
+//   }
+// }
 
 
 
@@ -65,15 +74,15 @@ export default class Welcome extends Component {
          source={require('../images/zooplogo.png')}
         />
 
-         <Text style={styles.text1}> LOGIN </Text>
-        <View style={styles.input}>
-        <TextInput 
+         {/* <Text style={styles.text1}> LOGIN </Text> */}
+       
+        <TextInput style={styles.input}
         placeholder="Enter Mobile No."
         keyboardType='number-pad'
         maxLength={10}
         onChangeText={mobile => this.setState({ mobile })}
-        value={this.state.mobile}      
-        // autoFocus={true}
+        value={this.state.mobile}
+        underlineColorAndroid='#000000'
         ></TextInput>
         <CustomButton
             title="SUBMIT"
@@ -81,8 +90,15 @@ export default class Welcome extends Component {
               () => {
                 // console.log(this.state.text)
                 console.log(apiLevel)
-                this.sendOtp(this.state.mobile) //this function sends mobile no. to the otpapi method
-                this.props.navigation.navigate('OtpVerify') 
+                if (this.state.mobile==''){
+                  return(
+                  ToastAndroid.show('Please Enter Mobile No.',ToastAndroid.CENTER),
+                  console.log('mobile number is empty')
+                  )
+                }
+                else {
+                this.sendOtp(this.state.mobile) //this function sends mobile no. through the otp api
+                }
               }
             }
             
@@ -90,7 +106,7 @@ export default class Welcome extends Component {
             textStyle={styles.text}
             
         />
-        </View>
+       
 
 <CustomButton
             title="SKIP"
@@ -98,6 +114,7 @@ export default class Welcome extends Component {
             // style={styles.button}
             // textStyle={styles.text}
         />
+        
         </FadeInView>
 
       </View>
@@ -107,7 +124,19 @@ export default class Welcome extends Component {
 }
 /////sending Device info
 const apiLevel = Device.getAPILevel();
-
+const ip = Device.getIPAddress().then(ip => {
+  return ip
+ });
+ const deviceId = Device.getDeviceId();
+ const carrier = Device.getCarrier();
+ const firstInstallTime = Device.getFirstInstallTime();
+ const macAddress= Device.getMACAddress();
+ const systemVersion = Device.getSystemVersion();
+ const systemName = Device.getSystemName();
+ const appVersion = Device.getVersion();
+ const deviceType = Device.getDeviceType();
+ const osBuildId = Device.getBuildId();
+///styling with CSS
 const styles = StyleSheet.create({
     slide: {
       flex: 1,
@@ -145,6 +174,10 @@ const styles = StyleSheet.create({
       alignItems: 'baseline',
       justifyContent: 'center',
       backgroundColor:'#ffffff'
+    },
+    input:{
+      fontSize:20,
+      alignItems:'center'
     },
     text: {
       color: '#ffffff',

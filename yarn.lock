@@ -5229,6 +5229,11 @@ react-native-cardview@^2.0.2:
   dependencies:
     prop-types "^15.6.0"
 
+react-native-circular-timer@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-circular-timer/-/react-native-circular-timer-0.1.0.tgz#7f367d635a04c0ec7eea4ad19d02a0dc397ea140"
+  integrity sha512-AF213xAj3XlfYsYci+NzwEz6PrqrPeDNZM2YGSyzIoLY3+0e9evGl1tq8jWzSviNwtcaACTLp5Yn2v+FPH8bUg==
+
 react-native-confirmation-code-input@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/react-native-confirmation-code-input/-/react-native-confirmation-code-input-1.0.4.tgz#f5c2cced66f26b61050fea8bfd17473af1ad5ff9"

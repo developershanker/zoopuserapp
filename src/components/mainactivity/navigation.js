@@ -9,6 +9,7 @@ import NotAuthenticated from '../login/notAuthenticated.js'
 import Slider from '../login/slider.js';
 import Register from '../login/register.js';
 import OtpVerify from '../login/otpVerify.js';
+import DeviceInfo from '../assests/deviceInfo.js';
 //////-------INITIAL SEARCH RELATED VIEWS-----------//////
 import Search from './search.js';
 import Welcome from '../login/welcome.js';
@@ -163,6 +164,12 @@ NotAuthenticated:{
   },
   OtpVerify:{
     screen:OtpVerify,
+    navigationOptions:{
+      header:null,
+    }
+  },
+  DeviceInfo:{
+    screen:DeviceInfo,
     navigationOptions:{
       header:null,
     }

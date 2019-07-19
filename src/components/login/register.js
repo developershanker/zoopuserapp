@@ -25,7 +25,7 @@ entryMsg(){
     return (
       
       <View style={styles.slide}>
-        <Text style={styles.heading}> Register To Zoop </Text>
+        <Text style={styles.heading}> My Profile </Text>
         <TextInput
         placeholder='Enter Name'
         keyboardType='default'
@@ -43,11 +43,24 @@ entryMsg(){
         onChangeText={text => this.setState({ text })}
         
         />
+        <TextInput
+        placeholder='Enter Referral Code (if any)'
+        keyboardType='default'
+        onChangeText={text => this.setState({ text })}
+        
+        />
         <CustomButton
             title="Register"
             color="#1abc9c"
             onPress={()=>{
               this.entryMsg()
+              this.props.navigation.navigate('Search')
+            }}
+            />
+            <CustomButton
+            title="Skip for now"
+            color="#1abc9c"
+            onPress={()=>{
               this.props.navigation.navigate('Search')
             }}
             />
