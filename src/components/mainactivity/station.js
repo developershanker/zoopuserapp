@@ -1,36 +1,31 @@
 import React, { Component } from 'react';
 import { Text, View,ScrollView,Image,StyleSheet,Animated,Easing,TouchableOpacity,FlatList } from 'react-native';
 import CardView from 'react-native-cardview';
+import SplashScreen from 'react-native-splash-screen';
+import { Searchbar } from 'react-native-paper';
+import { SafeAreaView } from 'react-navigation';
 
 export default class station extends Component {
+  componentDidMount() {
+    SplashScreen.hide();
+}
   constructor(props) {
     super(props);
-      this.spinValue = new Animated.Value(0)
+    this.state = {
+      firstQuery:'',
+    };
   }
-  componentDidMount () {
-    this.spin()
-  }
-  spin () {
-    this.spinValue.setValue(0)
-    Animated.timing(
-      this.spinValue,
-      {
-        toValue: 1,
-        duration: 4000,
-        easing: Easing.linear
-      }
-    ).start(() => this.spin())
-  }
+ 
 
   render() {
-
-    const spin = this.spinValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0deg', '360deg']
-    })
-    
     return (
-      <View style={styles.slide}>
+      <SafeAreaView style={styles.slide}>
+     
+        <Searchbar
+        placeholder="What would you like to have today?"
+        onChangeText={firstQuery => this.setState({firstQuery})}
+        value={this.state.firstQuery}
+        />
         <View style={styles.scroll}>
         <ScrollView
         horizontal={true}
@@ -101,7 +96,8 @@ export default class station extends Component {
           </View>
 </CardView>
         
- </View>
+
+ </SafeAreaView>
     );
   }
 }

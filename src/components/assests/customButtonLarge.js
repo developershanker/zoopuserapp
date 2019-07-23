@@ -21,11 +21,13 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         paddingVertical: 20,
         alignItems: 'center',
-        // backgroundColor: '#f2c744',
+        backgroundColor: '#f2c744',
         shadowColor: '#f2c744',
         shadowOpacity: 0.4,
         shadowOffset: { height: 10, width: 10 },
         shadowRadius: 20,
+        marginTop:10,
+        marginBottom: 10,
         
     },
     text: {

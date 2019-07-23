@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text,FlatList,StyleSheet,Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import CardView from 'react-native-cardview';
 
 export class CustomGridIcon extends Component {
     
@@ -28,12 +29,20 @@ export class CustomGridIcon extends Component {
              data={ this.state.GridListItems }
              renderItem={ ({item}) =>
                <View style={styles.GridViewContainer}>
+                 <CardView
+            cardElevation={5}
+            cardMaxElevation={5}
+            cornerRadius={5}
+            style={styles.icon}
+            >
                 {/* <Text style={styles.GridViewTextLayout} onPress={this.GetGridViewItem.bind(this, item.key)} > {item.key} </Text> */}
-               <Icon name={item.key} size={30} color="#000000" onPress={this.GetGridViewItem.bind(this,item.key)} />
+               <Icon  name={item.key} size={30} color="#000000" onPress={this.GetGridViewItem.bind(this,item.key)} />
                <Text>{item.text}</Text>
+               </CardView>
                </View> }
              numColumns={3}
           />
+          
         </View>
      );
   }
@@ -63,5 +72,11 @@ const styles = StyleSheet.create({
      justifyContent: 'center',
      color: '#fff',
      padding: 10,
+   },
+   icon:{
+    justifyContent: 'center',
+    alignItems:'center',
+     width:120,
+     height:80
    }
   });

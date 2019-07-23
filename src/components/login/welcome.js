@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { View ,Button, Text,Icon,TouchableOpacity,StyleSheet,Alert,Image,TextInput,ToastAndroid} from 'react-native';
+import { View ,Dimensions,Button, Text,Icon,TouchableOpacity,StyleSheet,Alert,Image,TextInput,ToastAndroid} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { CustomButton } from '../assests/customButtonShort.js';
 import {FadeInView} from '../assests/fadeInView.js';
 import Device from 'react-native-device-info';
+import ConstantValues from '../constantValues.js'
+
 
 
 export default class Welcome extends Component {
@@ -23,7 +25,7 @@ export default class Welcome extends Component {
   ////Sending Otp API//////
   sendOtp(mobile){
   console.log(mobile)
-  fetch('http://192.168.0.26:3000/customer/login',{
+  fetch(ConstantValues.apiUrl+'customer/login',{
     method:'POST',
     headers:{
       Accept: '*/*',
@@ -42,8 +44,12 @@ export default class Welcome extends Component {
       console.log('Logged with mobile No. :'+mobile),
       console.log('The status is: '+responseJson.status),
       console.log('The message is: '+responseJson.message),
+      // global.foo={mobile},
+      // global.id=(responseJson.data.customerId),
       ToastAndroid.show(responseJson.message, ToastAndroid.LONG),
-      this.props.navigation.navigate('OtpVerify') 
+      this.props.navigation.navigate('OtpVerify',{
+        mobile:this.state.mobile,
+        customerId:responseJson.data.customerId}) 
       )
       }else {
         return(
@@ -122,6 +128,9 @@ export default class Welcome extends Component {
     );
   }
 }
+
+
+
 /////sending Device info
 const apiLevel = Device.getAPILevel();
 const ip = Device.getIPAddress().then(ip => {
@@ -177,7 +186,7 @@ const styles = StyleSheet.create({
     },
     input:{
       fontSize:20,
-      alignItems:'center'
+      width:Dimensions.get('window').width - 120,
     },
     text: {
       color: '#ffffff',

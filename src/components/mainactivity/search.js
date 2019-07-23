@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View,StyleSheet,Clipboard,Button,ScrollView,Image,TextInput,TouchableOpacity} from 'react-native';
+import { View,Dimensions,StyleSheet,Clipboard,Button,ScrollView,Image,TextInput,TouchableOpacity} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { RadioButton, Text } from 'react-native-paper';
 import { CustomButton } from '../assests/customButtonLarge';
 import {CustomGridIcon} from '../assests/customGridIcon';
-
+import { SafeAreaView } from 'react-navigation';
 export default class Search extends Component {
   componentDidMount() {
     SplashScreen.hide();
@@ -14,18 +14,20 @@ export default class Search extends Component {
     this.state = {
       text:'',
       value:'Enter PNR',
-      placeholder:''
-      
+      placeholder:'',
+      email:''
     };
   }
  
   render() {
       
     return (
+      <SafeAreaView>
+      <ScrollView>
       <View style={styles.slide} >
-        {/* <DrawerNavigation/> */}
+
         <View>
-        <Image style={styles.img} source={require('../images/r.jpg')}/>
+        <Image style={styles.image} source={require('../images/ad.png')}/>
         </View>
        
       <RadioButton.Group
@@ -53,9 +55,11 @@ export default class Search extends Component {
       </View>
       <View style={styles.main}>
       <TextInput
+      style={styles.input}
       placeholder={this.state.value}
        keyboardType='number-pad'
        maxLength={10}
+       underlineColorAndroid='#000000'
       onValueChange={placeholder=>this.setState({placeholder})}
        onChangeText={text => this.setState({ text })}
        
@@ -63,8 +67,16 @@ export default class Search extends Component {
       <CustomButton
     onPress={()=>this.props.navigation.navigate('Station')}
     title='SEARCH'
+    
     />
     </View>
+    {/* <CustomTextInput
+    placeholder="test@gmail.com"
+    label="Email"
+    mode='outlined'
+    value={this.state.email}
+    onChangeText={email => this.setState({ email })}
+    /> */}
     <CustomGridIcon
     />
     
@@ -75,14 +87,16 @@ export default class Search extends Component {
         alwaysBounceHorizontal={true}
         contentContainerStyle={styles.contentContainer}
         >
-          <Image style={styles.image} source={require('../images/promo.png')}/>
-          <Image style={styles.image} source={require('../images/promo1.png')}/>
-          <Image style={styles.image} source={require('../images/promo4.jpg')}/>
-          <Image style={styles.image} source={require('../images/promo5.png')}/>
-          <Image style={styles.image} source={require('../images/promo1.png')}/>
+          <Image style={styles.img} source={require('../images/promo.png')}/>
+          <Image style={styles.img} source={require('../images/promo1.png')}/>
+          <Image style={styles.img} source={require('../images/promo4.jpg')}/>
+          <Image style={styles.img} source={require('../images/promo5.png')}/>
+          <Image style={styles.img} source={require('../images/promo1.png')}/>
         </ScrollView>
         </View>
     </View>
+    </ScrollView>
+    </SafeAreaView>
     );
   }
   
@@ -97,6 +111,7 @@ const styles = StyleSheet.create({
 
   },
  main: {
+  
     alignItems:'center',
     justifyContent:'center',
    
@@ -108,12 +123,13 @@ const styles = StyleSheet.create({
     marginBottom:10
   },
   img:{
-    width:400,
+    width:Dimensions.get('window').width - 120,
     height:150,
+    marginLeft:5
   },
   image: {
-    width:200,
-    height:100,
+    width:Dimensions.get('window').width,
+    height:150,
     marginLeft:5
 
   },
@@ -131,8 +147,9 @@ const styles = StyleSheet.create({
     fontFamily:'monospace',
   },
   input:{
-    width:200,
-    color:'#000000'
+    fontSize:20,
+    color:'#000000',
+    width:Dimensions.get('window').width - 50,
   },
   heading:{
     color: 'black',

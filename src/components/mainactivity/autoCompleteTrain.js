@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet,ActivityIndicator,FlatList,TouchableOpacity} from 'react-native';
-import { InputAutoSuggest } from 'react-native-autocomplete-input'
+import { InputAutoSuggest } from 'react-native-autocomplete-input';
+import SplashScreen from 'react-native-splash-screen';
 
 export default class autoCompleteTrain extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -11,6 +13,7 @@ export default class autoCompleteTrain extends Component {
     };
   }
  componentDidMount(){
+  SplashScreen.hide();
   fetch('https://api.myjson.com/bins/1bbso3')
     .then(response =>response.json())
     .then((responseJson)=>{

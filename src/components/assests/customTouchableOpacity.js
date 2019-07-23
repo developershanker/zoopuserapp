@@ -25,7 +25,8 @@ const styles = StyleSheet.create({
   textStyle: {
     fontSize:20,
 	color: '#202646',
-	textAlign: 'center'
+	textAlign: 'center',
+	fontWeight: 'bold',
   },
   
   buttonStyle: {
