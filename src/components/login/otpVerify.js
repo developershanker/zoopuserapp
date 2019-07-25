@@ -78,6 +78,8 @@ countdown(){
     ConstantValues.customerPhoneNo=mobile,   //storing mobile no for accessing globally
     ConstantValues.customerId=customerId,     //storing customer id for accessing globally
     ConstantValues.token=responseJson.data.token, //storing customer auth token for accessing globally
+    ConstantValues.customer.token=responseJson.data.token,
+    console.log('Info: '+JSON.stringify(ConstantValues.customer)),
     console.log('Stored Mobile No. is:'+ConstantValues.customerPhoneNo),
     this.storeData(),
     this.props.navigation.navigate('Register',{mobile:mobile}) 

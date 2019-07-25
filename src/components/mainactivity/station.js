@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View,ScrollView,Image,StyleSheet,Animated,Easing,TouchableOpacity,FlatList } from 'react-native';
-import CardView from 'react-native-cardview';
+import { Text,Dimensions, View,ScrollView,Image,StyleSheet,Animated,Easing,TouchableOpacity,FlatList } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
+import {OutletView} from '../mainactivity/outletView.js';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class station extends Component {
   componentDidMount() {
@@ -20,7 +21,7 @@ export default class station extends Component {
   render() {
     return (
       <SafeAreaView style={styles.slide}>
-     
+        <View style={styles.topContainer}>
         <Searchbar
         placeholder="What would you like to have today?"
         onChangeText={firstQuery => this.setState({firstQuery})}
@@ -42,22 +43,22 @@ export default class station extends Component {
           
         </ScrollView>
         </View>
-        {/* <Animated.Image
-        style={{
-          width: 50,
-          height: 50,
-          transform: [{rotate: spin}] }}
-          source={require('../images/train.png')}
-      /> */}
+        </View>
+      <View style={styles.stationContainer}>
       <View style={styles.scroll}>
           <ScrollView
       horizontal={true}
       showsHorizontalScrollIndicator={false}
       alwaysBounceHorizontal={true}
       contentContainerStyle={styles.contentContainer}>
-        
+      
+          {/* <Icon name='train' size={20}/> */}
           <TouchableOpacity>
           <Image style={styles.roundImage} source={require('../images/1.png')} />
+          <View style={styles.name}>
+          <Text style={{fontSize:10}}>New Delhi</Text>
+          <Text style={{fontSize:10}}>12:50</Text>
+          </View>
           </TouchableOpacity>
           <TouchableOpacity>
           <Image style={styles.roundImage} source={require('../images/2.png')}/>
@@ -82,21 +83,10 @@ export default class station extends Component {
           </TouchableOpacity>    
           </ScrollView>
         </View>  
-        
-        <CardView
-        style={styles.card}
-          cardElevation={0}
-          cardMaxElevation={2}
-          cornerRadius={5}>
-            <Image source={require('../images/roundimg3.jpg')} style={styles.image}/>
-            <View style={styles.text}>
-          <Text >
-              MOTI MAHAL RESTURENT
-          </Text>
-          </View>
-</CardView>
-        
-
+        </View>
+       
+        {/* Outlet View */}
+        <OutletView/>
  </SafeAreaView>
     );
   }
@@ -106,12 +96,29 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems:'stretch',
     justifyContent:'flex-start',
-    backgroundColor:'#d0d0d0',
-   
+    backgroundColor:'#f5f0f0',
   },
+  topContainer:{
+    alignItems:'stretch',
+    justifyContent:'flex-start',
+    backgroundColor:'#ffffff',
+  },
+  stationContainer:{
+    margin:5,
+    alignItems:'stretch',
+    justifyContent:'center',
+    backgroundColor:'#ffffff',
+  },
+  
   scroll:{
-    height:150,
+    height:'auto',
+    flexDirection:'column'
     // marginLeft: 10,
+  },
+  name:{
+    flexDirection:'column',
+    alignItems:'center',
+    margin:5
   },
   image: {
     width:100,
@@ -127,14 +134,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     // justifyContent:'center'
   },
-  card:{
-   width: '100%',
-   height:100,
-   marginLeft: 5,
-  },
   roundImage:{
-    width: 50,
-    height: 50,
+    width: 75,
+    height:75,
     borderRadius: 100 / 2,
     marginLeft: 10,
     backgroundColor:'#f2c744'

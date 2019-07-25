@@ -379,8 +379,7 @@ PlatformLocator:{
 
 },
 {
-
-  initialRouteName:'Search'
+  initialRouteName:'Station'
 }
 
 

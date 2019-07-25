@@ -44,8 +44,6 @@ export default class Welcome extends Component {
       console.log('Logged with mobile No. :'+mobile),
       console.log('The status is: '+responseJson.status),
       console.log('The message is: '+responseJson.message),
-      // global.foo={mobile},
-      // global.id=(responseJson.data.customerId),
       ToastAndroid.show(responseJson.message, ToastAndroid.LONG),
       this.props.navigation.navigate('OtpVerify',{
         mobile:this.state.mobile,
@@ -55,7 +53,7 @@ export default class Welcome extends Component {
         return(
           ToastAndroid.show(responseJson.error,ToastAndroid.LONG),
         console.log(responseJson.error)
-        // this.props.navigation.navigate('OtpVerify') 
+        
         )
       }
     })
@@ -145,6 +143,9 @@ const ip = Device.getIPAddress().then(ip => {
  const appVersion = Device.getVersion();
  const deviceType = Device.getDeviceType();
  const osBuildId = Device.getBuildId();
+
+
+ 
 ///styling with CSS
 const styles = StyleSheet.create({
     slide: {
