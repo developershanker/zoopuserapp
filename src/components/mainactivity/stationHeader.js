@@ -18,7 +18,7 @@ export class StationHeader extends Component {
           <FlatList
           data={this.state.ListItems}
         renderItem={ ({item}) =>
-        <View style={{justifyContent:'center'}}>
+        <View>
         <Text style={styles.text}>{item.stationName}</Text>
         <View style={styles.stextview}>
         <Text style={styles.stext}>Halt Minutes : {item.haltMins}</Text>
@@ -34,6 +34,7 @@ export class StationHeader extends Component {
 
 const styles=StyleSheet.create({
 slide:{
+    flex:1,
     width:Dimensions.get('window').width - 10,
     alignItems:'stretch',
     justifyContent:'center',

@@ -7,7 +7,6 @@ import Device from 'react-native-device-info';
 import ConstantValues from '../constantValues.js'
 
 
-
 export default class Welcome extends Component {
     componentDidMount() {
         SplashScreen.hide();

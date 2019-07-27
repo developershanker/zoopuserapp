@@ -21,8 +21,6 @@ export default class otpVerify extends Component {
         disable:true,
         text:'',
         code:''
-
-        
     };
   timeLeft=15;
    timerId= setInterval(() => {
@@ -180,8 +178,7 @@ storeData = async () => {
             color="#1abc9c"
             onPress={()=>{
               this.verifyOtp(this.state.customerCode,customerId,mobile)
-              
-
+             
             }}
             />
             </View>
@@ -189,8 +186,6 @@ storeData = async () => {
     );
   }
 }
-
-
 
 
 

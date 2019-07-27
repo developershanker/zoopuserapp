@@ -18,6 +18,7 @@ import Station from '../mainactivity/station.js';
 import SearchOption from '../mainactivity/searchOption.js';
 import AutoCompleteTrain from '../mainactivity/autoCompleteTrain.js';
 import Notifications from '../services/notifications.js';
+import Menu from '../menu/menu.js';
 //////-------DRAWER ITEMS RELATED VIEWS-----------//////
 import Contact from '../services/contact';
 import FAQ from '../services/faq';
@@ -340,6 +341,13 @@ SearchOption:{
     }
    
 },
+Menu:{
+  screen:Menu,
+  navigationOptions:{
+    header:null,
+  }
+ 
+},
 AutoCompleteTrain:{
   screen:AutoCompleteTrain,
   navigationOptions:{
@@ -379,7 +387,7 @@ PlatformLocator:{
 
 },
 {
-  initialRouteName:'Station'
+  initialRouteName:'Search'
 }
 
 
