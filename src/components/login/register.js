@@ -5,57 +5,52 @@ import { CustomButton } from '../assests/customButtonShort.js';
 import CustomTouchableOpacity from '../assests/customTouchableOpacity';
 import SplashScreen from 'react-native-splash-screen';
 import ConstantValues from '../constantValues.js';
+import LoginApi from '../login/loginApi.js';
+
 
 export default class Register extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    
-}
-constructor(props) {
-  super(props);
-  this.state = {
-    name:'',
-    email:'',
-    referralCode:'',
-    altmobile:''
-  };
-}
-isEmpty(name,email,referralCode){
-  if (name!=''){
-    if(email!=''){
-      this.onRegister(name,email,referralCode)
-    // this.props.navigation.navigate('Search')
-    }else{
-      ToastAndroid.show('Please Enter Email Id',ToastAndroid.LONG)
+  }
+  constructor(props) {
+    super(props);
+    this.state = {
+      name:'',
+      email:'',
+      referralCode:'',
+      altmobile:''
+    };
+  }
+  ///checking Input Validation
+  async isEmpty(name,email,referralCode){
+    try {
+      if (name!=''){
+          if(email!=''){
+            this.onRegister(name,email,referralCode)
+          }else{
+            ToastAndroid.show('Please Enter Email Id',ToastAndroid.LONG)
+          }
+      }else{
+        ToastAndroid.show('Please Enter Name',ToastAndroid.LONG)
+      }
+    } catch (error) {
+      console.log( 'Data received in register.js catch: '+ error)
     }
-  }else{
-    ToastAndroid.show('Please Enter Name',ToastAndroid.LONG)
   }
-}
 
-onRegister = async()=>{
-  try {
-    const options={
-      method:'GET',
-    headers:{
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'x-auth-token': ConstantValues.token
-    }}
-    const response= await fetch(`${ConstantValues.apiUrl}customer/details/${ConstantValues.customerId}`,options)
-    const json= await response.json();
-    console.log(json)
-    ToastAndroid.show('Congratulations!! Registeration Successfull',ToastAndroid.LONG)
-    this.props.navigation.navigate('Search')
-  } catch (error) {
-    console.log(error)
-  }
-}
+  //getting User register
+  async onRegister()  {
+    try {
+      let response = await LoginApi.getUserRegister();
+      console.log('data received in register.js : '+ JSON.stringify(response))
 
-
-
-
-
+      ToastAndroid.show('Congratulations!! Registeration Successfull',ToastAndroid.LONG)
+      this.props.navigation.navigate('Search')
+      
+    } catch (error) {
+      console.log( 'Data received in register.js catch: '+ error)
+    }
+ }
 
   render() {
     const { navigation } = this.props;
@@ -103,11 +98,13 @@ onRegister = async()=>{
             onPress={()=>{
               this.props.navigation.navigate('Search')
             }}
-            />
+        />
       </View>
     );
   }
 }
+
+
 const styles = StyleSheet.create({
   slide: {
     flex: 1,

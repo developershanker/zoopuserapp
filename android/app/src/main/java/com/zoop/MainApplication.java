@@ -3,8 +3,8 @@ package com.zoop;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.quenice.reactnative.RNCardViewPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.kishanjvaghela.cardview.RNCardViewPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
@@ -32,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            
             new RNDeviceInfo(),
             new RNCardViewPackage(),
             new SplashScreenReactPackage(),

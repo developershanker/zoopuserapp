@@ -5,6 +5,7 @@ import { CustomButton } from '../assests/customButtonShort.js';
 import {FadeInView} from '../assests/fadeInView.js';
 import Device from 'react-native-device-info';
 import ConstantValues from '../constantValues.js'
+import loginApi from './loginApi.js';
 
 
 export default class Welcome extends Component {
@@ -22,49 +23,32 @@ export default class Welcome extends Component {
 
 
   ////Sending Otp API//////
-  sendOtp(mobile){
-  console.log(mobile)
-  fetch(ConstantValues.apiUrl+'customer/login',{
-    method:'POST',
-    headers:{
-      Accept: '*/*',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      mobile: mobile, 
-      device:{apiLevel,ip,carrier,deviceId,firstInstallTime,macAddress,systemVersion,systemName,appVersion,deviceType,osBuildId},
-      
-    })
-  })
-  .then((response) => response.json())
-    .then((responseJson) => {
-      if(responseJson.status==true){
-      return(console.log(responseJson),
-      console.log('Logged with mobile No. :'+mobile),
-      console.log('The status is: '+responseJson.status),
-      console.log('The message is: '+responseJson.message),
-      ToastAndroid.show(responseJson.message, ToastAndroid.LONG),
-      this.props.navigation.navigate('OtpVerify',{
-        mobile:this.state.mobile,
-        customerId:responseJson.data.customerId}) 
-      )
+   async sendOtp(mobile){
+     try {
+       let response = await loginApi.sendOtp(mobile);
+       console.log('data received in welcome.js : '+ JSON.stringify(response))
+       if(response.status==true){
+              return(console.log (response),
+              console.log ('Logged with mobile No. :'+ mobile),
+              console.log ('The status is: '+ response.status),
+              console.log ('The message is: '+ response.message),
+              ToastAndroid.show(response.message, ToastAndroid.LONG),
+              this.props.navigation.navigate('OtpVerify',{
+                        mobile    : this.state.mobile,
+                        customerId: response.data.customerId }
+                        ) 
+              )
       }else {
-        return(
-          ToastAndroid.show(responseJson.error,ToastAndroid.LONG),
-        console.log(responseJson.error)
-        
-        )
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-}
-// isEmpty(){
-//   if (this.state.mobile==''){
-//     ToastAndroid.show('Please Enter Valid Mobile No.',ToastAndroid.CENTER)
-//   }
-// }
+            return(
+               ToastAndroid.show(response.error,ToastAndroid.LONG),
+               console.log(response.error)
+                )
+              }
+     } catch (error) {
+      console.log( 'Data received in welcome.js catch: '+ error)
+     }
+   }
+
 
 
 

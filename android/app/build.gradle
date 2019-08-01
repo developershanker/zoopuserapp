@@ -138,8 +138,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-rn-cardview')
     implementation project(':react-native-device-info')
-   implementation project(':react-native-cardview')
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-vector-icons')
     implementation project(':@react-native-community_async-storage')

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text,FlatList,StyleSheet,Alert,TouchableOpacity,Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import CardView from 'react-native-cardview';
+import CardView from 'react-native-rn-cardview';
 
 export class CustomGridIcon extends Component {
     
@@ -32,8 +32,8 @@ export class CustomGridIcon extends Component {
                  <TouchableOpacity  onPress={this.GetGridViewItem.bind(this,item.key)}>
                  <CardView
                    cardElevation={5}
-                   cardMaxElevation={5}
-                   cornerRadius={5}
+                   maxCardElevation={5}
+                          radius={5}
                   style={styles.icon}
             >
                 {/* <Text style={styles.GridViewTextLayout} onPress={this.GetGridViewItem.bind(this, item.key)} > {item.key} </Text> */}

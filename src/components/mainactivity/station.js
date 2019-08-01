@@ -3,7 +3,7 @@ import { Text,Dimensions, View,ScrollView,Image,StyleSheet,Animated,Easing,Touch
 import SplashScreen from 'react-native-splash-screen';
 import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
-import CardView from 'react-native-cardview';
+import CardView from 'react-native-rn-cardview';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { StationHeader } from './stationHeader.js';
 
@@ -102,8 +102,8 @@ export default class station extends Component {
         <CardView
         style={styles.card}
           cardElevation={4}
-          cardMaxElevation={4}
-          cornerRadius={5}>
+          maxCardElevation={4}
+          radius={5}>
             <Image source={require('../images/roundimg3.jpg')} style={styles.outletimage}/>
             <View  style={styles.detail}>
               <View style={{flexDirection:'row'}}>

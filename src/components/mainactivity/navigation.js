@@ -19,6 +19,7 @@ import SearchOption from '../mainactivity/searchOption.js';
 import AutoCompleteTrain from '../mainactivity/autoCompleteTrain.js';
 import Notifications from '../services/notifications.js';
 import Menu from '../menu/menu.js';
+import Cart from '../cart/cart.js';
 //////-------DRAWER ITEMS RELATED VIEWS-----------//////
 import Contact from '../services/contact';
 import FAQ from '../services/faq';
@@ -348,6 +349,13 @@ Menu:{
   }
  
 },
+Cart:{
+  screen:Cart,
+  navigationOptions:{
+    header:null,
+  }
+ 
+},
 AutoCompleteTrain:{
   screen:AutoCompleteTrain,
   navigationOptions:{
@@ -387,7 +395,7 @@ PlatformLocator:{
 
 },
 {
-  initialRouteName:'Search'
+  initialRouteName:'Welcome'
 }
 
 
