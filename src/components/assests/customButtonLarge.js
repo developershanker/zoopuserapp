@@ -3,10 +3,10 @@ import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 
 
 export const CustomButton = (props) => {
-    const { title = 'Enter', style = {}, textStyle = {}, onPress } = props;
+    const { title = 'Enter', style = {}, textStyle = {}, onPress,disabled,activeOpacity } = props;
 
     return (
-        <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
+        <TouchableOpacity onPress={onPress} style={[styles.button, style]} disabled={disabled} activeOpacity={activeOpacity}>
             <Text style={[styles.text, textStyle]}>{props.title}</Text>
         </TouchableOpacity>
     );
@@ -26,7 +26,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.4,
         shadowOffset: { height: 10, width: 10 },
         shadowRadius: 20,
-        margin: 10,
+        marginTop:10,
+        marginBottom: 10,
+        
     },
     text: {
         fontSize: 16,

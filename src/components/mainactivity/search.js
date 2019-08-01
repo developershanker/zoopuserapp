@@ -1,39 +1,35 @@
 import React, { Component } from 'react';
-import { View,StyleSheet,Clipboard,Button,ScrollView,Image,TextInput } from 'react-native';
+import { View,Dimensions,StyleSheet,Clipboard,Button,ScrollView,Image,TextInput,TouchableOpacity} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 import { RadioButton, Text } from 'react-native-paper';
 import { CustomButton } from '../assests/customButtonLarge';
-import { Grid } from 'native-base';
-
-
+import {CustomGridIcon} from '../assests/customGridIcon';
+import { SafeAreaView } from 'react-navigation';
 export default class Search extends Component {
+  componentDidMount() {
+    SplashScreen.hide();
+}
   constructor(props) {
     super(props);
     this.state = {
       text:'',
       value:'Enter PNR',
-      placeholder:''
-      
+      placeholder:'',
+      email:''
     };
   }
  
   render() {
       
     return (
-      <View style={styles.slide}>
-        <View style={styles.scroll}>
-        <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        alwaysBounceHorizontal={true}
-        contentContainerStyle={styles.contentContainer}
-        >
-          <Image style={styles.image} source={require('../images/promo.png')}/>
-          <Image style={styles.image} source={require('../images/promo1.png')}/>
-          <Image style={styles.image} source={require('../images/promo4.jpg')}/>
-          <Image style={styles.image} source={require('../images/promo5.png')}/>
-          <Image style={styles.image} source={require('../images/promo1.png')}/>
-        </ScrollView>
+      <SafeAreaView>
+      <ScrollView>
+      <View style={styles.slide} >
+
+        <View>
+        <Image style={styles.image} source={require('../images/ad.png')}/>
         </View>
+       
       <RadioButton.Group
         onValueChange={value => this.setState({ value })}
         value={this.state.value}
@@ -59,9 +55,11 @@ export default class Search extends Component {
       </View>
       <View style={styles.main}>
       <TextInput
+      style={styles.input}
       placeholder={this.state.value}
        keyboardType='number-pad'
        maxLength={10}
+       underlineColorAndroid='#000000'
       onValueChange={placeholder=>this.setState({placeholder})}
        onChangeText={text => this.setState({ text })}
        
@@ -69,13 +67,36 @@ export default class Search extends Component {
       <CustomButton
     onPress={()=>this.props.navigation.navigate('Station')}
     title='SEARCH'
+    
     />
     </View>
+    {/* <CustomTextInput
+    placeholder="test@gmail.com"
+    label="Email"
+    mode='outlined'
+    value={this.state.email}
+    onChangeText={email => this.setState({ email })}
+    /> */}
+    <CustomGridIcon
+    />
     
+    <View style={styles.scroll}>
+        <ScrollView
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        alwaysBounceHorizontal={true}
+        contentContainerStyle={styles.contentContainer}
+        >
+          <Image style={styles.img} source={require('../images/promo.png')}/>
+          <Image style={styles.img} source={require('../images/promo1.png')}/>
+          <Image style={styles.img} source={require('../images/promo4.jpg')}/>
+          <Image style={styles.img} source={require('../images/promo5.png')}/>
+          <Image style={styles.img} source={require('../images/promo1.png')}/>
+        </ScrollView>
+        </View>
     </View>
-
-      
-   
+    </ScrollView>
+    </SafeAreaView>
     );
   }
   
@@ -84,24 +105,32 @@ const styles = StyleSheet.create({
   slide: {
     flex: 1,
     alignItems:'stretch',
-    justifyContent:'flex-start',
+    justifyContent:'center',
     backgroundColor:'#ffffff',
-   
+    flexDirection:'column',
+
   },
  main: {
-    alignItems:'stretch',
+  
+    alignItems:'center',
     justifyContent:'center',
-   
    
   },
   scroll:{
-    height:150,
+    alignItems:'stretch',
+    justifyContent:'center',
     marginLeft: 10,
+    marginBottom:10
+  },
+  img:{
+    width:Dimensions.get('window').width - 120,
+    height:150,
+    marginLeft:5
   },
   image: {
-    width:200,
-    height:100,
-    margin:10
+    width:Dimensions.get('window').width,
+    height:150,
+    marginLeft:5
 
   },
   contentContainer:{
@@ -118,8 +147,9 @@ const styles = StyleSheet.create({
     fontFamily:'monospace',
   },
   input:{
-    width:200,
-    color:'#000000'
+    fontSize:20,
+    color:'#000000',
+    width:Dimensions.get('window').width - 50,
   },
   heading:{
     color: 'black',

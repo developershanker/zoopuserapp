@@ -3875,6 +3875,11 @@ lodash@4.17.11, lodash@^4.0.0, lodash@^4.17.11, lodash@^4.17.5, lodash@^4.3.0, l
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
 
+lodash@^4.17.4:
+  version "4.17.14"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
+  integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
+
 loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
@@ -4731,6 +4736,11 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
+opencollective-postinstall@^2.0.0:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/opencollective-postinstall/-/opencollective-postinstall-2.0.2.tgz#5657f1bede69b6e33a45939b061eb53d3c6c3a89"
+  integrity sha512-pVOEP16TrAO2/fjej1IdOyupJY8KDUM1CvsaScRbw6oddvpQoOfGk4ywha0HKKVAD6RkW4x6Q+tNBwhf3Bgpuw==
+
 opn@^3.0.2:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/opn/-/opn-3.0.3.tgz#b6d99e7399f78d65c3baaffef1fb288e9b85243a"
@@ -5084,7 +5094,7 @@ prompts@^2.0.1:
     kleur "^3.0.2"
     sisteransi "^1.0.0"
 
-prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
+prop-types@15.x.x, prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -5212,10 +5222,35 @@ react-native-autocomplete-search@^1.0.8:
     "@babel/preset-flow" "^7.0.0"
     lodash "^4.17.11"
 
+react-native-cardview@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-cardview/-/react-native-cardview-2.0.2.tgz#e07c13c61fbfce2152c1a2c18579895c7d9e7956"
+  integrity sha512-GSJv5lMxbCFPdOzEQizJhfFgHIA8xK16jO2lXpK0prcN8vTEoGsyzhiZJJEbY4SFbMfr+Q6cW4gAjBLNxWrTuw==
+  dependencies:
+    prop-types "^15.6.0"
+
+react-native-circular-timer@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-circular-timer/-/react-native-circular-timer-0.1.0.tgz#7f367d635a04c0ec7eea4ad19d02a0dc397ea140"
+  integrity sha512-AF213xAj3XlfYsYci+NzwEz6PrqrPeDNZM2YGSyzIoLY3+0e9evGl1tq8jWzSviNwtcaACTLp5Yn2v+FPH8bUg==
+
+react-native-confirmation-code-input@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-confirmation-code-input/-/react-native-confirmation-code-input-1.0.4.tgz#f5c2cced66f26b61050fea8bfd17473af1ad5ff9"
+  integrity sha512-WmkDws7lovEC9deYHtinwsLBv4Snem4VjHJOoXe0tNM/cgEKzuNNCOui25QHgB2OFPvcWMAnTHzyCJmEHcbnqA==
+  dependencies:
+    lodash "^4.17.4"
+    prop-types "^15.5.10"
+
 react-native-custom-radio-button@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-native-custom-radio-button/-/react-native-custom-radio-button-1.0.2.tgz#e646b970eb50f8cbcdd35faafdbe5dedbd1dcfc7"
   integrity sha512-5HxsUIiZ4174VQyfBS2u2KoxXZtiJji57bbOU43hrKxvvGfPs+2Nl1O3zXxz6FwI35JqlMJSRtjli+ojoH4PIw==
+
+react-native-device-info@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-2.2.2.tgz#777388b8cff4594c8db2ea3a53f2f1f9e2c611a1"
+  integrity sha512-2b0TycUJbW/9T7L070L6q4+ce8guD4c0c8mWWjiVNuvCrZVf7VNomvNk1BqIVXcnYbZO43V0SVN6z1fvp2HTyg==
 
 react-native-drawer@2.5.1:
   version "2.5.1"
@@ -5232,12 +5267,20 @@ react-native-easy-grid@0.2.1:
   dependencies:
     lodash "4.17.11"
 
-react-native-facebook-account-kit@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-facebook-account-kit/-/react-native-facebook-account-kit-1.1.0.tgz#39b0b09cb84dd2ceb2879ee498b5b6160a81a601"
-  integrity sha512-1FwFcJ5p3OM80ExIpHg7CUb1+RA5E/gaPmhZl2hB6gfqi4EezRpNuXCZiJ6IvZTw/I8xhXzUkmf7kJMQv30YqA==
+react-native-facebook-account-kit@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-facebook-account-kit/-/react-native-facebook-account-kit-2.0.0.tgz#cb3c6d1ebf5f16543b4faee3f6c313ea0afa78ba"
+  integrity sha512-7cfob8xo7Rcgvpy1YxZTHpud8nu6gQNrwqCBRVEqoXg35Y2RPoVmz5TMgsEKnCT/+beb7ASIRnTPoQHWir9e+Q==
   dependencies:
-    prop-types "^15.5.10"
+    prop-types "15.x.x"
+
+react-native-firebase@^5.5.5:
+  version "5.5.5"
+  resolved "https://registry.yarnpkg.com/react-native-firebase/-/react-native-firebase-5.5.5.tgz#d5c7e02eb6ea5650f9ebbb23c2cd796f83e7ca45"
+  integrity sha512-i3MBEQ2xPsEFLLp4NjK5PC4tGA4RgUdULxiTHvmi9qCM2FlVV0YhyFoO+dQIFfW2V9AzSE0v38EPCuhZDp3RdQ==
+  dependencies:
+    opencollective-postinstall "^2.0.0"
+    prop-types "^15.7.2"
 
 react-native-gesture-handler@^1.3.0:
   version "1.3.0"
@@ -5273,6 +5316,13 @@ react-native-paper@^2.16.0:
     react-lifecycles-compat "^3.0.4"
     react-native-safe-area-view "^0.12.0"
 
+react-native-rn-cardview@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-rn-cardview/-/react-native-rn-cardview-1.0.4.tgz#f271641087dfbcc1074a9a8dd791ef69867ce009"
+  integrity sha512-W4yrZ625VK2kDYvCJeHiiK0uA9MYHYPWhQ5sxyaoijSj9d8aSOTZ064XPhD9sK24jqxuJYAMqHImQW085GWZlQ==
+  dependencies:
+    prop-types "^15.6.0"
+
 react-native-safe-area-view@^0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-view/-/react-native-safe-area-view-0.12.0.tgz#5c312f087300ecf82e8541c3eac25d560e147f22"
@@ -5296,6 +5346,13 @@ react-native-splash-screen@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-native-splash-screen/-/react-native-splash-screen-3.2.0.tgz#d47ec8557b1ba988ee3ea98d01463081b60fff45"
   integrity sha512-Ls9qiNZzW/OLFoI25wfjjAcrf2DZ975hn2vr6U9gyuxi2nooVbzQeFoQS5vQcbCt9QX5NY8ASEEAtlLdIa6KVg==
+
+react-native-switch@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-switch/-/react-native-switch-1.5.0.tgz#a5c8e72f87def649d1c9de027c5ae27e2037ea40"
+  integrity sha1-pcjnL4fe9knRyd4CfFrifiA36kA=
+  dependencies:
+    prop-types "^15.6.0"
 
 react-native-tab-view@^1.2.0, react-native-tab-view@^1.4.1:
   version "1.4.1"

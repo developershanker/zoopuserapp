@@ -1,29 +1,264 @@
 import React, { Component } from 'react';
-import { View, Text,Button } from 'react-native';
+import { View, Text,Button,TouchableOpacity,Image,Platform,ScrollView,Dimensions } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
+import Device from 'react-native-device-info';
+//////-------LOGIN RELATED VIEWS-----------//////
 import Login from '../login/login.js';
 import Authenticated from '../login/authenticated.js'
 import NotAuthenticated from '../login/notAuthenticated.js'
 import Slider from '../login/slider.js';
 import Register from '../login/register.js';
+import OtpVerify from '../login/otpVerify.js';
+import DeviceInfo from '../assests/deviceInfo.js';
+
+//////-------INITIAL SEARCH RELATED VIEWS-----------//////
 import Search from './search.js';
 import Welcome from '../login/welcome.js';
 import Station from '../mainactivity/station.js';
 import SearchOption from '../mainactivity/searchOption.js';
-import AutoCompleteTrain from '../mainactivity/autoCompleteTrain.js'
-import SplashScreen from 'react-native-splash-screen';
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import AutoCompleteTrain from '../mainactivity/autoCompleteTrain.js';
+import Notifications from '../services/notifications.js';
+import Menu from '../menu/menu.js';
+import Cart from '../cart/cart.js';
+//////-------DRAWER ITEMS RELATED VIEWS-----------//////
+import Contact from '../services/contact';
+import FAQ from '../services/faq';
+import Feedback from '../services/feedback';
+import MyOrders from '../services/myOrders';
+import MyWallet from '../services/myWallet';
+import Profile from '../services/profile';
+import RateUs from '../services/rateUs'; 
+import LogOut from '../login/logout';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { DrawerItems, SafeAreaView } from 'react-navigation';
+////////-------Extra Services Screens------////////
+import CheckPNR from '../services/checkPnr';
+import SpotTrain from '../services/spotTrain';
+import TrainTimeTable from '../services/trainTimeTable';
+import CoachSequence from '../services/coachSequence';
+import PlatformLocator from '../services/platformLocator';
+
+
+import { createStackNavigator, createAppContainer,createDrawerNavigator} from "react-navigation";
+import { Footer } from 'native-base';
+
+
 
 export  class App extends Component{
-  componentDidMount() {
+  componentDidMount()  {
     SplashScreen.hide();
 }
   render(){
     return(
+
       <AppNavigator/>
+      
     )
   }
 }
 
+class NavigationDrawerStructure extends Component {
+  //Structure for the navigatin Drawer
+  toggleDrawer = () => {
+    //Props to open/close the drawer
+    this.props.navigationProps.toggleDrawer();
+    if (Platform.OS === 'android' && Device.hasNotch()) {
+      SafeAreaView.setStatusBarHeight(
+        /* Some value for status bar height + notch height */
+        30
+
+      );
+    }
+  };
+  render() {
+
+    return (
+      <SafeAreaView style={{ flexDirection: 'row' }}>
+      <View>
+        
+        <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
+          {/*Donute Button Image */}
+         
+         <Icon
+         name='align-center'
+         size={30}
+        style={{marginLeft: 15 }}
+          />
+        </TouchableOpacity>
+        
+      </View>
+      </SafeAreaView>
+    );
+  }
+}
+class NotificationSection extends Component{
+  openNotification=()=>{
+    this.props.navigationProps.navigate('Notifications')
+  }
+  render(){
+    return(
+      <TouchableOpacity onPress={this.openNotification.bind(this)}>
+
+      <Icon
+      name='bell'
+      size={30}
+      style={{marginRight:15}}
+      />
+    </TouchableOpacity>
+    )
+  }
+ 
+}
+class HeaderIcon extends Component{
+  render(){
+    return(
+      <View>
+        <Image source={require('../images/zooplogo.png')}
+        style={{width:50,height:30}}
+        />
+      </View>
+    )
+  }
+}
+
+const CustomDrawerComponent=(props)=>(
+ 
+  <SafeAreaView style={{flex:1,flexDirection:'column'}}>
+    <ScrollView>
+    <View style={{width:200,height:150,backgroundColor:'#ffffff',justifyContent:'center'}}>
+        <Image
+        source={require('../images/zooplogo.png')}
+        style={{height:120,width:120}}
+        ></Image>
+    </View>
+      
+       <DrawerItems {...props} />
+      
+      <TouchableOpacity>
+        <Footer style={{backgroundColor:'#FF9800'}}>
+      <View style={{justifyContent:'space-around'}}>
+        {/* <Icon name='sign-in' size={10} style={{color:'#000000'}}/> */}
+        <Text style={{fontSize:25,fontWeight:'bold',color:'#000000',justifyContent:'center'}}>LOGIN</Text>
+        </View>
+    </Footer>
+        </TouchableOpacity>
+        </ScrollView>
+    </SafeAreaView>
+        
+)
+const DrawerNavigator=createDrawerNavigator({
+  Search:{
+    screen:Search,
+    navigationOptions:{
+      drawerLabel:'Home',
+      drawerIcon:<Icon
+      name='home'
+      size={20}
+      
+      />
+    }
+  },
+  Profile:{
+    screen:Profile,
+    navigationOptions:{
+      drawerLabel:'Profile',
+      headerTitle:'Profile',
+      drawerIcon:<Icon
+      name='user'
+      size={20}
+      
+      />
+    }
+  },
+  MyOrders:{
+    screen:MyOrders,
+    navigationOptions:{
+      drawerLabel:'My Order',
+      headerTitle:'My Order',
+      drawerIcon:<Icon
+      name='shopping-basket'
+      size={20}
+      
+      />
+    }
+  },
+  MyWallet:{
+    screen:MyWallet,
+    navigationOptions:{
+      drawerLabel:'My Wallet',
+      headerTitle:'My Wallet',
+      drawerIcon:<Icon
+      name='plus'
+      size={20}
+      
+      />
+    }
+  },
+  Contact:{
+    screen:Contact,
+    navigationOptions: {
+      drawerLabel: 'Contact',
+      drawerIcon:<Icon
+      name='phone'
+      size={20}
+      
+      />
+    },
+  },
+  FAQ:{
+    screen:FAQ,
+    navigationOptions:{
+      drawerLabel:'FAQ',
+      drawerIcon:<Icon
+      name='question'
+      size={20}
+      
+      />
+    }
+  },
+  Login:{
+screen:Welcome,
+navigationOptions:{
+  header:null,
+  drawerLabel:'Login',
+  drawerIcon:<Icon
+      name='user'
+      size={20}
+      
+      />
+  
+}
+  },
+  Feedback:{
+    screen:Feedback,
+    navigationOptions:{
+    drawerLabel:'Feedback',
+    drawerIcon:<Icon
+      name='pencil-square'
+      size={20}
+      
+      />
+    }
+  },  
+  RateUs:{
+    screen:RateUs,
+    navigationOptions:{
+    drawerLabel:'Rate Us',
+    drawerIcon:<Icon
+      name='star'
+      size={20}
+      
+      />
+    }
+  },
+  
+},{
+  contentComponent:CustomDrawerComponent,
+  drawerWidth: Dimensions.get('window').width - 120,
+  
+
+}
+);
 const AppNavigator= createStackNavigator({
   Login:{
       screen:Login,
@@ -50,18 +285,43 @@ NotAuthenticated:{
     }
 
   },
+  Notifications:{
+    screen:Notifications,
+    navigationOptions:{
+      headerTitle:'Notifications'      
+    }
+
+  },
   Welcome:{
     screen:Welcome,
     navigationOptions:{
       header:null,
     }
   },
+  OtpVerify:{
+    screen:OtpVerify,
+    navigationOptions:{
+      header:null,
+    }
+  },
+  DeviceInfo:{
+    screen:DeviceInfo,
+    navigationOptions:{
+      header:null,
+    }
+  },
   
   Search:{
-    screen:Search,
-    navigationOptions:{
-      headerTitle:'Zoop',
-    }
+    screen:DrawerNavigator,
+    navigationOptions: ({ navigation }) => ({
+      headerTitle:<HeaderIcon/>,
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerRight:<NotificationSection navigationProps={navigation}/>,
+      headerStyle: {
+        backgroundColor: '#ffffff',
+      },
+      headerTintColor: '#ffffff',
+    }),
   },
   Register:{
     screen:Register,
@@ -78,24 +338,68 @@ SearchOption:{
   Station:{
     screen:Station,
     navigationOptions:{
-      headerTitle:'12196   Lko-Agra Intercity',
+      header:null,
     }
    
+},
+Menu:{
+  screen:Menu,
+  navigationOptions:{
+    header:null,
+  }
+ 
+},
+Cart:{
+  screen:Cart,
+  navigationOptions:{
+    header:null,
+  }
+ 
 },
 AutoCompleteTrain:{
   screen:AutoCompleteTrain,
   navigationOptions:{
     header:null
   }
+},
+CheckPNR:{
+  screen:CheckPNR,
+  navigationOptions:{
+    header:null
+  }
+},
+SpotTrain:{
+  screen:SpotTrain,
+  navigationOptions:{
+    header:null
+  }
+},
+TrainTimeTable:{
+  screen:TrainTimeTable,
+  navigationOptions:{
+    header:null
+  }
+},
+CoachSequence:{
+  screen:CoachSequence,
+  navigationOptions:{
+    header:null
+  }
+},
+PlatformLocator:{
+  screen:PlatformLocator,
+  navigationOptions:{
+    header:null
+  }
 }
+
 },
 {
-
   initialRouteName:'Welcome'
 }
 
 
 );
 export default createAppContainer(AppNavigator);
-
+// export default createAppContainer(DrawerNavigator);
 

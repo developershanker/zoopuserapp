@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet,ActivityIndicator,FlatList,TouchableOpacity} from 'react-native';
-import { InputAutoSuggest } from 'react-native-autocomplete-input'
+import { InputAutoSuggest } from 'react-native-autocomplete-input';
 
 export default class autoCompleteTrain extends Component {
   constructor(props) {
