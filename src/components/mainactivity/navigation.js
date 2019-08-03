@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text,Button,TouchableOpacity,Image,Platform,ScrollView,Dimensions } from 'react-native';
+import { View, Text, Button, TouchableOpacity, Image, Platform, ScrollView, Dimensions } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import Device from 'react-native-device-info';
 //////-------LOGIN RELATED VIEWS-----------//////
@@ -20,6 +20,9 @@ import AutoCompleteTrain from '../mainactivity/autoCompleteTrain.js';
 import Notifications from '../services/notifications.js';
 import Menu from '../menu/menu.js';
 import Cart from '../cart/cart.js';
+import CouponPage from '../cart/couponPage.js';
+import PassengerDetail from '../customer/passengerDetail.js';
+import PaymentPage from '../payment/paymentPage.js';
 //////-------DRAWER ITEMS RELATED VIEWS-----------//////
 import Contact from '../services/contact';
 import FAQ from '../services/faq';
@@ -27,7 +30,7 @@ import Feedback from '../services/feedback';
 import MyOrders from '../services/myOrders';
 import MyWallet from '../services/myWallet';
 import Profile from '../services/profile';
-import RateUs from '../services/rateUs'; 
+import RateUs from '../services/rateUs';
 import LogOut from '../login/logout';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { DrawerItems, SafeAreaView } from 'react-navigation';
@@ -39,20 +42,21 @@ import CoachSequence from '../services/coachSequence';
 import PlatformLocator from '../services/platformLocator';
 
 
-import { createStackNavigator, createAppContainer,createDrawerNavigator} from "react-navigation";
+import { createStackNavigator, createAppContainer, createDrawerNavigator } from "react-navigation";
 import { Footer } from 'native-base';
 
 
 
-export  class App extends Component{
-  componentDidMount()  {
-    SplashScreen.hide();
-}
-  render(){
-    return(
 
-      <AppNavigator/>
-      
+export class App extends Component {
+  componentDidMount() {
+    SplashScreen.hide();
+  }
+  render() {
+    return (
+
+      <AppNavigator />
+
     )
   }
 }
@@ -74,329 +78,346 @@ class NavigationDrawerStructure extends Component {
 
     return (
       <SafeAreaView style={{ flexDirection: 'row' }}>
-      <View>
-        
-        <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
-          {/*Donute Button Image */}
-         
-         <Icon
-         name='align-center'
-         size={30}
-        style={{marginLeft: 15 }}
-          />
-        </TouchableOpacity>
-        
-      </View>
+        <View>
+
+          <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
+            {/*Donute Button Image */}
+
+            <Icon
+              name='align-center'
+              size={30}
+              style={{ marginLeft: 15 }}
+            />
+          </TouchableOpacity>
+
+        </View>
       </SafeAreaView>
     );
   }
 }
-class NotificationSection extends Component{
-  openNotification=()=>{
+class NotificationSection extends Component {
+  openNotification = () => {
     this.props.navigationProps.navigate('Notifications')
   }
-  render(){
-    return(
+  render() {
+    return (
       <TouchableOpacity onPress={this.openNotification.bind(this)}>
 
-      <Icon
-      name='bell'
-      size={30}
-      style={{marginRight:15}}
-      />
-    </TouchableOpacity>
+        <Icon
+          name='bell'
+          size={30}
+          style={{ marginRight: 15 }}
+        />
+      </TouchableOpacity>
     )
   }
- 
+
 }
-class HeaderIcon extends Component{
-  render(){
-    return(
+class HeaderIcon extends Component {
+  render() {
+    return (
       <View>
         <Image source={require('../images/zooplogo.png')}
-        style={{width:50,height:30}}
+          style={{ width: 50, height: 30 }}
         />
       </View>
     )
   }
 }
 
-const CustomDrawerComponent=(props)=>(
- 
-  <SafeAreaView style={{flex:1,flexDirection:'column'}}>
+const CustomDrawerComponent = (props) => (
+
+  <SafeAreaView style={{ flex: 1, flexDirection: 'column' }}>
     <ScrollView>
-    <View style={{width:200,height:150,backgroundColor:'#ffffff',justifyContent:'center'}}>
+      <View style={{ width: 200, height: 150, backgroundColor: '#ffffff', justifyContent: 'center' }}>
         <Image
-        source={require('../images/zooplogo.png')}
-        style={{height:120,width:120}}
+          source={require('../images/zooplogo.png')}
+          style={{ height: 120, width: 120 }}
         ></Image>
-    </View>
-      
-       <DrawerItems {...props} />
-      
+      </View>
+
+      <DrawerItems {...props} />
+
       <TouchableOpacity>
-        <Footer style={{backgroundColor:'#FF9800'}}>
-      <View style={{justifyContent:'space-around'}}>
-        {/* <Icon name='sign-in' size={10} style={{color:'#000000'}}/> */}
-        <Text style={{fontSize:25,fontWeight:'bold',color:'#000000',justifyContent:'center'}}>LOGIN</Text>
-        </View>
-    </Footer>
-        </TouchableOpacity>
-        </ScrollView>
-    </SafeAreaView>
-        
+        <Footer style={{ backgroundColor: '#FF9800' }}>
+          <View style={{ justifyContent: 'space-around' }}>
+            {/* <Icon name='sign-in' size={10} style={{color:'#000000'}}/> */}
+            <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#000000', justifyContent: 'center' }}>LOGIN</Text>
+          </View>
+        </Footer>
+      </TouchableOpacity>
+    </ScrollView>
+  </SafeAreaView>
+
 )
-const DrawerNavigator=createDrawerNavigator({
-  Search:{
-    screen:Search,
-    navigationOptions:{
-      drawerLabel:'Home',
-      drawerIcon:<Icon
-      name='home'
-      size={20}
-      
+const DrawerNavigator = createDrawerNavigator({
+  Search: {
+    screen: Search,
+    navigationOptions: {
+      drawerLabel: 'Home',
+      drawerIcon: <Icon
+        name='home'
+        size={20}
+
       />
     }
   },
-  Profile:{
-    screen:Profile,
-    navigationOptions:{
-      drawerLabel:'Profile',
-      headerTitle:'Profile',
-      drawerIcon:<Icon
-      name='user'
-      size={20}
-      
+  Profile: {
+    screen: Profile,
+    navigationOptions: {
+      drawerLabel: 'Profile',
+      headerTitle: 'Profile',
+      drawerIcon: <Icon
+        name='user'
+        size={20}
+
       />
     }
   },
-  MyOrders:{
-    screen:MyOrders,
-    navigationOptions:{
-      drawerLabel:'My Order',
-      headerTitle:'My Order',
-      drawerIcon:<Icon
-      name='shopping-basket'
-      size={20}
-      
+  MyOrders: {
+    screen: MyOrders,
+    navigationOptions: {
+      drawerLabel: 'My Order',
+      headerTitle: 'My Order',
+      drawerIcon: <Icon
+        name='shopping-basket'
+        size={20}
+
       />
     }
   },
-  MyWallet:{
-    screen:MyWallet,
-    navigationOptions:{
-      drawerLabel:'My Wallet',
-      headerTitle:'My Wallet',
-      drawerIcon:<Icon
-      name='plus'
-      size={20}
-      
+  MyWallet: {
+    screen: MyWallet,
+    navigationOptions: {
+      drawerLabel: 'My Wallet',
+      headerTitle: 'My Wallet',
+      drawerIcon: <Icon
+        name='plus'
+        size={20}
+
       />
     }
   },
-  Contact:{
-    screen:Contact,
+  Contact: {
+    screen: Contact,
     navigationOptions: {
       drawerLabel: 'Contact',
-      drawerIcon:<Icon
-      name='phone'
-      size={20}
-      
+      drawerIcon: <Icon
+        name='phone'
+        size={20}
+
       />
     },
   },
-  FAQ:{
-    screen:FAQ,
-    navigationOptions:{
-      drawerLabel:'FAQ',
-      drawerIcon:<Icon
-      name='question'
-      size={20}
-      
-      />
-    }
-  },
-  Login:{
-screen:Welcome,
-navigationOptions:{
-  header:null,
-  drawerLabel:'Login',
-  drawerIcon:<Icon
-      name='user'
-      size={20}
-      
-      />
-  
-}
-  },
-  Feedback:{
-    screen:Feedback,
-    navigationOptions:{
-    drawerLabel:'Feedback',
-    drawerIcon:<Icon
-      name='pencil-square'
-      size={20}
-      
-      />
-    }
-  },  
-  RateUs:{
-    screen:RateUs,
-    navigationOptions:{
-    drawerLabel:'Rate Us',
-    drawerIcon:<Icon
-      name='star'
-      size={20}
-      
-      />
-    }
-  },
-  
-},{
-  contentComponent:CustomDrawerComponent,
-  drawerWidth: Dimensions.get('window').width - 120,
-  
-
-}
-);
-const AppNavigator= createStackNavigator({
-  Login:{
-      screen:Login,
-      navigationOptions: {
-                header: null,
-              }
-  },
-  Authenticated:{
-    screen:Authenticated,
+  FAQ: {
+    screen: FAQ,
     navigationOptions: {
-              header: null,
-            }
-},
-NotAuthenticated:{
-  screen:NotAuthenticated,
-  navigationOptions: {
-            header: null,
-          }
-},
-  Slider:{
-    screen:Slider,
-    navigationOptions:{
-      header:null,
+      drawerLabel: 'FAQ',
+      drawerIcon: <Icon
+        name='question'
+        size={20}
+
+      />
+    }
+  },
+  Login: {
+    screen: Welcome,
+    navigationOptions: {
+      header: null,
+      drawerLabel: 'Login',
+      drawerIcon: <Icon
+        name='user'
+        size={20}
+
+      />
+
+    }
+  },
+  Feedback: {
+    screen: Feedback,
+    navigationOptions: {
+      drawerLabel: 'Feedback',
+      drawerIcon: <Icon
+        name='pencil-square'
+        size={20}
+
+      />
+    }
+  },
+  RateUs: {
+    screen: RateUs,
+    navigationOptions: {
+      drawerLabel: 'Rate Us',
+      drawerIcon: <Icon
+        name='star'
+        size={20}
+
+      />
+    }
+  },
+
+}, {
+    contentComponent: CustomDrawerComponent,
+    drawerWidth: Dimensions.get('window').width - 120,
+
+
+  }
+);
+const AppNavigator = createStackNavigator({
+  Login: {
+    screen: Login,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  Authenticated: {
+    screen: Authenticated,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  NotAuthenticated: {
+    screen: NotAuthenticated,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  Slider: {
+    screen: Slider,
+    navigationOptions: {
+      header: null,
     }
 
   },
-  Notifications:{
-    screen:Notifications,
-    navigationOptions:{
-      headerTitle:'Notifications'      
+  Notifications: {
+    screen: Notifications,
+    navigationOptions: {
+      headerTitle: 'Notifications'
     }
 
   },
-  Welcome:{
-    screen:Welcome,
-    navigationOptions:{
-      header:null,
+  Welcome: {
+    screen: Welcome,
+    navigationOptions: {
+      header: null,
     }
   },
-  OtpVerify:{
-    screen:OtpVerify,
-    navigationOptions:{
-      header:null,
+  OtpVerify: {
+    screen: OtpVerify,
+    navigationOptions: {
+      header: null,
     }
   },
-  DeviceInfo:{
-    screen:DeviceInfo,
-    navigationOptions:{
-      header:null,
+  DeviceInfo: {
+    screen: DeviceInfo,
+    navigationOptions: {
+      header: null,
     }
   },
-  
-  Search:{
-    screen:DrawerNavigator,
+
+  Search: {
+    screen: DrawerNavigator,
     navigationOptions: ({ navigation }) => ({
-      headerTitle:<HeaderIcon/>,
+      headerTitle: <HeaderIcon />,
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-      headerRight:<NotificationSection navigationProps={navigation}/>,
+      headerRight: <NotificationSection navigationProps={navigation} />,
       headerStyle: {
         backgroundColor: '#ffffff',
       },
       headerTintColor: '#ffffff',
     }),
   },
-  Register:{
-    screen:Register,
-    navigationOptions:{
-      header:null,
+  Register: {
+    screen: Register,
+    navigationOptions: {
+      header: null,
     }
-},
-SearchOption:{
-  screen:SearchOption,
-  navigationOptions:{
-    header:null,
-  }
-},
-  Station:{
-    screen:Station,
-    navigationOptions:{
-      header:null,
+  },
+  SearchOption: {
+    screen: SearchOption,
+    navigationOptions: {
+      header: null,
     }
-   
-},
-Menu:{
-  screen:Menu,
-  navigationOptions:{
-    header:null,
+  },
+  Station: {
+    screen: Station,
+    navigationOptions: {
+      header: null,
+    }
+
+  },
+  Menu: {
+    screen: Menu,
+    navigationOptions: {
+      header: null,
+    }
+
+  },
+  Cart: {
+    screen: Cart,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  CouponPage: {
+    screen: CouponPage,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  PassengerDetail: {
+    screen: PassengerDetail,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  PaymentPage: {
+    screen: PaymentPage,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  AutoCompleteTrain: {
+    screen: AutoCompleteTrain,
+    navigationOptions: {
+      header: null
+    }
+  },
+  CheckPNR: {
+    screen: CheckPNR,
+    navigationOptions: {
+      header: null
+    }
+  },
+  SpotTrain: {
+    screen: SpotTrain,
+    navigationOptions: {
+      header: null
+    }
+  },
+  TrainTimeTable: {
+    screen: TrainTimeTable,
+    navigationOptions: {
+      header: null
+    }
+  },
+  CoachSequence: {
+    screen: CoachSequence,
+    navigationOptions: {
+      header: null
+    }
+  },
+  PlatformLocator: {
+    screen: PlatformLocator,
+    navigationOptions: {
+      header: null
+    }
   }
- 
-},
-Cart:{
-  screen:Cart,
-  navigationOptions:{
-    header:null,
-  }
- 
-},
-AutoCompleteTrain:{
-  screen:AutoCompleteTrain,
-  navigationOptions:{
-    header:null
-  }
-},
-CheckPNR:{
-  screen:CheckPNR,
-  navigationOptions:{
-    header:null
-  }
-},
-SpotTrain:{
-  screen:SpotTrain,
-  navigationOptions:{
-    header:null
-  }
-},
-TrainTimeTable:{
-  screen:TrainTimeTable,
-  navigationOptions:{
-    header:null
-  }
-},
-CoachSequence:{
-  screen:CoachSequence,
-  navigationOptions:{
-    header:null
-  }
-},
-PlatformLocator:{
-  screen:PlatformLocator,
-  navigationOptions:{
-    header:null
-  }
-}
 
 },
-{
-  initialRouteName:'Welcome'
-}
+  {
+    initialRouteName: 'Search'
+  }
 
 
 );

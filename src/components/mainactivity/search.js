@@ -5,6 +5,8 @@ import { RadioButton, Text } from 'react-native-paper';
 import { CustomButton } from '../assests/customButtonLarge';
 import {CustomGridIcon} from '../assests/customGridIcon';
 import { SafeAreaView } from 'react-navigation';
+import searchApi from './searchApi';
+
 export default class Search extends Component {
   componentDidMount() {
     SplashScreen.hide();
@@ -17,6 +19,16 @@ export default class Search extends Component {
       placeholder:'',
       email:''
     };
+  }
+
+  async showTrain(){
+    try {
+      let response = await searchApi.showTrain();
+      console.log('data received in search.js : '+ JSON.stringify(response))
+    } catch (error) {
+      console.log( 'Data received in search.js catch: '+ error)
+    }
+
   }
  
   render() {
@@ -45,7 +57,8 @@ export default class Search extends Component {
           
           <RadioButton 
           value="Enter Train No."  
-          color='#000000'      
+          color='#000000' 
+          // onPress={this.showTrain()}     
            />
            <Text>Train No.</Text>
         </View>
@@ -65,7 +78,9 @@ export default class Search extends Component {
        
       />
       <CustomButton
-    onPress={()=>this.props.navigation.navigate('Station')}
+    onPress={()=>{
+      // this.showTrain(),
+      this.props.navigation.navigate('Station')}}
     title='SEARCH'
     
     />

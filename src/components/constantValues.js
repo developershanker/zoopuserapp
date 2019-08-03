@@ -6,7 +6,8 @@ export default class ConstantValues {
   static customerPhoneNo=''
   static customerEmailId=''
   static customerId=''
-  static token='' 
+  static token=''
+  static couponCode='ZOOP50'
   static device={
           apiLevel          : Device.getAPILevel(),
           ip                : Device.getIPAddress().then(ip => { return ip}),
