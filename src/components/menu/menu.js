@@ -250,7 +250,10 @@ export default class Menu extends Component {
       </ScrollView>
                                            {/*  Footer  */}
       <Fade visible={visible}>
-      <TouchableOpacity onPress={()=>this.props.navigation.navigate('Cart')} disabled={false}>
+      <TouchableOpacity onPress={()=>this.props.navigation.navigate('Cart',{
+                                            count       : this.state.count,
+                                            totalPrice  : this.state.totalPrice})}
+                        disabled={false}>
       <View style={[styles.footer]}>
         
         <View style={styles.itemCountShow}>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { TextInput} from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import { CustomButton } from '../assests/customButtonShort.js';
 
 
@@ -15,59 +15,59 @@ export default class login extends Component {
     return (
       <View style={styles.slide}>
         <Image
-        style={styles.icon}
-         source={require('../images/zooplogo.png')}
+          style={styles.icon}
+          source={require('../images/zooplogo.png')}
         />
         <Text style={styles.text}> LOGIN </Text>
         <View style={styles.input}>
-        <TextInput 
-        placeholder="Enter Mobile No."
-        keyboardType='number-pad'
-        maxLength={10}
-        ></TextInput>
-        
-        <CustomButton
-        style={styles.button}
+          <TextInput
+            placeholder="Enter Mobile No."
+            keyboardType='number-pad'
+            maxLength={10}
+          ></TextInput>
+
+          <CustomButton
+            style={styles.button}
             title="Submit"
             onPress={
               () => this.props.navigation.navigate('Search')}
-            
-        />
+
+          />
         </View>
       </View>
     );
   }
 }
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
   slide: {
     flex: 1,
-   alignContent:'center',
+    alignContent: 'center',
     justifyContent: 'center',
-    backgroundColor:'#ffffff'
+    backgroundColor: '#ffffff'
   },
   text: {
-   fontSize:20,
+    fontSize: 20,
     fontWeight: 'bold',
     // alignContent: 'center',  
   },
   input: {
-    fontSize:20,
+    fontSize: 20,
     fontWeight: 'bold',
-  alignContent:'stretch',
-    },
-    button: {
-      display: 'flex',
-      justifyContent:'center',
-      alignItems: 'center',
-      backgroundColor: '#000000',
-      shadowColor: '#000000',
-      
+    alignContent: 'stretch',
+  },
+  button: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000000',
+    shadowColor: '#000000',
+
   },
   icon: {
-    width:200,
-    height:200,
-    justifyContent:'flex-start'
-     },
+    width: 200,
+    height: 200,
+    justifyContent: 'flex-start'
+  },
 })
 
 
@@ -205,14 +205,14 @@ const styles=StyleSheet.create({
 // //       this.state = {
 // //       };
 // //     }
-    
+
 // //   render(){
 // //    RNAccountKit.configure({
 // //      responseType:'code' ,// 'token' by default,
 // //      initialPhoneCountryPrefix: '+91', // autodetected if none is provide
 // //      defaultCountry: 'IN',
 // //      }),
-   
+
 // //      RNAccountKit.loginWithPhone()
 // //      .then((token) => {
 // //        if (!token) {
@@ -220,7 +220,7 @@ const styles=StyleSheet.create({
 // //          return(
 // //            <Search/>
 // //          )
-         
+
 // //        }
 // //         else {
 // //          console.log(`Logged with phone. Token: ${JSON.stringify(token)}`)
@@ -230,7 +230,7 @@ const styles=StyleSheet.create({
 // //           <Register/>
 // //         )
 // //        }
-       
+
 // //      })
 // //     }
 // //   }
