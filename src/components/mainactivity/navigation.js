@@ -22,7 +22,13 @@ import Menu from '../menu/menu.js';
 import Cart from '../cart/cart.js';
 import CouponPage from '../cart/couponPage.js';
 import PassengerDetail from '../customer/passengerDetail.js';
+///////------Payment Process Files-------//////
 import PaymentPage from '../payment/paymentPage.js';
+import PaymentPaytm from '../payment/paymentPaytm.js';
+///////------Order Process Files-------//////
+import OrderBookingProcess from '../orderBooking/orderBookingConfirm.js';
+import DeliveryMark from '../postOrderActivity/deliveryMark.js';
+import TrackingOrder from '../postOrderActivity/trackingOrder.js';
 //////-------DRAWER ITEMS RELATED VIEWS-----------//////
 import Contact from '../services/contact';
 import FAQ from '../services/faq';
@@ -292,7 +298,7 @@ const AppNavigator = createStackNavigator({
   Notifications: {
     screen: Notifications,
     navigationOptions: {
-      headerTitle: 'Notifications'
+      header: null,
     }
 
   },
@@ -375,6 +381,30 @@ const AppNavigator = createStackNavigator({
     screen: PaymentPage,
     navigationOptions: {
       header: null,
+    }
+  },
+  PaymentPaytm: {
+    screen: PaymentPaytm,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  OrderBookingProcess:{
+    screen: OrderBookingProcess,
+    navigationOptions:{
+      header:null,
+    }
+  },
+  DeliveryMark:{
+    screen: DeliveryMark,
+    navigationOptions:{
+      header:null,
+    }
+  },
+  TrackingOrder:{
+    screen: TrackingOrder,
+    navigationOptions:{
+      header:null,
     }
   },
   AutoCompleteTrain: {

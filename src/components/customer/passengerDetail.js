@@ -102,7 +102,10 @@ export default class passengerDetail extends Component {
         </ScrollView>
         <CustomButton
           style={{ backgroundColor: '#1fc44e', alignSelf: 'center', marginBottom: 20, }}
-          onPress={() => this.props.navigation.navigate('PaymentPage')}
+          onPress={() => {
+            this.props.navigation.navigate('PaymentPage'),
+            { altMobileNo: this.state.altMobileNo }
+          }}
           title='Proceed To Pay'
         />
       </SafeAreaView>
