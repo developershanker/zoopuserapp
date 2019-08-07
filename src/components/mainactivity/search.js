@@ -6,6 +6,8 @@ import { CustomButton } from '../assests/customButtonLarge';
 import {CustomGridIcon} from '../assests/customGridIcon';
 import { SafeAreaView } from 'react-navigation';
 import searchApi from './searchApi';
+import DeliveryMark from '../postOrderActivity/deliveryMark';
+
 
 export default class Search extends Component {
   componentDidMount() {
@@ -111,6 +113,7 @@ export default class Search extends Component {
         </View>
     </View>
     </ScrollView>
+    {/* <DeliveryMark/> */}
     </SafeAreaView>
     );
   }

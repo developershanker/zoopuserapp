@@ -28,7 +28,9 @@ import PaymentPaytm from '../payment/paymentPaytm.js';
 ///////------Order Process Files-------//////
 import OrderBookingProcess from '../orderBooking/orderBookingConfirm.js';
 import DeliveryMark from '../postOrderActivity/deliveryMark.js';
+import OrderFeedback from '../postOrderActivity/orderFeedback.js';
 import TrackingOrder from '../postOrderActivity/trackingOrder.js';
+import RatingView from '../postOrderActivity/ratingView.js';
 //////-------DRAWER ITEMS RELATED VIEWS-----------//////
 import Contact from '../services/contact';
 import FAQ from '../services/faq';
@@ -397,6 +399,12 @@ const AppNavigator = createStackNavigator({
   },
   DeliveryMark:{
     screen: DeliveryMark,
+    navigationOptions:{
+      header:null,
+    }
+  },
+  OrderFeedback:{
+    screen: OrderFeedback,
     navigationOptions:{
       header:null,
     }

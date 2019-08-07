@@ -8,6 +8,7 @@ export default class ConstantValues {
   static customerId = ''
   static token = ''
   static couponCode = 'ZOOP50'
+  static orderRating = ''
   static source= 'APP'
   static device = {
     apiLevel: Device.getAPILevel(),
