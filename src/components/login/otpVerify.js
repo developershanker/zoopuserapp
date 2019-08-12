@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: 'black',
-    fontWeight: 'bold',
+    fontFamily:'Poppins-Bold',
     fontSize: 30,
     justifyContent: 'center',
 
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: '#000000',
     alignItems: 'center',
-    fontWeight: 'bold',
+    fontFamily:'Poppins-Bold',
     justifyContent: 'center',
   },
   button: {

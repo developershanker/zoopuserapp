@@ -47,12 +47,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily:'Poppins-Bold',
     // alignContent: 'center',  
   },
   input: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily:'Poppins-Bold',
     alignContent: 'stretch',
   },
   button: {

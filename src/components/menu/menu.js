@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import {Animated, View, Text, StyleSheet,FlatList,Dimensions,Switch,Image,SectionList,ToastAndroid, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet,FlatList,Dimensions,Switch,Image,SectionList,ScrollView, TouchableOpacity} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
-import CardView from 'react-native-rn-cardview';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import CustomMenuFAB from '../assests/customMenuFAB.js';
@@ -90,11 +89,8 @@ export default class Menu extends Component {
         </View>
         <Text style={{fontSize:10,fontWeight:'bold',marginRight:10}}>GST No. {item.gstno}</Text>
         </View>
-      <CardView
+      <View
       style={styles.card}
-      cardElevation={4}
-      maxCardElevation={4}
-      radius={5}
       >
           <View style={{flexDirection:'row',justifyContent:'space-between',width:Dimensions.get('window').width}}>
               <View style={{flexDirection:'column',alignItems:'center',margin:10,marginLeft:20}}>
@@ -114,7 +110,7 @@ export default class Menu extends Component {
             </View>
             
           </View>
-      </CardView>
+      </View>
       {/* Offer text label */}
         <View style={styles.offerboard}>
           <Text style={styles.offerText}>Offer:- {item.offer}</Text>
@@ -131,11 +127,8 @@ export default class Menu extends Component {
         data={this.state.OutletMenuInfo}
         renderItem={({item})=>
           <View>
-            <CardView
+            <View
             style={styles.menuGridCardContainer}
-           cardElevation={5}
-           maxCardElevation={5}
-           radius={5}
             >
             <View>
               <Image style={styles.itemImage} source={item.itemImage}/>
@@ -175,7 +168,7 @@ export default class Menu extends Component {
                {/* Incrementor ends here */}
                 </View>
             </View>
-            </CardView>
+            </View>
           </View>
       }
       numColumns={2}
@@ -297,6 +290,16 @@ card:{
    margin: 5,
    alignItems:'center',
    flexDirection: 'row',   
+   backgroundColor: '#ffffff',//can change as we move to various pages
+    marginBottom: 10,//can change as we move to various pages
+    marginLeft: '2%', //can change as we move to various pages
+    // width: '96%', //can change as we move to various pages
+    borderColor: '#e4e4e4',
+    // borderRadius: 100 / 9,
+    borderWidth: 1,
+    shadowOpacity: 0.4,
+    borderBottomColor: '#e4e4e4',
+    borderBottomWidth: 4,
   },
       // OFFER BOARD STYLES
   offerText:{
@@ -322,6 +325,16 @@ card:{
     width:Dimensions.get('window').width/2,
     height:Dimensions.get('window').width/2,
     borderRadius: 100 / 5,
+    backgroundColor: '#ffffff',//can change as we move to various pages
+    marginBottom: 10,//can change as we move to various pages
+    marginLeft: '2%', //can change as we move to various pages
+    // width: '96%', //can change as we move to various pages
+    borderColor: '#e4e4e4',
+    // borderRadius: 100 / 9,
+    borderWidth: 1,
+    shadowOpacity: 0.4,
+    borderBottomColor: '#e4e4e4',
+    borderBottomWidth: 4,
   },
   itemImage:{
     marginTop:5,

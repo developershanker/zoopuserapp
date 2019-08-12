@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import { View, Picker, Text, FlatList, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Icons from 'react-native-vector-icons/FontAwesome5';
-import { CustomButton } from '../assests/customButtonLarge.js';
-import { CustomTextInput } from '../assests/customTextInput.js';
-import ConstantValues from '../constantValues.js';
-import CardView from 'react-native-rn-cardview';
 
 
 export default class notifications extends Component {
@@ -41,7 +36,7 @@ export default class notifications extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 25, color: '#000000' }}> Notifications </Text>
+                <Text style={{ alignSelf: 'center', fontFamily:'Poppins-Bold', fontSize: 25, color: '#000000' }}> Notifications </Text>
               </View>
             </View>
             {/* header view ends */}
@@ -52,11 +47,8 @@ export default class notifications extends Component {
                 renderItem={({ item }) =>
                   <View>
                     <TouchableOpacity onPress={() => { this.props.navigation.navigate('Search') }}>
-                      <CardView
+                      <View
                         style={styles.card}
-                        cardElevation={5}
-                        maxCardElevation={5}
-                        radius={5}
                       >
                         <View style={{ flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 5 }}>
                           <View style={{ flexDirection: 'row', alignContent: 'stretch', alignItems: 'center' }}>
@@ -70,7 +62,7 @@ export default class notifications extends Component {
                         </View>
 
 
-                      </CardView>
+                      </View>
                     </TouchableOpacity>
                   </View>
                 }
@@ -102,7 +94,18 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 10,
-    paddingRight: 10
+    paddingRight: 10,
+
+    backgroundColor: '#ffffff',//can change as we move to various pages
+    marginBottom: 10,//can change as we move to various pages
+    // marginLeft: '2%', //can change as we move to various pages
+    // width: '96%', //can change as we move to various pages
+    borderColor: '#e4e4e4',
+    // borderRadius: 100 / 9,
+    borderWidth: 1,
+    shadowOpacity: 0.4,
+    borderBottomColor: '#e4e4e4',
+    borderBottomWidth: 4,
   },
   notiText: {
     paddingVertical: 10,

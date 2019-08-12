@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
   heading:{
     color: 'black',
-    fontWeight: 'bold',
+    fontFamily:'Poppins-Bold',
     fontSize: 30,
     marginBottom:10,
     justifyContent:'center',

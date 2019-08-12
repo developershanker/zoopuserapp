@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         width:'auto',
         textTransform: 'uppercase',
         color: '#f59120',
-        fontWeight:'bold',
+        fontFamily:'Poppins-Bold',
         justifyContent:'center'
     },
 });

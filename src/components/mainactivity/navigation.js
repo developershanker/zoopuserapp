@@ -26,10 +26,11 @@ import PassengerDetail from '../customer/passengerDetail.js';
 import PaymentPage from '../payment/paymentPage.js';
 import PaymentPaytm from '../payment/paymentPaytm.js';
 ///////------Order Process Files-------//////
-import OrderBookingProcess from '../orderBooking/orderBookingConfirm.js';
+import OrderConfirm from '../orderBooking/orderConfirm.js';
 import DeliveryMark from '../postOrderActivity/deliveryMark.js';
 import OrderFeedback from '../postOrderActivity/orderFeedback.js';
 import TrackingOrder from '../postOrderActivity/trackingOrder.js';
+import OrderDetail from '../orderBooking/orderDetail.js';
 import RatingView from '../postOrderActivity/ratingView.js';
 //////-------DRAWER ITEMS RELATED VIEWS-----------//////
 import Contact from '../services/contact';
@@ -125,7 +126,7 @@ class HeaderIcon extends Component {
   render() {
     return (
       <View>
-        <Image source={require('../images/zooplogo.png')}
+        <Image source={require('../images/logo.png')}
           style={{ width: 50, height: 30 }}
         />
       </View>
@@ -137,10 +138,9 @@ const CustomDrawerComponent = (props) => (
 
   <SafeAreaView style={{ flex: 1, flexDirection: 'column' }}>
     <ScrollView>
-      <View style={{ width: 200, height: 150, backgroundColor: '#ffffff', justifyContent: 'center' }}>
+      <View style={{ backgroundColor: '#ffffff', justifyContent: 'center',alignItems:'center' }}>
         <Image
-          source={require('../images/zooplogo.png')}
-          style={{ height: 120, width: 120 }}
+          source={require('../images/logo.png')}
         ></Image>
       </View>
 
@@ -150,7 +150,7 @@ const CustomDrawerComponent = (props) => (
         <Footer style={{ backgroundColor: '#FF9800' }}>
           <View style={{ justifyContent: 'space-around' }}>
             {/* <Icon name='sign-in' size={10} style={{color:'#000000'}}/> */}
-            <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#000000', justifyContent: 'center' }}>LOGIN</Text>
+            <Text style={{ fontSize: 25, fontFamily:'Poppins-Bold', color: '#000000', justifyContent: 'center' }}>LOGIN</Text>
           </View>
         </Footer>
       </TouchableOpacity>
@@ -391,8 +391,8 @@ const AppNavigator = createStackNavigator({
       header: null,
     }
   },
-  OrderBookingProcess:{
-    screen: OrderBookingProcess,
+  OrderConfirm:{
+    screen: OrderConfirm,
     navigationOptions:{
       header:null,
     }
@@ -411,6 +411,12 @@ const AppNavigator = createStackNavigator({
   },
   TrackingOrder:{
     screen: TrackingOrder,
+    navigationOptions:{
+      header:null,
+    }
+  },
+  OrderDetail:{
+    screen: OrderDetail,
     navigationOptions:{
       header:null,
     }

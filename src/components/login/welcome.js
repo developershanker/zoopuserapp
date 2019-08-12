@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
-import { View ,Dimensions,Button, Text,Icon,TouchableOpacity,StyleSheet,Alert,Image,TextInput,ToastAndroid} from 'react-native';
+import { View, Dimensions, Button, Text, Icon, TouchableOpacity, StyleSheet, Alert, Image, TextInput, ToastAndroid } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { CustomButton } from '../assests/customButtonShort.js';
-import {FadeInView} from '../assests/fadeInView.js';
+import { FadeInView } from '../assests/fadeInView.js';
 import Device from 'react-native-device-info';
 import ConstantValues from '../constantValues.js'
 import loginApi from './loginApi.js';
 
 
 export default class Welcome extends Component {
-    componentDidMount() {
-        SplashScreen.hide();
-    }
+  componentDidMount() {
+    SplashScreen.hide();
+  }
   constructor(props) {
     super(props);
     this.state = {
-      mobile:'',
+      mobile: '',
     };
   }
 
@@ -23,31 +23,32 @@ export default class Welcome extends Component {
 
 
   ////Sending Otp API//////
-   async sendOtp(mobile){
-     try {
-       let response = await loginApi.sendOtp(mobile);
-       console.log('data received in welcome.js : '+ JSON.stringify(response))
-       if(response.status==true){
-              return(console.log (response),
-              console.log ('Logged with mobile No. :'+ mobile),
-              console.log ('The status is: '+ response.status),
-              console.log ('The message is: '+ response.message),
-              ToastAndroid.show(response.message, ToastAndroid.LONG),
-              this.props.navigation.navigate('OtpVerify',{
-                        mobile    : this.state.mobile,
-                        customerId: response.data.customerId }
-                        ) 
-              )
-      }else {
-            return(
-               ToastAndroid.show(response.error,ToastAndroid.LONG),
-               console.log(response.error)
-                )
-              }
-     } catch (error) {
-      console.log( 'Data received in welcome.js catch: '+ error)
-     }
-   }
+  async sendOtp(mobile) {
+    try {
+      let response = await loginApi.sendOtp(mobile);
+      console.log('data received in welcome.js : ' + JSON.stringify(response))
+      if (response.status == true) {
+        return (console.log(response),
+          console.log('Logged with mobile No. :' + mobile),
+          console.log('The status is: ' + response.status),
+          console.log('The message is: ' + response.message),
+          ToastAndroid.show(response.message, ToastAndroid.LONG),
+          this.props.navigation.navigate('OtpVerify', {
+            mobile: this.state.mobile,
+            customerId: response.data.customerId
+          }
+          )
+        )
+      } else {
+        return (
+          ToastAndroid.show(response.error, ToastAndroid.LONG),
+          console.log(response.error)
+        )
+      }
+    } catch (error) {
+      console.log('Data received in welcome.js catch: ' + error)
+    }
+  }
 
 
 
@@ -56,52 +57,52 @@ export default class Welcome extends Component {
     return (
       <View style={styles.slide}>
         <FadeInView style={styles.anim}>
-        <Image
-        style={styles.image}
-         source={require('../images/zooplogo.png')}
-        />
+          <Image
+            style={styles.image}
+            source={require('../images/logo.png')}
+          />
 
-         {/* <Text style={styles.text1}> LOGIN </Text> */}
-       
-        <TextInput style={styles.input}
-        placeholder="Enter Mobile No."
-        keyboardType='number-pad'
-        maxLength={10}
-        onChangeText={mobile => this.setState({ mobile })}
-        value={this.state.mobile}
-        underlineColorAndroid='#000000'
-        ></TextInput>
-        <CustomButton
+          {/* <Text style={styles.text1}> LOGIN </Text> */}
+          <View style={styles.inputView}>
+          <TextInput style={styles.input}
+            placeholder="Enter Mobile No."
+            keyboardType='number-pad'
+            maxLength={10}
+            onChangeText={mobile => this.setState({ mobile })}
+            value={this.state.mobile}
+          />
+          </View>
+          <CustomButton
             title="SUBMIT"
             onPress={
               () => {
                 // console.log(this.state.text)
                 console.log(apiLevel)
-                if (this.state.mobile==''){
-                  return(
-                  ToastAndroid.show('Please Enter Mobile No.',ToastAndroid.CENTER),
-                  console.log('mobile number is empty')
+                if (this.state.mobile == '') {
+                  return (
+                    ToastAndroid.show('Please Enter Mobile No.', ToastAndroid.CENTER),
+                    console.log('mobile number is empty')
                   )
                 }
                 else {
-                this.sendOtp(this.state.mobile) //this function sends mobile no. through the otp api
+                  this.sendOtp(this.state.mobile) //this function sends mobile no. through the otp api
                 }
               }
             }
-            
+
             // style={styles.button}
             textStyle={styles.text}
-            
-        />
-       
 
-<CustomButton
+          />
+
+
+          <CustomButton
             title="SKIP"
             onPress={() => this.props.navigation.navigate('Search')}
-            // style={styles.button}
-            // textStyle={styles.text}
-        />
-        
+          // style={styles.button}
+          // textStyle={styles.text}
+          />
+
         </FadeInView>
 
       </View>
@@ -116,72 +117,79 @@ export default class Welcome extends Component {
 const apiLevel = Device.getAPILevel();
 const ip = Device.getIPAddress().then(ip => {
   return ip
- });
- const deviceId = Device.getDeviceId();
- const carrier = Device.getCarrier();
- const firstInstallTime = Device.getFirstInstallTime();
- const macAddress= Device.getMACAddress();
- const systemVersion = Device.getSystemVersion();
- const systemName = Device.getSystemName();
- const appVersion = Device.getVersion();
- const deviceType = Device.getDeviceType();
- const osBuildId = Device.getBuildId();
+});
+const deviceId = Device.getDeviceId();
+const carrier = Device.getCarrier();
+const firstInstallTime = Device.getFirstInstallTime();
+const macAddress = Device.getMACAddress();
+const systemVersion = Device.getSystemVersion();
+const systemName = Device.getSystemName();
+const appVersion = Device.getVersion();
+const deviceType = Device.getDeviceType();
+const osBuildId = Device.getBuildId();
 
 
- 
+
 ///styling with CSS
 const styles = StyleSheet.create({
-    slide: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor:'#ffffff'
-    },
-   anim: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor:'#ffffff'
-    },
-    image: {
-      width:200,
-      height:200,
-      justifyContent:'flex-start'
-    },
-    button: {
-      display: 'flex',
-      width: 100,
-      height: 30,
-      borderRadius: 5,
-      justifyContent:'center',
-      paddingVertical: 20,
-      alignItems: 'center',
-      backgroundColor: '#000000',
-      shadowColor: '#000000',
-      shadowOpacity: 0.4,
-      shadowOffset: { height: 10, width: 10 },
-      shadowRadius: 20,
-      margin: 10,
+  slide: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ffffff'
+  },
+  anim: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ffffff'
+  },
+  image: {
+    // width:200,
+    // height:200,
+    justifyContent: 'flex-start'
+  },
+  button: {
+    display: 'flex',
+    width: 100,
+    height: 30,
+    borderRadius: 5,
+    justifyContent: 'center',
+    paddingVertical: 20,
+    alignItems: 'center',
+    backgroundColor: '#000000',
+    shadowColor: '#000000',
+    shadowOpacity: 0.4,
+    shadowOffset: { height: 10, width: 10 },
+    shadowRadius: 20,
+    margin: 10,
   },
 
-    skip:{
-      alignItems: 'baseline',
-      justifyContent: 'center',
-      backgroundColor:'#ffffff'
-    },
-    input:{
-      fontSize:20,
-      width:Dimensions.get('window').width - 120,
-    },
-    text: {
-      color: '#ffffff',
-      textAlign: 'center',
-      fontWeight: 'bold',
-      fontFamily: 'Times New Roman',
-    },
-    text1: {
-      color: '#000000',
-      textAlign: 'center',
-      fontWeight: 'bold',
-      fontFamily: 'Times New Roman',
-    },  
-  });
+  skip: {
+    alignItems: 'baseline',
+    justifyContent: 'center',
+    backgroundColor: '#ffffff'
+  },
+  input: {
+    fontSize: 20,
+    width: Dimensions.get('window').width - 120,
+    color: '#000000',
+    fontFamily: 'Poppins-Bold',
+    alignItems: 'center'
+  },
+  inputView:{
+    borderRadius: 100 / 10,
+    borderColor: '#9B9B9B',
+    borderWidth:2,
+    
+  },
+  text: {
+    color: '#ffffff',
+    textAlign: 'center',
+    fontFamily: 'Poppins-Bold',
+  },
+  text1: {
+    color: '#000000',
+    textAlign: 'center',
+    fontFamily: 'Poppins-Bold',
+  },
+});

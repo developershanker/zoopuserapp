@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
    },
    heading:{
     color: 'black',
-    fontWeight: 'bold',
+    fontFamily:'Poppins-Bold',
     fontSize: 20,
   }
 });
