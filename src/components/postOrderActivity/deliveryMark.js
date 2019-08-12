@@ -43,7 +43,7 @@ export default class DeliveryMark extends Component {
               this.props.navigation.navigate('OrderFeedback')
             }}>
               <View style={styles.optionView}>
-                <Text style={{ fontWeight: 'bold', color: '#000000' }}>Yes</Text>
+                <Text style={{ fontFamily:'Poppins-Bold', color: '#000000' }}>Yes</Text>
               </View>
             </TouchableOpacity>
 
@@ -70,12 +70,12 @@ export default class DeliveryMark extends Component {
 }
 const styles = StyleSheet.create({
   textQ: {
-    fontWeight: 'bold',
+    fontFamily:'Poppins-Bold',
     color: '#ffffff',
     marginVertical: 10
   },
   textO: {
-    fontWeight: 'bold',
+    fontFamily:'Poppins-Bold',
     color: '#000000'
   },
   modalView: {

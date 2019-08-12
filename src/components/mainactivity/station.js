@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Text,Dimensions, View,ScrollView,Image,StyleSheet,Animated,Easing,TouchableOpacity,FlatList } from 'react-native';
+import { Text,Dimensions, View,ScrollView,Image,StyleSheet,TouchableOpacity,FlatList } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
-import CardView from 'react-native-rn-cardview';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { StationHeader } from './stationHeader.js';
 
 
@@ -98,12 +96,7 @@ export default class station extends Component {
         data={this.state.ListItems}
         renderItem={({item}) =>
         <View style={styles.outletContainer}>
-          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Menu')}>
-        <CardView
-        style={styles.card}
-          cardElevation={4}
-          maxCardElevation={4}
-          radius={5}>
+          <TouchableOpacity style={styles.card} onPress={()=>this.props.navigation.navigate('Menu')}>
             <Image source={require('../images/roundimg3.jpg')} style={styles.outletimage}/>
             <View  style={styles.detail}>
               <View style={{flexDirection:'row'}}>
@@ -127,7 +120,6 @@ export default class station extends Component {
             Minimum Order: Rs. {item.minorder}
           </Text>
           </View>
-</CardView>
 </TouchableOpacity>
 </View>}
     
@@ -162,12 +154,24 @@ const styles = StyleSheet.create({
     backgroundColor:'#ffffff',
   },
   card:{
-    width:Dimensions.get('window').width - 10,
-   height:120,
-   borderRadius: 100 / 4,
-   margin: 5,
+  //   width:Dimensions.get('window').width - 10,
+  //  height:120,
+  //  borderRadius: 100 / 4,
+  //  margin: 5,
+  //  alignItems:'center',
+  //  flexDirection: 'row',   
+  backgroundColor: '#ffffff',//can change as we move to various pages
+  marginBottom: 10,//can change as we move to various pages
+  marginLeft: '2%', //can change as we move to various pages
+  width: '96%', //can change as we move to various pages
+  borderColor: '#e4e4e4',
+  borderRadius: 100 / 9,
+  borderWidth: 1,
+  shadowOpacity: 0.4,
+  borderBottomColor: '#e4e4e4',
+  borderBottomWidth: 4,
    alignItems:'center',
-   flexDirection: 'row',   
+   flexDirection: 'row', 
   },
   
   scroll:{

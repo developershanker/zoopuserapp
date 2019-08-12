@@ -15,7 +15,7 @@ export const CustomButton = (props) => {
 const styles = StyleSheet.create({
     button: {
         display: 'flex',
-      width: 300,
+        width: 300,
         height: 30,
         borderRadius: 5,
         justifyContent:'center',
@@ -32,9 +32,8 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        textTransform: 'uppercase',
         color: '#ffffff',
-        fontWeight:'bold',
-        justifyContent:'center'
+        justifyContent:'center',
+        fontFamily:'Poppins-Bold'
     },
 });

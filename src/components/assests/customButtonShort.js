@@ -31,9 +31,8 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        textTransform: 'uppercase',
         color: '#ffffff',
-        fontWeight:'bold',
-        justifyContent:'center'
+        justifyContent:'center',
+        fontFamily:'Poppins-Bold'
     },
 });

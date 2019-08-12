@@ -5331,13 +5331,6 @@ react-native-paper@^2.16.0:
     react-lifecycles-compat "^3.0.4"
     react-native-safe-area-view "^0.12.0"
 
-react-native-rn-cardview@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/react-native-rn-cardview/-/react-native-rn-cardview-1.0.4.tgz#f271641087dfbcc1074a9a8dd791ef69867ce009"
-  integrity sha512-W4yrZ625VK2kDYvCJeHiiK0uA9MYHYPWhQ5sxyaoijSj9d8aSOTZ064XPhD9sK24jqxuJYAMqHImQW085GWZlQ==
-  dependencies:
-    prop-types "^15.6.0"
-
 react-native-safe-area-view@^0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-view/-/react-native-safe-area-view-0.12.0.tgz#5c312f087300ecf82e8541c3eac25d560e147f22"

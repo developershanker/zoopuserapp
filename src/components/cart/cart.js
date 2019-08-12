@@ -4,7 +4,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
-import CardView from 'react-native-rn-cardview';
 import ConstantValues from '../constantValues.js';
 import BillCardDetail from '../cart/billDetailCard.js';
 import { CustomButton } from '../assests/customButtonLarge.js';
@@ -64,21 +63,18 @@ export default class Cart extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 25, color: '#000000' }}> Cart </Text>
+                <Text style={{ alignSelf: 'center', fontFamily:'Poppins-Bold', fontSize: 25, color: '#000000' }}> Cart </Text>
               </View>
             </View>
             {/* header view ends */}
             <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width, alignItems: 'center', marginTop: 15 }}>
-              <Text style={{ alignSelf: 'center', fontSize: 20, color: '#000000', fontWeight: 'bold' }}>{this.state.outletName}</Text>
+              <Text style={{ alignSelf: 'center', fontSize: 20, color: '#000000', fontFamily:'Poppins-Bold',}}>{this.state.outletName}</Text>
               <Text style={{ alignSelf: 'center', fontSize: 15, color: '#000000' }}>{this.state.station}</Text>
             </View>
             {/* Selected Items list */}
             <View>
-              <CardView
+              <View
                 style={styles.card}
-                cardElevation={5}
-                maxCardElevation={5}
-                radius={5}
               >
                 <FlatList
                   style={{ width: Dimensions.get('window').width }}
@@ -95,7 +91,7 @@ export default class Cart extends Component {
                             <TouchableOpacity onPress={this.decrementCounter} disabled={this.state.count == 0 ? true : false}>
                               <Icon style={{ opacity: this.state.count == 0 ? 0 : 100 }} name='minus' size={10} color='#1e8728' />
                             </TouchableOpacity>
-                            <Text style={{ fontWeight: 'bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{this.state.count == 0 ? 'Add' : this.state.count}</Text>
+                            <Text style={{ fontFamily:'Poppins-Bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{this.state.count == 0 ? 'Add' : this.state.count}</Text>
                             <TouchableOpacity onPress={() => {
                               this.incrementCounter()
                             }}>
@@ -111,14 +107,11 @@ export default class Cart extends Component {
                     </View>
                   }
                 />
-              </CardView>
+              </View>
               {/* itemCard ends here */}
               {/* Wallet and Coupon Card begin here */}
-              <CardView
+              <View
                 style={styles.couponcard}
-                cardElevation={5}
-                maxCardElevation={5}
-                radius={5}
               >
                 <View style={{ flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
                   <View style={{ flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
@@ -128,9 +121,9 @@ export default class Cart extends Component {
                         disabled={this.state.textPromoCode == ConstantValues.couponCode ? true : false}
                         onValueChange={walletUsed => this.setState({ walletUsed })}
                       />
-                      <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Use Zoop Wallet</Text>
+                      <Text style={{ fontSize: 15, fontFamily:'Poppins-Bold', }}>Use Zoop Wallet</Text>
                     </View>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#000000' }}>Rs. {this.state.walletBalance}</Text>
+                    <Text style={{ fontSize: 20, fontFamily:'Poppins-Bold', color: '#000000' }}>Rs. {this.state.walletBalance}</Text>
                   </View>
                   <Text>OR</Text>
 
@@ -143,7 +136,7 @@ export default class Cart extends Component {
                     </Fade>
                   </TouchableOpacity>
                 </View>
-              </CardView>
+              </View>
               {/* Wallet and Coupon Card ends here */}
               {/* bill detail Card begins here */}
               <BillCardDetail />
@@ -169,35 +162,44 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   card: {
-    width: Dimensions.get('window').width - 5,
-    borderRadius: 100 / 4,
-    marginLeft: 5,
-    marginRight: 10,
-    marginTop: 10,
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10
+    backgroundColor: '#ffffff',//can change as we move to various pages
+    marginBottom: 10,//can change as we move to various pages
+    marginLeft: '2%', //can change as we move to various pages
+    width: '96%', //can change as we move to various pages
+    borderColor: '#e4e4e4',
+    borderRadius: 100 / 9,
+    borderWidth: 1,
+    shadowOpacity: 0.4,
+    borderBottomColor: '#e4e4e4',
+    borderBottomWidth: 4,
   },
   couponcard: {
-    width: Dimensions.get('window').width - 5,
-    justifyContent: 'center',
-    borderRadius: 100 / 4,
-    marginLeft: 5,
-    marginRight: 10,
-    marginTop: 10,
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10
+    // width: Dimensions.get('window').width - 5,
+    // justifyContent: 'center',
+    // borderRadius: 100 / 4,
+    // marginLeft: 5,
+    // marginRight: 10,
+    // marginTop: 10,
+    // alignItems: 'center',
+    // flexDirection: 'row',
+    // paddingBottom: 10,
+    // paddingLeft: 10,
+    // paddingRight: 10
+    backgroundColor: '#ffffff',//can change as we move to various pages
+    marginBottom: 10,//can change as we move to various pages
+    marginLeft: '2%', //can change as we move to various pages
+    width: '96%', //can change as we move to various pages
+    borderColor: '#e4e4e4',
+    borderRadius: 100 / 9,
+    borderWidth: 1,
+    shadowOpacity: 0.4,
+    borderBottomColor: '#e4e4e4',
+    borderBottomWidth: 4,
   },
   coupontext: {
     fontSize: 20,
     // color:'#149db5',
-    fontWeight: 'bold',
+    fontFamily:'Poppins-Bold',
     textDecorationLine: 'underline'
   },
 

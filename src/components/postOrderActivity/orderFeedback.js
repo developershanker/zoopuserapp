@@ -147,7 +147,8 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontSize: 20,
-        color: '#000000'
+        color: '#000000',
+        fontFamily:'Poppins-Bold'
     },
     feedbackView: {
         flexDirection: 'row',
