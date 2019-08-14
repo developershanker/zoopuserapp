@@ -36,11 +36,12 @@ import RatingView from '../postOrderActivity/ratingView.js';
 import Contact from '../services/contact';
 import FAQ from '../services/faq';
 import Feedback from '../services/feedback';
-import MyOrders from '../services/myOrders';
-import MyWallet from '../services/myWallet';
-import Profile from '../services/profile';
+import MyOrders from '../customer/myOrders';
+import MyWallet from '../customer/myWallet';
+import Profile from '../customer/profile';
 import RateUs from '../services/rateUs';
 import LogOut from '../login/logout';
+import TermsActivity from '../services/termsActivity.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { DrawerItems, SafeAreaView } from 'react-navigation';
 ////////-------Extra Services Screens------////////
@@ -174,7 +175,6 @@ const DrawerNavigator = createDrawerNavigator({
     screen: Profile,
     navigationOptions: {
       drawerLabel: 'Profile',
-      headerTitle: 'Profile',
       drawerIcon: <Icon
         name='user'
         size={20}
@@ -186,7 +186,6 @@ const DrawerNavigator = createDrawerNavigator({
     screen: MyOrders,
     navigationOptions: {
       drawerLabel: 'My Order',
-      headerTitle: 'My Order',
       drawerIcon: <Icon
         name='shopping-basket'
         size={20}
@@ -198,7 +197,7 @@ const DrawerNavigator = createDrawerNavigator({
     screen: MyWallet,
     navigationOptions: {
       drawerLabel: 'My Wallet',
-      headerTitle: 'My Wallet',
+      header:null,
       drawerIcon: <Icon
         name='plus'
         size={20}
@@ -231,7 +230,6 @@ const DrawerNavigator = createDrawerNavigator({
   Login: {
     screen: Welcome,
     navigationOptions: {
-      header: null,
       drawerLabel: 'Login',
       drawerIcon: <Icon
         name='user'
@@ -258,6 +256,17 @@ const DrawerNavigator = createDrawerNavigator({
       drawerLabel: 'Rate Us',
       drawerIcon: <Icon
         name='star'
+        size={20}
+
+      />
+    }
+  },
+  TermsActivity: {
+    screen: TermsActivity,
+    navigationOptions: {
+      drawerLabel: 'Terms & Conditions',
+      drawerIcon: <Icon
+        name='book'
         size={20}
 
       />
@@ -421,6 +430,12 @@ const AppNavigator = createStackNavigator({
       header:null,
     }
   },
+  MyWallet: {
+    screen: MyWallet,
+    navigationOptions: {
+      header: null
+    }
+  },
   AutoCompleteTrain: {
     screen: AutoCompleteTrain,
     navigationOptions: {
@@ -460,7 +475,7 @@ const AppNavigator = createStackNavigator({
 
 },
   {
-    initialRouteName: 'Search'
+    initialRouteName: 'MyWallet'
   }
 
 
