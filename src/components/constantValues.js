@@ -1,4 +1,7 @@
+import React, { Component } from 'react';
 import Device from 'react-native-device-info';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Icons from 'react-native-vector-icons/FontAwesome5';
 export default class ConstantValues {
   static apiUrl = 'http://192.168.0.60:3000/'
   static customer = { name: '', mobileNo: '' }
@@ -8,6 +11,8 @@ export default class ConstantValues {
   static customerId = ''
   static token = ''
   static couponCode = 'ZOOP50'
+  static walletBalance = 200
+  static rupee = <Icon name={'rupee'} size={15}/>
   static orderRating = ''
   static source= 'APP'
   static device = {

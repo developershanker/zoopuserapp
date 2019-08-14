@@ -34,7 +34,7 @@ export default class OrderFeedback extends Component {
         console.log('ConstantValues.orderRating: ' + ConstantValues.orderRating)
         //Keeping the Rating Selected in state
     }
-
+    
     showTags(bool) {
         this.setState({ tagVisible: bool });
     }

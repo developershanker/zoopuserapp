@@ -5,7 +5,7 @@ import CustomTouchableOpacity from '../assests/customTouchableOpacity';
 import loginApi from '../login/loginApi.js';
 
 
-export default class profile extends Component {
+export default class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
