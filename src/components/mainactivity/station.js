@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Dimensions, View, ScrollView, Image, StyleSheet, TouchableOpacity, FlatList, TextInput, CheckBox } from 'react-native';
+import { Text, Dimensions, View, ScrollView, Image, StyleSheet, ToastAndroid, TouchableOpacity, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 // import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
@@ -8,6 +8,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Modal from "react-native-modal";
 import { CustomButton } from '../assests/customButtonShort.js';
+import Search from './search.js';
+import searchApi from './searchApi.js';
 
 export default class station extends Component {
   componentDidMount() {
@@ -18,6 +20,7 @@ export default class station extends Component {
     this.state = {
       firstQuery: '',
       visibleModal: null,
+      animating: true,
       ListItems: [
         { key: "1", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
         { key: "2", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
@@ -52,6 +55,32 @@ export default class station extends Component {
     this.setState({ checked });
   }
 
+  async showCuisines() {
+    try {
+      let response = await searchApi.showCuisines();
+
+      if (response.status == true) {
+        console.log('The status is: ' + response.status)
+        response.data.forEach(element => {
+          const cuisineList = element.cuisineName;
+          return (
+            console.log('The Cuisine name is: ' + cuisineList)
+          )
+
+        });
+        // ToastAndroid.show(response.message, ToastAndroid.LONG)  
+      } else {
+        return (
+          ToastAndroid.show(response.error, ToastAndroid.LONG),
+          console.log(response.error)
+        )
+      }
+
+    } catch (error) {
+      console.log('Data received in search.js catch: ' + error)
+    }
+  }
+
   render() {
     return (
       <SafeAreaView style={styles.slide}>
@@ -62,7 +91,6 @@ export default class station extends Component {
             </TouchableOpacity>
           </View>
           {/* Searchbar begins */}
-
           <View style={styles.searchBarView}>
             <TextInput
               style={{ fontSize: 15, fontFamily: 'Poppins-Regular', width: '80%' }}
@@ -154,25 +182,29 @@ export default class station extends Component {
               <View>
                 <Text style={styles.cuisineText}>Cuisines</Text>
               </View>
-              <FlatList
-                data={this.state.CuisinesList}
-                extraData={this.state}
-                renderItem={({ item, index }) =>
-                  <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                    <CheckBox
-                      value={this.state.checked[index]}
-                      disabled={false}
-                      onValueChange={() => this.handleChange(index)}
-                    />
-                    <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Bold' }}>{item.CuisineName}</Text>
-                  </View>
-                }
-              />
+              <ScrollView>
+                <FlatList
+                  data={this.state.CuisinesList}
+                  extraData={this.state}
+                  renderItem={({ item, index }) =>
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+                      <CheckBox
+                        value={this.state.checked[index]}
+                        disabled={false}
+                        onValueChange={() => this.handleChange(index)}
+                      />
+                      <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Bold' }}>{item.CuisineName}</Text>
+                    </View>
+                  }
+                // keyExtractor={(item)=>item.cuisineId}
+                />
+              </ScrollView>
               <CustomButton
-                  style={{ backgroundColor: '#1fc44e',alignSelf:'flex-end' }}
-                  onPress={() => {this.setState({ visibleModal: null })}}
-                  title='Apply'
-                  />
+                style={{ backgroundColor: '#1fc44e', alignSelf: 'flex-end' }}
+                onPress={() => { this.setState({ visibleModal: null }) }}
+                title='Apply'
+              />
             </View>
           </Modal>
         </View>

@@ -6,7 +6,7 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
      <style name="SplashScreenTheme" parent="SplashScreen_SplashTheme">
-        <item name="colorPrimaryDark">@color/status_bar_color</item>
+        <item name="colorPrimaryDark">@color/orange</item>
     </style>
     <!-- <style name="LoginThemeYellow" parent="Theme.AccountKit">
     <item name="com_accountkit_primary_color">#f4bf56</item>

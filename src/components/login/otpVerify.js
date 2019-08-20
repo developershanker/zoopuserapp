@@ -65,7 +65,8 @@ export default class otpVerify extends Component {
           console.log('Info: ' + JSON.stringify(ConstantValues.customer)),
           console.log('Stored Mobile No. is:' + ConstantValues.customerPhoneNo),
           this.storeData(),
-          this.props.navigation.navigate('Register', { mobile: mobile })
+          // this.props.navigation.navigate('Register', { mobile: mobile }),
+          this.props.navigation.navigate('Profile', { mobile: mobile })
         )
       } else {
         return (
