@@ -120,7 +120,7 @@ export default class loginApi {
         }
     }
 
-    static async editUserInfo(name, emailId, referralCode) {
+    static async editUserInfo(name, emailId, alternateMobile ,  referredBy) {
         try {
             //url
             const apiUrl = 'customers/' + ConstantValues.customerId
@@ -128,9 +128,15 @@ export default class loginApi {
             const body = {}
             body['fullName'] = name
             body['email'] = emailId
-            body['referralCode'] = referralCode
+            body['alternateMobile'] = alternateMobile
+            body['referredBy'] = referredBy
+
+            //headers
+            const headers = {}
+            headers['x-auth-token'] = ConstantValues.token
+
             //calling api for response
-            const response = await this.apiCall(apiUrl, 'PUT', body, {})
+            const response = await this.apiCall(apiUrl, 'PUT', body, headers)
             console.log(response)
 
             return Promise.resolve(response)

@@ -7,6 +7,7 @@ import Icons from 'react-native-vector-icons/FontAwesome5';
 import CustomMenuFAB from '../assests/customMenuFAB.js';
 import { Fade } from '../assests/fade.js';
 import Modal from "react-native-modal";
+import menuApi from './menuApi.js';
 
 
 
@@ -61,6 +62,19 @@ export default class Menu extends Component {
     this.setState({ tagVisible: bool });
   }
 
+  //getting menudetails
+  async getMenu() {
+    try {
+      let response = await menuApi.getMenu();
+      console.log('data received in menu.js : ' + JSON.stringify(response))
+
+    } catch (error) {
+      console.log('Data received in menu.js catch: ' + error)
+    }
+  }
+
+
+  
 
   render() {
     const visible = this.state.count == 0 ? false : true
@@ -131,7 +145,7 @@ export default class Menu extends Component {
               style={{ width: Dimensions.get('window').width }}
               data={this.state.OutletMenuInfo}
               extraData={this.state}
-              renderItem={({ item}) =>
+              renderItem={({ item }) =>
                 <View>
                   <View
                     style={styles.menuGridCardContainer}
@@ -213,13 +227,13 @@ export default class Menu extends Component {
               style={{ margin: 10 }}
               sections={[
                 { title: 'Thali', data: itemDetail },
-                 {title:'Rice & Biryani',data:itemDetail},
-                 {title:'Sweets',data:itemDetail},
-                 {title:'Breads',data:itemDetail},
-                 {title:'Fast Food',data:itemDetail},
-                 {title:'Rice & Biryani',data:itemDetail},
-                 {title:'Rice & Biryani',data:itemDetail},
-                 {title:'Rice & Biryani',data:itemDetail},
+                { title: 'Rice & Biryani', data: itemDetail },
+                { title: 'Sweets', data: itemDetail },
+                { title: 'Breads', data: itemDetail },
+                { title: 'Fast Food', data: itemDetail },
+                { title: 'Rice & Biryani', data: itemDetail },
+                { title: 'Rice & Biryani', data: itemDetail },
+                { title: 'Rice & Biryani', data: itemDetail },
               ]}
               // Section Item rendering
               renderItem={({ item }) => (
@@ -282,10 +296,12 @@ export default class Menu extends Component {
         {/* Floating FAB ends */}
         {/*  Footer  */}
         <Fade visible={visible}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Cart', {
+          <TouchableOpacity onPress={() => {
+            // this.getMenu(),
+            this.props.navigation.navigate('Cart', {
             count: this.state.count,
             totalPrice: this.state.totalPrice
-          })}
+          })}}
             disabled={false}>
             <View style={[styles.footer]}>
 
@@ -444,7 +460,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-SemiBold',
     fontSize: 20,
     color: '#000000',
-    paddingVertical:10
+    paddingVertical: 10
   },
   modalItemView: {
     width: Dimensions.get('window').width,

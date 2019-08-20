@@ -12,36 +12,36 @@ class billDetailCard extends Component {
   render() {
     return (
       <SafeAreaView style={styles.slide}>
-      <View>
-        <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-          <Text style={{ fontSize: 20, fontFamily:'Poppins-Bold', color: '#000000' }}>Bill Details</Text>
-          <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} />
-        </View>
-        <View
-          style={styles.billcard}
-        >
-          <View>
-            {/* <Text style={{fontSize:15,fontWeight:'bold',padding:5}}></Text> */}
-            <View style={styles.tile}>
-              <Text style={styles.tiletext}>ITEM TOTAL</Text>
-              <Text style={styles.tiletext}>Rs. 200</Text>
-            </View>
-            <View style={styles.tile}>
-              <Text style={styles.tiletext}>TOTAL DISCOUNT</Text>
-              <Text style={styles.tiletext}>Rs. 200</Text>
-            </View>
-            <View style={styles.tile}>
-              <Text style={styles.tiletext}>DELIVERY FEE</Text>
-              <Text style={styles.tiletext}>Rs. 200</Text>
-            </View>
-            <View style={styles.tile}>
-              <Text style={styles.tiletext}>TOTAL</Text>
-              <Text style={styles.tiletext}>Rs. 200</Text>
-            </View>
+        <View>
+          <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
+            <Text style={{ fontSize: 20, fontFamily: 'Poppins-Bold', color: '#000000' }}>Bill Details</Text>
+            <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} />
+          </View>
+          <View
+            style={styles.billcard}
+          >
+            <View>
+              {/* <Text style={{fontSize:15,fontWeight:'bold',padding:5}}></Text> */}
+              <View style={styles.tile}>
+                <Text style={styles.tiletext}>ITEM TOTAL</Text>
+                <Text style={styles.tiletext}>Rs. 200</Text>
+              </View>
+              <View style={styles.tile}>
+                <Text style={styles.tiletext}>TOTAL DISCOUNT</Text>
+                <Text style={styles.tiletext}>Rs. 200</Text>
+              </View>
+              <View style={styles.tile}>
+                <Text style={styles.tiletext}>DELIVERY FEE</Text>
+                <Text style={styles.tiletext}>Rs. 200</Text>
+              </View>
+              <View style={styles.tile}>
+                <Text style={styles.tiletext}>TOTAL</Text>
+                <Text style={styles.tiletext}>Rs. 200</Text>
+              </View>
 
+            </View>
           </View>
         </View>
-      </View>
       </SafeAreaView>
     );
   }
@@ -78,15 +78,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
   },
   tile: {
-    width: Dimensions.get('screen').width-20,
+    width: Dimensions.get('screen').width - 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal:10,
-    paddingVertical:10
+    paddingHorizontal: 10,
+    paddingVertical: 10
   },
   tiletext: {
-    fontFamily:'Poppins-Bold',
-    color:'#000000'
+    fontFamily: 'Poppins-Bold',
+    color: '#000000'
   }
 })
 

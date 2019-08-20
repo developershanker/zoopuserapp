@@ -6,6 +6,7 @@ import CustomTouchableOpacity from '../assests/customTouchableOpacity';
 import SplashScreen from 'react-native-splash-screen';
 import ConstantValues from '../constantValues.js';
 import LoginApi from '../login/loginApi.js';
+import { Fade } from '../assests/fade.js';
 
 
 export default class Register extends Component {
@@ -17,16 +18,16 @@ export default class Register extends Component {
     this.state = {
       name:'',
       email:'',
-      referralCode:'',
+      referredBy:'',
       altmobile:''
     };
   }
   ///checking Input Validation
-  async isEmpty(name,email,referralCode){
+  async isEmpty(name,email,referredBy){
     try {
       if (name!=''){
           if(email!=''){
-            this.onRegister(name,email,referralCode)
+            this.onRegister(name,email,referredBy)
           }else{
             ToastAndroid.show('Please Enter Email Id',ToastAndroid.LONG)
           }
@@ -63,32 +64,29 @@ export default class Register extends Component {
         placeholder='Full Name'
         keyboardType='default'
         onChangeText={name => this.setState({ name})}
-        underlineColorAndroid='#000000'
         autoCapitalize="words"
         />
         <TextInput style={styles.input}
         placeholder='Email id'
         keyboardType='email-address'
         onChangeText={email => this.setState({ email })}
-        underlineColorAndroid='#000000'
         />
         <TextInput style={styles.input}
         placeholder='Alternate Mobile No.'
         keyboardType='number-pad'
         onChangeText={altmobile => this.setState({ altmobile})}
-        underlineColorAndroid='#000000'
         />
         <TextInput style={styles.input}
         placeholder='Referral Code (if any)'
         keyboardType='default'
-        onChangeText={referralCode => this.setState({ referralCode })}
-        underlineColorAndroid='#000000'
+        onChangeText={
+          referredBy => this.setState({referredBy})}
         />
         <CustomButton
             title="Register"
             color="#1abc9c"
             onPress={()=>{
-              this.isEmpty(this.state.name,this.state.email,this.state.referralCode)
+              this.isEmpty(this.state.name,this.state.email,this.state.referredBy)
               // this.props.navigation.navigate('Search')
             }}
             />

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet, Clipboard, Button, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native';
+import { View, Dimensions, StyleSheet, Clipboard, Button, ScrollView, Image, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { RadioButton, Text } from 'react-native-paper';
 import { CustomButton } from '../assests/customButtonLarge';
@@ -31,6 +31,28 @@ export default class Search extends Component {
       console.log('Data received in search.js catch: ' + error)
     }
 
+  }
+
+  async searchBy(text) {
+    try {
+      let response = await searchApi.searchBy(text);
+      // console.log('data received in search.js : ' + JSON.stringify(response))
+      if (response.status == true) {
+        return (
+          console.log('The status is: ' + response.status),
+          console.log('The train name is: ' + response.data.trainDetails.trainName),
+          ToastAndroid.show(response.message, ToastAndroid.LONG),
+          this.props.navigation.navigate('Station')
+        )
+      } else {
+        return (
+          ToastAndroid.show(response.error, ToastAndroid.LONG),
+          console.log(response.error)
+        )
+      }
+    } catch (error) {
+      console.log('Data received in search.js catch: ' + error)
+    }
   }
 
   render() {
@@ -70,19 +92,20 @@ export default class Search extends Component {
             </View>
             <View style={styles.main}>
               <View style={styles.inputView}>
-              <TextInput
-                style={styles.input}
-                placeholder={this.state.value}
-                keyboardType='number-pad'
-                maxLength={10}
-                onValueChange={placeholder => this.setState({ placeholder })}
-                onChangeText={text => this.setState({ text })}
+                <TextInput
+                  style={styles.input}
+                  placeholder={this.state.value}
+                  keyboardType='number-pad'
+                  maxLength={10}
+                  onValueChange={placeholder => this.setState({ placeholder })}
+                  onChangeText={text => this.setState({ text })}
 
-              />
+                />
               </View>
               <CustomButton
                 onPress={() => {
                   // this.showTrain(),
+                  // this.searchBy(this.state.text)
                   this.props.navigation.navigate('Station')
                 }}
                 title='Search'
@@ -166,20 +189,20 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'monospace',
   },
-  inputView:{
+  inputView: {
     marginLeft: 5,
     borderRadius: 100 / 10,
     borderColor: '#9B9B9B',
-    borderWidth:2,
-    paddingVertical:5
-    
+    borderWidth: 2,
+    paddingVertical: 5
+
   },
   input: {
     fontSize: 15,
     color: '#000000',
     width: Dimensions.get('window').width - 50,
     fontFamily: 'Poppins-Bold',
-    alignItems:'center'
+    alignItems: 'center'
   },
   heading: {
     color: 'black',

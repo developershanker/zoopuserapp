@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, Button, Text, Icon, TouchableOpacity, StyleSheet, Alert, Image, TextInput, ToastAndroid } from 'react-native';
+import { View, Dimensions, Button, Text, Icon, TouchableOpacity, StyleSheet, Alert, Image, TextInput, ToastAndroid, ImageBackground } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { CustomButton } from '../assests/customButtonShort.js';
 import { FadeInView } from '../assests/fadeInView.js';
@@ -57,20 +57,22 @@ export default class Welcome extends Component {
     return (
       <View style={styles.slide}>
         <FadeInView style={styles.anim}>
-          <Image
-            style={styles.image}
-            source={require('../images/logo.png')}
-          />
+          <ImageBackground style={{ width: Dimensions.get('screen').width, justifyContent: 'flex-start' }} source={require('../images/deliveryboy.png')}>
+            <Image
+              style={styles.image}
+              source={require('../images/zooplogoorange.png')}
+            />
+          </ImageBackground>
 
           {/* <Text style={styles.text1}> LOGIN </Text> */}
           <View style={styles.inputView}>
-          <TextInput style={styles.input}
-            placeholder="Enter Mobile No."
-            keyboardType='number-pad'
-            maxLength={10}
-            onChangeText={mobile => this.setState({ mobile })}
-            value={this.state.mobile}
-          />
+            <TextInput style={styles.input}
+              placeholder="Enter Mobile No."
+              keyboardType='number-pad'
+              maxLength={10}
+              onChangeText={mobile => this.setState({ mobile })}
+              value={this.state.mobile}
+            />
           </View>
           <CustomButton
             title="SUBMIT"
@@ -144,9 +146,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff'
   },
   image: {
-    // width:200,
-    // height:200,
-    justifyContent: 'flex-start'
+    width: 200,
+    height: 200,
+    justifyContent: 'center',
   },
   button: {
     display: 'flex',
@@ -176,11 +178,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     alignItems: 'center'
   },
-  inputView:{
+  inputView: {
     borderRadius: 100 / 10,
     borderColor: '#9B9B9B',
-    borderWidth:2,
-    
+    borderWidth: 2,
+
   },
   text: {
     color: '#ffffff',

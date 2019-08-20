@@ -94,8 +94,8 @@ class NavigationDrawerStructure extends Component {
             {/*Donute Button Image */}
 
             <Icon
-              name='align-center'
-              size={30}
+              name='bars'
+              size={20}
               style={{ marginLeft: 15 }}
             />
           </TouchableOpacity>
@@ -115,7 +115,7 @@ class NotificationSection extends Component {
 
         <Icon
           name='bell'
-          size={30}
+          size={20}
           style={{ marginRight: 15 }}
         />
       </TouchableOpacity>
@@ -127,7 +127,7 @@ class HeaderIcon extends Component {
   render() {
     return (
       <View>
-        <Image source={require('../images/logo.png')}
+        <Image source={require('../images/zooplogoorange.png')}
           style={{ width: 50, height: 30 }}
         />
       </View>
@@ -139,9 +139,10 @@ const CustomDrawerComponent = (props) => (
 
   <SafeAreaView style={{ flex: 1, flexDirection: 'column' }}>
     <ScrollView>
-      <View style={{ backgroundColor: '#ffffff', justifyContent: 'center',alignItems:'center' }}>
+      <View style={{ backgroundColor: '#ffffff', justifyContent: 'center',alignItems:'center',paddingVertical:20 }}>
         <Image
-          source={require('../images/logo.png')}
+          style={{width:150,height:60}}
+          source={require('../images/zooplogoorange.png')}
         ></Image>
       </View>
 
@@ -370,6 +371,13 @@ const AppNavigator = createStackNavigator({
     }
 
   },
+  Profile: {
+    screen: Profile,
+    navigationOptions: {
+      header: null,
+    }
+
+  },
   Cart: {
     screen: Cart,
     navigationOptions: {
@@ -475,7 +483,7 @@ const AppNavigator = createStackNavigator({
 
 },
   {
-    initialRouteName: 'MyWallet'
+    initialRouteName: 'Welcome'
   }
 
 

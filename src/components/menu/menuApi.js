@@ -1,13 +1,14 @@
 import ConstantValues from '../constantValues.js';
-
+import qs from 'qs';
 
 
 const baseURL = ConstantValues.apiUrl
 
-export default class searchApi {
+export default class menuApi {
     //Common Function for calling api
     static async apiCall(apiUrl, method, body = {}, headers = {}) {
         try {
+            let params = '';
             const option = {
                 method: method,
                 headers: {
@@ -25,8 +26,17 @@ export default class searchApi {
                     option.body = JSON.stringify(body);
                 }
             }
+            else if (method == 'GET') {
+                apiUrl += '?' + qs.stringify(body);
+            }
+
+
+
+
             console.log(option)
             const uri = baseURL + apiUrl;
+
+            console.log('the final uri is:' + uri)
 
             const response = await fetch(uri, option)
             const json = await response.json();
@@ -39,33 +49,16 @@ export default class searchApi {
         }
     }
 
-    static async showTrain() {
+    static async getMenu() {
         try {
             //url
-            const apiUrl = 'trains'
-            //body
-
-            //calling api for response
-            const response = await this.apiCall(apiUrl, 'GET', {}, {})
-            console.log(response)
-
-            return Promise.resolve(response)
-
-        } catch (error) {
-            console.log('Data received in searchApi catch: ' + error)
-            return Promise.reject(error)
-        }
-    }
-
-    static async searchBy(searchString) {
-        try {
-            //url
-            const apiUrl = 'search/train'
+            const apiUrl = 'outlets/menu/' + ConstantValues.outletId
             //body
             const body = {}
-            body['searchString'] = searchString
+            body['stationId'] = ConstantValues.stationId
+
             //calling api for response
-            const response = await this.apiCall(apiUrl, 'POST', body, {})
+            const response = await this.apiCall(apiUrl, 'GET', body, {})
             console.log(response)
 
             return Promise.resolve(response)
@@ -76,21 +69,5 @@ export default class searchApi {
         }
     }
 
-    static async showCuisines() {
-        try {
-            //url
-            const apiUrl = 'cuisines'
-            //body
-
-            //calling api for response
-            const response = await this.apiCall(apiUrl, 'GET', {}, {})
-            console.log(response)
-
-            return Promise.resolve(response)
-
-        } catch (error) {
-            console.log('Data received in searchApi catch: ' + error)
-            return Promise.reject(error)
-        }
-    }
 }
+
