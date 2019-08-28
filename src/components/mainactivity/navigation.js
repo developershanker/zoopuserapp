@@ -3,10 +3,10 @@ import { View, Text, Button, TouchableOpacity, Image, Platform, ScrollView, Dime
 import SplashScreen from 'react-native-splash-screen';
 import Device from 'react-native-device-info';
 //////-------LOGIN RELATED VIEWS-----------//////
-import Login from '../login/login.js';
+import SignUp from '../login/signUp.js';
 import Authenticated from '../login/authenticated.js'
 import NotAuthenticated from '../login/notAuthenticated.js'
-import Slider from '../login/slider.js';
+// import Slider from '../login/slider.js';
 import Register from '../login/register.js';
 import OtpVerify from '../login/otpVerify.js';
 import DeviceInfo from '../assests/deviceInfo.js';
@@ -16,7 +16,6 @@ import Search from './search.js';
 import Welcome from '../login/welcome.js';
 import Station from '../mainactivity/station.js';
 import SearchOption from '../mainactivity/searchOption.js';
-import AutoCompleteTrain from '../mainactivity/autoCompleteTrain.js';
 import Notifications from '../services/notifications.js';
 import Menu from '../menu/menu.js';
 import Cart from '../cart/cart.js';
@@ -139,9 +138,9 @@ const CustomDrawerComponent = (props) => (
 
   <SafeAreaView style={{ flex: 1, flexDirection: 'column' }}>
     <ScrollView>
-      <View style={{ backgroundColor: '#ffffff', justifyContent: 'center',alignItems:'center',paddingVertical:20 }}>
+      <View style={{ backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center', paddingVertical: 20 }}>
         <Image
-          style={{width:150,height:60}}
+          style={{ width: 150, height: 60 }}
           source={require('../images/zooplogoorange.png')}
         ></Image>
       </View>
@@ -152,7 +151,7 @@ const CustomDrawerComponent = (props) => (
         <Footer style={{ backgroundColor: '#FF9800' }}>
           <View style={{ justifyContent: 'space-around' }}>
             {/* <Icon name='sign-in' size={10} style={{color:'#000000'}}/> */}
-            <Text style={{ fontSize: 25, fontFamily:'Poppins-Bold', color: '#000000', justifyContent: 'center' }}>LOGIN</Text>
+            <Text style={{ fontSize: 25, fontFamily: 'Poppins-Bold', color: '#000000', justifyContent: 'center' }}>LOGIN</Text>
           </View>
         </Footer>
       </TouchableOpacity>
@@ -198,7 +197,7 @@ const DrawerNavigator = createDrawerNavigator({
     screen: MyWallet,
     navigationOptions: {
       drawerLabel: 'My Wallet',
-      header:null,
+      header: null,
       drawerIcon: <Icon
         name='plus'
         size={20}
@@ -282,8 +281,8 @@ const DrawerNavigator = createDrawerNavigator({
   }
 );
 const AppNavigator = createStackNavigator({
-  Login: {
-    screen: Login,
+  SignUp: {
+    screen: SignUp,
     navigationOptions: {
       header: null,
     }
@@ -300,13 +299,13 @@ const AppNavigator = createStackNavigator({
       header: null,
     }
   },
-  Slider: {
-    screen: Slider,
-    navigationOptions: {
-      header: null,
-    }
+  // Slider: {
+  //   screen: Slider,
+  //   navigationOptions: {
+  //     header: null,
+  //   }
 
-  },
+  // },
   Notifications: {
     screen: Notifications,
     navigationOptions: {
@@ -408,48 +407,42 @@ const AppNavigator = createStackNavigator({
       header: null,
     }
   },
-  OrderConfirm:{
+  OrderConfirm: {
     screen: OrderConfirm,
-    navigationOptions:{
-      header:null,
+    navigationOptions: {
+      header: null,
     }
   },
-  DeliveryMark:{
+  DeliveryMark: {
     screen: DeliveryMark,
-    navigationOptions:{
-      header:null,
+    navigationOptions: {
+      header: null,
     }
   },
-  OrderFeedback:{
+  OrderFeedback: {
     screen: OrderFeedback,
-    navigationOptions:{
-      header:null,
+    navigationOptions: {
+      header: null,
     }
   },
-  TrackingOrder:{
+  TrackingOrder: {
     screen: TrackingOrder,
-    navigationOptions:{
-      header:null,
+    navigationOptions: {
+      header: null,
     }
   },
-  OrderDetail:{
+  OrderDetail: {
     screen: OrderDetail,
-    navigationOptions:{
-      header:null,
-    }
-  },
-  MyWallet: {
-    screen: MyWallet,
     navigationOptions: {
-      header: null
+      header: null,
     }
   },
-  AutoCompleteTrain: {
-    screen: AutoCompleteTrain,
-    navigationOptions: {
-      header: null
-    }
-  },
+  // MyWallet: {
+  //   screen: MyWallet,
+  //   navigationOptions: {
+  //     header: null
+  //   }
+  // },
   CheckPNR: {
     screen: CheckPNR,
     navigationOptions: {
@@ -483,7 +476,7 @@ const AppNavigator = createStackNavigator({
 
 },
   {
-    initialRouteName: 'Welcome'
+    initialRouteName: 'Search'
   }
 
 

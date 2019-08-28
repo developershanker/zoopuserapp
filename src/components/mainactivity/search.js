@@ -7,11 +7,17 @@ import { CustomGridIcon } from '../assests/customGridIcon';
 import { SafeAreaView } from 'react-navigation';
 import searchApi from './searchApi';
 import DeliveryMark from '../postOrderActivity/deliveryMark';
+import ConstantValues from '../constantValues';
+import { Fade } from '../assests/fade';
+// import  Autocomplete  from 'react-native-autocomplete-input';
+import { InputAutoSuggest } from 'react-native-autocomplete-search';
+
 
 
 export default class Search extends Component {
   componentDidMount() {
     SplashScreen.hide();
+    // this.showTrain()
   }
   constructor(props) {
     super(props);
@@ -19,31 +25,64 @@ export default class Search extends Component {
       text: '',
       value: 'Enter PNR',
       placeholder: '',
-      email: ''
+      email: '',
+      query: '',
+      trains:[],
     };
+  }
+
+  findTrain(query) {
+    if (query === '') {
+      return [];
+    }
+  }
+
+  trainList = (value) => {
+    if (value == 'Enter PNR') {
+      return (
+        <View style={styles.inputView}>
+          <TextInput
+            // ref={component => this._textInput = component}
+            style={styles.input}
+            placeholder={this.state.value}
+            keyboardType='number-pad'
+            maxLength={10}
+            onValueChange={placeholder => this.setState({ placeholder })}
+            onChangeText={text => this.setState({ text })}
+          />
+        </View>
+      )
+    } else {
+      const { query } = this.state;
+      const trains = this.findTrain(query);
+      return(
+      <View style={styles.inputView}>
+        <TextInput
+          // ref={component => this._textInput = component}
+          style={styles.input}
+          placeholder={this.state.value}
+          keyboardType='number-pad'
+          maxLength={10}
+          onValueChange={placeholder => this.setState({ placeholder })}
+          onChangeText={text => this.setState({ text })}
+        />
+      </View>
+      )
+    }
   }
 
   async showTrain() {
     try {
       let response = await searchApi.showTrain();
-      console.log('data received in search.js : ' + JSON.stringify(response))
-    } catch (error) {
-      console.log('Data received in search.js catch: ' + error)
-    }
-
-  }
-
-  async searchBy(text) {
-    try {
-      let response = await searchApi.searchBy(text);
       // console.log('data received in search.js : ' + JSON.stringify(response))
       if (response.status == true) {
-        return (
-          console.log('The status is: ' + response.status),
-          console.log('The train name is: ' + response.data.trainDetails.trainName),
-          ToastAndroid.show(response.message, ToastAndroid.LONG),
-          this.props.navigation.navigate('Station')
-        )
+          console.log('data : ' + JSON.stringify(response.data))
+          this.setState({ 
+            trains : response.data
+          })
+        // return (
+        //   ToastAndroid.show(response.message, ToastAndroid.LONG)
+        // )
       } else {
         return (
           ToastAndroid.show(response.error, ToastAndroid.LONG),
@@ -53,7 +92,37 @@ export default class Search extends Component {
     } catch (error) {
       console.log('Data received in search.js catch: ' + error)
     }
+
   }
+
+  searchBy(text) {
+    ConstantValues.searchString = text,
+      console.log('ConstantValues.searchString is ....' + ConstantValues.searchString),
+      this.props.navigation.navigate('Station')
+  }
+  //   try {
+  //     let response = await searchApi.searchBy(text);
+  //     // console.log('data received in search.js : ' + JSON.stringify(response))
+  //     if (response.status == true) {
+  //       return (
+  //         ConstantValues.searchResponse = response,
+  //         ConstantValues.searchString = text,
+  //         // console.log('ConstantValues.searchResponse is ....'+ConstantValues.searchResponse),
+  //         console.log('The searchString is: ' + ConstantValues.searchString),
+  //         // console.log('The train name is: ' + response.data.trainDetails.trainName),
+  //         ToastAndroid.show(response.message, ToastAndroid.LONG),
+  //         this.props.navigation.navigate('Station')
+  //       )
+  //     } else {
+  //       return (
+  //         ToastAndroid.show(response.error, ToastAndroid.LONG),
+  //         console.log(response.error)
+  //       )
+  //     }
+  //   } catch (error) {
+  //     console.log('Data received in search.js catch: ' + error)
+  //   }
+  // }
 
   render() {
 
@@ -91,34 +160,29 @@ export default class Search extends Component {
 
             </View>
             <View style={styles.main}>
-              <View style={styles.inputView}>
+              {this.trainList(this.state.value)}
+              {/* <View style={styles.inputView}>
+                {
                 <TextInput
+                  // ref={component => this._textInput = component}
                   style={styles.input}
                   placeholder={this.state.value}
                   keyboardType='number-pad'
                   maxLength={10}
                   onValueChange={placeholder => this.setState({ placeholder })}
                   onChangeText={text => this.setState({ text })}
-
                 />
-              </View>
+                }
+              </View> */}
               <CustomButton
                 onPress={() => {
                   // this.showTrain(),
-                  // this.searchBy(this.state.text)
-                  this.props.navigation.navigate('Station')
+                  this.searchBy(this.state.text)
+                  // this.props.navigation.navigate('Station')
                 }}
                 title='Search'
-
               />
             </View>
-            {/* <CustomTextInput
-    placeholder="test@gmail.com"
-    label="Email"
-    mode='outlined'
-    value={this.state.email}
-    onChangeText={email => this.setState({ email })}
-    /> */}
             <CustomGridIcon
             />
 
@@ -154,7 +218,6 @@ const styles = StyleSheet.create({
 
   },
   main: {
-
     alignItems: 'center',
     justifyContent: 'center',
 
@@ -197,12 +260,25 @@ const styles = StyleSheet.create({
     paddingVertical: 5
 
   },
+  itemText: {
+    fontSize: 15,
+    margin: 2
+  },
   input: {
     fontSize: 15,
     color: '#000000',
     width: Dimensions.get('window').width - 50,
     fontFamily: 'Poppins-Bold',
     alignItems: 'center'
+  },
+  inputAuto:{
+    // width:Dimensions.get('window').width - 50,
+    flex: 1,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    // zIndex: 1
   },
   heading: {
     color: 'black',

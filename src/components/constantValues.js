@@ -3,7 +3,9 @@ import Device from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 export default class ConstantValues {
+  // static apiUrl = 'http://13.126.232.146:3000/'
   static apiUrl = 'http://10.5.48.206:3000/'
+  // http://10.5.48.206:3000/ local          //http://13.126.232.146:3000/ main
   static customer = { name: '', mobileNo: '' }
   static customerName = ''
   static customeralternateMobile = ''
@@ -13,7 +15,8 @@ export default class ConstantValues {
   static token = ''
   static loginCount = null
   static couponCode = 'ZOOP50'
-  static walletBalance = 200
+  static walletBalance = null
+  // static walletSummary = { }
   static rupee = <Icon name={'rupee'} size={15} />
   static orderRating = ''
   static source = 'APP'
@@ -31,8 +34,16 @@ export default class ConstantValues {
     osBuildId: Device.getBuildId(),
   }
 
+  //station and outlet
+  static searchString = ''
 
   //order constant module
-  static stationId = '5884'
-  static outletId = '1'
+  static stationId = ''
+  static stationName = ''
+  static outletId = ''
+  static outletName = ''
+  static haltTime = ''
+  static outletRating = null
+  static minimumOrderValue = null
+
 }

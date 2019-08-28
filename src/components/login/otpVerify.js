@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, ToastAndroid } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, ToastAndroid, Image, ImageBackground, Dimensions, ScrollView } from 'react-native';
 import { CustomButton } from '../assests/customButtonLarge';
 import CodeInput from 'react-native-confirmation-code-input';
 import SplashScreen from 'react-native-splash-screen';
@@ -46,7 +46,7 @@ export default class otpVerify extends Component {
     this.setState({
       // On State false it will enable the button.
       ButtonStateHolder: false,
-      backgroundColor: '#edd361'
+      backgroundColor: '#FF5819'
     })
   }
   ///this fuction will send OTP to Zoop Server for matching
@@ -114,79 +114,94 @@ export default class otpVerify extends Component {
     const mobile = navigation.getParam('mobile', '0');
     const customerId = navigation.getParam('customerId', '0')
     return (
-      <View style={styles.slide}>
-        <Text style={styles.heading}>PHONE VERIFICATION</Text>
-        <CodeInput
-          underlineColorAndroid='#000000'
-          secureTextEntry={false}
-          selectionColor='#1abc9c'
-          codeInputStyle={styles.text}
-          codeLength={4}
-          inputPosition='left'
-          keyboardType='number-pad'
-          onFulfill={(customerCode) => {
-            this.setState({ customerCode })
-            console.log(customerCode)
-            this.EnableButtonFunction()
-          }}
-        />
+      <ScrollView>
+        <View style={styles.slide}>
+          <ImageBackground style={{ width: Dimensions.get('screen').width, alignItems: 'center', height: Dimensions.get('screen').height / 2, }} source={require('../images/deliveryboy.png')}>
+            <Image
+              style={styles.image}
+              source={require('../images/zooplogoorange.png')}
+            />
+          </ImageBackground>
+          <Text style={styles.heading}>Phone Verification</Text>
+          <View style={{ justifyContent: 'center', alignItems: 'center', marginHorizontal: 15, marginVertical: 30 }} >
+            <CodeInput
+              // underlineColorAndroid='#000000'
+              secureTextEntry={false}
+              selectionColor='#000000'
+              codeInputStyle={styles.text}
+              codeLength={4}
+              className='border-circle'
+              inputPosition='left'
+              keyboardType='number-pad'
+              onFulfill={(customerCode) => {
+                this.setState({ customerCode })
+                console.log(customerCode)
+                this.EnableButtonFunction()
+              }}
+            />
+          </View>
 
 
-        <CustomTouchableOpacity
-          disabled={this.state.disable}
-          text={this.state.text}
-          onPress={() => this.activeResendOtp(mobile, customerId)}
-        />
+          <CustomTouchableOpacity
+            disabled={this.state.disable}
+            text={this.state.text}
+            // onPress={() => { this.activeResendOtp(mobile, customerId) }}
+            onPress={() => { ToastAndroid.show('OTP Resend Successful', ToastAndroid.LONG) }}
+          />
 
+          <View style={{ paddingHorizontal: 20, alignItems: 'center' }}>
+            <CustomButton
+              style={[styles.button, { backgroundColor: this.state.backgroundColor }]}
+              title="Register"
+              activeOpacity={.5}
+              disabled={this.state.ButtonStateHolder}
+              color="#1abc9c"
+              onPress={() => {
+                this.verifyOtp(this.state.customerCode, customerId, mobile)
 
-        <CustomButton
-          style={[styles.button, { backgroundColor: this.state.backgroundColor }]}
-          title="Register"
-          activeOpacity={.5}
-          disabled={this.state.ButtonStateHolder}
-          color="#1abc9c"
-          onPress={() => {
-            this.verifyOtp(this.state.customerCode, customerId, mobile)
-
-          }}
-        />
-      </View>
-
+              }}
+            />
+          </View>
+        </View>
+      </ScrollView>
     );
   }
 }
 const styles = StyleSheet.create({
   slide: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // flex: 1,
+    width: Dimensions.get('screen').width,
+    // height:Dimensions.get('screen').height,
     backgroundColor: '#ffffff',
-    paddingTop: 100,
-    marginLeft: 20,
-    marginRight: 20,
+    alignItems: 'stretch',
   },
   heading: {
-    color: 'black',
-    fontFamily:'Poppins-Bold',
-    fontSize: 30,
-    justifyContent: 'center',
-
+    fontSize: 20,
+    paddingTop: 10,
+    color: '#000000',
+    textAlign: 'center',
+    fontFamily: 'Poppins-SemiBold',
   },
   text: {
-    width: 100,
-    height: 100,
-    fontSize: 40,
+    width: 50,
+    height: 50,
+    fontSize: 20,
+    backgroundColor:'#d9dedd',
+    borderWidth: 1.5,
     color: '#000000',
     alignItems: 'center',
-    fontFamily:'Poppins-Bold',
+    fontFamily: 'Poppins-Bold',
     justifyContent: 'center',
   },
   button: {
-    display: 'flex',
     alignContent: 'center',
     justifyContent: 'center',
-    // color:'#1abc9c',        
-    marginTop: 20,
-    marginBottom: 40
+    paddingHorizontal: 20,
+    paddingVertical: 20
+  },
+  image: {
+    width: 200,
+    height: 200,
+    alignItems: 'center'
   },
 })

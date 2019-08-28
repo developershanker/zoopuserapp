@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, Button, Text, Icon, TouchableOpacity, StyleSheet, Alert, Image, TextInput, ToastAndroid, ImageBackground , ScrollView} from 'react-native';
+import { View, Dimensions, Button, Text, Icon, TouchableOpacity, StyleSheet, Alert, Image, TextInput, ToastAndroid, ImageBackground, ScrollView } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import CustomTouchableOpacity from '../assests/customTouchableOpacity';
@@ -9,7 +9,8 @@ import ConstantValues from '../constantValues.js'
 import loginApi from './loginApi.js';
 
 
-export default class Welcome extends Component {
+
+export default class SignUp extends Component {
   componentDidMount() {
     SplashScreen.hide();
   }
@@ -19,15 +20,11 @@ export default class Welcome extends Component {
       mobile: '',
     };
   }
-
-
-
-
   ////Sending Otp API//////
   async sendOtp(mobile) {
     try {
       let response = await loginApi.sendOtp(mobile);
-      console.log('data received in welcome.js : ' + JSON.stringify(response))
+      console.log('data received in signup.js : ' + JSON.stringify(response))
       if (response.status == true) {
         return (console.log(response),
           console.log('Logged with mobile No. :' + mobile),
@@ -47,28 +44,25 @@ export default class Welcome extends Component {
         )
       }
     } catch (error) {
-      console.log('Data received in welcome.js catch: ' + error)
+      console.log('Data received in signup.js catch: ' + error)
     }
   }
-
-
-
 
   render() {
     return (
       <ScrollView>
-      <View style={styles.slide}>
-        {/* <FadeInView style={styles.anim}> */}
-          <ImageBackground style={{ width: Dimensions.get('screen').width, alignItems: 'center', height:Dimensions.get('screen').height/2, }} source={require('../images/deliveryboy.png')}>
-            
+        <View style={styles.slide}>
+          {/* <FadeInView style={styles.anim}> */}
+          <ImageBackground style={{ width: Dimensions.get('screen').width, alignItems: 'center', height: Dimensions.get('screen').height / 2, }} source={require('../images/deliveryboy.png')}>
+
             <Image
               style={styles.image}
               source={require('../images/zooplogoorange.png')}
             />
-            
+
           </ImageBackground>
 
-          <Text style={styles.text1}> Login </Text>
+          <Text style={styles.text1}> Sign Up </Text>
           <View style={styles.inputView}>
             <TextInput style={styles.input}
               placeholder="Enter Mobile No."
@@ -78,72 +72,51 @@ export default class Welcome extends Component {
               value={this.state.mobile}
             />
           </View>
-          <View style={{paddingHorizontal: 20,alignItems:'center'}}>
-          <CustomButton
-            title="Submit"
-            onPress={
-              () => {
-                // console.log(this.state.text)
-                console.log(apiLevel)
-                if (this.state.mobile == '') {
-                  return (
-                    ToastAndroid.show('Please Enter Mobile No.', ToastAndroid.CENTER),
-                    console.log('mobile number is empty')
-                  )
-                }
-                else {
-                  this.sendOtp(this.state.mobile) //this function sends mobile no. through the otp api
+          <View style={{ paddingHorizontal: 20, alignItems: 'center' }}>
+            <CustomButton
+              title="Submit"
+              onPress={
+                () => {
+                  // console.log(this.state.text)
+                  if (this.state.mobile == '') {
+                    return (
+                      ToastAndroid.show('Please Enter Mobile No.', ToastAndroid.CENTER),
+                      console.log('mobile number is empty')
+                    )
+                  }
+                  else {
+                    this.sendOtp(this.state.mobile) //this function sends mobile no. through the otp api
+                  }
                 }
               }
-            }
-            style={{backgroundColor:'#FF5819',justifyContent: 'center',}}
-            textStyle={styles.text}
+              style={{ backgroundColor: '#FF5819', justifyContent: 'center', }}
+              textStyle={styles.text}
 
-          />
-          <CustomTouchableOpacity
-          text="Skip >>"
-          color="#1abc9c"
-          onPress={() => {
-            this.props.navigation.navigate('Search')
-          }}
-        />
+            />
+            <View style={{ flexDirection: 'row', paddingVertical: 20, alignItems: 'center' }}>
+              <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Already Registered?</Text>
+              <TouchableOpacity onPress={() => { this.props.navigation.navigate('Welcome') }}>
+                <Text style={styles.logintext}>Login</Text>
+              </TouchableOpacity>
             </View>
-        {/* </FadeInView> */}
+          </View>
+          {/* </FadeInView> */}
 
-      </View>
+        </View>
       </ScrollView>
 
     );
   }
 }
 
-
-
-/////sending Device info
-const apiLevel = Device.getAPILevel();
-const ip = Device.getIPAddress().then(ip => {
-  return ip
-});
-const deviceId = Device.getDeviceId();
-const carrier = Device.getCarrier();
-const firstInstallTime = Device.getFirstInstallTime();
-const macAddress = Device.getMACAddress();
-const systemVersion = Device.getSystemVersion();
-const systemName = Device.getSystemName();
-const appVersion = Device.getVersion();
-const deviceType = Device.getDeviceType();
-const osBuildId = Device.getBuildId();
-
-
-
 ///styling with CSS
 const styles = StyleSheet.create({
   slide: {
     // flex: 1,
-    width:Dimensions.get('screen').width,
+    width: Dimensions.get('screen').width,
     // height:Dimensions.get('screen').height,
     backgroundColor: '#ffffff',
-    alignItems:'stretch',
+    alignItems: 'stretch',
   },
   anim: {
     alignItems: 'center',
@@ -153,7 +126,7 @@ const styles = StyleSheet.create({
   image: {
     width: 200,
     height: 200,
-    alignItems:'center'
+    alignItems: 'center'
   },
   button: {
     display: 'flex',
@@ -187,8 +160,8 @@ const styles = StyleSheet.create({
     borderRadius: 100 / 10,
     borderColor: '#9B9B9B',
     borderWidth: 2,
-    marginHorizontal:15,
-    marginVertical:30
+    marginHorizontal: 15,
+    marginVertical: 30
   },
   text: {
     color: '#ffffff',
@@ -196,10 +169,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
   },
   text1: {
-    fontSize:25,
-    paddingTop:10,
+    fontSize: 25,
+    paddingTop: 10,
     color: '#000000',
     textAlign: 'center',
     fontFamily: 'Poppins-SemiBold',
   },
+  logintext: {
+    paddingHorizontal: 5,
+    fontSize: 15,
+    color: '#FF5819',
+    textAlign: 'center',
+    fontFamily: 'Poppins-SemiBold',
+    textDecorationLine: 'underline'
+  }
 });
