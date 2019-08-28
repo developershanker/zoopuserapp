@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Dimensions, View, ScrollView, Image, StyleSheet, ToastAndroid, TouchableOpacity, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
+import { Text, Dimensions, View, ScrollView, Image, StyleSheet, ToastAndroid, SectionList, TouchableOpacity, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 // import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
@@ -10,10 +10,13 @@ import Modal from "react-native-modal";
 import { CustomButton } from '../assests/customButtonShort.js';
 import Search from './search.js';
 import searchApi from './searchApi.js';
+import ConstantValues from '../constantValues.js';
+import CustomActivityIndicator from '../assests/customActivityIndicator.js';
 
 export default class station extends Component {
   componentDidMount() {
     SplashScreen.hide();
+    this.showStation(ConstantValues.searchString);
   }
   constructor(props) {
     super(props);
@@ -21,29 +24,17 @@ export default class station extends Component {
       firstQuery: '',
       visibleModal: null,
       animating: true,
-      ListItems: [
-        { key: "1", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
-        { key: "2", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
-        { key: "3", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
-        { key: "4", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
-        { key: "5", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
-        { key: "6", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
+      // data: [],
+      OutletList: [
+        // { key: "1", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
+        // { key: "2", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
+        // { key: "3", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
+        // { key: "4", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
+        // { key: "5", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
+        // { key: "6", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
       ],
-      StationList: [
-        { key: "1", stationName: "New Delhi", arrTime: "12:50", image: require('../images/1.png') },
-        { key: "2", stationName: "New Delhi", arrTime: "12:50", image: require('../images/2.png') },
-        { key: "3", stationName: "New Delhi", arrTime: "12:50", image: require('../images/3.png') },
-        { key: "4", stationName: "New Delhi", arrTime: "12:50", image: require('../images/4.png') },
-        { key: "5", stationName: "New Delhi", arrTime: "12:50", image: require('../images/5.png') },
-        { key: "6", stationName: "New Delhi", arrTime: "12:50", image: require('../images/6.png') },
-        { key: "7", stationName: "New Delhi", arrTime: "12:50", image: require('../images/1.png') }
-      ],
-      CuisinesList: [
-        { key: "1", CuisineName: "South Indian", },
-        { key: "2", CuisineName: "Chinese", },
-        { key: "3", CuisineName: "Mughlai", },
-        { key: "4", CuisineName: "Punjabi", },
-      ],
+      StationList: [],
+      CuisinesList: [],
       checked: []
     };
   }
@@ -55,20 +46,22 @@ export default class station extends Component {
     this.setState({ checked });
   }
 
+  FlatListItemSeparator = () => {
+    return (
+      //Item Separator
+      <View style={{ height: 0.5, width: '100%', backgroundColor: '#C8C8C8' }} />
+    );
+  };
+
+
+
   async showCuisines() {
     try {
       let response = await searchApi.showCuisines();
-
       if (response.status == true) {
-        console.log('The status is: ' + response.status)
-        response.data.forEach(element => {
-          const cuisineList = element.cuisineName;
-          return (
-            console.log('The Cuisine name is: ' + cuisineList)
-          )
-
-        });
-        // ToastAndroid.show(response.message, ToastAndroid.LONG)  
+        this.setState({
+          CuisinesList: response.data
+        })
       } else {
         return (
           ToastAndroid.show(response.error, ToastAndroid.LONG),
@@ -81,9 +74,47 @@ export default class station extends Component {
     }
   }
 
+  async showStation(text) {
+    try {
+      let response = await searchApi.searchBy(text);
+      if (response.status == true) {
+        // console.log('data received in station.js : ' + JSON.stringify(response)),
+        this.setState({
+          StationList: response.data.trainRoutes,
+        })
+
+        return (
+          // <CustomActivityIndicator animating={false} /> ,
+          ToastAndroid.show(response.message, ToastAndroid.LONG)
+        )
+      } else {
+        return (
+          ToastAndroid.show(response.error, ToastAndroid.LONG),
+          console.log(response.error)
+        )
+      }
+    } catch (error) {
+      console.log('Data received in station.js catch: ' + error)
+    }
+  }
+
+  gotoMenu = (stationId, outletId, stationName, haltTime, outletName, outletRating, minimumOrderValue) => {
+    ConstantValues.stationId = stationId,
+      ConstantValues.outletId = outletId,
+      ConstantValues.stationName = stationName,
+      ConstantValues.outletName = outletName,
+      ConstantValues.haltTime = haltTime,
+      ConstantValues.outletRating = outletRating,
+      ConstantValues.minimumOrderValue = minimumOrderValue
+    console.log('ConstantValues.stationId : ' + ConstantValues.stationId),
+      console.log('ConstantValues.outletId : ' + ConstantValues.outletId),
+      this.props.navigation.navigate('Menu')
+  }
+
   render() {
     return (
       <SafeAreaView style={styles.slide}>
+        {/* <CustomActivityIndicator size={40} animating={true} ></CustomActivityIndicator> */}
         <View style={styles.topContainer}>
           <View>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
@@ -108,6 +139,7 @@ export default class station extends Component {
         <View style={{ flex: 1 }}>
           <Modal
             isVisible={this.state.visibleModal === 'bottom'}
+            onBackButtonPress={() => this.setState({ visibleModal: null })}
             onSwipeComplete={() => this.setState({ visibleModal: null })}
             swipeDirection={['left', 'right',]}
             style={styles.bottomModal}
@@ -182,24 +214,28 @@ export default class station extends Component {
               <View>
                 <Text style={styles.cuisineText}>Cuisines</Text>
               </View>
-              <ScrollView>
-                <FlatList
-                  data={this.state.CuisinesList}
-                  extraData={this.state}
-                  renderItem={({ item, index }) =>
+              <View style={{ height: 250, width: Dimensions.get('screen').width, paddingHorizontal: 10 }}>
+                <ScrollView
+                  showsHorizontalScrollIndicator={false}
+                >
+                  <FlatList
+                    data={this.state.CuisinesList}
+                    extraData={this.state}
+                    renderItem={({ item, index }) =>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      <CheckBox
-                        value={this.state.checked[index]}
-                        disabled={false}
-                        onValueChange={() => this.handleChange(index)}
-                      />
-                      <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Bold' }}>{item.CuisineName}</Text>
-                    </View>
-                  }
-                // keyExtractor={(item)=>item.cuisineId}
-                />
-              </ScrollView>
+                      <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+                        <CheckBox
+                          value={this.state.checked[index]}
+                          disabled={false}
+                          onValueChange={() => this.handleChange(index)}
+                        />
+                        <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Bold' }}>{item.cuisineName}</Text>
+                      </View>
+                    }
+                    keyExtractor={(item) => item.cuisineId.toString()}
+                  />
+                </ScrollView>
+              </View>
               <CustomButton
                 style={{ backgroundColor: '#1fc44e', alignSelf: 'flex-end' }}
                 onPress={() => { this.setState({ visibleModal: null }) }}
@@ -221,18 +257,20 @@ export default class station extends Component {
               contentContainerStyle={styles.contentContainer}>
               <FlatList
                 data={this.state.StationList}
+                // data={this.state.data}
                 horizontal={true}
-                renderItem={({ item }) =>
+                renderItem={({ item, index }) =>
                   <View>
                     <TouchableOpacity>
-                      <Image style={styles.roundImage} source={item.image} />
+                      <Image style={styles.roundImage} source={item.stationImage == null ? require('../images/1.png') : require('../images/3.png')} />
                       <View style={styles.name}>
                         <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular' }}>{item.stationName}</Text>
-                        <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', }}>{item.arrTime}</Text>
+                        <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', }}>{item.arrivalTime}</Text>
                       </View>
                     </TouchableOpacity>
                   </View>
                 }
+                keyExtractor={(item) => item.stationId.toString()}
               />
             </ScrollView>
           </View>
@@ -242,45 +280,84 @@ export default class station extends Component {
         <ScrollView>
           <View style={styles.slide}>
             {/* Station Header */}
-            <StationHeader />
+            {/* <StationHeader /> */}
             <FlatList
-              data={this.state.ListItems}
-              renderItem={({ item }) =>
-                <View style={styles.outletContainer}>
-                  <TouchableOpacity style={styles.card} onPress={() => this.props.navigation.navigate('Menu')}>
-                    <Image source={require('../images/roundimg3.jpg')} style={styles.outletimage} />
-                    <View style={styles.detail}>
-                      <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.outletname}>
-                          {item.name}
-                        </Text>
-                        <View style={styles.ratingView}>
-                          <Text style={styles.rating}>
-                            {item.rating}
-                          </Text>
+              data={this.state.StationList}
+              ItemSeparatorComponent={this.FlatListItemSeparator}
+              renderItem={({ item, index }) =>
+                <View>
+                  <Text style={styles.textheader}>{item.stationName}</Text>
+                  <View style={styles.stextview}>
+                    <Text style={styles.stext}>Halt Mins : {item.haltTime}</Text>
+                    <Text style={styles.stext}> S.T.A:{item.arrivalTime} |</Text>
+                    <Text style={styles.stext}> E.T.A:{item.expectedTime}</Text>
+                  </View>
+
+                  {/* OutletView starts */}
+                  {
+                    item.outlets.map((outlets, index) => {
+                      return (
+                        <View style={styles.outletContainer} key={index} >
+                          <TouchableOpacity style={styles.card} onPress={() => {
+                            this.gotoMenu(
+                              item.stationId,
+                              outlets.outletId,
+                              item.stationName,
+                              item.haltTime,
+                              outlets.outletName,
+                              outlets.outletRating,
+                              outlets.minimumOrderValue
+                            )
+                          }}>
+                            <Image source={require('../images/roundimg3.jpg')} style={styles.outletimage} />
+                            <View style={styles.detail}>
+                              <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.outletname}>
+                                  {outlets.outletName}
+                                </Text>
+                                <View style={styles.ratingView}>
+                                  <Text style={styles.rating}>
+                                    {outlets.outletRating}
+                                  </Text>
+                                </View>
+                              </View>
+                              {/* {
+                              outlets.cuisines.map((cuisines, index) => {
+                                return (
+                                  <View style={{width:400,flexDirection:'row',}} key = {index}>
+                                    <Text style={styles.cuisine}>
+                                      {cuisines.cuisineName} , 
+                                    </Text>
+                                  </View>
+                                )
+                              }
+                              )} */}
+
+                              <Text style={styles.minorder}>
+                                Minimum Order: {ConstantValues.rupee} {outlets.minimumOrderValue}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
                         </View>
-                      </View>
-                      <Text style={styles.cuisine}>
-                        {item.cuisine}
-                      </Text>
+                      )
+                    }
+                    )
+                  }
+                </View>
 
-                      {/* <Text>
-            Order before "date" and "time"
-          </Text> */}
-                      <Text style={styles.minorder}>
-                        Minimum Order: Rs. {item.minorder}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>}
-
+              }
+              keyExtractor={(item, index) => item.stationId.toString()}
             />
           </View>
 
         </ScrollView>
         {/* Floating FAB starts */}
         <View>
-          <TouchableOpacity style={styles.fab} onPress={() => { this.setState({ visibleModal: 'bottom' }) }} >
+          <TouchableOpacity style={styles.fab} onPress={() => {
+            this.showCuisines();
+            this.setState({ visibleModal: 'bottom' })
+
+          }} >
             <Icon name={'filter'} size={20} color={'#ffffff'} />
             <Text style={styles.fabIcon}>Filter</Text>
           </TouchableOpacity>
@@ -435,8 +512,11 @@ const styles = StyleSheet.create({
     color: '#ffffff'
   },
   cuisine: {
+    // width:150,
+    // flexDirection:'row',
+    fontSize: 10,
     fontFamily: 'Poppins-Regular',
-    marginLeft: 10
+    // marginLeft: 10
   },
   minorder: {
     fontFamily: 'Poppins-Regular',
@@ -483,5 +563,23 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 10
   },
+  textheader: {
+    marginLeft: 20,
+    fontSize: 20,
+    fontFamily: 'Poppins-Bold',
+    color: '#000000',
+    justifyContent: 'center',
+  },
+  stext: {
+    fontSize: 13,
+    fontFamily: 'Poppins-Regular',
+    color: '#000000',
+    alignItems: 'center'
+  },
+  stextview: {
+    flexDirection: 'row',
+    marginLeft: Dimensions.get('window').width - 250,
+    justifyContent: 'center'
+  }
 
 })

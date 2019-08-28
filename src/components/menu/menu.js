@@ -8,43 +8,28 @@ import CustomMenuFAB from '../assests/customMenuFAB.js';
 import { Fade } from '../assests/fade.js';
 import Modal from "react-native-modal";
 import menuApi from './menuApi.js';
+import ConstantValues from '../constantValues.js';
 
 
-
-const itemDetail = [
-  { id: 1, itemName: "Special Thali", itemImage: require('../images/thali.png'), itemPrice: "175", itemCategory: "Breakfast", itemType: "veg", itemMarking: "", itemDescription: "2 Bhature + Chole + Salad + Pickle" },
-  { id: 2, itemName: "Chicken Curry", itemImage: require('../images/chickencurry.png'), itemPrice: "200", itemCategory: "Thali", itemType: "nonveg", itemMarking: "", itemDescription: "2 Bhature + Chole + Salad + Pickle" },
-  { id: 3, itemName: "Hot Dog", itemImage: require('../images/roundimg1.jpg'), itemPrice: "150", itemCategory: "Rice and Biryani", itemType: "nonveg", itemMarking: "", itemDescription: "2 Bhature + Chole + Salad + Pickle" },
-  { id: 4, itemName: "Veg Burger", itemImage: require('../images/roundimg2.jpg'), itemPrice: "80", itemCategory: "Fast Food", itemType: "veg", itemMarking: "", itemDescription: "2 Bhature + Chole + Salad + Pickle" },
-  { id: 5, itemName: "Mini Non-Thali", itemImage: require('../images/roundimg3.jpg'), itemPrice: "120", itemCategory: "Main Course", itemType: "nonveg", itemMarking: "", itemDescription: "2 Bhature + Chole + Salad + Pickle" },
-  { id: 6, itemName: "Jain Thali", itemImage: require('../images/roundimg4.jpg'), itemPrice: "140", itemCategory: "Sweets", itemType: "veg", itemMarking: "", itemDescription: "2 Bhature + Chole + Salad + Pickle" },
-]
 export default class Menu extends Component {
   componentDidMount() {
     SplashScreen.hide();
+    this.getMenu()
   }
 
   constructor(props) {
     super(props);
     this.state = {
       text: 'Add',
+      offer: '',
+      gstin: '',
+      fssaiNo: '',
       count: 0,
       show: 'Add',
       visibleModal: null,
       totalPrice: 0,
-      OutletInfo: [
-        { key: "1", name: "MOTI MAHAL RESTURENT", station: "(Kanpur)", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150", haltTime: "05 Minutes", fssai: "22005587474", gstno: "245871688", offer: "20% Off on orders above Rs.99 upto Rs.50" }
-      ],
-      OutletMenuInfo: [
-        { key: "1", itemName: "Special Thali", itemImage: require('../images/thali.png'), itemPrice: "175", itemCategory: "Breakfast", itemType: "veg", itemMarking: "", itemDescription: "" },
-        { key: "2", itemName: "Chicken Curry", itemImage: require('../images/chickencurry.png'), itemPrice: "200", itemCategory: "Thali", itemType: "nonveg", itemMarking: "", itemDescription: "" },
-        { key: "3", itemName: "Hot Dog", itemImage: require('../images/roundimg1.jpg'), itemPrice: "150", itemCategory: "Rice and Biryani", itemType: "nonveg", itemMarking: "", itemDescription: "" },
-        { key: "4", itemName: "Veg Burger", itemImage: require('../images/roundimg2.jpg'), itemPrice: "80", itemCategory: "Fast Food", itemType: "veg", itemMarking: "", itemDescription: "" },
-        { key: "5", itemName: "Mini Non-Thali", itemImage: require('../images/roundimg3.jpg'), itemPrice: "120", itemCategory: "Main Course", itemType: "nonveg", itemMarking: "", itemDescription: "" },
-        { key: "6", itemName: "Jain Thali", itemImage: require('../images/roundimg4.jpg'), itemPrice: "140", itemCategory: "Sweets", itemType: "veg", itemMarking: "", itemDescription: "" },
-
-
-      ]
+      RecommendedMenuInfo: [],
+      OutletMenuInfo: [],
     };
   }
 
@@ -61,12 +46,34 @@ export default class Menu extends Component {
   showFAB(bool) {
     this.setState({ tagVisible: bool });
   }
+  FlatListItemSeparator = () => {
+    return (
+      //Item Separator
+      <View style={{ height: 0.5, width: '100%', backgroundColor: '#C8C8C8' }} />
+    );
+  };
 
   //getting menudetails
   async getMenu() {
     try {
       let response = await menuApi.getMenu();
-      console.log('data received in menu.js : ' + JSON.stringify(response))
+      // console.log('data received in menu.js : ' + JSON.stringify(response))
+      if (response.status == true) {
+        this.setState({
+          gstin: response.data.outlet.gstin,
+          fssaiNo: response.data.outlet.fssaiNo,
+          offer: response.data.offer,
+          RecommendedMenuInfo: response.data.recommendedItems,
+          OutletMenuInfo: response.data.items,
+        })
+
+
+      } else {
+        return (
+          ToastAndroid.show(response.error, ToastAndroid.LONG),
+          console.log(response.error)
+        )
+      }
 
     } catch (error) {
       console.log('Data received in menu.js catch: ' + error)
@@ -74,11 +81,11 @@ export default class Menu extends Component {
   }
 
 
-  
+
 
   render() {
     const visible = this.state.count == 0 ? false : true
-
+    const uniqueTags = []
     return (
       <SafeAreaView style={styles.slide}>
         <View></View>
@@ -91,73 +98,72 @@ export default class Menu extends Component {
               </TouchableOpacity>
             </View>
             {/* go back navigator icon ends here */}
-            <FlatList
-              data={this.state.OutletInfo}
-              renderItem={({ item }) =>
-                <View style={styles.topContainer}>
-                  <Text style={styles.outletName}> {item.name} </Text>
-                  <Text style={{ fontWeight: 'bold', paddingBottom: 10, fontSize: 15 }}>{item.station}</Text>
-                  <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
-                    <Text>Veg. Only</Text>
-                    <Switch />
-                  </View>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
-                    <View style={{ flexDirection: 'row' }}>
-                      <Image style={{ width: 30, height: 15 }} source={require('../images/fssai.png')} />
-                      <Text style={{ fontSize: 10, fontWeight: 'bold' }}>Lic No. {item.fssai}</Text>
-                    </View>
-                    <Text style={{ fontSize: 10, fontWeight: 'bold', marginRight: 10 }}>GST No. {item.gstno}</Text>
-                  </View>
-                  <View
-                    style={styles.card}
-                  >
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
-                      <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginLeft: 20 }}>
-                        <View style={{ flexDirection: 'row' }}>
-                          <Icon name='star' size={15} color='#ff9214' />
-                          <Text style={{ fontWeight: 'bold' }}> {item.rating}</Text>
-                        </View>
-                        <Text style={{ fontWeight: 'bold' }}>Rating</Text>
-                      </View>
-                      <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10 }}>
-                        <Text style={{ fontWeight: 'bold' }}>Rs. {item.minorder}</Text>
-                        <Text style={{ fontWeight: 'bold' }}>Min. Order</Text>
-                      </View>
-                      <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginRight: 20 }}>
-                        <Text style={{ fontWeight: 'bold' }}>{item.haltTime}</Text>
-                        <Text style={{ fontWeight: 'bold' }}>Halt Time</Text>
-                      </View>
 
-                    </View>
-                  </View>
-                  {/* Offer text label */}
-                  <View style={styles.offerboard}>
-                    <Text style={styles.offerText}>Offer:- {item.offer}</Text>
-                  </View>
+            <View style={styles.topContainer}>
+              <Text style={styles.outletName}> {ConstantValues.outletName} </Text>
+              <Text style={{ fontWeight: 'bold', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
+              <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
+                <Text>Veg. Only</Text>
+                <Switch />
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Image style={{ width: 30, height: 15 }} source={require('../images/fssai.png')} />
+                  <Text style={{ fontSize: 10, fontWeight: 'bold' }}>Lic No. {this.state.fssaiNo}</Text>
                 </View>
-              }
-            />
+                <Text style={{ fontSize: 10, fontWeight: 'bold', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
+              </View>
+              <View
+                style={styles.card}
+              >
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
+                  <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginLeft: 20 }}>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Icon name='star' size={15} color='#ff9214' />
+                      <Text style={{ fontWeight: 'bold' }}> {ConstantValues.outletRating} </Text>
+                    </View>
+                    <Text style={{ fontWeight: 'bold' }}>Rating</Text>
+                  </View>
+                  <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10 }}>
+                    <Text style={{ fontWeight: 'bold' }}>{ConstantValues.rupee} {ConstantValues.minimumOrderValue}</Text>
+                    <Text style={{ fontWeight: 'bold' }}>Min. Order</Text>
+                  </View>
+                  <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginRight: 20 }}>
+                    <Text style={{ fontWeight: 'bold' }}>{ConstantValues.haltTime}</Text>
+                    <Text style={{ fontWeight: 'bold' }}>Halt Time</Text>
+                  </View>
 
+                </View>
+              </View>
+              {/* Offer text label */}
+              <Fade visible={this.state.offer.length != 0}>
+                <View style={styles.offerboard}>
+                  <Text style={styles.offerText}>Offer:- {this.state.offer}</Text>
+                </View>
+              </Fade>
+            </View>
           </View>
           {/*  MENU ITEM STYLES{GRID} */}
           <View style={{ width: Dimensions.get('window').width }}>
+            <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
+              <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#000000' }}>Recommended Items</Text>
+              <Image style={{ alignSelf: 'center', height: 15 }} source={require('../images/line.png')} />
+            </View>
             <FlatList
               style={{ width: Dimensions.get('window').width }}
-              data={this.state.OutletMenuInfo}
+              data={this.state.RecommendedMenuInfo}
               extraData={this.state}
               renderItem={({ item }) =>
                 <View>
-                  <View
-                    style={styles.menuGridCardContainer}
-                  >
+                  <View style={styles.menuGridCardContainer}>
                     <View>
-                      <Image style={styles.itemImage} source={item.itemImage} />
+                      <Image style={styles.itemImage} source={require('../images/thali.png')} />
                       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Icons name={'carrot'} size={15} color={item.itemType == 'nonveg' ? '#eb0909' : '#1e8728'} />
+                        <Icons name={'carrot'} size={15} color={item.categoryType == 'Veg' ? '#1e8728' : '#eb0909'} />
                         <Text style={styles.itemName}>{item.itemName}</Text>
                       </View>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginRight: 20 }}>
-                        <Text style={styles.itemName}>Rs. {item.itemPrice}</Text>
+                        <Text style={styles.itemName}>{ConstantValues.rupee} {item.sellingPrice}</Text>
                         {/* Adding item to cart button */}
 
                         <View>
@@ -165,7 +171,7 @@ export default class Menu extends Component {
                           {/* Adding item to cart button */}
                           <View
                             style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }}>
-                            <TouchableOpacity onPress={() => { this.incrementCounter(), this.state.totalPrice = item.itemPrice }} disabled={this.state.count == 0 ? false : true}>
+                            <TouchableOpacity onPress={() => { this.incrementCounter(), this.state.totalPrice = item.sellingPrice }} disabled={this.state.count == 0 ? false : true}>
                               <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={this.decrementCounter} disabled={this.state.count == 0 ? true : false}>
                                   <Icon style={{ opacity: this.state.count == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
@@ -192,6 +198,7 @@ export default class Menu extends Component {
                 </View>
               }
               numColumns={2}
+              keyExtractor={(item) => item.itemId.toString()}
             />
 
           </View>
@@ -200,22 +207,30 @@ export default class Menu extends Component {
           <View style={{ flex: 1 }}>
             <Modal
               isVisible={this.state.visibleModal === 'bottom'}
+              onBackButtonPress={() => this.setState({ visibleModal: null })}
               onSwipeComplete={() => this.setState({ visibleModal: null })}
-              swipeDirection={['left', 'right',]}
+              swipeDirection={['left', 'right', 'down']}
               style={styles.bottomModal}
             >
               <View style={styles.modalView}>
-                <FlatList
-                  data={this.state.OutletMenuInfo}
-                  renderItem={({ item }) =>
-                    <View style={styles.modalItemView}>
-                      <TouchableOpacity>
-                        <Text style={styles.headerTextmodal}>{item.itemCategory}</Text>
-                      </TouchableOpacity>
-                    </View>
-                  }
-                >
-                </FlatList>
+                {
+                  this.state.OutletMenuInfo.map((item) => {
+                    if (uniqueTags.indexOf(item.typeName) === -1) {
+                      uniqueTags.push(item.typeName)
+                    }
+
+                  })
+                }{
+                  uniqueTags.map((item, index) => {
+                    return (
+                      <View style={styles.modalItemView} key={index}>
+                        <TouchableOpacity>
+                          <Text style={styles.headerTextmodal}>{item}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )
+                  })
+                }
               </View>
             </Modal>
           </View>
@@ -223,27 +238,27 @@ export default class Menu extends Component {
           {/* Headerhighlighter ends */}
           {/* MENU ITEM STYLES{LIST} */}
           <View style={{ width: Dimensions.get('window').width }}>
-            <SectionList
+            <FlatList
               style={{ margin: 10 }}
-              sections={[
-                { title: 'Thali', data: itemDetail },
-                { title: 'Rice & Biryani', data: itemDetail },
-                { title: 'Sweets', data: itemDetail },
-                { title: 'Breads', data: itemDetail },
-                { title: 'Fast Food', data: itemDetail },
-                { title: 'Rice & Biryani', data: itemDetail },
-                { title: 'Rice & Biryani', data: itemDetail },
-                { title: 'Rice & Biryani', data: itemDetail },
-              ]}
+              ItemSeparatorComponent={this.FlatListItemSeparator}
+              data={this.state.OutletMenuInfo}
+              extraData={this.state}
+              //  Section Header Rendering
+              // renderSectionHeader={({ section }) => (
+              //   <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
+              //     <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#000000' }}>{section.title}</Text>
+              //     <Image style={{ alignSelf: 'center', height: 15 }} source={require('../images/line.png')} />
+              //   </View>
+              // )}
               // Section Item rendering
               renderItem={({ item }) => (
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 10 }}>
-                  <View>
+                  <View style={{ width: Dimensions.get('window').width - 200 }}>
                     <View style={{ flexDirection: 'row' }}>
-                      <Icons name={'carrot'} size={15} color={item.itemType == 'nonveg' ? '#eb0909' : '#1e8728'} />
+                      <Icons name={'carrot'} size={15} color={item.categoryType == 'Veg' ? '#1e8728' : '#eb0909'} />
                       <Text style={{ fontSize: 15, color: '#000000' }}>{item.itemName}</Text>
                     </View>
-                    <Text style={{ fontSize: 15, color: '#000000' }}>Rs. {item.itemPrice}</Text>
+                    <Text style={{ fontSize: 15, color: '#000000' }}>{ConstantValues.rupee} {item.sellingPrice}</Text>
                     <Text style={{ fontSize: 10, color: '#c7c3c3' }}>{item.itemDescription}</Text>
                   </View>
                   <View>
@@ -251,7 +266,7 @@ export default class Menu extends Component {
                     {/* Adding item to cart button */}
                     <View
                       style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }}>
-                      <TouchableOpacity onPress={() => { this.incrementCounter(), this.state.totalPrice = item.itemPrice }} disabled={this.state.count == 0 ? false : true}>
+                      <TouchableOpacity onPress={() => { this.incrementCounter(), this.state.totalPrice = item.sellingPrice }} disabled={this.state.count == 0 ? false : true}>
                         <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
                           <TouchableOpacity onPress={this.decrementCounter} disabled={this.state.count == 0 ? true : false}>
                             <Icon style={{ opacity: this.state.count == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
@@ -275,14 +290,8 @@ export default class Menu extends Component {
                   {/* Incrementor ends here */}
                 </View>
               )}
-              //  Section Header Rendering
-              renderSectionHeader={({ section }) => (
-                <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-                  <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#000000' }}>{section.title}</Text>
-                  <Image style={{ alignSelf: 'center', height: 15 }} source={require('../images/line.png')} />
-                </View>
-              )}
-              keyExtractor={item => item.id}
+
+              keyExtractor={item => item.itemId.toString()}
             />
           </View>
         </ScrollView>
@@ -297,16 +306,16 @@ export default class Menu extends Component {
         {/*  Footer  */}
         <Fade visible={visible}>
           <TouchableOpacity onPress={() => {
-            // this.getMenu(),
             this.props.navigation.navigate('Cart', {
-            count: this.state.count,
-            totalPrice: this.state.totalPrice
-          })}}
+              count: this.state.count,
+              totalPrice: this.state.totalPrice
+            })
+          }}
             disabled={false}>
             <View style={[styles.footer]}>
 
               <View style={styles.itemCountShow}>
-                <Text style={{ marginLeft: 5, fontSize: 20, fontWeight: 'bold', color: '#ffffff' }}>{this.state.count} {this.state.count == 1 ? 'Item' : 'Items'} |  Rs.{this.state.totalPrice}</Text>
+                <Text style={{ marginLeft: 5, fontSize: 20, fontWeight: 'bold', color: '#ffffff' }}>{this.state.count} {this.state.count == 1 ? 'Item' : 'Items'} |  {ConstantValues.rupee}{this.state.totalPrice}</Text>
               </View>
               <View style={styles.viewcart}>
                 <Text style={{ marginRight: 5, fontSize: 20, fontWeight: 'bold', color: '#ffffff' }}>VIEW CART</Text>

@@ -4,7 +4,8 @@ import ConstantValues from '../constantValues.js';
 
 const baseURL = ConstantValues.apiUrl
 
-export default class searchApi {
+
+export default class loginApi {
     //Common Function for calling api
     static async apiCall(apiUrl, method, body = {}, headers = {}) {
         try {
@@ -39,58 +40,25 @@ export default class searchApi {
         }
     }
 
-    static async showTrain() {
+    static async getWalletInfo() {
         try {
             //url
-            const apiUrl = 'trains'
-            //body
+            const apiUrl = 'customers/wallet-history/' + ConstantValues.customerId
+
+            //headers
+            const headers = {}
+            headers['x-auth-token'] = ConstantValues.token
 
             //calling api for response
-            const response = await this.apiCall(apiUrl, 'GET', {}, {})
+            const response = await this.apiCall(apiUrl, 'GET', {}, headers)
             console.log(response)
 
             return Promise.resolve(response)
 
         } catch (error) {
-            console.log('Data received in searchApi catch: ' + error)
+            console.log('Data received in WalletApi catch: ' + error)
             return Promise.reject(error)
-        }
-    }
 
-    static async searchBy(searchString) {
-        try {
-            //url
-            const apiUrl = 'search/train'
-            //body
-            const body = {}
-            body['searchString'] = searchString
-            //calling api for response
-            const response = await this.apiCall(apiUrl, 'POST', body, {})
-            // console.log(response)
-
-            return Promise.resolve(response)
-
-        } catch (error) {
-            console.log('Data received in searchApi catch: ' + error)
-            return Promise.reject(error)
-        }
-    }
-
-    static async showCuisines() {
-        try {
-            //url
-            const apiUrl = 'cuisines'
-            //body
-
-            //calling api for response
-            const response = await this.apiCall(apiUrl, 'GET', {}, {})
-            console.log(response)
-
-            return Promise.resolve(response)
-
-        } catch (error) {
-            console.log('Data received in searchApi catch: ' + error)
-            return Promise.reject(error)
         }
     }
 }
