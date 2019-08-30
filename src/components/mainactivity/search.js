@@ -97,7 +97,7 @@ export default class Search extends Component {
 
   searchBy(text) {
     ConstantValues.searchString = text,
-      console.log('ConstantValues.searchString is ....' + ConstantValues.searchString),
+      console.log('ConstantValues.searchString is ....' + ConstantValues.searchString)
       this.props.navigation.navigate('Station')
   }
   //   try {
