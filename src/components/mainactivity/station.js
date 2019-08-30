@@ -11,7 +11,7 @@ import { CustomButton } from '../assests/customButtonShort.js';
 import Search from './search.js';
 import searchApi from './searchApi.js';
 import ConstantValues from '../constantValues.js';
-import CustomActivityIndicator from '../assests/customActivityIndicator.js';
+
 
 export default class station extends Component {
   componentDidMount() {
@@ -24,15 +24,7 @@ export default class station extends Component {
       firstQuery: '',
       visibleModal: null,
       animating: true,
-      // data: [],
-      OutletList: [
-        // { key: "1", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
-        // { key: "2", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
-        // { key: "3", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
-        // { key: "4", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
-        // { key: "5", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
-        // { key: "6", name: "MOTI MAHAL RESTURENT", rating: "4.5", cuisine: "North Indian,Chinese", minorder: "150" },
-      ],
+      OutletList: [],
       StationList: [],
       CuisinesList: [],
       checked: []
@@ -114,7 +106,7 @@ export default class station extends Component {
   render() {
     return (
       <SafeAreaView style={styles.slide}>
-        {/* <CustomActivityIndicator size={40} animating={true} ></CustomActivityIndicator> */}
+  
         <View style={styles.topContainer}>
           <View>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
@@ -262,7 +254,7 @@ export default class station extends Component {
                 renderItem={({ item, index }) =>
                   <View>
                     <TouchableOpacity>
-                      <Image style={styles.roundImage} source={item.stationImage == null ? require('../images/1.png') : require('../images/3.png')} />
+                      <Image style={styles.roundImage} source={item.stationImage == null ? require('../images/1.png') : {uri:item.stationImage}} />
                       <View style={styles.name}>
                         <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular' }}>{item.stationName}</Text>
                         <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', }}>{item.arrivalTime}</Text>
@@ -294,53 +286,67 @@ export default class station extends Component {
                   </View>
 
                   {/* OutletView starts */}
+                  
+                   
+                  
                   {
                     item.outlets.map((outlets, index) => {
-                      return (
-                        <View style={styles.outletContainer} key={index} >
-                          <TouchableOpacity style={styles.card} onPress={() => {
-                            this.gotoMenu(
-                              item.stationId,
-                              outlets.outletId,
-                              item.stationName,
-                              item.haltTime,
-                              outlets.outletName,
-                              outlets.outletRating,
-                              outlets.minimumOrderValue
-                            )
-                          }}>
-                            <Image source={require('../images/roundimg3.jpg')} style={styles.outletimage} />
-                            <View style={styles.detail}>
-                              <View style={{ flexDirection: 'row' }}>
-                                <Text style={styles.outletname}>
-                                  {outlets.outletName}
-                                </Text>
-                                <View style={styles.ratingView}>
-                                  <Text style={styles.rating}>
-                                    {outlets.outletRating}
+                      
+                      // console.log('outlets :: ' + JSON.stringify(item.outlets))
+                      // if (item.outlets.length == 0) {
+                      //   return(
+                      //     <View style={{justifyContent:'center',alignItems:'center',backgroundColor: '#ffffff'}} key={index}>
+                      //       <Text style={styles.outletname}>No outlets active in this area</Text>
+                      //       </View>
+                      //   )
+                      // } else {
+                        return (
+                          <View style={styles.outletContainer} key={index} >
+                            <TouchableOpacity style={styles.card} onPress={() => {
+                              this.gotoMenu(
+                                item.stationId,
+                                outlets.outletId,
+                                item.stationName,
+                                item.haltTime,
+                                outlets.outletName,
+                                outlets.outletRating,
+                                outlets.minimumOrderValue
+                              )
+                            }}>
+                              <Image source={require('../images/roundimg3.jpg')} style={styles.outletimage} />
+                              <View style={styles.detail}>
+                                <View style={{ flexDirection: 'row' }}>
+                                  <Text style={styles.outletname}>
+                                    {outlets.outletName}
                                   </Text>
-                                </View>
-                              </View>
-                              {/* {
-                              outlets.cuisines.map((cuisines, index) => {
-                                return (
-                                  <View style={{width:400,flexDirection:'row',}} key = {index}>
-                                    <Text style={styles.cuisine}>
-                                      {cuisines.cuisineName} , 
+                                  <View style={styles.ratingView}>
+                                    <Text style={styles.rating}>
+                                      {outlets.outletRating}
                                     </Text>
                                   </View>
-                                )
-                              }
-                              )} */}
-
-                              <Text style={styles.minorder}>
-                                Minimum Order: {ConstantValues.rupee} {outlets.minimumOrderValue}
-                              </Text>
-                            </View>
-                          </TouchableOpacity>
-                        </View>
-                      )
-                    }
+                                </View>
+                                {/* {
+                                outlets.cuisines.map((cuisines, index) => {
+                                  return (
+                                    <View style={{width:400,flexDirection:'row',}} key = {index}>
+                                      <Text style={styles.cuisine}>
+                                        {cuisines.cuisineName} , 
+                                      </Text>
+                                    </View>
+                                  )
+                                }
+                                )} */}
+  
+                                <Text style={styles.minorder}>
+                                  Minimum Order: {ConstantValues.rupee} {outlets.minimumOrderValue}
+                                </Text>
+                              </View>
+                            </TouchableOpacity>
+                          </View>
+                        )
+                      }
+                      
+                  //  }
                     )
                   }
                 </View>

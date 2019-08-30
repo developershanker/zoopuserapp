@@ -1,10 +1,11 @@
+import React, { Component } from 'react';
+import { View, Dimensions, StyleSheet, Clipboard, Button, ScrollView, Image, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
 import ConstantValues from '../constantValues.js';
-
 
 
 const baseURL = ConstantValues.apiUrl
 
-export default class searchApi {
+export default class searchApi extends Component {
     //Common Function for calling api
     static async apiCall(apiUrl, method, body = {}, headers = {}) {
         try {
@@ -58,9 +59,19 @@ export default class searchApi {
     }
 
     static async searchBy(searchString) {
+        console.log('searchstring length in searchApi.js  : ' + searchString.length )
         try {
+            if (searchString.length == 10) {
+                apiUrl = 'search/pnr'
+            } else if (searchString.length == 5) {
+                apiUrl = 'search/train'
+            } else {
+                return (
+                    ToastAndroid.show('Wrong Input', ToastAndroid.CENTER)
+                )
+            }
             //url
-            const apiUrl = 'search/train'
+            // const apiUrl = 'search/train'
             //body
             const body = {}
             body['searchString'] = searchString
@@ -69,7 +80,6 @@ export default class searchApi {
             // console.log(response)
 
             return Promise.resolve(response)
-
         } catch (error) {
             console.log('Data received in searchApi catch: ' + error)
             return Promise.reject(error)

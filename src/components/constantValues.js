@@ -3,8 +3,8 @@ import Device from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 export default class ConstantValues {
-  // static apiUrl = 'http://13.126.232.146:3000/'
-  static apiUrl = 'http://10.5.48.206:3000/'
+  static apiUrl = 'http://13.126.232.146:3000/'
+  // static apiUrl = 'http://10.5.48.206:3000/'
   // http://10.5.48.206:3000/ local          //http://13.126.232.146:3000/ main
   static customer = { name: '', mobileNo: '' }
   static customerName = ''
@@ -46,4 +46,10 @@ export default class ConstantValues {
   static outletRating = null
   static minimumOrderValue = null
 
+  //cart management module
+  
+  //zoopsocials
+  static zoopFacebook = 'https://www.facebook.com/zoopindia2014/'
+  static zoopInstagram = 'https://www.instagram.com/zoopindia/'
+  static zoopTwitter = 'https://twitter.com/zoopindia'
 }

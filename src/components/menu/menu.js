@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, Switch, Image, SectionList, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, Switch, Image, SectionList, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -9,6 +9,7 @@ import { Fade } from '../assests/fade.js';
 import Modal from "react-native-modal";
 import menuApi from './menuApi.js';
 import ConstantValues from '../constantValues.js';
+
 
 
 export default class Menu extends Component {
@@ -24,6 +25,7 @@ export default class Menu extends Component {
       offer: '',
       gstin: '',
       fssaiNo: '',
+      loading: false,
       count: 0,
       show: 'Add',
       visibleModal: null,
@@ -55,6 +57,9 @@ export default class Menu extends Component {
 
   //getting menudetails
   async getMenu() {
+    this.setState({
+      loading: true
+    })
     try {
       let response = await menuApi.getMenu();
       // console.log('data received in menu.js : ' + JSON.stringify(response))
@@ -65,6 +70,7 @@ export default class Menu extends Component {
           offer: response.data.offer,
           RecommendedMenuInfo: response.data.recommendedItems,
           OutletMenuInfo: response.data.items,
+          loading: false
         })
 
 
@@ -85,10 +91,11 @@ export default class Menu extends Component {
 
   render() {
     const visible = this.state.count == 0 ? false : true
+    const fssaiVisible = this.state.fssaiNo == null ? false : true
     const uniqueTags = []
     return (
       <SafeAreaView style={styles.slide}>
-        <View></View>
+        {/* <ZoopLoader show={this.state.loading}/> */}
         <ScrollView>
           <View >
             {/* go back navigator icon */}
@@ -106,13 +113,18 @@ export default class Menu extends Component {
                 <Text>Veg. Only</Text>
                 <Switch />
               </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
-                <View style={{ flexDirection: 'row' }}>
-                  <Image style={{ width: 30, height: 15 }} source={require('../images/fssai.png')} />
-                  <Text style={{ fontSize: 10, fontWeight: 'bold' }}>Lic No. {this.state.fssaiNo}</Text>
+
+              <Fade visible={fssaiVisible}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image style={{ width: 30, height: 15 }} source={require('../images/fssai.png')} />
+                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>Lic No. {this.state.fssaiNo}</Text>
+                  </View>
+                  <Text style={{ fontSize: 10, fontWeight: 'bold', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
                 </View>
-                <Text style={{ fontSize: 10, fontWeight: 'bold', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
-              </View>
+              </Fade>
+
+
               <View
                 style={styles.card}
               >
@@ -153,7 +165,7 @@ export default class Menu extends Component {
               style={{ width: Dimensions.get('window').width }}
               data={this.state.RecommendedMenuInfo}
               extraData={this.state}
-              renderItem={({ item }) =>
+              renderItem={({ item,index }) =>
                 <View>
                   <View style={styles.menuGridCardContainer}>
                     <View>
@@ -164,16 +176,14 @@ export default class Menu extends Component {
                       </View>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginRight: 20 }}>
                         <Text style={styles.itemName}>{ConstantValues.rupee} {item.sellingPrice}</Text>
-                        {/* Adding item to cart button */}
-
+                        {/* Incrementor starts here */}
                         <View>
-
                           {/* Adding item to cart button */}
                           <View
-                            style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }}>
+                            style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }} key={index}>
                             <TouchableOpacity onPress={() => { this.incrementCounter(), this.state.totalPrice = item.sellingPrice }} disabled={this.state.count == 0 ? false : true}>
                               <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
-                                <TouchableOpacity onPress={this.decrementCounter} disabled={this.state.count == 0 ? true : false}>
+                                <TouchableOpacity onPress={this.decrementCounter()} disabled={this.state.count == 0 ? true : false}>
                                   <Icon style={{ opacity: this.state.count == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
                                 </TouchableOpacity>
 
@@ -189,7 +199,7 @@ export default class Menu extends Component {
                               </View>
                             </TouchableOpacity>
                           </View>
-
+                            {/* Adding item to cart button ends */}
                         </View>
                         {/* Incrementor ends here */}
                       </View>
@@ -236,6 +246,7 @@ export default class Menu extends Component {
           </View>
 
           {/* Headerhighlighter ends */}
+
           {/* MENU ITEM STYLES{LIST} */}
           <View style={{ width: Dimensions.get('window').width }}>
             <FlatList
