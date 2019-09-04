@@ -20,7 +20,7 @@ export default class contact extends Component {
       zoopAddress: '',
       zoopPhone: '',
       zoopEmail: '',
-      subject: '',
+      name: '',
       description: '',
     };
   }
@@ -50,6 +50,30 @@ export default class contact extends Component {
     Linking.openURL(link);
   }
 
+  async sendContent(name, description) {
+    try {
+      let response = await servicesApi.sendContent(name, description);
+      if (name != '') {
+        if (description != '') {
+          if (response.status == true) {
+            return (
+              ToastAndroid.show('Thank You for contacting. We will reach you soon', ToastAndroid.CENTER)
+            )
+          } else {
+            ToastAndroid.show('Something went wrong. Please try after some time', ToastAndroid.LONG)
+          }
+        } else {
+          ToastAndroid.show('Please Enter Description', ToastAndroid.LONG)
+        }
+      } else {
+        ToastAndroid.show('Please Enter Name', ToastAndroid.LONG)
+      }
+    }
+    catch (error) {
+      console.log('Data received in contact.js catch: ' + error)
+    }
+  }
+
   render() {
     return (
       <SafeAreaView style={styles.slide}>
@@ -69,23 +93,20 @@ export default class contact extends Component {
               <TextInput
                 style={styles.inputS}
                 underlineColorAndroid={'#000000'}
-                placeholder='Subject'
+                placeholder='Enter Name'
                 keyboardType='default'
-                onChangeText={subject => this.setState({ subject })}
+                onChangeText={name => this.setState({ name })}
               />
               <TextInput
                 style={styles.inputD}
                 underlineColorAndroid={'#000000'}
-                placeholder='Description'
+                placeholder='Add Description'
                 keyboardType='default'
                 onChangeText={description => this.setState({ description })}
               />
               <CustomButton
                 style={{ backgroundColor: '#1fc44e', alignSelf: 'center', marginBottom: 20, }}
-                onPress={() => {
-                  ToastAndroid.show('ThankYou for contacting. We will reach you soon')
-                  this.props.navigation.navigate('Search')
-                }}
+                onPress={() => { this.sendContent(this.state.name, this.state.description) }}
                 title='Submit'
               />
             </View>
@@ -93,6 +114,8 @@ export default class contact extends Component {
             <View>
               <View style={styles.detailview}>
                 <Image style={styles.image} source={require('../images/location.png')} />
+                {/* <Image  source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.location}} />
+                {console.log('Image url is  : ' + ConstantValues.IconUrl+ConstantValues.imgurl.location)} */}
                 <Text style={styles.detailText}> {this.state.zoopAddress} </Text>
               </View>
               <View style={styles.detailview}>
@@ -105,7 +128,7 @@ export default class contact extends Component {
               </View>
             </View>
 
-            <View style={{justifyContent:'center',alignItems:'center',paddingTop:20}}>
+            <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 20 }}>
               <Text style={styles.textS}>FOLLOW US ON</Text>
               <View style={styles.detailview}>
 
@@ -182,7 +205,7 @@ const styles = StyleSheet.create({
   textS: {
     fontFamily: 'Poppins-SemiBold',
     fontSize: 20,
-    color:'#000000'
+    color: '#000000'
   },
   inputD: {
     fontFamily: 'Poppins-Regular',
@@ -203,7 +226,7 @@ const styles = StyleSheet.create({
   detailText: {
     fontFamily: 'Poppins-SemiBold',
     fontSize: 15,
-    color:'#000000'
+    color: '#000000'
   },
   detailview: {
     flexDirection: 'row',

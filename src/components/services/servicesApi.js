@@ -69,5 +69,47 @@ export default class servicesApi {
         }
     }
 
+    static async sendContent(name,description){
+        try {
+            //url
+            const apiUrl = 'contact-us'
+            //body
+            const body = {}
+            body['name'] = name
+            body['description'] = description
+            //calling api for response
+            const response = await this.apiCall(apiUrl, 'POST', body, {})
+            console.log(response)
+
+            return Promise.resolve(response)
+
+        } catch (error) {
+            console.log('Data received in serviceApi catch: ' + error)
+            return Promise.reject(error)
+        }
+
+    }
+
+    static async sendFeedback(name,email,message){
+        try {
+            //url
+            const apiUrl = 'feedback'
+            //body
+            const body = {}
+            body['name'] = name
+            body['email'] = email
+            body['message'] = message
+            //calling api for response
+            const response = await this.apiCall(apiUrl, 'POST', body, {})
+            console.log(response)
+
+            return Promise.resolve(response)
+
+        } catch (error) {
+            console.log('Data received in serviceApi catch: ' + error)
+            return Promise.reject(error)
+        }
+    }
+
 
 }

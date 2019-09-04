@@ -32,22 +32,41 @@ export default class Menu extends Component {
       totalPrice: 0,
       RecommendedMenuInfo: [],
       OutletMenuInfo: [],
+      inCart: []
     };
   }
 
-  incrementCounter = () => {
+  addItemToCart = (item) => {
+    item.itemCount = item.itemCount + 1
     this.setState({
-      count: this.state.count + 1
-    })
+      count: item.itemCount
+    }
+    )
+    this.state.totalPrice = item.sellingPrice
+    
+    this.state.inCart.push(item)
+    // console.log('incart items are  : ' + JSON.stringify(item))
+    // console.log('incart items are [when added] : ' + JSON.stringify(this.state.inCart))
+    // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
+    ConstantValues.inCart = this.state.inCart
+   // console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
   }
-  decrementCounter = () => {
+
+
+  removeItemFromCart = (item) => {
+
+    item.itemCount = item.itemCount - 1
     this.setState({
-      count: this.state.count - 1
-    })
+      count: item.itemCount
+    }
+    )
+    this.state.inCart.pop(item)
+    // console.log('incart items are [when removed] : ' + JSON.stringify(this.state.inCart))
+    // console.log('incart item.itemCount when ---- : ' + item.itemCount)
+    ConstantValues.inCart = this.state.inCart
+   // console.log('ConstantValues.incart items are [when removed] : ' + JSON.stringify(ConstantValues.inCart))
   }
-  showFAB(bool) {
-    this.setState({ tagVisible: bool });
-  }
+
   FlatListItemSeparator = () => {
     return (
       //Item Separator
@@ -90,8 +109,8 @@ export default class Menu extends Component {
 
 
   render() {
-    const visible = this.state.count == 0 ? false : true
-    const fssaiVisible = this.state.fssaiNo == null ? false : true
+    const visible = this.state.inCart.length == 0 ? false : true
+    // const fssaiVisible = this.state.fssaiNo == null ? false : true
     const uniqueTags = []
     return (
       <SafeAreaView style={styles.slide}>
@@ -114,15 +133,14 @@ export default class Menu extends Component {
                 <Switch />
               </View>
 
-              <Fade visible={fssaiVisible}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Image style={{ width: 30, height: 15 }} source={require('../images/fssai.png')} />
-                    <Text style={{ fontSize: 10, fontWeight: 'bold' }}>Lic No. {this.state.fssaiNo}</Text>
-                  </View>
-                  <Text style={{ fontSize: 10, fontWeight: 'bold', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Image style={{ width: 30, height: 15 }} source={require('../images/fssai.png')} />
+                  <Text style={{ fontSize: 10, fontWeight: 'bold' }}>Lic No. {this.state.fssaiNo}</Text>
                 </View>
-              </Fade>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
+              </View>
 
 
               <View
@@ -165,7 +183,7 @@ export default class Menu extends Component {
               style={{ width: Dimensions.get('window').width }}
               data={this.state.RecommendedMenuInfo}
               extraData={this.state}
-              renderItem={({ item,index }) =>
+              renderItem={({ item, index }) =>
                 <View>
                   <View style={styles.menuGridCardContainer}>
                     <View>
@@ -181,25 +199,25 @@ export default class Menu extends Component {
                           {/* Adding item to cart button */}
                           <View
                             style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }} key={index}>
-                            <TouchableOpacity onPress={() => { this.incrementCounter(), this.state.totalPrice = item.sellingPrice }} disabled={this.state.count == 0 ? false : true}>
+                            <TouchableOpacity onPress={() => { this.addItemToCart(item) }} disabled={item.itemCount == 0 ? false : true}>
                               <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
-                                <TouchableOpacity onPress={this.decrementCounter()} disabled={this.state.count == 0 ? true : false}>
-                                  <Icon style={{ opacity: this.state.count == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
+                                <TouchableOpacity onPress={() => { this.removeItemFromCart(item) }} disabled={item.itemCount == 0 ? true : false}>
+                                  <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
                                 </TouchableOpacity>
 
-                                <Text style={{ fontWeight: 'bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{this.state.count == 0 ? 'Add' : this.state.count}</Text>
+                                <Text style={{ fontWeight: 'bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
 
 
                                 <TouchableOpacity onPress={() => {
-                                  this.incrementCounter()
+                                  this.addItemToCart(item)
                                 }}>
-                                  <Icon style={{ opacity: this.state.count == 0 ? 0 : 100 }} name='plus' size={15} color='#1e8728' />
+                                  <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='plus' size={15} color='#1e8728' />
                                 </TouchableOpacity>
 
                               </View>
                             </TouchableOpacity>
                           </View>
-                            {/* Adding item to cart button ends */}
+                          {/* Adding item to cart button ends */}
                         </View>
                         {/* Incrementor ends here */}
                       </View>
@@ -225,6 +243,7 @@ export default class Menu extends Component {
               <View style={styles.modalView}>
                 {
                   this.state.OutletMenuInfo.map((item) => {
+                    //to avoid duplicate interies in array
                     if (uniqueTags.indexOf(item.typeName) === -1) {
                       uniqueTags.push(item.typeName)
                     }
@@ -274,22 +293,22 @@ export default class Menu extends Component {
                   </View>
                   <View>
 
-                    {/* Adding item to cart button */}
+
                     <View
                       style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }}>
-                      <TouchableOpacity onPress={() => { this.incrementCounter(), this.state.totalPrice = item.sellingPrice }} disabled={this.state.count == 0 ? false : true}>
+                      <TouchableOpacity onPress={() => { this.addItemToCart(item), this.state.totalPrice = item.sellingPrice }} disabled={item.itemCount == 0 ? false : true}>
                         <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
-                          <TouchableOpacity onPress={this.decrementCounter} disabled={this.state.count == 0 ? true : false}>
-                            <Icon style={{ opacity: this.state.count == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
+                          <TouchableOpacity onPress={() => { this.removeItemFromCart(item) }} disabled={item.itemCount == 0 ? true : false}>
+                            <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
                           </TouchableOpacity>
 
-                          <Text style={{ fontWeight: 'bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{this.state.count == 0 ? 'Add' : this.state.count}</Text>
+                          <Text style={{ fontWeight: 'bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
 
 
                           <TouchableOpacity onPress={() => {
-                            this.incrementCounter()
+                            this.addItemToCart(item)
                           }}>
-                            <Icon style={{ opacity: this.state.count == 0 ? 0 : 100 }} name='plus' size={15} color='#1e8728' />
+                            <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='plus' size={15} color='#1e8728' />
                           </TouchableOpacity>
 
                         </View>
@@ -298,7 +317,7 @@ export default class Menu extends Component {
 
                   </View>
 
-                  {/* Incrementor ends here */}
+
                 </View>
               )}
 
@@ -317,8 +336,9 @@ export default class Menu extends Component {
         {/*  Footer  */}
         <Fade visible={visible}>
           <TouchableOpacity onPress={() => {
+            
             this.props.navigation.navigate('Cart', {
-              count: this.state.count,
+              count: this.state.inCart.length,
               totalPrice: this.state.totalPrice
             })
           }}
@@ -326,7 +346,7 @@ export default class Menu extends Component {
             <View style={[styles.footer]}>
 
               <View style={styles.itemCountShow}>
-                <Text style={{ marginLeft: 5, fontSize: 20, fontWeight: 'bold', color: '#ffffff' }}>{this.state.count} {this.state.count == 1 ? 'Item' : 'Items'} |  {ConstantValues.rupee}{this.state.totalPrice}</Text>
+                <Text style={{ marginLeft: 5, fontSize: 20, fontWeight: 'bold', color: '#ffffff' }}>{this.state.inCart.length} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.rupee}{this.state.totalPrice}</Text>
               </View>
               <View style={styles.viewcart}>
                 <Text style={{ marginRight: 5, fontSize: 20, fontWeight: 'bold', color: '#ffffff' }}>VIEW CART</Text>
@@ -440,7 +460,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: Dimensions.get('window').width,
     height: 60,
-    backgroundColor: '#20c41d',
+    backgroundColor: '#0e8341',
     alignContent: 'center',
 
   },

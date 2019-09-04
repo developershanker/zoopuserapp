@@ -11,6 +11,7 @@ import { CustomButton } from '../assests/customButtonShort.js';
 import Search from './search.js';
 import searchApi from './searchApi.js';
 import ConstantValues from '../constantValues.js';
+import { Fade } from '../assests/fade.js';
 
 
 export default class station extends Component {
@@ -252,6 +253,7 @@ export default class station extends Component {
                 // data={this.state.data}
                 horizontal={true}
                 renderItem={({ item, index }) =>
+                <Fade visible={item.isVisible}>
                   <View>
                     <TouchableOpacity>
                       <Image style={styles.roundImage} source={item.stationImage == null ? require('../images/1.png') : {uri:item.stationImage}} />
@@ -261,6 +263,7 @@ export default class station extends Component {
                       </View>
                     </TouchableOpacity>
                   </View>
+                  </Fade>
                 }
                 keyExtractor={(item) => item.stationId.toString()}
               />
@@ -277,6 +280,7 @@ export default class station extends Component {
               data={this.state.StationList}
               ItemSeparatorComponent={this.FlatListItemSeparator}
               renderItem={({ item, index }) =>
+                 <Fade visible={item.isVisible}>
                 <View>
                   <Text style={styles.textheader}>{item.stationName}</Text>
                   <View style={styles.stextview}>
@@ -302,7 +306,9 @@ export default class station extends Component {
                       // } else {
                         return (
                           <View style={styles.outletContainer} key={index} >
-                            <TouchableOpacity style={styles.card} onPress={() => {
+                            <TouchableOpacity style={styles.card} 
+                            // disabled = {!item.isVisible} 
+                            onPress={() => {
                               this.gotoMenu(
                                 item.stationId,
                                 outlets.outletId,
@@ -350,7 +356,7 @@ export default class station extends Component {
                     )
                   }
                 </View>
-
+               </Fade>
               }
               keyExtractor={(item, index) => item.stationId.toString()}
             />

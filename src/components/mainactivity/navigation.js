@@ -299,13 +299,13 @@ const AppNavigator = createStackNavigator({
       header: null,
     }
   },
-  Contact: {
-    screen: Contact,
-    navigationOptions: {
-      header: null,
-    }
+  // Contact: {
+  //   screen: Contact,
+  //   navigationOptions: {
+  //     header: null,
+  //   }
 
-  },
+  // },
   Notifications: {
     screen: Notifications,
     navigationOptions: {
