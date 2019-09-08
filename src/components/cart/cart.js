@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View,  Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity, FlatList, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions, Alert, TouchableOpacity, FlatList, Image, ToastAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import SplashScreen from 'react-native-splash-screen';
@@ -10,14 +10,16 @@ import { CustomButton } from '../assests/customButtonLarge.js';
 import { Fade } from '../assests/fade.js';
 import walletApi from '../customer/walletApi.js';
 import { CheckBox } from 'react-native-elements';
+import cartApi from './cartApi.js';
 
 
 export default class Cart extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.getCartItems(ConstantValues.inCart)
-    this.getWalletInfo()
-    
+    // this.getWalletInfo()
+    this.billDetail()
+
     // this.changeCode(ConstantValues.couponCode)
   }
   constructor(props) {
@@ -29,8 +31,9 @@ export default class Cart extends Component {
       discount: 0,
       totalPrice: 0,
       revisedInCart: [],
-      walletBalance: 500,
+      walletBalance: 0,
       walletUsed: false,
+      walletBalanceUsed: 0,
       textPromoCode: 'Apply Coupon Code',
       OutletMenuInfo: [
         { key: "1", itemName: "Special Thali", itemImage: require('../images/thali.png'), itemPrice: "175", itemCategory: "Thali", itemType: "veg", itemMarking: "", itemDescription: "" },
@@ -40,9 +43,9 @@ export default class Cart extends Component {
   }
   getCartItems = (inCart) => {
     this.setState({
-      revisedInCart : inCart
+      revisedInCart: inCart
     })
-    console.log('revisedInCart is'+ JSON.stringify(this.state.revisedInCart))
+    console.log('revisedInCart is' + JSON.stringify(this.state.revisedInCart))
   }
   // incrementCounter = () => {
   //   this.setState({
@@ -62,11 +65,8 @@ export default class Cart extends Component {
     )
     // this.state.totalPrice = item.sellingPrice
     this.state.revisedInCart.push(item)
-    // console.log('incart items are  : ' + JSON.stringify(item))
-    // console.log('incart items are [when added] : ' + JSON.stringify(this.state.inCart))
-    // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
-    ConstantValues.inCart = this.state.inCart
-   // console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
+    ConstantValues.inCart = this.state.revisedInCart
+    // console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
   }
 
 
@@ -80,7 +80,7 @@ export default class Cart extends Component {
     this.state.revisedInCart.pop(item)
     // console.log('incart items are [when removed] : ' + JSON.stringify(this.state.inCart))
     // console.log('incart item.itemCount when ---- : ' + item.itemCount)
-    ConstantValues.inCart = this.state.inCart
+    ConstantValues.inCart = this.state.revisedInCart
     //console.log('ConstantValues.incart items are [when removed] : ' + JSON.stringify(ConstantValues.inCart))
   }
 
@@ -115,6 +115,7 @@ export default class Cart extends Component {
     this.setState({
       textPromoCode: 'Apply Coupon Code'
     })
+    cartApi.billDetail()
   }
 
   async getWalletInfo() {
@@ -145,26 +146,85 @@ export default class Cart extends Component {
       walletUsed: !this.state.walletUsed
     })
     if (this.state.walletUsed == true) {
-      return(
-      ConstantValues.discount = 50,
-      this.setState({
-        discount : 50
-      })
+      return (
+        ConstantValues.discount = 50,
+        this.setState({
+          discount: 50
+        })
       )
-     // console.log('On this.state.walletUsed == true..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
-    } else if(this.state.walletUsed == false){
-      return(
-      ConstantValues.discount = 0,
-      this.setState({
-        discount : 50
-      })
+      // console.log('On this.state.walletUsed == true..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
+    } else if (this.state.walletUsed == false) {
+      return (
+        ConstantValues.discount = 0,
+        this.setState({
+          discount: 50
+        })
       )
-     // console.log('On this.state.walletUsed == false..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
+      // console.log('On this.state.walletUsed == false..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
     }
-    
-
   }
+  confirmCart = () => {
+    return (
+      Alert.alert(
+        'Confirm!!',
+        'Are you sure you want to place this order? No further changes can be made once order is placed.',
+        [// { text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+          {
+            text: 'NO',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'YES', onPress: () => {
+              this.items(),
+                this.submitCart()
+            }
+          },
+        ],
+        { cancelable: false },
+      )
+    )
+  }
+  async submitCart() {
+    try {
+      let response = await cartApi.inCart();
+      if (response.status == true) {
+        ToastAndroid.show('Added to Cart', ToastAndroid.SHORT)
+        this.props.navigation.navigate('PassengerDetail')
+      } else {
+        ToastAndroid.show('Something went wrong', ToastAndroid.LONG)
+      }
+    } catch (error) {
+      console.log('Data received in cart.js catch: ' + error)
+    }
+  }
+  items = () => {
 
+    this.state.revisedInCart.map((item) =>
+      ConstantValues.inCart = [{
+        'itemId': item.itemId,
+        'itemName': item.itemName,
+        'sellingPrice': item.sellingPrice,
+        'quantity': item.itemCount,
+        'itemTimes': item.itemTimes
+      }]
+    )
+    console.log('items are : ' + ConstantValues.inCart)
+  }
+  billDetail = () => {
+    ConstantValues.billDetail = [{
+      'totalBasePrice': ConstantValues.totalBasePrice,
+      'deliveryCharges': ConstantValues.deliveryCharge,
+      'discount': ConstantValues.couponValue,
+      'couponId': ConstantValues.couponId,
+      'couponCode': ConstantValues.couponCode,
+      'couponValue': ConstantValues.couponValue,
+      'walletBalanceUsed': ConstantValues.walletBalanceUsed,
+      'gst': ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
+      'totalPayableAmount': ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst
+    }]
+    console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
+  }
   render() {
     const { navigation } = this.props;
     const count = navigation.getParam('count', '0');
@@ -191,9 +251,7 @@ export default class Cart extends Component {
             </View>
             {/* Selected Items list */}
             <View>
-              <View
-                style={styles.card}
-              >
+              <View style={styles.card}>
                 <FlatList
                   style={{ width: Dimensions.get('window').width }}
                   data={this.state.revisedInCart}
@@ -205,25 +263,25 @@ export default class Cart extends Component {
                       {/* Adding item to cart button */}
 
                       <View
-                      style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }}>
-                      <TouchableOpacity onPress={() => { this.addItemToCart(item), this.state.totalPrice = item.sellingPrice }} disabled={item.itemCount == 0 ? false : true}>
-                        <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
-                          <TouchableOpacity onPress={() => { this.removeItemFromCart(item) }} disabled={item.itemCount == 0 ? true : false}>
-                            <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
-                          </TouchableOpacity>
+                        style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }}>
+                        <TouchableOpacity onPress={() => { this.addItemToCart(item), this.state.totalPrice = item.sellingPrice }} disabled={item.itemCount == 0 ? false : true}>
+                          <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
+                            <TouchableOpacity onPress={() => { this.removeItemFromCart(item) }} disabled={item.itemCount == 0 ? true : false}>
+                              <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
+                            </TouchableOpacity>
 
-                          <Text style={{ fontWeight: 'bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
+                            <Text style={{ fontWeight: 'bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
 
 
-                          <TouchableOpacity onPress={() => {
-                            this.addItemToCart(item)
-                          }}>
-                            <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='plus' size={15} color='#1e8728' />
-                          </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
+                              this.addItemToCart(item)
+                            }}>
+                              <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='plus' size={15} color='#1e8728' />
+                            </TouchableOpacity>
 
-                        </View>
-                      </TouchableOpacity>
-                    </View>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
 
                       {/* Adding item to cart button ends here */}
                       <Text>{ConstantValues.rupee} {item.sellingPrice}</Text>
@@ -252,7 +310,7 @@ export default class Cart extends Component {
                         // title='Use Wallet Balance'
                         checked={this.state.walletUsed}
                         onPress={() => {
-                         this.walletUsed()
+                          this.walletUsed()
                         }}
                       />
                       <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', }}>Use Zoop Wallet</Text>
@@ -279,7 +337,7 @@ export default class Cart extends Component {
                     </TouchableOpacity>
                     <Fade visible={this.state.textPromoCode == ConstantValues.couponCode ? true : false}>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                        <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular' }}>---Applied Successfully---</Text>
+                        <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular' }}>---Applied---</Text>
                         <TouchableOpacity onPress={() => this.removeCoupon()}>
                           <Text style={styles.removetext}>REMOVE</Text>
                         </TouchableOpacity>
@@ -303,19 +361,28 @@ export default class Cart extends Component {
                   <View>
                     {/* <Text style={{fontSize:15,fontWeight:'bold',padding:5}}></Text> */}
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>ITEM TOTAL</Text>
+                      <Text style={styles.tiletext}>Item Total</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.totalBasePrice}</Text>
                     </View>
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>TOTAL DISCOUNT</Text>
-                      <Text style={[styles.tiletext, { color: '#1fc44e' }]}> {ConstantValues.rupee} { this.state.walletUsed == true ? this.state.discount : ConstantValues.couponValue}</Text>
-                    </View>
-                    <View style={styles.tile}>
-                      <Text style={styles.tiletext}>DELIVERY FEE</Text>
+                      <Text style={styles.tiletext}>Delivery Charges</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.deliveryCharge}</Text>
                     </View>
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>TOTAL</Text>
+                      <Text style={styles.tiletext}>Discount</Text>
+                      <Text style={[styles.tiletext, { color: '#1fc44e' }]}> {ConstantValues.rupee} {ConstantValues.couponValue}</Text>
+                    </View>
+                    <View style={styles.tile}>
+                      <Text style={styles.tiletext}>Used Wallet Balance</Text>
+                      <Text style={[styles.tiletext, { color: '#1fc44e' }]}>{ConstantValues.rupee} {ConstantValues.walletBalanceUsed}</Text>
+                    </View>
+                    <View style={styles.tile}>
+                      <Text style={styles.tiletext}>Add GST 5%</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.gst}</Text>
+                    </View>
+
+                    <View style={styles.tile}>
+                      <Text style={styles.tiletext}>To Pay</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.totalPayableAmount}</Text>
                     </View>
 
@@ -328,8 +395,9 @@ export default class Cart extends Component {
           </View>
         </ScrollView>
         <CustomButton
-          style={{ backgroundColor: '#1fc44e', alignSelf: 'center', marginBottom: 20, }}
-          onPress={() => this.props.navigation.navigate('PassengerDetail')}
+          disabled={this.state.revisedInCart.length == 0 ? true : false}
+          style={{ backgroundColor: this.state.revisedInCart.length == 0 ? '#9b9b9b' : '#1fc44e', alignSelf: 'center', marginBottom: 20, }}
+          onPress={() => this.confirmCart()}
           title='Add Passenger Details'
         />
       </SafeAreaView>
@@ -420,6 +488,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10
   },
+
+
+
+
   tiletext: {
     fontFamily: 'Poppins-Bold',
     color: '#000000'

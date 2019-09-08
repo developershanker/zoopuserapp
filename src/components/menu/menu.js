@@ -43,7 +43,7 @@ export default class Menu extends Component {
     }
     )
     this.state.totalPrice = item.sellingPrice
-    
+    ConstantValues.totalBasePrice = this.state.totalPrice
     this.state.inCart.push(item)
     // console.log('incart items are  : ' + JSON.stringify(item))
     // console.log('incart items are [when added] : ' + JSON.stringify(this.state.inCart))
@@ -127,7 +127,7 @@ export default class Menu extends Component {
 
             <View style={styles.topContainer}>
               <Text style={styles.outletName}> {ConstantValues.outletName} </Text>
-              <Text style={{ fontWeight: 'bold', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
+              <Text style={{ fontFamily:'Poppins-Bold', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
               <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
                 <Text>Veg. Only</Text>
                 <Switch />
@@ -136,10 +136,10 @@ export default class Menu extends Component {
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Image style={{ width: 30, height: 15 }} source={require('../images/fssai.png')} />
-                  <Text style={{ fontSize: 10, fontWeight: 'bold' }}>Lic No. {this.state.fssaiNo}</Text>
+                  <Image style={{ width: 30, height: 15 }} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.fssai}} />
+                  <Text style={{ fontSize: 10, fontFamily:'Poppins-Bold' }}>Lic No. {this.state.fssaiNo}</Text>
                 </View>
-                <Text style={{ fontSize: 10, fontWeight: 'bold', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
+                <Text style={{ fontSize: 10, fontFamily:'Poppins-Bold', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
               </View>
 
 
@@ -150,17 +150,17 @@ export default class Menu extends Component {
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginLeft: 20 }}>
                     <View style={{ flexDirection: 'row' }}>
                       <Icon name='star' size={15} color='#ff9214' />
-                      <Text style={{ fontWeight: 'bold' }}> {ConstantValues.outletRating} </Text>
+                      <Text style={{ fontFamily:'Poppins-Bold' }}> {ConstantValues.outletRating} </Text>
                     </View>
-                    <Text style={{ fontWeight: 'bold' }}>Rating</Text>
+                    <Text style={{ fontFamily:'Poppins-Bold' }}>Rating</Text>
                   </View>
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10 }}>
-                    <Text style={{ fontWeight: 'bold' }}>{ConstantValues.rupee} {ConstantValues.minimumOrderValue}</Text>
-                    <Text style={{ fontWeight: 'bold' }}>Min. Order</Text>
+                    <Text style={{ fontFamily:'Poppins-Bold' }}>{ConstantValues.rupee} {ConstantValues.minimumOrderValue}</Text>
+                    <Text style={{ fontFamily:'Poppins-Bold' }}>Min. Order</Text>
                   </View>
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginRight: 20 }}>
-                    <Text style={{ fontWeight: 'bold' }}>{ConstantValues.haltTime}</Text>
-                    <Text style={{ fontWeight: 'bold' }}>Halt Time</Text>
+                    <Text style={{ fontFamily:'Poppins-Bold' }}>{ConstantValues.haltTime}</Text>
+                    <Text style={{ fontFamily:'Poppins-Bold' }}>Halt Time</Text>
                   </View>
 
                 </View>
@@ -176,7 +176,7 @@ export default class Menu extends Component {
           {/*  MENU ITEM STYLES{GRID} */}
           <View style={{ width: Dimensions.get('window').width }}>
             <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-              <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#000000' }}>Recommended Items</Text>
+              <Text style={{ fontSize: 20, fontFamily:'Poppins-Bold', color: '#000000' }}>Recommended Items</Text>
               <Image style={{ alignSelf: 'center', height: 15 }} source={require('../images/line.png')} />
             </View>
             <FlatList
@@ -187,7 +187,7 @@ export default class Menu extends Component {
                 <View>
                   <View style={styles.menuGridCardContainer}>
                     <View>
-                      <Image style={styles.itemImage} source={require('../images/thali.png')} />
+                      <Image style={styles.itemImage} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.menu}} />
                       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Icons name={'carrot'} size={15} color={item.categoryType == 'Veg' ? '#1e8728' : '#eb0909'} />
                         <Text style={styles.itemName}>{item.itemName}</Text>
@@ -205,7 +205,7 @@ export default class Menu extends Component {
                                   <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
                                 </TouchableOpacity>
 
-                                <Text style={{ fontWeight: 'bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
+                                <Text style={{ fontFamily:'Poppins-Bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
 
 
                                 <TouchableOpacity onPress={() => {
@@ -276,7 +276,7 @@ export default class Menu extends Component {
               //  Section Header Rendering
               // renderSectionHeader={({ section }) => (
               //   <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-              //     <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#000000' }}>{section.title}</Text>
+              //     <Text style={{ fontSize: 20, fontFamily:'Poppins-Bold', color: '#000000' }}>{section.title}</Text>
               //     <Image style={{ alignSelf: 'center', height: 15 }} source={require('../images/line.png')} />
               //   </View>
               // )}
@@ -302,7 +302,7 @@ export default class Menu extends Component {
                             <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
                           </TouchableOpacity>
 
-                          <Text style={{ fontWeight: 'bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
+                          <Text style={{ fontFamily:'Poppins-Bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
 
 
                           <TouchableOpacity onPress={() => {
@@ -346,10 +346,10 @@ export default class Menu extends Component {
             <View style={[styles.footer]}>
 
               <View style={styles.itemCountShow}>
-                <Text style={{ marginLeft: 5, fontSize: 20, fontWeight: 'bold', color: '#ffffff' }}>{this.state.inCart.length} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.rupee}{this.state.totalPrice}</Text>
+                <Text style={{ marginLeft: 5, fontSize: 20, fontFamily:'Poppins-Bold', color: '#ffffff' }}>{this.state.inCart.length} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.rupee}{this.state.totalPrice}</Text>
               </View>
               <View style={styles.viewcart}>
-                <Text style={{ marginRight: 5, fontSize: 20, fontWeight: 'bold', color: '#ffffff' }}>VIEW CART</Text>
+                <Text style={{ marginRight: 5, fontSize: 20, fontFamily:'Poppins-Bold', color: '#ffffff' }}>VIEW CART</Text>
                 <Icon name={'shopping-bag'} color={'#ffffff'} size={20} />
               </View>
             </View>
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     fontSize: 20,
     color: '#000000',
-    fontWeight: 'bold',
+    fontFamily:'Poppins-Bold',
   },
   card: {
     width: Dimensions.get('window').width,
@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
   // OFFER BOARD STYLES
   offerText: {
     color: '#ffffff',
-    fontWeight: 'bold',
+    fontFamily:'Poppins-Bold',
     fontSize: 15
   },
   offerboard: {
@@ -452,7 +452,7 @@ const styles = StyleSheet.create({
     borderRadius: 100 / 5,
   },
   itemName: {
-    fontWeight: 'bold',
+    fontFamily:'Poppins-Bold',
     fontSize: 15,
   },
   footer: {

@@ -75,7 +75,8 @@ export default class station extends Component {
         this.setState({
           StationList: response.data.trainRoutes,
         })
-
+          ConstantValues.seat = response.data.seatInfo.berth
+          ConstantValues.coach = response.data.seatInfo.coach
         return (
           // <CustomActivityIndicator animating={false} /> ,
           ToastAndroid.show(response.message, ToastAndroid.LONG)
@@ -91,7 +92,7 @@ export default class station extends Component {
     }
   }
 
-  gotoMenu = (stationId, outletId, stationName, haltTime, outletName, outletRating, minimumOrderValue) => {
+  gotoMenu = (stationId, outletId, stationName, haltTime, outletName, outletRating, minimumOrderValue,eta) => {
     ConstantValues.stationId = stationId,
       ConstantValues.outletId = outletId,
       ConstantValues.stationName = stationName,
@@ -99,6 +100,7 @@ export default class station extends Component {
       ConstantValues.haltTime = haltTime,
       ConstantValues.outletRating = outletRating,
       ConstantValues.minimumOrderValue = minimumOrderValue
+      ConstantValues.eta = eta
     console.log('ConstantValues.stationId : ' + ConstantValues.stationId),
       console.log('ConstantValues.outletId : ' + ConstantValues.outletId),
       this.props.navigation.navigate('Menu')
@@ -316,10 +318,11 @@ export default class station extends Component {
                                 item.haltTime,
                                 outlets.outletName,
                                 outlets.outletRating,
-                                outlets.minimumOrderValue
+                                outlets.minimumOrderValue,
+                                item.expectedTime
                               )
                             }}>
-                              <Image source={require('../images/roundimg3.jpg')} style={styles.outletimage} />
+                              <Image source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.outlet}} style={styles.outletimage} />
                               <View style={styles.detail}>
                                 <View style={{ flexDirection: 'row' }}>
                                   <Text style={styles.outletname}>
@@ -415,7 +418,7 @@ const styles = StyleSheet.create({
   outletContainer: {
     alignItems: 'stretch',
     justifyContent: 'flex-start',
-    backgroundColor: '#ffffff',
+    // backgroundColor: '#ffffff',
   },
   searchBarView: {
     flexDirection: 'row',

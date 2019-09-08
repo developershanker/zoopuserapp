@@ -10,10 +10,24 @@ import ConstantValues from '../constantValues.js';
 import BillDetailCard from '../cart/billDetailCard.js';
 import { RadioButton } from 'react-native-paper';
 import { Fade } from '../assests/fade.js';
+import orderApi from '../orderBooking/orderApi.js';
 
 export default class PaymentPage extends Component {
   componentDidMount() {
     SplashScreen.hide();
+    var that = this;
+
+    var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    var hours = new Date().getHours(); //Current Hours
+    var min = new Date().getMinutes(); //Current Minutes
+    var sec = new Date().getSeconds(); //Current Seconds
+
+    that.setState({
+      date : date + '/' + month + '/' + year,
+      time :  hours + ':' + min + ':' + sec
+    })
   }
   constructor(props) {
     super(props);
@@ -21,7 +35,54 @@ export default class PaymentPage extends Component {
       value: 'Paytm',
       codActive: false,
       checked: false,
+      date : '',
+      time : ''
     };
+  }
+  async orderBooking() {
+    try {
+      let response = await orderApi.orderBooking();
+      if (response.status == true) {
+        return(
+          ToastAndroid.show('!! Order Placed Successfully !!',ToastAndroid.LONG),
+           this.props.navigation.navigate('OrderConfirm')
+        )
+      } else {
+        ToastAndroid.show('Oops!! Something went wrong!!',ToastAndroid.LONG)
+      } 
+    } catch (error) {
+      console.log('Data received in menu.js catch: ' + error)
+    }
+  }
+
+  paymentDetails = () => {
+    if (this.state.codActive == true) {
+      ConstantValues.paymentMode = 'Cash On Delivery'
+      ConstantValues.paymentType = 'COD'
+      ConstantValues.refNo = 'N.A'
+      ConstantValues.orderDate = this.state.date
+      ConstantValues.orderTime = this.state.time
+      ConstantValues.paymentDetails = [{
+        'paymentMode' : ConstantValues.paymentMode,
+        'paymentType' : ConstantValues.paymentType,
+        'payableAmount' : ConstantValues.totalPayableAmount
+      }]
+      this.orderBooking()
+    } else {
+      ConstantValues.paymentMode = 'PayTm'
+      ConstantValues.paymentType = 'Pre-paid'
+      ConstantValues.refNo = ''
+      ConstantValues.orderDate = this.state.date
+      ConstantValues.orderTime = this.state.time
+      ConstantValues.paymentDetails = [{
+        'paymentMode' : ConstantValues.paymentMode,
+        'paymentType' : ConstantValues.paymentType,
+        'payableAmount' : ConstantValues.totalPayableAmount
+      }]
+      this.orderBooking()
+    }
+  
+    
   }
 
   render() {
@@ -51,8 +112,8 @@ export default class PaymentPage extends Component {
             </View>
             <View style={{ width: Dimensions.get('window').width, paddingVertical: 15, paddingHorizontal: 15 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Seat no. 51</Text>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Coach no. S9</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Seat no. {ConstantValues.seat}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Coach no. {ConstantValues.coach}</Text>
               </View>
               <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Name : {ConstantValues.customerName}</Text>
               <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
@@ -74,7 +135,7 @@ export default class PaymentPage extends Component {
                       value="Paytm"
                       color='#000000'
                     />
-                    <Image style={{ marginHorizontal: 20 }} source={require('../images/paytmnew.png')} />
+                    <Image style={{ marginHorizontal: 20 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.paytm }} />
                   </View>
                   <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 10, paddingHorizontal: 10 }}>
                     <RadioButton
@@ -111,8 +172,9 @@ export default class PaymentPage extends Component {
 
           </View>
           <CustomButton
-            style={{ backgroundColor: '#1fc44e', alignSelf: 'center', }}
-            onPress={() => { this.props.navigation.navigate('OrderConfirm') }}
+            disabled = {this.state.checked == false ? true : false }
+            style={{ backgroundColor: this.state.checked == false ? '#9b9b9b' : '#1fc44e', alignSelf: 'center', }}
+            onPress={() => this.paymentDetails() }
             title='Proceed To Pay'
           />
         </ScrollView>

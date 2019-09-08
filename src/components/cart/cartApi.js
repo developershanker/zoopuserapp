@@ -68,4 +68,50 @@ export default class cartApi {
 
         }
     }
+
+    static async inCart() {
+        try {
+            //url
+            const apiUrl = 'add-to-cart'
+            //body
+            const body = {}
+            body['customerId'] = ConstantValues.customerId
+            body['outletId'] = ConstantValues.outletId
+            body['items'] = ConstantValues.inCart
+            body['billDetail'] = ConstantValues.billDetail
+
+            //headers
+            const headers = {}
+            headers['x-auth-token'] = ConstantValues.token
+
+            //calling api for response
+            const response = await this.apiCall(apiUrl, 'POST', body, headers)
+            console.log(response)
+
+            return Promise.resolve(response)
+
+
+        } catch (error) {
+            console.log('Data received in cartApi catch: ' + error)
+            return Promise.reject(error)
+        }
+    }
+
+    static billDetail = () => {
+        ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
+        ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst
+        ConstantValues.billDetail = [{
+            'totalBasePrice': ConstantValues.totalBasePrice,
+            'deliveryCharges': ConstantValues.deliveryCharge,
+            'discount': ConstantValues.couponValue,
+            'couponId': ConstantValues.couponId,
+            'couponCode': ConstantValues.couponCode,
+            'couponValue': ConstantValues.couponValue,
+            'walletBalanceUsed': ConstantValues.walletBalanceUsed,
+            'gst': (ConstantValues.gst).toFixed(2),
+            'totalPayableAmount': (ConstantValues.totalPayableAmount).toFixed(2)
+        }]
+        console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
+    }
+    
 }

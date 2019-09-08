@@ -31,6 +31,7 @@ export default class Search extends Component {
   }
 
 
+  //function to render dropdown while search by train no.
   findTrain(query) {
     if (query === '') {
       return [];
@@ -64,7 +65,7 @@ export default class Search extends Component {
     else if (value == 'Enter Train No.') {
       const { query } = this.state;
       const trains = this.findTrain(query);
-      console.log('trains are' + trains)
+     // console.log('trains are' + trains)
       const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
 
     return (
@@ -106,7 +107,7 @@ async showTrain() {
     let response = await searchApi.showTrain();
     // console.log('data received in search.js : ' + JSON.stringify(response))
     if (response.status == true) {
-      console.log('data : ' + JSON.stringify(response.data))
+      // console.log('data : ' + JSON.stringify(response.data))
       this.setState({
         trains: response.data
       })

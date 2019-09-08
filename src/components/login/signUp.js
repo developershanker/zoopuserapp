@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Dimensions, Button, Text, Icon, TouchableOpacity, StyleSheet, Alert, Image, TextInput, ToastAndroid, ImageBackground, ScrollView } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { CustomButton } from '../assests/customButtonLarge.js';
+import AsyncStorage from '@react-native-community/async-storage';
 import CustomTouchableOpacity from '../assests/customTouchableOpacity';
 import { FadeInView } from '../assests/fadeInView.js';
 import Device from 'react-native-device-info';
@@ -30,6 +31,7 @@ export default class SignUp extends Component {
           console.log('Logged with mobile No. :' + mobile),
           console.log('The status is: ' + response.status),
           console.log('The message is: ' + response.message),
+          ConstantValues.customerId = response.data.customerId,
           ToastAndroid.show(response.message, ToastAndroid.LONG),
           this.props.navigation.navigate('OtpVerify', {
             mobile: this.state.mobile,
@@ -47,6 +49,16 @@ export default class SignUp extends Component {
       console.log('Data received in signup.js catch: ' + error)
     }
   }
+  // storeData = async (customerId) => {
+  //   try {
+  //     // await AsyncStorage.setItem('x-authtoken', ConstantValues.token)
+  //     await AsyncStorage.setItem('customerId', customerId)
+  //     ConstantValues.customerId = customerId
+  //     console.log('----------Stored in Local...customerId...---- : ' + ConstantValues.customerId)
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
 
   render() {
     return (

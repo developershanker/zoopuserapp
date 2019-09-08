@@ -18,11 +18,7 @@ export default class CouponPage extends Component {
         super(props);
         this.state = {
             couponCode: '',
-            CouponDetail: [
-                // { couponId: '1', couponCode: "ZOOP50", couponValidity: "07/09/2019", couponDescription: "Get upto 20% OFF on Order of Rs.250 and above" },
-                // { couponId: '2', couponCode: "ZOOP50", couponValidity: "07/09/2019", couponDescription: "Get upto 20% OFF on Order of Rs.250 and above" },
-                // { couponId: '3', couponCode: "ZOOP50", couponValidity: "07/09/2019", couponDescription: "Get upto 20% OFF on Order of Rs.250 and above" },
-            ]
+            CouponDetail: []
         };
     }
 
@@ -49,8 +45,10 @@ export default class CouponPage extends Component {
         ConstantValues.couponValue = couponDetail.couponValue
         ConstantValues.discount = couponDetail.couponValue
         ConstantValues.couponType = couponDetail.type
+        ConstantValues.couponId = couponDetail.couponId
         console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
         // Cart.changeCode(ConstantValues.couponCode)
+        cartApi.billDetail()
         this.props.navigation.navigate('Cart')
     }
 
