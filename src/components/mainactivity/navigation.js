@@ -3,6 +3,7 @@ import { View, Text, Button, TouchableOpacity, Image, Platform, ScrollView, Dime
 import SplashScreen from 'react-native-splash-screen';
 import Device from 'react-native-device-info';
 //////-------LOGIN RELATED VIEWS-----------//////
+import AuthLoadingScreen from '../mainactivity/AuthLoadingScreen.js'
 import SignUp from '../login/signUp.js';
 import Authenticated from '../login/authenticated.js'
 import NotAuthenticated from '../login/notAuthenticated.js'
@@ -51,8 +52,9 @@ import CoachSequence from '../services/coachSequence';
 import PlatformLocator from '../services/platformLocator';
 
 
-import { createStackNavigator, createAppContainer, createDrawerNavigator } from "react-navigation";
+import { createStackNavigator, createAppContainer, createDrawerNavigator, createSwitchNavigator } from "react-navigation";
 import { Footer } from 'native-base';
+import { Fade } from '../assests/fade.js';
 
 
 
@@ -70,6 +72,14 @@ export class App extends Component {
   }
 }
 
+const AuthStack = createStackNavigator({
+  SignUp: {
+    screen: SignUp,
+    navigationOptions: {
+      header: null,
+    }
+  }
+})
 class NavigationDrawerStructure extends Component {
   //Structure for the navigatin Drawer
   toggleDrawer = () => {
@@ -146,15 +156,15 @@ const CustomDrawerComponent = (props) => (
       </View>
 
       <DrawerItems {...props} />
-
-      <TouchableOpacity>
+ {/* <Icon name='sign-in' size={10} style={{color:'#000000'}}/> */}
+      {/* <TouchableOpacity>
         <Footer style={{ backgroundColor: '#FF9800' }}>
           <View style={{ justifyContent: 'space-around' }}>
-            {/* <Icon name='sign-in' size={10} style={{color:'#000000'}}/> */}
-            <Text style={{ fontSize: 25, fontFamily: 'Poppins-Bold', color: '#000000', justifyContent: 'center' }}>LOGIN</Text>
+           
+            <Text style={{ fontSize: 25, fontFamily: 'Poppins-Bold', color: '#000000', justifyContent: 'center' }}>LOGOUT</Text>
           </View>
         </Footer>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </ScrollView>
   </SafeAreaView>
 
@@ -227,18 +237,6 @@ const DrawerNavigator = createDrawerNavigator({
       />
     }
   },
-  Login: {
-    screen: Welcome,
-    navigationOptions: {
-      drawerLabel: 'Login',
-      drawerIcon: <Icon
-        name='user'
-        size={20}
-
-      />
-
-    }
-  },
   Feedback: {
     screen: Feedback,
     navigationOptions: {
@@ -268,17 +266,36 @@ const DrawerNavigator = createDrawerNavigator({
       drawerIcon: <Icon
         name='book'
         size={20}
-
+      />
+    }
+  },
+  Login: {
+    screen: Welcome,
+    navigationOptions: {
+      drawerLabel: 'Login',
+      drawerIcon: <Icon
+        name='user'
+        size={20}
+      />
+    }
+  },
+  LogOut: {
+    screen: LogOut,
+    navigationOptions: {
+      drawerLabel: 'LogOut',
+      drawerIcon: <Icon
+        name='user'
+        size={20}
       />
     }
   },
 
 }, {
-    contentComponent: CustomDrawerComponent,
-    drawerWidth: Dimensions.get('window').width - 120,
+  contentComponent: CustomDrawerComponent,
+  drawerWidth: Dimensions.get('window').width - 120,
 
 
-  }
+}
 );
 const AppNavigator = createStackNavigator({
   SignUp: {
@@ -299,13 +316,13 @@ const AppNavigator = createStackNavigator({
       header: null,
     }
   },
-  Contact: {
-    screen: Contact,
-    navigationOptions: {
-      header: null,
-    }
+  // Contact: {
+  //   screen: Contact,
+  //   navigationOptions: {
+  //     header: null,
+  //   }
 
-  },
+  // },
   Notifications: {
     screen: Notifications,
     navigationOptions: {
@@ -327,6 +344,12 @@ const AppNavigator = createStackNavigator({
   },
   DeviceInfo: {
     screen: DeviceInfo,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  LogOut: {
+    screen: LogOut,
     navigationOptions: {
       header: null,
     }
@@ -483,4 +506,15 @@ const AppNavigator = createStackNavigator({
 );
 export default createAppContainer(AppNavigator);
 // export default createAppContainer(DrawerNavigator);
-
+// export default createAppContainer(
+//   createSwitchNavigator(
+//     {
+//       AuthLoading: AuthLoadingScreen,
+//       App: AppNavigator,
+//       Auth: AuthStack,
+//     },
+//     {
+//       initialRouteName: 'AuthLoading',
+//     }
+//   )
+// );

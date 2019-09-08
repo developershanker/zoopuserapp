@@ -48,7 +48,7 @@ export default class searchApi extends Component {
 
             //calling api for response
             const response = await this.apiCall(apiUrl, 'GET', {}, {})
-            console.log(response)
+            // console.log(response)
 
             return Promise.resolve(response)
 
@@ -62,6 +62,7 @@ export default class searchApi extends Component {
         console.log('searchstring length in searchApi.js  : ' + searchString.length )
         try {
             if (searchString.length == 10) {
+                ConstantValues.pnr = searchString
                 apiUrl = 'search/pnr'
             } else if (searchString.length == 5) {
                 apiUrl = 'search/train'

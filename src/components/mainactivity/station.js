@@ -11,6 +11,7 @@ import { CustomButton } from '../assests/customButtonShort.js';
 import Search from './search.js';
 import searchApi from './searchApi.js';
 import ConstantValues from '../constantValues.js';
+import { Fade } from '../assests/fade.js';
 
 
 export default class station extends Component {
@@ -74,7 +75,8 @@ export default class station extends Component {
         this.setState({
           StationList: response.data.trainRoutes,
         })
-
+          ConstantValues.seat = response.data.seatInfo.berth
+          ConstantValues.coach = response.data.seatInfo.coach
         return (
           // <CustomActivityIndicator animating={false} /> ,
           ToastAndroid.show(response.message, ToastAndroid.LONG)
@@ -90,7 +92,7 @@ export default class station extends Component {
     }
   }
 
-  gotoMenu = (stationId, outletId, stationName, haltTime, outletName, outletRating, minimumOrderValue) => {
+  gotoMenu = (stationId, outletId, stationName, haltTime, outletName, outletRating, minimumOrderValue,eta) => {
     ConstantValues.stationId = stationId,
       ConstantValues.outletId = outletId,
       ConstantValues.stationName = stationName,
@@ -98,6 +100,7 @@ export default class station extends Component {
       ConstantValues.haltTime = haltTime,
       ConstantValues.outletRating = outletRating,
       ConstantValues.minimumOrderValue = minimumOrderValue
+      ConstantValues.eta = eta
     console.log('ConstantValues.stationId : ' + ConstantValues.stationId),
       console.log('ConstantValues.outletId : ' + ConstantValues.outletId),
       this.props.navigation.navigate('Menu')
@@ -252,6 +255,7 @@ export default class station extends Component {
                 // data={this.state.data}
                 horizontal={true}
                 renderItem={({ item, index }) =>
+                <Fade visible={item.isVisible}>
                   <View>
                     <TouchableOpacity>
                       <Image style={styles.roundImage} source={item.stationImage == null ? require('../images/1.png') : {uri:item.stationImage}} />
@@ -261,6 +265,7 @@ export default class station extends Component {
                       </View>
                     </TouchableOpacity>
                   </View>
+                  </Fade>
                 }
                 keyExtractor={(item) => item.stationId.toString()}
               />
@@ -277,6 +282,7 @@ export default class station extends Component {
               data={this.state.StationList}
               ItemSeparatorComponent={this.FlatListItemSeparator}
               renderItem={({ item, index }) =>
+                 <Fade visible={item.isVisible}>
                 <View>
                   <Text style={styles.textheader}>{item.stationName}</Text>
                   <View style={styles.stextview}>
@@ -302,7 +308,9 @@ export default class station extends Component {
                       // } else {
                         return (
                           <View style={styles.outletContainer} key={index} >
-                            <TouchableOpacity style={styles.card} onPress={() => {
+                            <TouchableOpacity style={styles.card} 
+                            // disabled = {!item.isVisible} 
+                            onPress={() => {
                               this.gotoMenu(
                                 item.stationId,
                                 outlets.outletId,
@@ -310,10 +318,11 @@ export default class station extends Component {
                                 item.haltTime,
                                 outlets.outletName,
                                 outlets.outletRating,
-                                outlets.minimumOrderValue
+                                outlets.minimumOrderValue,
+                                item.expectedTime
                               )
                             }}>
-                              <Image source={require('../images/roundimg3.jpg')} style={styles.outletimage} />
+                              <Image source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.outlet}} style={styles.outletimage} />
                               <View style={styles.detail}>
                                 <View style={{ flexDirection: 'row' }}>
                                   <Text style={styles.outletname}>
@@ -350,7 +359,7 @@ export default class station extends Component {
                     )
                   }
                 </View>
-
+               </Fade>
               }
               keyExtractor={(item, index) => item.stationId.toString()}
             />
@@ -409,7 +418,7 @@ const styles = StyleSheet.create({
   outletContainer: {
     alignItems: 'stretch',
     justifyContent: 'flex-start',
-    backgroundColor: '#ffffff',
+    // backgroundColor: '#ffffff',
   },
   searchBarView: {
     flexDirection: 'row',

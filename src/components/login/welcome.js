@@ -3,6 +3,7 @@ import { View, Dimensions, Button, Text, Icon, TouchableOpacity, StyleSheet, Ale
 import SplashScreen from 'react-native-splash-screen';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import CustomTouchableOpacity from '../assests/customTouchableOpacity';
+import AsyncStorage from '@react-native-community/async-storage';
 import { FadeInView } from '../assests/fadeInView.js';
 import Device from 'react-native-device-info';
 import ConstantValues from '../constantValues.js'
@@ -29,10 +30,14 @@ export default class Welcome extends Component {
       let response = await loginApi.sendOtp(mobile);
       console.log('data received in welcome.js : ' + JSON.stringify(response))
       if (response.status == true) {
+      //  let storedData = this.storeData(response.data.customerId)
+      //  console.log('Stored Data: ' + storedData)
+
         return (console.log(response),
           console.log('Logged with mobile No. :' + mobile),
           console.log('The status is: ' + response.status),
           console.log('The message is: ' + response.message),
+          ConstantValues.customerId = response.data.customerId,
           ToastAndroid.show(response.message, ToastAndroid.LONG),
           this.props.navigation.navigate('OtpVerify', {
             mobile: this.state.mobile,
@@ -51,6 +56,16 @@ export default class Welcome extends Component {
     }
   }
 
+  // storeData = async (customerId) => {
+  //   try {
+  //     // await AsyncStorage.setItem('x-authtoken', ConstantValues.token)
+  //     await AsyncStorage.setItem('customerId', customerId)
+  //     ConstantValues.customerId = customerId
+  //     console.log('----------Stored in Local...customerId...---- : ' + ConstantValues.customerId)
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
 
 
 

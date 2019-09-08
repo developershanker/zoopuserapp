@@ -44,9 +44,16 @@ export default class Register extends Component {
     try {
       let response = await LoginApi.getUserRegister();
       console.log('data received in register.js : '+ JSON.stringify(response))
-
-      ToastAndroid.show('Congratulations!! Registeration Successfull',ToastAndroid.LONG)
-      this.props.navigation.navigate('Search')
+      if (response.status == true) {
+        ConstantValues.isAgent = response.data.isAgent
+        console.log('ConstantValues.isAgent : '+ ConstantValues.isAgent)
+        console.log('response.data.isAgent : '+ response.data.isAgent)
+        ToastAndroid.show('Congratulations!! Registeration Successfull',ToastAndroid.LONG)
+        this.props.navigation.navigate('Search')
+      } else {
+        ToastAndroid.show('Something Went Wrong.. Try after some time',ToastAndroid.LONG)
+      }
+    
       
     } catch (error) {
       console.log( 'Data received in register.js catch: '+ error)
@@ -56,7 +63,7 @@ export default class Register extends Component {
   render() {
     const { navigation } = this.props;
     const mobile = navigation.getParam('mobile','');
-    
+    ConstantValues.customerPhoneNo = mobile
     return (      
       <View style={styles.slide}>
         <Text style={styles.heading}> My Profile </Text>

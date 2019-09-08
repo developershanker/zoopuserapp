@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions, Image } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
+import cartApi from './cartApi';
+import ConstantValues from '../constantValues'
 
 class billDetailCard extends Component {
+  componentDidMount() {
+    cartApi.billDetail();
+}
   constructor(props) {
     super(props);
     this.state = {
@@ -18,29 +23,38 @@ class billDetailCard extends Component {
             <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} />
           </View>
           <View
-            style={styles.billcard}
-          >
-            <View>
-              {/* <Text style={{fontSize:15,fontWeight:'bold',padding:5}}></Text> */}
-              <View style={styles.tile}>
-                <Text style={styles.tiletext}>ITEM TOTAL</Text>
-                <Text style={styles.tiletext}>Rs. 200</Text>
-              </View>
-              <View style={styles.tile}>
-                <Text style={styles.tiletext}>TOTAL DISCOUNT</Text>
-                <Text style={styles.tiletext}>Rs. 200</Text>
-              </View>
-              <View style={styles.tile}>
-                <Text style={styles.tiletext}>DELIVERY FEE</Text>
-                <Text style={styles.tiletext}>Rs. 200</Text>
-              </View>
-              <View style={styles.tile}>
-                <Text style={styles.tiletext}>TOTAL</Text>
-                <Text style={styles.tiletext}>Rs. 200</Text>
-              </View>
+                  style={styles.billcard}
+                >
+                  <View>
+                    {/* <Text style={{fontSize:15,fontWeight:'bold',padding:5}}></Text> */}
+                    <View style={styles.tile}>
+                      <Text style={styles.tiletext}>Item Total</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.totalBasePrice}</Text>
+                    </View>
+                    <View style={styles.tile}>
+                      <Text style={styles.tiletext}>Delivery Charges</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.deliveryCharge}</Text>
+                    </View>
+                    <View style={styles.tile}>
+                      <Text style={styles.tiletext}>Discount</Text>
+                      <Text style={[styles.tiletext, { color: '#1fc44e' }]}> {ConstantValues.rupee} {ConstantValues.couponValue}</Text>
+                    </View>
+                    <View style={styles.tile}>
+                      <Text style={styles.tiletext}>Used Wallet Balance</Text>
+                      <Text style={[styles.tiletext, { color: '#1fc44e' }]}>{ConstantValues.rupee} {ConstantValues.walletBalanceUsed}</Text>
+                    </View>
+                    <View style={styles.tile}>
+                      <Text style={styles.tiletext}>Add GST 5%</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.gst}</Text>
+                    </View>
 
-            </View>
-          </View>
+                    <View style={styles.tile}>
+                      <Text style={styles.tiletext}>To Pay</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.totalPayableAmount}</Text>
+                    </View>
+
+                  </View>
+                </View>
         </View>
       </SafeAreaView>
     );
