@@ -25,6 +25,8 @@ export default class station extends Component {
       firstQuery: '',
       visibleModal: null,
       animating: true,
+      stationOpacity: 0.5,
+      scrollBegin: false,
       OutletList: [],
       StationList: [],
       CuisinesList: [],
@@ -72,11 +74,15 @@ export default class station extends Component {
       let response = await searchApi.searchBy(text);
       if (response.status == true) {
         // console.log('data received in station.js : ' + JSON.stringify(response)),
+        ConstantValues.trainId = response.data.trainDetails.trainId
+        ConstantValues.trainNumber = response.data.trainDetails.trainNumber
+        ConstantValues.trainName = response.data.trainDetails.trainName
+
         this.setState({
           StationList: response.data.trainRoutes,
         })
-          ConstantValues.seat = response.data.seatInfo.berth
-          ConstantValues.coach = response.data.seatInfo.coach
+        ConstantValues.seat = response.data.seatInfo.berth
+        ConstantValues.coach = response.data.seatInfo.coach
         return (
           // <CustomActivityIndicator animating={false} /> ,
           ToastAndroid.show(response.message, ToastAndroid.LONG)
@@ -92,24 +98,34 @@ export default class station extends Component {
     }
   }
 
-  gotoMenu = (stationId, outletId, stationName, haltTime, outletName, outletRating, minimumOrderValue,eta) => {
+  gotoMenu = (stationId, outletId, stationName, stationCode, haltTime,arrDate,arrival, outletName, outletRating, minimumOrderValue, eta) => {
     ConstantValues.stationId = stationId,
       ConstantValues.outletId = outletId,
       ConstantValues.stationName = stationName,
+      ConstantValues.stationCode = stationCode
       ConstantValues.outletName = outletName,
       ConstantValues.haltTime = haltTime,
+      ConstantValues.deliveryDate = arrDate, //actual date of arraival
+      ConstantValues.deliveryTime = arrival, //expected date of arraival
       ConstantValues.outletRating = outletRating,
       ConstantValues.minimumOrderValue = minimumOrderValue
-      ConstantValues.eta = eta
+    ConstantValues.eta = eta
     console.log('ConstantValues.stationId : ' + ConstantValues.stationId),
       console.log('ConstantValues.outletId : ' + ConstantValues.outletId),
       this.props.navigation.navigate('Menu')
   }
+  selectedStation = (item,index) => {
+    this.setState({
+         stationOpacity : 1
+    })
+  }
+  scrollStart = () => this.setState({scrollBegin: true})  
+  scrollEnd = () => this.setState({scrollBegin: false})
 
   render() {
     return (
       <SafeAreaView style={styles.slide}>
-  
+
         <View style={styles.topContainer}>
           <View>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
@@ -246,6 +262,8 @@ export default class station extends Component {
         <View style={styles.stationContainer}>
           <View style={styles.scroll}>
             <ScrollView
+            //  onScrollBeginDrag={this.scrollStart}
+            //  onScrollEndDrag={this.scrollEnd}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               alwaysBounceHorizontal={true}
@@ -255,16 +273,17 @@ export default class station extends Component {
                 // data={this.state.data}
                 horizontal={true}
                 renderItem={({ item, index }) =>
-                <Fade visible={item.isVisible}>
-                  <View>
-                    <TouchableOpacity>
-                      <Image style={styles.roundImage} source={item.stationImage == null ? require('../images/1.png') : {uri:item.stationImage}} />
-                      <View style={styles.name}>
-                        <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular' }}>{item.stationName}</Text>
-                        <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', }}>{item.arrivalTime}</Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
+                  <Fade visible={item.isVisible}>
+                    <View style={styles.stationView}>
+                    {/* activeOpacity = {this.state.scrollBegin == true ? 1 : 0.5 } */}
+                      <TouchableOpacity>
+                        <Image style={styles.roundImage} source={item.stationImage == null ? require('../images/1.png') : { uri: item.stationImage }} />
+                        <View style={styles.name}>
+                          <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular' , justifyContent:'center', alignSelf:'center' }}>{item.stationName}</Text>
+                          <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf:'center' }}>{item.arrivalTime}</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
                   </Fade>
                 }
                 keyExtractor={(item) => item.stationId.toString()}
@@ -282,47 +301,50 @@ export default class station extends Component {
               data={this.state.StationList}
               ItemSeparatorComponent={this.FlatListItemSeparator}
               renderItem={({ item, index }) =>
-                 <Fade visible={item.isVisible}>
-                <View>
-                  <Text style={styles.textheader}>{item.stationName}</Text>
-                  <View style={styles.stextview}>
-                    <Text style={styles.stext}>Halt Mins : {item.haltTime}</Text>
-                    <Text style={styles.stext}> S.T.A:{item.arrivalTime} |</Text>
-                    <Text style={styles.stext}> E.T.A:{item.expectedTime}</Text>
-                  </View>
+                <Fade visible={item.isVisible}>
+                  <View>
+                    <Text style={styles.textheader}>{item.stationName}</Text>
+                    <View style={styles.stextview}>
+                      <Text style={styles.stext}>Halt Mins : {item.haltTime}</Text>
+                      <Text style={styles.stext}> S.T.A:{item.arrivalTime} |</Text>
+                      <Text style={styles.stext}> E.T.A:{item.expectedTime}</Text>
+                    </View>
 
-                  {/* OutletView starts */}
-                  
-                   
-                  
-                  {
-                    item.outlets.map((outlets, index) => {
-                      
-                      // console.log('outlets :: ' + JSON.stringify(item.outlets))
-                      // if (item.outlets.length == 0) {
-                      //   return(
-                      //     <View style={{justifyContent:'center',alignItems:'center',backgroundColor: '#ffffff'}} key={index}>
-                      //       <Text style={styles.outletname}>No outlets active in this area</Text>
-                      //       </View>
-                      //   )
-                      // } else {
+                    {/* OutletView starts */}
+
+
+
+                    {
+                      item.outlets.map((outlets, index) => {
+
+                        // console.log('outlets :: ' + JSON.stringify(item.outlets))
+                        // if (item.outlets.length == 0) {
+                        //   return(
+                        //     <View style={{justifyContent:'center',alignItems:'center',backgroundColor: '#ffffff'}} key={index}>
+                        //       <Text style={styles.outletname}>No outlets active in this area</Text>
+                        //       </View>
+                        //   )
+                        // } else {
                         return (
                           <View style={styles.outletContainer} key={index} >
-                            <TouchableOpacity style={styles.card} 
-                            // disabled = {!item.isVisible} 
-                            onPress={() => {
-                              this.gotoMenu(
-                                item.stationId,
-                                outlets.outletId,
-                                item.stationName,
-                                item.haltTime,
-                                outlets.outletName,
-                                outlets.outletRating,
-                                outlets.minimumOrderValue,
-                                item.expectedTime
-                              )
-                            }}>
-                              <Image source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.outlet}} style={styles.outletimage} />
+                            <TouchableOpacity style={styles.card}
+                              // disabled = {!item.isVisible} 
+                              onPress={() => {
+                                this.gotoMenu(
+                                  item.stationId,
+                                  outlets.outletId,
+                                  item.stationName,
+                                  item.stationCode,
+                                  item.haltTime,
+                                  item.arrDate, //actual date of arraival
+                                  item.arrival,//actual time of arraival
+                                  outlets.outletName,
+                                  outlets.outletRating,
+                                  outlets.minimumOrderValue,
+                                  item.expectedTime
+                                )
+                              }}>
+                              <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.outlet }} style={styles.outletimage} />
                               <View style={styles.detail}>
                                 <View style={{ flexDirection: 'row' }}>
                                   <Text style={styles.outletname}>
@@ -345,7 +367,7 @@ export default class station extends Component {
                                   )
                                 }
                                 )} */}
-  
+
                                 <Text style={styles.minorder}>
                                   Minimum Order: {ConstantValues.rupee} {outlets.minimumOrderValue}
                                 </Text>
@@ -354,12 +376,12 @@ export default class station extends Component {
                           </View>
                         )
                       }
-                      
-                  //  }
-                    )
-                  }
-                </View>
-               </Fade>
+
+                        //  }
+                      )
+                    }
+                  </View>
+                </Fade>
               }
               keyExtractor={(item, index) => item.stationId.toString()}
             />
@@ -465,7 +487,9 @@ const styles = StyleSheet.create({
   name: {
     flexDirection: 'column',
     alignItems: 'center',
-    margin: 5
+    margin: 5,
+    justifyContent:'center',
+    alignSelf:'center'
   },
   image: {
     width: 100,
@@ -506,8 +530,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   roundImage: {
-    width: 75,
-    height: 75,
+    width: 60,
+    height: 60,
     borderRadius: 100 / 2,
     marginLeft: 10,
     backgroundColor: '#f2c744'
@@ -525,6 +549,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     fontFamily: 'Poppins-Bold',
     color: '#ffffff'
+  },
+  stationView: {
+    width: 80,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center'
   },
   cuisine: {
     // width:150,

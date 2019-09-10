@@ -11,6 +11,7 @@ import loginApi from './loginApi.js';
 
 
 
+
 export default class SignUp extends Component {
   componentDidMount() {
     SplashScreen.hide();
@@ -25,7 +26,7 @@ export default class SignUp extends Component {
   async sendOtp(mobile) {
     try {
       let response = await loginApi.sendOtp(mobile);
-      console.log('data received in signup.js : ' + JSON.stringify(response))
+      //console.log('data received in signup.js : ' + JSON.stringify(response))
       if (response.status == true) {
         return (console.log(response),
           console.log('Logged with mobile No. :' + mobile),
@@ -65,12 +66,13 @@ export default class SignUp extends Component {
       <ScrollView>
         <View style={styles.slide}>
           {/* <FadeInView style={styles.anim}> */}
-          <ImageBackground style={{ width: Dimensions.get('screen').width, alignItems: 'center', height: Dimensions.get('screen').height / 2, }} source={require('../images/deliveryboy.png')}>
+          <ImageBackground style={{ width: Dimensions.get('screen').width, alignItems: 'center', height: Dimensions.get('screen').height / 2, }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.deliveryboypng }}>
 
             <Image
               style={styles.image}
-              source={require('../images/zooplogoorange.png')}
+              source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
             />
+
 
           </ImageBackground>
 

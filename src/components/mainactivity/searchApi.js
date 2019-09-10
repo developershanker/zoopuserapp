@@ -31,7 +31,7 @@ export default class searchApi extends Component {
 
             const response = await fetch(uri, option)
             const json = await response.json();
-            console.log(json)
+            // console.log(json)
             return Promise.resolve(json)
         }
         catch (error) {

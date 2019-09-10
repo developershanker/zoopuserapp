@@ -18,7 +18,8 @@ export class CustomGridIcon extends Component {
     };
   }
   GetGridViewItem(item) {
-    Alert.alert(item);
+    // Alert.alert(item);
+    console.log(item)
   }
 
   render() {

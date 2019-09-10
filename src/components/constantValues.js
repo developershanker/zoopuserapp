@@ -3,16 +3,17 @@ import Device from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 export default class ConstantValues {
-  static apiUrl = 'http://13.126.232.146:3000/'
-  // static apiUrl = 'http://10.5.48.206:3000/'
+  static apiUrl = 'https://appapi.zoopindia.in/'
+//  static apiUrl = 'http://13.126.232.146:3000/'
+ // static apiUrl = 'http://10.5.48.206:3000/'
   // http://10.5.48.206:3000/ local          //http://13.126.232.146:3000/ main
   static customer = { name: '', mobileNo: '' }
   static customerName = ''
   static customeralternateMobile = ''
   static customerPhoneNo = ''
   static customerEmailId = ''
-  static customerId = '1'
-  static token = '123'
+  static customerId = ''
+  static token = ''
   static isAgent = 0
   static loginCount = null
 
@@ -41,6 +42,7 @@ export default class ConstantValues {
   //order constant module
   static stationId = ''
   static stationName = ''
+  static stationCode = ''
   static outletId = ''
   static outletName = ''
   static haltTime = ''
@@ -54,8 +56,14 @@ export default class ConstantValues {
   static seat = ''
   static eta = ''
   static ata = ''
+  static trainId = 0
+  static trainNumber = ''
+  static trainName = ''
   static orderDate = ''
   static orderTime = ''
+  static deliveryDate = ''
+  static deliveryTime = ''
+  static schArrivalDate = ''
   static seatInfo = []
   static passengerDetail = []
 
@@ -88,6 +96,9 @@ export default class ConstantValues {
   static zoopInstagram = 'https://www.instagram.com/zoopindia/'
   static zoopTwitter = 'https://twitter.com/zoopindia'
 
+
+  //zoopOrderId
+  static zoopOrderId = 0
   //Icon set in app
   // https://zoop.s3.ap-south-1.amazonaws.com/app-Icon-set/AC+Coach.svg
   static bucket = 'zoop-dev-local'
@@ -96,11 +107,26 @@ export default class ConstantValues {
   static IconUrl = 'https://' + this.bucket + '.' + this.region + '.' + this.url
   static imgurl = {
     facebook: 'app-Icon-set/Facebook.svg',
+    twitter : 'app-Icon-set/Twitter.svg',
     location: 'app-Icon-set/location.svg',
     fssai: 'app-Icon-set/fssai.png',
     paytm: 'app-Icon-set/paytmnew.png',
     outlet: 'app-Icon-set/Biryani.jpg',
-    menu: 'app-Icon-set/Idli_Sambhar.jpg'
+    menu: 'app-Icon-set/Idli_Sambhar.jpg',
+    deliveryboy : 'app-Icon-set/Delivery+Boy.svg',
+    deliveryboypng : 'app-Icon-set/deliveryboy.png',
+    //logos
+    zooporange : 'app-Icon-set/zooplogoorange.png',
+    zoopwhite : 'app-Icon-set/zooplogowhite.png',
+    zoopblack : 'app-Icon-set/zooplogoblack.png',
+    //banners
+    home:'app-Icon-set/Home.jpg',
+    banner1: 'app-Icon-set/banner1.jpg',
+    banner2: 'app-Icon-set/banner2.jpg',
+    banner3: 'app-Icon-set/banner3.jpg',
+    banner4: 'app-Icon-set/banner4.jpg',
+
+
   }
 
 }

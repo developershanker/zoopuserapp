@@ -45,12 +45,12 @@ class billDetailCard extends Component {
                     </View>
                     <View style={styles.tile}>
                       <Text style={styles.tiletext}>Add GST 5%</Text>
-                      <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.gst}</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.gst).toFixed(2)}</Text>
                     </View>
 
                     <View style={styles.tile}>
                       <Text style={styles.tiletext}>To Pay</Text>
-                      <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.totalPayableAmount}</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
                     </View>
 
                   </View>

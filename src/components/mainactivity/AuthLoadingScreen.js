@@ -20,71 +20,35 @@ class AuthLoadingScreen extends Component {
 
     // Fetch the token from storage then navigate to our appropriate place
     _bootstrapAsync = async () => {
-
-
         try {
-           await AsyncStorage.getItem('x-authtoken').then((userToken) => {
-                if (userToken != '') {
-                    ConstantValues.token = userToken
-                    console.log('ConstantValues.token : ' + ConstantValues.token)
-                    this.props.navigation.navigate(userToken ? 'App' : 'Auth');
-                } else {
-                    return (
-                        ToastAndroid.showWithGravity('Something went wrong!!', ToastAndroid.BOTTOM)
-                    )
-                }
-            }).done();
+            const storedValues = await AsyncStorage.getItem('userInfo')
+            // console.log('JSON.stringify(storedValues) : ' + JSON.stringify(storedValues))
+             console.log('storedValues : ' + storedValues)
+            //  storedValues : {"userToken":"pbkdf2_sha256$55000$UxLacxq6kwQ=$GqbBXFV+Kircxzvwf14je+wWpWa8+fxNnvcTaItB2xY=","customerId":2}
+            let userInfo = JSON.parse(storedValues)
+            let userToken  = userInfo.userToken 
+            let customerId = userInfo.customerId
+            console.log('Getting token from localstorage : ' + userToken)
+            console.log('Getting CustomerId from localstorage : ' + customerId)
+            if (userToken != '') {
+                ConstantValues.token = userToken
+                ConstantValues.customerId = customerId
+                console.log('ConstantValues.token : ' + ConstantValues.token)
+                console.log('ConstantValues.customerId : ' + ConstantValues.customerId)
+                this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+            } else {
+                return (
+                    ToastAndroid.show('Something went wrong!!', ToastAndroid.BOTTOM)
+                )
+            }
+
         } catch (error) {
-            console.log(error)
+            this.props.navigation.navigate('Auth')
+            console.log('Error in getting stored value from asyncstorage: ' + error)
         }
-        // let keys = ['x-authtoken', 'customerId'];
-        // await AsyncStorage.multiGet(keys, (err, stores) => {
-        //     stores.map((result, i, store) => {
-        //         let key = store[i][0]; //reurn one key
-        //         let value = store[i][1]; //return value for key
-        //         let multiget = result; //return key and it's value
-        //         console.log('result : ' + result)
-        //         console.log('key, value : ' + key  , value)
-        //         this.props.navigation.navigate(value ? 'App' : 'Auth');
-                // if (result == 'x-authtoken') {
-                //     ConstantValues.token = value
-                //     console.log('ConstantValues.token : ' + ConstantValues.token)
-                //     this.props.navigation.navigate(value ? 'App' : 'Auth');
-                // } else {
-                //     return (
-                //         ToastAndroid.showWithGravity('Something went wrong!!', ToastAndroid.BOTTOM)
-                //     )
-                // }
-                // result.forEach((key,value)=>{
-                    
-                //     if (keys == 'x-authtoken') {
-                //         ConstantValues.token = value
-                //         console.log('ConstantValues.token : ' + ConstantValues.token)
-                //         //this.props.navigation.navigate(value ? 'App' : 'Auth');
-                //     } else {
-                //         return (
-                //             ToastAndroid.showWithGravity('Something went wrong!!', ToastAndroid.BOTTOM)
-                //         )
-                //     }
-                // }
-                // )
-                
-                
-          //  })
-        //})
 
     };
-    getCustomerId = async () => {
 
-        try {
-            await AsyncStorage.getItem('customerId').then((customerId) => {
-                ConstantValues.customerId = customerId
-                console.log('ConstantValues.customerId : ' + ConstantValues.customerId)
-            }).done();
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
 
     render() {

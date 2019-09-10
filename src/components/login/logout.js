@@ -17,8 +17,9 @@ export default class LogOut extends Component {
 
   removetoken = async () => {
     try {
-      await AsyncStorage.removeItem('x-authtoken')
-      await AsyncStorage.removeItem('customerId')
+      // await AsyncStorage.removeItem('x-authtoken')
+      // await AsyncStorage.removeItem('customerId')
+      // AsyncStorage.removeItem('userInfo')
       console.log('Token and customerId Removed!!')
     } catch (e) {
       console.log('Error in removetoken in logout.js: ' + error)
@@ -42,11 +43,11 @@ export default class LogOut extends Component {
 }
 const styles = StyleSheet.create({
   slide: {
-    // flex: 1,
+    flex: 1,
     width: Dimensions.get('screen').width,
     height: Dimensions.get('screen').height,
     backgroundColor: '#ffffff',
-    alignItems: 'stretch',
+    alignItems: 'center',
   },
   text1: {
     fontSize: 25,

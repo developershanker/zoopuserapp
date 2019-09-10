@@ -64,9 +64,8 @@ export default class otpVerify extends Component {
           ConstantValues.customer.token = response.data.token,
          // console.log('Info: ' + JSON.stringify(ConstantValues.customer)),
           console.log('Stored Mobile No. is:' + ConstantValues.customerPhoneNo),
-          // this.storeToken(),
-          // this.storeCustomerId(),
-          this.storeData(),
+
+           this.storeData(),
           // this.props.navigation.navigate('Register', { mobile: mobile }),
           this.props.navigation.navigate('Profile', { mobile: mobile })
         )
@@ -81,43 +80,19 @@ export default class otpVerify extends Component {
     }
   }
 
-  storeData =  async () => {
-    let keys = [['x-authtoken', ConstantValues.token],['customerId', ConstantValues.customerId]]
+  storeData = async () => {
     try {
-     await  AsyncStorage.multiSet(keys,()=>{
-      console.log('Stored this token to the local storage : ' + keys)
-     })
-      //  AsyncStorage.setItem('customerId', ConstantValues.customerId)
-      
-     
-      // console.log('Stored this customerId to the local storage : ' + ConstantValues.customerId)
-    } catch (e) {
-      console.log(e)
+      let storedObject = {};
+      storedObject.userToken = ConstantValues.token;
+      storedObject.customerId = ConstantValues.customerId;
+      await AsyncStorage.setItem('userInfo', JSON.stringify(storedObject));
+      console.log('Storing this in local storage' + JSON.stringify(storedObject))
+    } catch (error) {
+      console.log('Error in storing asyncstorage: ' + error)
     }
   }
 
-  ///storing auth token
-  storeToken =  async () => {
-    try {
-     await  AsyncStorage.setItem('x-authtoken', ConstantValues.token)
-      //  AsyncStorage.setItem('customerId', ConstantValues.customerId)
-      
-      console.log('Stored this token to the local storage : ' + ConstantValues.token)
-      // console.log('Stored this customerId to the local storage : ' + ConstantValues.customerId)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-   //storing customerId
-   storeCustomerId = async () => {
-    try {
-      await AsyncStorage.setItem('customerId', ConstantValues.customerId)
-      console.log('Stored this customerId to the local storage : ' + ConstantValues.customerId)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-  // await AsyncStorage.setItem('customerId', ConstantValues.customerId)
+  
 
   ////setting timer for resending otp
   activateResend = () => {

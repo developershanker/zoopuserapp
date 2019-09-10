@@ -15,19 +15,7 @@ import orderApi from '../orderBooking/orderApi.js';
 export default class PaymentPage extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    var that = this;
-
-    var date = new Date().getDate(); //Current Date
-    var month = new Date().getMonth() + 1; //Current Month
-    var year = new Date().getFullYear(); //Current Year
-    var hours = new Date().getHours(); //Current Hours
-    var min = new Date().getMinutes(); //Current Minutes
-    var sec = new Date().getSeconds(); //Current Seconds
-
-    that.setState({
-      date : date + '/' + month + '/' + year,
-      time :  hours + ':' + min + ':' + sec
-    })
+   
   }
   constructor(props) {
     super(props);
@@ -35,14 +23,14 @@ export default class PaymentPage extends Component {
       value: 'Paytm',
       codActive: false,
       checked: false,
-      date : '',
-      time : ''
+      
     };
   }
   async orderBooking() {
     try {
       let response = await orderApi.orderBooking();
       if (response.status == true) {
+           ConstantValues.zoopOrderId = response.data.orderId 
         return(
           ToastAndroid.show('!! Order Placed Successfully !!',ToastAndroid.LONG),
            this.props.navigation.navigate('OrderConfirm')
@@ -60,25 +48,23 @@ export default class PaymentPage extends Component {
       ConstantValues.paymentMode = 'Cash On Delivery'
       ConstantValues.paymentType = 'COD'
       ConstantValues.refNo = 'N.A'
-      ConstantValues.orderDate = this.state.date
-      ConstantValues.orderTime = this.state.time
-      ConstantValues.paymentDetails = [{
-        'paymentMode' : ConstantValues.paymentMode,
+      ConstantValues.paymentDetails = {
+        'referenceNo' : ConstantValues.refNo,
+        //'paymentMode' : ConstantValues.paymentMode,
         'paymentType' : ConstantValues.paymentType,
-        'payableAmount' : ConstantValues.totalPayableAmount
-      }]
+        //'payableAmount' : ConstantValues.totalPayableAmount
+      }
       this.orderBooking()
     } else {
       ConstantValues.paymentMode = 'PayTm'
       ConstantValues.paymentType = 'Pre-paid'
       ConstantValues.refNo = ''
-      ConstantValues.orderDate = this.state.date
-      ConstantValues.orderTime = this.state.time
-      ConstantValues.paymentDetails = [{
-        'paymentMode' : ConstantValues.paymentMode,
+      ConstantValues.paymentDetails = {
+        'referenceNo' : ConstantValues.refNo,
+        //'paymentMode' : ConstantValues.paymentMode,
         'paymentType' : ConstantValues.paymentType,
-        'payableAmount' : ConstantValues.totalPayableAmount
-      }]
+       // 'payableAmount' : ConstantValues.totalPayableAmount
+      }
       this.orderBooking()
     }
   

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TextInput, Linking, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList, Image } from 'react-native';
+import { View, TextInput, Linking, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList} from 'react-native';
 import servicesApi from './servicesApi';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';

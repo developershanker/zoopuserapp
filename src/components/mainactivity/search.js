@@ -10,13 +10,15 @@ import DeliveryMark from '../postOrderActivity/deliveryMark';
 import ConstantValues from '../constantValues';
 import { Fade } from '../assests/fade';
 import Autocomplete from 'react-native-autocomplete-input';
+import loginApi from '../login/loginApi.js';
 
 
 
 export default class Search extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    this.showTrain()
+    this.showTrain(),
+      this.onRegister()
   }
   constructor(props) {
     super(props);
@@ -28,6 +30,33 @@ export default class Search extends Component {
       query: '',
       trains: [],
     };
+  }
+
+  async onRegister() {
+    try {
+      let response = await loginApi.getUserRegister();
+      console.log('data received in register.js : ' + JSON.stringify(response))
+      ConstantValues.loginCount = response.data.loginCount
+      this.state.loginCount = response.data.loginCount
+      ConstantValues.customerPhoneNo = response.data.mobile
+      ConstantValues.customerName = response.data.fullName
+      this.setState({
+        name: ConstantValues.customerName
+      })
+      console.log('ConstantValues.customerName :' + ConstantValues.customerName)
+      ConstantValues.customerEmailId = response.data.email
+      this.setState({
+        emailId: ConstantValues.customerEmailId
+      })
+      ConstantValues.customeralternateMobile = response.data.alternateMobile
+      this.setState({
+        altmobile: ConstantValues.customeralternateMobile
+      })
+
+
+    } catch (error) {
+      console.log('Data received in register.js catch: ' + error)
+    }
   }
 
 
@@ -61,147 +90,153 @@ export default class Search extends Component {
           />
         </View>
       )
-    } 
+    }
     else if (value == 'Enter Train No.') {
       const { query } = this.state;
       const trains = this.findTrain(query);
-     // console.log('trains are' + trains)
+      // console.log('trains are' + trains)
       const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
 
-    return (
-      <View style={styles.inputViewD}>
-        <Autocomplete
-          autoCapitalize="none"
-          autoCorrect={false}
-          data={trains.length === 1 && comp(query, trains[0].trainNumberAndName) ? [] : trains}
-          defaultValue={query}
-          // listContainerStyle={styles.autocompleteContainer}
-          onChangeText={text => this.setState({ query: text })}
-          placeholder="Enter Train No."
-          renderItem={({ item }) => (
-            <View>
-              <ScrollView contentContainerStyle={styles.dropdown}>
-                <TouchableOpacity onPress={() => this.setState({
-                  query: item.trainNumberAndName,
-                  text: item.trainNumber
-                })}>
-                  <Text style={styles.itemText}>
-                    {item.trainNumberAndName}
-                  </Text>
-                </TouchableOpacity>
-              </ScrollView>
-            </View>
-          )}
-          keyExtractor={(item) => item.trainId.toString()}
-        />
-      </View>
-    )
-  }
-}
-
-
-
-
-async showTrain() {
-  try {
-    let response = await searchApi.showTrain();
-    // console.log('data received in search.js : ' + JSON.stringify(response))
-    if (response.status == true) {
-      // console.log('data : ' + JSON.stringify(response.data))
-      this.setState({
-        trains: response.data
-      })
-      // return (
-      //   ToastAndroid.show(response.message, ToastAndroid.LONG)
-      // )
-    } else {
       return (
-        ToastAndroid.show(response.error, ToastAndroid.LONG),
-        console.log(response.error)
+        <View style={styles.inputViewD}>
+          <Autocomplete
+            autoCapitalize="none"
+            autoCorrect={false}
+            data={trains.length === 1 && comp(query, trains[0].trainNumberAndName) ? [] : trains}
+            defaultValue={query}
+            // listContainerStyle={styles.autocompleteContainer}
+            onChangeText={text => this.setState({ query: text })}
+            placeholder="Enter Train No."
+            renderItem={({ item }) => (
+              <View>
+                <ScrollView contentContainerStyle={styles.dropdown}>
+                  <TouchableOpacity onPress={() => this.setState({
+                    query: item.trainNumberAndName,
+                    text: item.trainNumber
+                  })}>
+                    <Text style={styles.itemText}>
+                      {item.trainNumberAndName}
+                    </Text>
+                  </TouchableOpacity>
+                </ScrollView>
+              </View>
+            )}
+            keyExtractor={(item) => item.trainId.toString()}
+          />
+        </View>
       )
     }
-  } catch (error) {
-    console.log('Data received in search.js catch: ' + error)
   }
 
-}
-
-searchBy(text) {
-  ConstantValues.searchString = text,
-    console.log('ConstantValues.searchString is ....' + ConstantValues.searchString)
-  this.props.navigation.navigate('Station')
-}
-
-render() {
-
-  return (
-    <SafeAreaView>
-      <ScrollView>
-        <View style={styles.slide} >
-
-          <View>
-            <Image style={styles.image} source={require('../images/ad.png')} />
-          </View>
-          <Text style={{ fontFamily: 'Poppins-Bold', paddingHorizontal: 10, paddingVertical: 10 }}>Search By</Text>
-          <RadioButton.Group
-            onValueChange={value => this.setState({ value })}
-            value={this.state.value}
-          >
-            <View style={styles.radioButton}>
-
-              <RadioButton
-                value="Enter PNR"
-                color='#000000'
-              />
-              <Text style={styles.text}>PNR</Text>
 
 
-              <RadioButton
-                value="Enter Train No."
-                color='#000000'
-              // onPress={this.showTrain()}     
-              />
-              <Text style={styles.text}>Train No.</Text>
+
+  async showTrain() {
+    try {
+      let response = await searchApi.showTrain();
+      // console.log('data received in search.js : ' + JSON.stringify(response))
+      if (response.status == true) {
+        // console.log('data : ' + JSON.stringify(response.data))
+        this.setState({
+          trains: response.data
+        })
+        // return (
+        //   ToastAndroid.show(response.message, ToastAndroid.LONG)
+        // )
+      } else {
+        return (
+          ToastAndroid.show(response.error, ToastAndroid.LONG),
+          console.log(response.error)
+        )
+      }
+    } catch (error) {
+      console.log('Data received in search.js catch: ' + error)
+    }
+
+  }
+
+  searchBy(text) {
+    if (text != '') {
+      ConstantValues.searchString = text,
+        console.log('ConstantValues.searchString is ....' + ConstantValues.searchString)
+      this.props.navigation.navigate('Station')
+    } else {
+      return (
+        ToastAndroid.show('Invalid Input', ToastAndroid.LONG)
+      )
+    }
+
+  }
+
+  render() {
+
+    return (
+      <SafeAreaView>
+        <ScrollView>
+          <View style={styles.slide} >
+
+            <View>
+              <Image style={styles.image} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.home }} />
             </View>
-          </RadioButton.Group>
-          <View style={styles.input}>
-
-          </View>
-          <View style={styles.main}>
-            {this.trainList(this.state.value)}
-         
-            <CustomButton
-              onPress={() => {
-                // this.showTrain(),
-                this.searchBy(this.state.text)
-                // this.props.navigation.navigate('Station')
-              }}
-              title='Search'
-            />
-          </View>
-          <CustomGridIcon
-          />
-
-          <View style={styles.scroll}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              alwaysBounceHorizontal={true}
-              contentContainerStyle={styles.contentContainer}
+            <Text style={{ fontFamily: 'Poppins-Bold', paddingHorizontal: 10, paddingVertical: 10 }}>Search By</Text>
+            <RadioButton.Group
+              onValueChange={value => this.setState({ value })}
+              value={this.state.value}
             >
-              <Image style={styles.img} source={require('../images/promo.png')} />
-              <Image style={styles.img} source={require('../images/promo1.png')} />
-              <Image style={styles.img} source={require('../images/promo4.jpg')} />
-              <Image style={styles.img} source={require('../images/promo5.png')} />
-              <Image style={styles.img} source={require('../images/promo1.png')} />
-            </ScrollView>
+              <View style={styles.radioButton}>
+
+                <RadioButton
+                  value="Enter PNR"
+                  color='#000000'
+                />
+                <Text style={styles.text}>PNR</Text>
+
+
+                <RadioButton
+                  value="Enter Train No."
+                  color='#000000'
+                // onPress={this.showTrain()}     
+                />
+                <Text style={styles.text}>Train No.</Text>
+              </View>
+            </RadioButton.Group>
+            <View style={styles.input}>
+
+            </View>
+            <View style={styles.main}>
+              {this.trainList(this.state.value)}
+
+              <CustomButton
+                onPress={() => {
+                  // this.showTrain(),
+                  this.searchBy(this.state.text)
+                  // this.props.navigation.navigate('Station')
+                }}
+                title='Search'
+              />
+            </View>
+            <CustomGridIcon
+            />
+
+            <View style={styles.scroll}>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                alwaysBounceHorizontal={true}
+                contentContainerStyle={styles.contentContainer}
+              >
+                <Image style={styles.img} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.banner1 }} />
+                <Image style={styles.img} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.banner2 }} />
+                <Image style={styles.img} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.banner3 }} />
+                <Image style={styles.img} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.banner4 }} />
+              </ScrollView>
+            </View>
           </View>
-        </View>
-      </ScrollView>
-      {/* <DeliveryMark/> */}
-    </SafeAreaView>
-  );
-}
+        </ScrollView>
+        {/* <DeliveryMark/> */}
+      </SafeAreaView>
+    );
+  }
 
 }
 const styles = StyleSheet.create({
@@ -225,14 +260,16 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   img: {
-    width: Dimensions.get('window').width - 120,
+    width: Dimensions.get('window').width,
     height: 150,
-    marginLeft: 5
+    marginLeft: 5,
+    flexWrap: 'wrap'
   },
   image: {
     width: Dimensions.get('window').width,
     height: 150,
-    marginLeft: 5
+    flexWrap: 'wrap'
+    // marginLeft: 5
 
   },
   contentContainer: {
@@ -254,7 +291,7 @@ const styles = StyleSheet.create({
     borderColor: '#9B9B9B',
     borderWidth: 2,
     paddingVertical: 5,
-    
+
   },
   inputViewD: {
     marginLeft: 5,

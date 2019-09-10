@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TextInput, Linking, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList, Image } from 'react-native';
+import { View, TextInput, Linking, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList , Image} from 'react-native';
 import servicesApi from './servicesApi';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -7,6 +7,7 @@ import Icons from 'react-native-vector-icons/FontAwesome5';
 import { SafeAreaView } from 'react-navigation';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import ConstantValues from '../constantValues';
+// import Image from 'react-native-remote-svg';
 
 export default class contact extends Component {
 

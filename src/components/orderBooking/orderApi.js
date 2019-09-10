@@ -29,9 +29,9 @@ export default class orderApi extends Component {
                     option.body = JSON.stringify(body);
                 }
             }
-            else if (method == 'GET') {
-                apiUrl += '?' + qs.stringify(body);
-            }
+            // else if (method == 'GET') {
+            //     apiUrl += '?' + qs.stringify(body);
+            // }
 
 
 
@@ -60,44 +60,12 @@ export default class orderApi extends Component {
             const body = {}
             body['customerId'] = ConstantValues.customerId
             body['outletId'] = ConstantValues.outletId
+            body['source'] = 'APP'
             body['items'] = ConstantValues.inCart
-            //    body['billDetail'] = ConstantValues.billDetail
-            //    body['passengerDetail'] = ConstantValues.passengerDetail
-            //    body['paymentDetail'] = ConstantValues.paymentDetails
+            body['billDetail'] = ConstantValues.billDetail
+            body['passengerDetail'] = ConstantValues.passengerDetail
+            body['paymentDetail'] = ConstantValues.paymentDetails
 
-            // sending billdetail
-
-            body['totalBasePrice'] = ConstantValues.totalBasePrice,
-            body['deliveryCharges'] = ConstantValues.deliveryCharge,
-            body['discount'] = ConstantValues.couponValue,
-            body['couponId'] = ConstantValues.couponId,
-            body['couponCode'] = ConstantValues.couponCode,
-            body['couponValue'] = ConstantValues.couponValue,
-            body['walletBalanceUsed'] = ConstantValues.walletBalanceUsed,
-            body['gst'] = ConstantValues.gst
-            body['totalPayableAmount'] = ConstantValues.totalPayableAmount
-
-            //sending passengerDetail
-
-            body['pnr'] = ConstantValues.pnr,
-            body['seat'] = ConstantValues.seat,
-            body['coach'] = ConstantValues.coach,
-            body['eta'] = ConstantValues.eta,
-            body['orderDate'] = ConstantValues.orderDate
-            body['orderTime'] = ConstantValues.orderTime
-            body['stationid'] = ConstantValues.stationId,
-            body['stationName'] = ConstantValues.stationName,
-            body['passengerName'] = ConstantValues.customerName,
-            body['contactNo.'] = ConstantValues.customerPhoneNo,
-            body['customeralternateMobile'] = ConstantValues.customeralternateMobile,
-            body['customerEmailId'] = ConstantValues.customerEmailId
-            body['suggestions'] = ConstantValues.suggestions
-
-            //sending PaymentPage
-            body['refNo'] = ConstantValues.refNo
-            body['paymentMode'] = ConstantValues.paymentMode
-            body['payableAmount'] = ConstantValues.totalPayableAmount
-            //body['paymentType'] = ConstantValues.paymentType
 
 
 
@@ -110,6 +78,28 @@ export default class orderApi extends Component {
             console.log(response)
 
             return Promise.resolve(response)
+
+        } catch (error) {
+            console.log('Data received in orderApi.js catch: ' + error)
+            return Promise.reject(error)
+        }
+    }
+
+    static async orderHistory() {
+        try {
+            //url
+            const apiUrl = 'orders/history/' + ConstantValues.customerId
+
+            //headers
+            const headers = {}
+            headers['x-auth-token'] = ConstantValues.token
+
+            //calling api for response
+            const response = await this.apiCall(apiUrl, 'GET', {}, headers)
+            console.log(response)
+
+            return Promise.resolve(response)
+
 
         } catch (error) {
             console.log('Data received in orderApi.js catch: ' + error)

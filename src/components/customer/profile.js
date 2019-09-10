@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, ToastAndroid , PermissionsAndroid  } from 'react-native';
-import { CustomButton } from '../assests/customButtonShort.js';
+import {Picker, View,Text, StyleSheet, TextInput, ToastAndroid , PermissionsAndroid  } from 'react-native';
+import { CustomButton } from '../assests/customButtonLarge.js';
 import SplashScreen from 'react-native-splash-screen';
 import CustomTouchableOpacity from '../assests/customTouchableOpacity';
 import loginApi from '../login/loginApi.js';
@@ -12,6 +12,7 @@ export default class Profile extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.onRegister();
+    this.requestGetAccountPermission()
   }
   constructor(props) {
     super(props);
@@ -89,11 +90,36 @@ export default class Profile extends Component {
       console.log('Data received in profile.js catch: ' + error)
     }
   }
+
+  async requestGetAccountPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.GET_ACCOUNTS,
+        {
+          title: 'ZoopIndia Account Permission',
+          message:
+            'Automatically get device account',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Getting Device Accounts');
+      } else {
+        console.log('Account permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  }
+
   render() {
     const visible = this.state.loginCount == 1 ? true : false
     return (
       <View style={styles.slide}>
         <Text style={styles.heading}> My Profile </Text>
+        <View style = {styles.card}>
         <TextInput style={styles.input}
           placeholder='Full Name'
           value={this.state.name}
@@ -121,9 +147,12 @@ export default class Profile extends Component {
             onChangeText={referredBy => this.setState({ referredBy })}
           />
         </Fade>
+
+        </View>
         <CustomButton
           title="Submit"
-          color="#1abc9c"
+          disabled={ this.state.name.length == 0 ? true : false}
+          style={{ backgroundColor:  this.state.name.length == 0 ? '#9b9b9b' : '#1fc44e', alignSelf: 'center', marginBottom: 20, }}
           onPress={() => {
             this.isEmpty(this.state.name, this.state.emailId, this.state.altmobile, this.state.referredBy)
             // this.props.navigation.navigate('Search')
@@ -165,8 +194,21 @@ const styles = StyleSheet.create({
     width: '80%',
     marginBottom: 5,
     fontSize: 20,
+    paddingHorizontal:10,
     fontFamily: 'Poppins-SemiBold'
-  }
+  },
+  card: {
+    backgroundColor: '#ffffff',//can change as we move to various pages
+    marginBottom: 10,//can change as we move to various pages
+    marginLeft: '2%', //can change as we move to various pages
+    width: '96%', //can change as we move to various pages
+    borderColor: '#e4e4e4',
+    borderRadius: 100 / 9,
+    borderWidth: 1,
+    shadowOpacity: 0.4,
+    borderBottomColor: '#e4e4e4',
+    borderBottomWidth: 4,
+  },
 })
 
 
