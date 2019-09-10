@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity, TextInput,ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity, TextInput, ToastAndroid } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -12,7 +12,21 @@ import { CheckBox } from 'react-native-elements';
 export default class passengerDetail extends Component {
   componentDidMount() {
     SplashScreen.hide();
-   // this.getSeatInfo()
+    // this.getSeatInfo()
+    var that = this;
+
+    var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    var hours = new Date().getHours(); //Current Hours
+    var min = new Date().getMinutes(); //Current Minutes
+    var sec = new Date().getSeconds(); //Current Seconds
+
+    that.setState({
+      //  date : date + '/' + month + '/' + year,
+      date: year + '-' + month + '-' + date,
+      time: hours + ':' + min + ':' + sec
+    })
   }
   constructor(props) {
     super(props);
@@ -25,7 +39,9 @@ export default class passengerDetail extends Component {
       addMessage: '',
       skipSms: false,
       skipIrctc: false,
-      skipPnr: false
+      skipPnr: false,
+      date: '',
+      time: ''
     };
   }
 
@@ -63,29 +79,38 @@ export default class passengerDetail extends Component {
     this.savePassengerDetail()
     {
       this.props.navigation.navigate('PaymentPage'),
-      { altMobileNo: this.state.altMobileNo }
+        { altMobileNo: this.state.altMobileNo }
     }
   }
-      
-     savePassengerDetail = () => {
-       ConstantValues.passengerDetail = [{
-         'pnr' : ConstantValues.pnr,
-         'seat' : ConstantValues.seat,
-         'eta' : ConstantValues.eta,
-         'stationid' : ConstantValues.stationId,
-         'stationName' : ConstantValues.stationName,
-         'passengerName' : ConstantValues.customerName,
-         'contactNo.' : ConstantValues.customerPhoneNo,
-         'customeralternateMobile' : ConstantValues.customeralternateMobile,
-         'customerEmailId' : ConstantValues.customerEmailId,
-         'suggestions' : ConstantValues.suggestions = this.state.addMessage
-       }]
-     }
-    
-  
-  
-  
-      render() {
+
+  savePassengerDetail = () => {
+    ConstantValues.orderDate = this.state.date
+    ConstantValues.orderTime = this.state.time
+    ConstantValues.passengerDetail = {
+      'pnr': ConstantValues.pnr,
+      'berth': ConstantValues.seat,
+      'coach': ConstantValues.coach,
+      'eta': ConstantValues.eta,
+      'deliveryDate': ConstantValues.deliveryDate,
+      'deliveryTime': ConstantValues.deliveryTime,
+      'trainId': ConstantValues.trainId,
+      //  'orderDate' : ConstantValues.orderDate,
+      //  'orderTime' : ConstantValues.orderTime,
+      'stationId': ConstantValues.stationId,
+      'stationCode': ConstantValues.stationCode,
+      //'stationName' : ConstantValues.stationName,
+      'passengerName': ConstantValues.customerName,
+      'passengerMobile': ConstantValues.customerPhoneNo,
+      'passengeAlternateMobile': ConstantValues.customeralternateMobile,
+      'passengerEmail': ConstantValues.customerEmailId,
+      'suggestions': ConstantValues.suggestions = this.state.addMessage
+    }
+  }
+
+
+
+
+  render() {
     return (
       <SafeAreaView style={styles.slide}>
         <ScrollView>
@@ -107,7 +132,7 @@ export default class passengerDetail extends Component {
                   style={styles.input}
                   placeholder='Enter PNR'
                   editable={this.state.pnrEditable}
-                  value = {ConstantValues.searchString.length == 10 ? ConstantValues.searchString : this.state.enterPnr}
+                  value={ConstantValues.searchString.length == 10 ? ConstantValues.searchString : this.state.enterPnr}
                   keyboardType='number-pad'
                   maxLength={10}
                   onChangeText={enterPnr => this.setState({ enterPnr })}
@@ -143,7 +168,7 @@ export default class passengerDetail extends Component {
                     placeholder='Passenger`s Alt. Contact No.'
                     editable={true}
                     keyboardType='number-pad'
-                    value={ConstantValues.customeralternateMobile == '' ? this.state.altMobileNo : ConstantValues.customeralternateMobile }
+                    value={ConstantValues.customeralternateMobile == '' ? this.state.altMobileNo : ConstantValues.customeralternateMobile}
                     autoCapitalize='none'
                     onChangeText={altMobileNo => this.setState({ altMobileNo })}
                   />

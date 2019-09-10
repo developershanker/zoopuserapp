@@ -17,7 +17,7 @@ export default class Cart extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.getCartItems(ConstantValues.inCart)
-    // this.getWalletInfo()
+    this.getWalletInfo()
     this.billDetail()
 
     // this.changeCode(ConstantValues.couponCode)
@@ -147,7 +147,8 @@ export default class Cart extends Component {
     })
     if (this.state.walletUsed == true) {
       return (
-        ConstantValues.discount = 50,
+        ConstantValues.walletBalanceUsed = 50,
+        // ConstantValues.discount = 50,
         this.setState({
           discount: 50
         })
@@ -155,7 +156,8 @@ export default class Cart extends Component {
       // console.log('On this.state.walletUsed == true..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
     } else if (this.state.walletUsed == false) {
       return (
-        ConstantValues.discount = 0,
+        // ConstantValues.discount = 0,
+        ConstantValues.walletBalanceUsed = 50,
         this.setState({
           discount: 50
         })
@@ -212,17 +214,19 @@ export default class Cart extends Component {
     console.log('items are : ' + ConstantValues.inCart)
   }
   billDetail = () => {
-    ConstantValues.billDetail = [{
-      'totalBasePrice': ConstantValues.totalBasePrice,
-      'deliveryCharges': ConstantValues.deliveryCharge,
+    ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
+    ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst,
+    ConstantValues.billDetail = {
+      'totalAmount': ConstantValues.totalBasePrice,
+      'deliveryCharge': ConstantValues.deliveryCharge,
       'discount': ConstantValues.couponValue,
       'couponId': ConstantValues.couponId,
       'couponCode': ConstantValues.couponCode,
       'couponValue': ConstantValues.couponValue,
-      'walletBalanceUsed': ConstantValues.walletBalanceUsed,
-      'gst': ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
-      'totalPayableAmount': ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst
-    }]
+      'walletAmount': ConstantValues.walletBalanceUsed,
+      'gst': (ConstantValues.gst).toFixed(2),
+      'totalPayableAmount': (ConstantValues.totalPayableAmount).toFixed(2)
+    }
     console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
   }
   render() {
@@ -309,8 +313,9 @@ export default class Cart extends Component {
                       <CheckBox
                         // title='Use Wallet Balance'
                         checked={this.state.walletUsed}
-                        onPress={() => {
-                          this.walletUsed()
+                        onPress={() => { 
+                          //this.walletUsed()
+                          walletUsed => this.setState({ walletUsed })
                         }}
                       />
                       <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', }}>Use Zoop Wallet</Text>
@@ -378,12 +383,12 @@ export default class Cart extends Component {
                     </View>
                     <View style={styles.tile}>
                       <Text style={styles.tiletext}>Add GST 5%</Text>
-                      <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.gst}</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.gst).toFixed(2)}</Text>
                     </View>
 
                     <View style={styles.tile}>
                       <Text style={styles.tiletext}>To Pay</Text>
-                      <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.totalPayableAmount}</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
                     </View>
 
                   </View>

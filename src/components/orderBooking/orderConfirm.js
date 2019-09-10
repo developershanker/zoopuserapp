@@ -4,6 +4,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { CustomButton } from '../assests/customButtonLarge.js';
+import ConstantValues from '../constantValues.js';
 
 export default class OrderConfirm extends Component {
   componentDidMount() {
@@ -56,6 +57,7 @@ export default class OrderConfirm extends Component {
               </View>
               <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Bold' }}>Your Order has been placed successfully</Text>
+                <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Bold' }}>Zoop Order Id : {ConstantValues.zoopOrderId}</Text>
                 <Text style={{ fontSize: 20, color: '#FF3D00', fontFamily: 'Poppins-Bold' }}>Enjoy the meal :)</Text>
               </View>
               <View style={{ justifyContent: 'center', alignItems: 'center' }}>

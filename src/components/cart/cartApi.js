@@ -100,17 +100,17 @@ export default class cartApi {
     static billDetail = () => {
         ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
         ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst
-        ConstantValues.billDetail = [{
-            'totalBasePrice': ConstantValues.totalBasePrice,
-            'deliveryCharges': ConstantValues.deliveryCharge,
+        ConstantValues.billDetail = {
+            'totalAmount': ConstantValues.totalBasePrice,
+            'deliveryCharge': ConstantValues.deliveryCharge,
             'discount': ConstantValues.couponValue,
             'couponId': ConstantValues.couponId,
             'couponCode': ConstantValues.couponCode,
             'couponValue': ConstantValues.couponValue,
-            'walletBalanceUsed': ConstantValues.walletBalanceUsed,
+            'walletAmount': ConstantValues.walletBalanceUsed,
             'gst': (ConstantValues.gst).toFixed(2),
             'totalPayableAmount': (ConstantValues.totalPayableAmount).toFixed(2)
-        }]
+        }
         console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
     }
     

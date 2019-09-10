@@ -55,6 +55,7 @@ import PlatformLocator from '../services/platformLocator';
 import { createStackNavigator, createAppContainer, createDrawerNavigator, createSwitchNavigator } from "react-navigation";
 import { Footer } from 'native-base';
 import { Fade } from '../assests/fade.js';
+import ConstantValues from '../constantValues.js';
 
 
 
@@ -136,7 +137,7 @@ class HeaderIcon extends Component {
   render() {
     return (
       <View>
-        <Image source={require('../images/zooplogoorange.png')}
+        <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
           style={{ width: 50, height: 30 }}
         />
       </View>
@@ -151,7 +152,7 @@ const CustomDrawerComponent = (props) => (
       <View style={{ backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center', paddingVertical: 20 }}>
         <Image
           style={{ width: 150, height: 60 }}
-          source={require('../images/zooplogoorange.png')}
+          source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
         ></Image>
       </View>
 
@@ -504,17 +505,17 @@ const AppNavigator = createStackNavigator({
 
 
 );
-export default createAppContainer(AppNavigator);
+// export default createAppContainer(AppNavigator);
 // export default createAppContainer(DrawerNavigator);
-// export default createAppContainer(
-//   createSwitchNavigator(
-//     {
-//       AuthLoading: AuthLoadingScreen,
-//       App: AppNavigator,
-//       Auth: AuthStack,
-//     },
-//     {
-//       initialRouteName: 'AuthLoading',
-//     }
-//   )
-// );
+export default createAppContainer(
+  createSwitchNavigator(
+    {
+      AuthLoading: AuthLoadingScreen,
+      App: AppNavigator,
+      Auth: AuthStack,
+    },
+    {
+      initialRouteName: 'AuthLoading',
+    }
+  )
+);

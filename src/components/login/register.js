@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text,Button,StyleSheet,TextInput,ToastAndroid} from 'react-native';
+import {View, Text,Button,StyleSheet,TextInput,ToastAndroid} from 'react-native';
 // import RNAccountKit from 'react-native-facebook-account-kit';
 import { CustomButton } from '../assests/customButtonShort.js';
 import CustomTouchableOpacity from '../assests/customTouchableOpacity';
@@ -59,7 +59,6 @@ export default class Register extends Component {
       console.log( 'Data received in register.js catch: '+ error)
     }
  }
-
   render() {
     const { navigation } = this.props;
     const mobile = navigation.getParam('mobile','');
