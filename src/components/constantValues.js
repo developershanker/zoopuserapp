@@ -3,9 +3,9 @@ import Device from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 export default class ConstantValues {
-  static apiUrl = 'https://appapi.zoopindia.in/'
+ // static apiUrl = 'https://appapi.zoopindia.in/'
 //  static apiUrl = 'http://13.126.232.146:3000/'
- // static apiUrl = 'http://10.5.48.206:3000/'
+  static apiUrl = 'http://10.5.48.206:3000/'
   // http://10.5.48.206:3000/ local          //http://13.126.232.146:3000/ main
   static customer = { name: '', mobileNo: '' }
   static customerName = ''
@@ -72,6 +72,7 @@ export default class ConstantValues {
   static paymentMode = '' //paytm   cod   payu
   static paymentType = ''  //online //cod
   static refNo = ''
+  static paymentTypeId = ''
   static paymentDetails = []
 
   //cart management module
@@ -89,6 +90,7 @@ export default class ConstantValues {
   static deliveryCharge = 0
   static totalPayableAmount = 0
   static inCart = []
+  static finalCart =[]
   static billDetail = []
 
   //zoopsocials

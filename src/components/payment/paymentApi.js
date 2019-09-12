@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { View, Dimensions, StyleSheet, Clipboard, Button, ScrollView, Image, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
 import ConstantValues from '../constantValues.js';
+import qs from 'qs';
 
 
+const baseURL = ConstantValues.apiUrl
 export default class paymentApi extends Component {
     static async apiCall(apiUrl, method, body = {}, headers = {}) {
         try {
