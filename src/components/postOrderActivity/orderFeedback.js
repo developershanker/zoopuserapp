@@ -69,7 +69,7 @@ export default class OrderFeedback extends Component {
                     style={styles.bottomModal}
                 >
                     <View style={styles.modalView}>
-                        <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => this.setState({ visibleModal: null })}>
+                        <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => {this.setState({ visibleModal: null }),this.props.navigation.navigate('Search')}}>
                             <Icon name={'times-circle'} style={{ alignSelf: 'flex-end' }} size={20} />
                         </TouchableOpacity>
                         <View>

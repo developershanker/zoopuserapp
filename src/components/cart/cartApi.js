@@ -77,7 +77,7 @@ export default class cartApi {
             const body = {}
             body['customerId'] = ConstantValues.customerId
             body['outletId'] = ConstantValues.outletId
-            body['items'] = ConstantValues.inCart
+            body['items'] = ConstantValues.finalCart
             body['billDetail'] = ConstantValues.billDetail
 
             //headers
@@ -114,4 +114,8 @@ export default class cartApi {
         console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
     }
     
+    static resetCart = () => {
+        ConstantValues.inCart = []
+        ConstantValues.finalCart = []
+    }
 }

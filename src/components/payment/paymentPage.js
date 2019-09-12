@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Picker, ToastAndroid, Text, Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity, CheckBox } from 'react-native';
+import { View, Picker, ToastAndroid, Text, Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity, CheckBox, FlatList } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -11,65 +11,103 @@ import BillDetailCard from '../cart/billDetailCard.js';
 import { RadioButton } from 'react-native-paper';
 import { Fade } from '../assests/fade.js';
 import orderApi from '../orderBooking/orderApi.js';
+import paymentApi from '../payment/paymentApi.js';
 
 export default class PaymentPage extends Component {
   componentDidMount() {
     SplashScreen.hide();
-   
+    this.getPaymentInfo()
+
   }
   constructor(props) {
     super(props);
     this.state = {
-      value: 'Paytm',
+      value: 0,
       codActive: false,
       checked: false,
-      
+      paymentTypes: [],
+      paymentTypeName: '',
+      paymentTypeId: ''
     };
   }
   async orderBooking() {
     try {
       let response = await orderApi.orderBooking();
       if (response.status == true) {
-           ConstantValues.zoopOrderId = response.data.orderId 
-        return(
-          ToastAndroid.show('!! Order Placed Successfully !!',ToastAndroid.LONG),
-           this.props.navigation.navigate('OrderConfirm')
+        ConstantValues.zoopOrderId = response.data.orderId
+        return (
+          ToastAndroid.show('!! Order Placed Successfully !!', ToastAndroid.LONG),
+          this.props.navigation.navigate('OrderConfirm')
         )
       } else {
-        ToastAndroid.show('Oops!! Something went wrong!!',ToastAndroid.LONG)
-      } 
+        ToastAndroid.show('Oops!! Something went wrong!!', ToastAndroid.LONG)
+      }
     } catch (error) {
-      console.log('Data received in menu.js catch: ' + error)
+      console.log('Data received in paymentPage.js catch: ' + error)
+    }
+  }
+  async getPaymentInfo() {
+
+    try {
+      let response = await paymentApi.paymentTypes();
+      if (response.status == true) {
+        this.setState({
+          paymentTypes: response.data
+        })
+        console.log('Data received in paymentPage.js response: ' + JSON.stringify(this.state.paymentTypes))
+      } else {
+        ToastAndroid.show('Oops!! Something went wrong!!', ToastAndroid.LONG)
+      }
+    } catch (error) {
+      console.log('Data received in paymentPage.js catch: ' + error)
     }
   }
 
-  paymentDetails = () => {
-    if (this.state.codActive == true) {
-      ConstantValues.paymentMode = 'Cash On Delivery'
-      ConstantValues.paymentType = 'COD'
-      ConstantValues.refNo = 'N.A'
-      ConstantValues.paymentDetails = {
-        'referenceNo' : ConstantValues.refNo,
-        //'paymentMode' : ConstantValues.paymentMode,
-        'paymentType' : ConstantValues.paymentType,
-        //'payableAmount' : ConstantValues.totalPayableAmount
-      }
-      this.orderBooking()
-    } else {
-      ConstantValues.paymentMode = 'PayTm'
-      ConstantValues.paymentType = 'Pre-paid'
-      ConstantValues.refNo = ''
-      ConstantValues.paymentDetails = {
-        'referenceNo' : ConstantValues.refNo,
-        //'paymentMode' : ConstantValues.paymentMode,
-        'paymentType' : ConstantValues.paymentType,
-       // 'payableAmount' : ConstantValues.totalPayableAmount
-      }
-      this.orderBooking()
-    }
-  
-    
+
+  setPaymentInfo = (item) => {
+    this.setState({
+      paymentTypeName: item.paymentTypeName,
+      paymentTypeId: item.paymentTypeId
+    })
+    console.log('paymentTypeName : ' + this.state.paymentTypeName + '\n' + 'paymentTypeId :' + this.state.paymentTypeId)
+    console.log('item.paymentTypeName : ' + item.paymentTypeName + '\n' + 'item.paymentTypeId :' + item.paymentTypeId)
   }
+
+
+  paymentDetails = () => {
+    // if (this.state.codActive == true) {
+    //   ConstantValues.paymentType = this.state.paymentTypeName
+    //   ConstantValues.paymentTypeId = this.state.paymentTypeId
+    //   ConstantValues.refNo = 'N.A'
+    //   ConstantValues.paymentDetails = {
+    //     'referenceNo' : ConstantValues.refNo,
+    //     'paymentType' : ConstantValues.paymentType,
+    //     'paymentTypeId':ConstantValues.paymentTypeId
+    //   }
+    //   this.orderBooking()
+    // } else {
+    //   ConstantValues.paymentType = this.state.paymentTypeName
+    //   ConstantValues.paymentTypeId = this.state.paymentTypeId
+    //   ConstantValues.refNo = ''
+    //   ConstantValues.paymentDetails = {
+    //     'referenceNo' : ConstantValues.refNo,
+    //     'paymentType' : ConstantValues.paymentType,
+    //     'paymentTypeId':ConstantValues.paymentTypeId
+    //   }
+    //   this.orderBooking()
+    ConstantValues.paymentType = this.state.paymentTypeName,
+      ConstantValues.paymentTypeId = this.state.paymentTypeId,
+      ConstantValues.refNo = '',
+      ConstantValues.paymentDetails = {
+        'referenceNo': ConstantValues.refNo,
+        'paymentType': ConstantValues.paymentType,
+        'paymentTypeId': ConstantValues.paymentTypeId
+      },
+      this.orderBooking()
+
+  }
+
+
 
   render() {
     const { navigation } = this.props;
@@ -111,7 +149,29 @@ export default class PaymentPage extends Component {
               <View style={{ width: Dimensions.get('window').width - 10, alignItems: 'center', paddingVertical: 10 }}>
                 <Text style={{ fontSize: 20, fontFamily: 'Poppins-Bold' }}>Choose Payment Mode</Text>
               </View>
-              <RadioButton.Group
+
+
+
+              <FlatList
+                data={this.state.paymentTypes}
+                extraData={this.state}
+                renderItem={({ item }) =>
+
+                  <View style={{ flexDirection: 'column', alignItems: 'flex-start', marginHorizontal: 20 }}>
+                    <View style={styles.paytmView}>
+                      <TouchableOpacity onPress={() => { this.setPaymentInfo(item) }}>
+                        <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Bold' }}>{item.paymentTypeName == 'Prepaid' ? 'Pay through Paytm' : 'Cash On Delivery'}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                }
+                keyExtractor={(item) => item.paymentTypeId.toString()}
+              />
+
+
+
+              {/* <RadioButton.Group
                 onValueChange={value => this.setState({ value })}
                 value={this.state.value}
               >
@@ -141,7 +201,7 @@ export default class PaymentPage extends Component {
                     </View>
                   </Fade>
                 </View>
-              </RadioButton.Group>
+              </RadioButton.Group> */}
               <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
                 <CheckBox
                   value={this.state.checked}
@@ -158,9 +218,9 @@ export default class PaymentPage extends Component {
 
           </View>
           <CustomButton
-            disabled = {this.state.checked == false ? true : false }
+            disabled={this.state.checked == false ? true : false}
             style={{ backgroundColor: this.state.checked == false ? '#9b9b9b' : '#1fc44e', alignSelf: 'center', }}
-            onPress={() => this.paymentDetails() }
+            onPress={() => this.paymentDetails()}
             title='Proceed To Pay'
           />
         </ScrollView>

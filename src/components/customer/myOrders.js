@@ -37,9 +37,9 @@ export default class myOrders extends Component {
   async orderHistory() {
     try {
       let response = await orderApi.orderHistory();
-      if (response.status == true){
+      if (response.status == true) {
         this.setState({
-          orderHistory : response.data
+          orderHistory: response.data
         })
       }
     } catch (error) {
@@ -66,29 +66,29 @@ export default class myOrders extends Component {
               <FlatList
                 data={this.state.orderHistory}
                 extraData={this.state}
-                renderItem={({item}) =>
+                renderItem={({ item }) =>
                   <View>
-                  <TouchableOpacity>
-                    <View style={styles.card}>
-                      <View style={styles.tile}>
-                        <Text style={styles.tiletext}>Ordered On</Text>
-                        <Text style={styles.tiletext}>{item.deliveryDate}</Text>
+                    <TouchableOpacity onPress={() => { this.props.navigation.navigate('DeliveryMark') }}>
+                      <View style={styles.card}>
+                        <View style={styles.tile}>
+                          <Text style={styles.tiletext}>Ordered On</Text>
+                          <Text style={styles.tiletext}>{item.deliveryDate}</Text>
+                        </View>
+                        <View style={styles.tile}>
+                          <Text style={styles.tiletext}>Item</Text>
+                          <Text style={styles.tiletext}>{item.item}</Text>
+                        </View>
+                        <View style={styles.tile}>
+                          <Text style={styles.tiletext}>Total Amount</Text>
+                          <Text style={[styles.tiletext, { color: '#1fc44e' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
+                        </View>
+                        <View style={styles.tile}>
+                          <Text style={[styles.tiletext, { color: item.status == 'Upcoming' ? '#1fc44e' : '#000000' }]}>{item.status}</Text>
+                          <Text style={[styles.tiletext, { color: '#f15926' }]}>Repeat Order</Text>
+                        </View>
                       </View>
-                      <View style={styles.tile}>
-                        <Text style={styles.tiletext}>Item</Text>
-                        <Text style={styles.tiletext}>{item.item}</Text>
-                      </View>
-                      <View style={styles.tile}>
-                        <Text style={styles.tiletext}>Total Amount</Text>
-                        <Text style={[styles.tiletext, { color: '#1fc44e' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
-                      </View>
-                      <View style={styles.tile}>
-                        <Text style={[styles.tiletext, { color: item.status =='Upcoming' ? '#1fc44e' : '#000000' }]}>{item.status}</Text>
-                        <Text style={[styles.tiletext, { color: '#f15926' }]}>Repeat Order</Text>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
+                    </TouchableOpacity>
+                  </View>
                 }
                 keyExtractor={(item) => item.orderId.toString()}
               />

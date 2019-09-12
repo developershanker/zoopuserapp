@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, Switch, Image, SectionList, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, Switch, Image, SectionList, ScrollView, TouchableOpacity, ActivityIndicator,BackHandler , Alert} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -9,6 +9,7 @@ import { Fade } from '../assests/fade.js';
 import Modal from "react-native-modal";
 import menuApi from './menuApi.js';
 import ConstantValues from '../constantValues.js';
+import cartApi from '../cart/cartApi.js';
 
 
 
@@ -16,6 +17,7 @@ export default class Menu extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.getMenu()
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress',this.handleBackPress);    
   }
 
   constructor(props) {
@@ -32,39 +34,99 @@ export default class Menu extends Component {
       totalPrice: 0,
       RecommendedMenuInfo: [],
       OutletMenuInfo: [],
-      inCart: []
+      inCart: [],
+      totalCartCount: 0
     };
   }
+  handleBackPress = () => {
+    return (
+      Alert.alert(
+        'Confirm!!',
+        'Are you sure you want to go back? All items from the cart will be removed.',
+        [// { text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+          {
+            text: 'NO',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'YES', onPress: () => {
+              cartApi.resetCart();
+              console.log('ConstantValues.inCart : ' + ConstantValues.inCart + '\n' + 'ConstantValues.finalCart : ' + ConstantValues.finalCart)
+              return true
+            }
+          },
+        ],
+        { cancelable: false },
+      )
+    )
+  }
 
-  addItemToCart = (item) => {
+  addItemToCart = (item, index) => {
+    let itemId = item.itemId
+    let inCart = this.state.inCart
+
     item.itemCount = item.itemCount + 1
     this.setState({
       count: item.itemCount
     }
     )
-    this.state.totalPrice = item.sellingPrice
+    // this.state.totalCartCount += item.itemCount 
+    this.state.totalPrice += item.sellingPrice  //price adding calculation
     ConstantValues.totalBasePrice = this.state.totalPrice
-    this.state.inCart.push(item)
-    // console.log('incart items are  : ' + JSON.stringify(item))
-    // console.log('incart items are [when added] : ' + JSON.stringify(this.state.inCart))
+    let idx = this.state.inCart.findIndex(i => { return i.itemId == item.itemId })
+    console.log('idx items are  : ' + idx)
+    if (idx > -1) {
+      this.state.inCart[idx].itemCount = this.state.inCart[idx].itemCount + 1;
+    } else {
+      this.state.inCart.push(Object.assign({}, item))
+    }
+    console.log('incart items are [when added] : ' + JSON.stringify(this.state.inCart))
     // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
     ConstantValues.inCart = this.state.inCart
-   // console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
+    this.cartCalculate(item)
+    //console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
   }
 
 
-  removeItemFromCart = (item) => {
+
+
+  removeItemFromCart = (item, index) => {
+    let itemId = item.itemId
+    let inCart = this.state.inCart
 
     item.itemCount = item.itemCount - 1
     this.setState({
       count: item.itemCount
     }
     )
-    this.state.inCart.pop(item)
-    // console.log('incart items are [when removed] : ' + JSON.stringify(this.state.inCart))
-    // console.log('incart item.itemCount when ---- : ' + item.itemCount)
+
+    this.state.totalPrice -= item.sellingPrice //price calculation
+    ConstantValues.totalBasePrice = this.state.totalPrice
+    let idx = this.state.inCart.findIndex(i => { return i.itemId == item.itemId })
+    console.log('idx items are  : ' + idx)
+    if (idx > -1) {
+      if (this.state.inCart[idx].itemCount == 1) {
+        this.state.inCart.splice(idx)
+      } else {
+        this.state.inCart[idx].itemCount = this.state.inCart[idx].itemCount - 1;
+        this.state.totalCartCount -= item.itemCount
+      }
+    }
+    console.log('incart items are [when removed] : ' + JSON.stringify(this.state.inCart))
+    // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
     ConstantValues.inCart = this.state.inCart
-   // console.log('ConstantValues.incart items are [when removed] : ' + JSON.stringify(ConstantValues.inCart))
+    this.cartCalculate(item)
+    //console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
+  }
+
+  cartCalculate = (item) => {
+    let totalCartCount = 0
+    this.state.inCart.forEach(i => {
+      totalCartCount = totalCartCount + i.itemCount
+    })
+    this.state.totalCartCount = totalCartCount
+    console.log('totalCartCount is :  ' + totalCartCount)
   }
 
   FlatListItemSeparator = () => {
@@ -127,7 +189,7 @@ export default class Menu extends Component {
 
             <View style={styles.topContainer}>
               <Text style={styles.outletName}> {ConstantValues.outletName} </Text>
-              <Text style={{ fontFamily:'Poppins-Bold', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
+              <Text style={{ fontFamily: 'Poppins-Bold', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
               <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
                 <Text>Veg. Only</Text>
                 <Switch />
@@ -136,10 +198,10 @@ export default class Menu extends Component {
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Image style={{ width: 30, height: 15 }} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.fssai}} />
-                  <Text style={{ fontSize: 10, fontFamily:'Poppins-Bold' }}>Lic No. {this.state.fssaiNo}</Text>
+                  <Image style={{ width: 30, height: 15 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.fssai }} />
+                  <Text style={{ fontSize: 10, fontFamily: 'Poppins-Bold' }}>Lic No. {this.state.fssaiNo}</Text>
                 </View>
-                <Text style={{ fontSize: 10, fontFamily:'Poppins-Bold', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
+                <Text style={{ fontSize: 10, fontFamily: 'Poppins-Bold', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
               </View>
 
 
@@ -150,17 +212,17 @@ export default class Menu extends Component {
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginLeft: 20 }}>
                     <View style={{ flexDirection: 'row' }}>
                       <Icon name='star' size={15} color='#ff9214' />
-                      <Text style={{ fontFamily:'Poppins-Bold' }}> {ConstantValues.outletRating} </Text>
+                      <Text style={{ fontFamily: 'Poppins-Bold' }}> {ConstantValues.outletRating} </Text>
                     </View>
-                    <Text style={{ fontFamily:'Poppins-Bold' }}>Rating</Text>
+                    <Text style={{ fontFamily: 'Poppins-Bold' }}>Rating</Text>
                   </View>
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10 }}>
-                    <Text style={{ fontFamily:'Poppins-Bold' }}>{ConstantValues.rupee} {ConstantValues.minimumOrderValue}</Text>
-                    <Text style={{ fontFamily:'Poppins-Bold' }}>Min. Order</Text>
+                    <Text style={{ fontFamily: 'Poppins-Bold' }}>{ConstantValues.rupee} {ConstantValues.minimumOrderValue}</Text>
+                    <Text style={{ fontFamily: 'Poppins-Bold' }}>Min. Order</Text>
                   </View>
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginRight: 20 }}>
-                    <Text style={{ fontFamily:'Poppins-Bold' }}>{ConstantValues.haltTime}</Text>
-                    <Text style={{ fontFamily:'Poppins-Bold' }}>Halt Time</Text>
+                    <Text style={{ fontFamily: 'Poppins-Bold' }}>{ConstantValues.haltTime}</Text>
+                    <Text style={{ fontFamily: 'Poppins-Bold' }}>Halt Time</Text>
                   </View>
 
                 </View>
@@ -176,18 +238,18 @@ export default class Menu extends Component {
           {/*  MENU ITEM STYLES{GRID} */}
           <View style={{ width: Dimensions.get('window').width }}>
             <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-              <Text style={{ fontSize: 20, fontFamily:'Poppins-Bold', color: '#000000' }}>Recommended Items</Text>
+              <Text style={{ fontSize: 20, fontFamily: 'Poppins-Bold', color: '#000000' }}>Recommended Items</Text>
               <Image style={{ alignSelf: 'center', height: 15 }} source={require('../images/line.png')} />
             </View>
             <FlatList
               style={{ width: Dimensions.get('window').width }}
-              data={this.state.RecommendedMenuInfo}
+              data={this.state.OutletMenuInfo}
               extraData={this.state}
               renderItem={({ item, index }) =>
                 <View>
                   <View style={styles.menuGridCardContainer}>
                     <View>
-                      <Image style={styles.itemImage} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.menu}} />
+                      <Image style={styles.itemImage} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.menu }} />
                       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Icons name={'carrot'} size={15} color={item.categoryType == 'Veg' ? '#1e8728' : '#eb0909'} />
                         <Text style={styles.itemName}>{item.itemName}</Text>
@@ -198,18 +260,18 @@ export default class Menu extends Component {
                         <View>
                           {/* Adding item to cart button */}
                           <View
-                            style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }} key={index}>
-                            <TouchableOpacity onPress={() => { this.addItemToCart(item) }} disabled={item.itemCount == 0 ? false : true}>
+                            style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 10, borderWidth: 1 }} key={index}>
+                            <TouchableOpacity onPress={() => { this.addItemToCart(item, index) }} disabled={item.itemCount == 0 ? false : true}>
                               <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={() => { this.removeItemFromCart(item) }} disabled={item.itemCount == 0 ? true : false}>
                                   <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
                                 </TouchableOpacity>
 
-                                <Text style={{ fontFamily:'Poppins-Bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
+                                <Text style={{ fontFamily: 'Poppins-Bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
 
 
                                 <TouchableOpacity onPress={() => {
-                                  this.addItemToCart(item)
+                                  this.addItemToCart(item, index)
                                 }}>
                                   <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='plus' size={15} color='#1e8728' />
                                 </TouchableOpacity>
@@ -267,7 +329,7 @@ export default class Menu extends Component {
           {/* Headerhighlighter ends */}
 
           {/* MENU ITEM STYLES{LIST} */}
-          <View style={{ width: Dimensions.get('window').width }}>
+          {/* <View style={{ width: Dimensions.get('window').width }}>
             <FlatList
               style={{ margin: 10 }}
               ItemSeparatorComponent={this.FlatListItemSeparator}
@@ -281,24 +343,24 @@ export default class Menu extends Component {
               //   </View>
               // )}
               // Section Item rendering
-              renderItem={({ item }) => (
+              renderItem={({ item ,index }) => (
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 10 }}>
                   <View style={{ width: Dimensions.get('window').width - 200 }}>
                     <View style={{ flexDirection: 'row' }}>
                       <Icons name={'carrot'} size={15} color={item.categoryType == 'Veg' ? '#1e8728' : '#eb0909'} />
-                      <Text style={{ fontSize: 15, color: '#000000' }}>{item.itemName}</Text>
+                      <Text style={{ fontSize: 15, color: '#000000', fontFamily : 'Poppins-Bold'}}>{item.itemName}</Text>
                     </View>
-                    <Text style={{ fontSize: 15, color: '#000000' }}>{ConstantValues.rupee} {item.sellingPrice}</Text>
-                    <Text style={{ fontSize: 10, color: '#c7c3c3' }}>{item.itemDescription}</Text>
+                    <Text style={{ fontSize: 15, color: '#000000',fontFamily : 'Poppins-SemiBold' }}>{ConstantValues.rupee} {item.sellingPrice}</Text>
+                    <Text style={{ fontSize: 10, color: '#c7c3c3',fontFamily : 'Poppins-Regular' }}>{item.itemDescription}</Text>
                   </View>
                   <View>
 
 
                     <View
-                      style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }}>
-                      <TouchableOpacity onPress={() => { this.addItemToCart(item), this.state.totalPrice = item.sellingPrice }} disabled={item.itemCount == 0 ? false : true}>
+                      style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius:  100 / 10, borderWidth : 1 }}>
+                      <TouchableOpacity onPress={() => { this.addItemToCart(item,index), this.state.totalPrice = item.sellingPrice }} disabled={item.itemCount == 0 ? false : true}>
                         <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
-                          <TouchableOpacity onPress={() => { this.removeItemFromCart(item) }} disabled={item.itemCount == 0 ? true : false}>
+                          <TouchableOpacity onPress={() => { this.removeItemFromCart(item,index) }} disabled={item.itemCount == 0 ? true : false}>
                             <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
                           </TouchableOpacity>
 
@@ -306,7 +368,7 @@ export default class Menu extends Component {
 
 
                           <TouchableOpacity onPress={() => {
-                            this.addItemToCart(item)
+                            this.addItemToCart(item,index)
                           }}>
                             <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='plus' size={15} color='#1e8728' />
                           </TouchableOpacity>
@@ -323,7 +385,7 @@ export default class Menu extends Component {
 
               keyExtractor={item => item.itemId.toString()}
             />
-          </View>
+          </View> */}
         </ScrollView>
         {/* Floating FAB starts */}
         <View >
@@ -336,7 +398,7 @@ export default class Menu extends Component {
         {/*  Footer  */}
         <Fade visible={visible}>
           <TouchableOpacity onPress={() => {
-            
+
             this.props.navigation.navigate('Cart', {
               count: this.state.inCart.length,
               totalPrice: this.state.totalPrice
@@ -346,10 +408,10 @@ export default class Menu extends Component {
             <View style={[styles.footer]}>
 
               <View style={styles.itemCountShow}>
-                <Text style={{ marginLeft: 5, fontSize: 20, fontFamily:'Poppins-Bold', color: '#ffffff' }}>{this.state.inCart.length} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.rupee}{this.state.totalPrice}</Text>
+                <Text style={{ marginLeft: 5, fontSize: 20, fontFamily: 'Poppins-Bold', color: '#ffffff' }}>{this.state.totalCartCount} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.rupee}{this.state.totalPrice}</Text>
               </View>
               <View style={styles.viewcart}>
-                <Text style={{ marginRight: 5, fontSize: 20, fontFamily:'Poppins-Bold', color: '#ffffff' }}>VIEW CART</Text>
+                <Text style={{ marginRight: 5, fontSize: 20, fontFamily: 'Poppins-Bold', color: '#ffffff' }}>VIEW CART</Text>
                 <Icon name={'shopping-bag'} color={'#ffffff'} size={20} />
               </View>
             </View>
@@ -377,7 +439,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     fontSize: 20,
     color: '#000000',
-    fontFamily:'Poppins-Bold',
+    fontFamily: 'Poppins-Bold',
   },
   card: {
     width: Dimensions.get('window').width,
@@ -400,7 +462,7 @@ const styles = StyleSheet.create({
   // OFFER BOARD STYLES
   offerText: {
     color: '#ffffff',
-    fontFamily:'Poppins-Bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: 15
   },
   offerboard: {
@@ -452,7 +514,7 @@ const styles = StyleSheet.create({
     borderRadius: 100 / 5,
   },
   itemName: {
-    fontFamily:'Poppins-Bold',
+    fontFamily: 'Poppins-Bold',
     fontSize: 15,
   },
   footer: {

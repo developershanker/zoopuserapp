@@ -47,16 +47,6 @@ export default class Cart extends Component {
     })
     console.log('revisedInCart is' + JSON.stringify(this.state.revisedInCart))
   }
-  // incrementCounter = () => {
-  //   this.setState({
-  //     count: this.state.count + 1
-  //   })
-  // }
-  // decrementCounter = () => {
-  //   this.setState({
-  //     count: this.state.count - 1
-  //   })
-  // }
   addItemToCart = (item) => {
     item.itemCount = item.itemCount + 1
     this.setState({
@@ -200,33 +190,32 @@ export default class Cart extends Component {
       console.log('Data received in cart.js catch: ' + error)
     }
   }
-  items = () => {
-
+  items = () => { ConstantValues.finalCart = []
     this.state.revisedInCart.map((item) =>
-      ConstantValues.inCart = [{
+      ConstantValues.finalCart.push({
         'itemId': item.itemId,
         'itemName': item.itemName,
         'sellingPrice': item.sellingPrice,
         'quantity': item.itemCount,
         'itemTimes': item.itemTimes
-      }]
+      })
     )
-    console.log('items are : ' + ConstantValues.inCart)
+    console.log('items are : ' + ConstantValues.finalCart)
   }
   billDetail = () => {
     ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
-    ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst,
-    ConstantValues.billDetail = {
-      'totalAmount': ConstantValues.totalBasePrice,
-      'deliveryCharge': ConstantValues.deliveryCharge,
-      'discount': ConstantValues.couponValue,
-      'couponId': ConstantValues.couponId,
-      'couponCode': ConstantValues.couponCode,
-      'couponValue': ConstantValues.couponValue,
-      'walletAmount': ConstantValues.walletBalanceUsed,
-      'gst': (ConstantValues.gst).toFixed(2),
-      'totalPayableAmount': (ConstantValues.totalPayableAmount).toFixed(2)
-    }
+      ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst,
+      ConstantValues.billDetail = {
+        'totalAmount': ConstantValues.totalBasePrice,
+        'deliveryCharge': ConstantValues.deliveryCharge,
+        'discount': ConstantValues.couponValue,
+        'couponId': ConstantValues.couponId,
+        'couponCode': ConstantValues.couponCode,
+        'couponValue': ConstantValues.couponValue,
+        'walletAmount': ConstantValues.walletBalanceUsed,
+        'gst': (ConstantValues.gst).toFixed(2),
+        'totalPayableAmount': (ConstantValues.totalPayableAmount).toFixed(2)
+      }
     console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
   }
   render() {
@@ -256,6 +245,18 @@ export default class Cart extends Component {
             {/* Selected Items list */}
             <View>
               <View style={styles.card}>
+                <Fade visible={this.state.revisedInCart.length == 0 ? true : false}>
+                  <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <Text>Cart Is Empty</Text>
+                    <CustomButton
+                      title='Add Items'
+                      onPress={() => {
+                        this.props.navigation.navigate('Menu'),
+                          cartApi.resetCart()
+                      }}
+                    />
+                  </View>
+                </Fade>
                 <FlatList
                   style={{ width: Dimensions.get('window').width }}
                   data={this.state.revisedInCart}
@@ -265,6 +266,7 @@ export default class Cart extends Component {
                       <Icons name={'carrot'} size={15} color={item.categoryType == 'Veg' ? '#1e8728' : '#eb0909'} />
                       <Text>{item.itemName}</Text>
                       {/* Adding item to cart button */}
+
 
                       <View
                         style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }}>
@@ -313,7 +315,7 @@ export default class Cart extends Component {
                       <CheckBox
                         // title='Use Wallet Balance'
                         checked={this.state.walletUsed}
-                        onPress={() => { 
+                        onPress={() => {
                           //this.walletUsed()
                           walletUsed => this.setState({ walletUsed })
                         }}
