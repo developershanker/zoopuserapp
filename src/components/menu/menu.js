@@ -17,7 +17,7 @@ export default class Menu extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.getMenu()
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress',this.handleBackPress);    
+    //this.backHandler = BackHandler.addEventListener('hardwareBackPress',this.handleBackPress);    
   }
 
   constructor(props) {
@@ -38,29 +38,29 @@ export default class Menu extends Component {
       totalCartCount: 0
     };
   }
-  handleBackPress = () => {
-    return (
-      Alert.alert(
-        'Confirm!!',
-        'Are you sure you want to go back? All items from the cart will be removed.',
-        [// { text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-          {
-            text: 'NO',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {
-            text: 'YES', onPress: () => {
-              cartApi.resetCart();
-              console.log('ConstantValues.inCart : ' + ConstantValues.inCart + '\n' + 'ConstantValues.finalCart : ' + ConstantValues.finalCart)
-              return true
-            }
-          },
-        ],
-        { cancelable: false },
-      )
-    )
-  }
+  // handleBackPress = () => {
+  //   return (
+  //     Alert.alert(
+  //       'Confirm!!',
+  //       'Are you sure you want to go back? All items from the cart will be removed.',
+  //       [// { text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+  //         {
+  //           text: 'NO',
+  //           onPress: () => console.log('Cancel Pressed'),
+  //           style: 'cancel',
+  //         },
+  //         {
+  //           text: 'YES', onPress: () => {
+  //             cartApi.resetCart();
+  //             console.log('ConstantValues.inCart : ' + ConstantValues.inCart + '\n' + 'ConstantValues.finalCart : ' + ConstantValues.finalCart)
+  //             return true
+  //           }
+  //         },
+  //       ],
+  //       { cancelable: false },
+  //     )
+  //   )
+  // }
 
   addItemToCart = (item, index) => {
     let itemId = item.itemId
