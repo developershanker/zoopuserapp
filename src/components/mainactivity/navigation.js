@@ -25,6 +25,7 @@ import PassengerDetail from '../customer/passengerDetail.js';
 ///////------Payment Process Files-------//////
 import PaymentPage from '../payment/paymentPage.js';
 import PaymentPaytm from '../payment/paymentPaytm.js';
+import IrctcConfirmation from '../payment/irctcConfirmation.js';
 ///////------Order Process Files-------//////
 import OrderConfirm from '../orderBooking/orderConfirm.js';
 import DeliveryMark from '../postOrderActivity/deliveryMark.js';
@@ -445,6 +446,12 @@ const AppNavigator = createStackNavigator({
   },
   OrderFeedback: {
     screen: OrderFeedback,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  IrctcConfirmation: {
+    screen: IrctcConfirmation,
     navigationOptions: {
       header: null,
     }

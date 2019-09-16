@@ -28,17 +28,30 @@ export default class PaymentPage extends Component {
       paymentTypes: [],
       paymentTypeName: '',
       paymentTypeId: ''
+      // backgroundColor : ''
     };
   }
-  async orderBooking() {
+  async orderBooking(paymentType) {
     try {
       let response = await orderApi.orderBooking();
       if (response.status == true) {
         ConstantValues.zoopOrderId = response.data.orderId
-        return (
-          ToastAndroid.show('!! Order Placed Successfully !!', ToastAndroid.LONG),
-          this.props.navigation.navigate('OrderConfirm')
-        )
+        if (paymentType == 'Prepaid') {
+          return (
+
+           ToastAndroid.show('Requesting payment, please wait...', ToastAndroid.LONG),
+            this.props.navigation.navigate('PaymentPaytm')
+            // this.props.navigation.navigate('OrderConfirm')
+          )
+        } else {
+          return (
+
+            ToastAndroid.show('!! Order Placed Successfully !!', ToastAndroid.LONG),
+            // this.props.navigation.navigate('PaymentPaytm')
+            this.props.navigation.navigate('OrderConfirm')
+          )
+        }
+       
       } else {
         ToastAndroid.show('Oops!! Something went wrong!!', ToastAndroid.LONG)
       }
@@ -103,7 +116,7 @@ export default class PaymentPage extends Component {
         'paymentType': ConstantValues.paymentType,
         'paymentTypeId': ConstantValues.paymentTypeId
       },
-      this.orderBooking()
+      this.orderBooking(ConstantValues.paymentType)
 
   }
 
@@ -159,7 +172,7 @@ export default class PaymentPage extends Component {
 
                   <View style={{ flexDirection: 'column', alignItems: 'flex-start', marginHorizontal: 20 }}>
                     <View style={styles.paytmView}>
-                      <TouchableOpacity onPress={() => { this.setPaymentInfo(item) }}>
+                      <TouchableOpacity onPress={() => {this.setPaymentInfo(item)}}>
                         <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Bold' }}>{item.paymentTypeName == 'Prepaid' ? 'Pay through Paytm' : 'Cash On Delivery'}</Text>
                       </TouchableOpacity>
                     </View>

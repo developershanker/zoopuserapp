@@ -61,11 +61,47 @@ export default class paymentApi extends Component {
 
             return Promise.resolve(response)
 
-            
+
         } catch (error) {
             console.log('Data received in paymentApi.js catch: ' + error)
             return Promise.reject(error)
         }
     }
+
+    static async getChecksum(amount,orderId,customerId,callbackUrl) {
+        try {
+            //url
+            const apiUrl = 'payment-gateway'
+            //body
+            const body = {}
+            body['MID'] = ConstantValues.MID
+            body['WEBSITE'] = ConstantValues.WEBSITE
+            body['CHANNEL_ID'] = ConstantValues.CHANNEL_ID
+            body['INDUSTRY_TYPE_ID'] = ConstantValues.INDUSTRY_TYPE_ID
+            body['TXN_AMOUNT'] =`${amount}`     //ConstantValues.totalPayableAmount
+            body['ORDER_ID'] = orderId    //ConstantValues.zoopOrderId
+            body['EMAIL'] = ConstantValues.customerEmailId
+            body['MOBILE_NO'] = ConstantValues.customerPhoneNo
+            body['CUST_ID'] = customerId        //ConstantValues.customerId
+            body['CALLBACK_URL'] = callbackUrl  //ConstantValues.CALLBACK_URL
+
+            //headers
+            const headers = {}
+            headers['x-auth-token'] = ConstantValues.token
+            //calling api for response
+            const response = await this.apiCall(apiUrl, 'POST', body, headers)
+            console.log(response)
+
+            return Promise.resolve(response)
+        } catch (error) {
+            console.log('Data received in paymentApi.js catch: ' + error)
+            return Promise.reject(error)
+        }
+    }
+
+    //gatewayResponse = ConstantValues.gatewayResponse
+    //paymentTransactionId = ConstantValues.txnId
+    //paymentStatus = ConstantValues.paymentStatus
+    //OrderId = ConstantValues.paymentOrderId
 }
 
