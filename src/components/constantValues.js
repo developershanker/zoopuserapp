@@ -74,6 +74,7 @@ export default class ConstantValues {
   static refNo = ''
   static paymentTypeId = ''
   static paymentDetails = []
+  static zooptransactionId = ''
 
     //ZoopWE12498126199605
   // <string name="merchant_key">klbGlV59135347348753</string>
@@ -90,7 +91,7 @@ static MID = 'FIjIdu58691666399235'
   static INDUSTRY_TYPE_ID = 'Retail' //Retail109
   static checkSum = ''
   static txnId = ''
-  static paymentOrderId = ''
+  static paymentOrderId = ''  // orderid which is pused from zoop to paytm
   static paymentStatus = true
   static gatewayResponse = {}
 

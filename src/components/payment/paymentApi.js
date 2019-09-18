@@ -26,9 +26,9 @@ export default class paymentApi extends Component {
                     option.body = JSON.stringify(body);
                 }
             }
-            else if (method == 'GET') {
-                apiUrl += '?' + qs.stringify(body);
-            }
+            // else if (method == 'GET') {
+            //     apiUrl += '?' + qs.stringify(body);
+            // }
 
 
 
@@ -99,9 +99,52 @@ export default class paymentApi extends Component {
         }
     }
 
-    //gatewayResponse = ConstantValues.gatewayResponse
-    //paymentTransactionId = ConstantValues.txnId
-    //paymentStatus = ConstantValues.paymentStatus
-    //OrderId = ConstantValues.paymentOrderId
+    static async paymentConfirmation(){
+        try {
+            //url
+            const apiUrl = 'orders/payments/' + ConstantValues.zoopOrderId
+            //body
+            const body = {}
+            body['paymentResponse'] = ConstantValues.gatewayResponse
+           // body['orderId'] = ConstantValues.zoopOrderId
+            body['transactionId'] = ConstantValues.zooptransactionId
+            body['referenceNo'] =  ConstantValues.txnId
+            body['status'] = ConstantValues.paymentStatus
+            
+            //headers
+            const headers = {}
+            headers['x-auth-token'] = ConstantValues.token
+            //calling api for response
+            const response = await this.apiCall(apiUrl, 'PUT', body, headers)
+            console.log(response)
+
+            return Promise.resolve(response)
+            
+        } catch (error) {
+            console.log('Data received in paymentApi.js catch: ' + error)
+            return Promise.reject(error)
+        }
+    }
+
+    static async getIrctc(){
+        try {
+            //url
+            const apiUrl = 'orders/irctc-status/' + ConstantValues.zoopOrderId
+
+            //headers
+            const headers = {}
+            headers['x-auth-token'] = ConstantValues.token
+            //calling api for response
+            const response = await this.apiCall(apiUrl, 'GET', {}, headers)
+            console.log(response)
+
+            return Promise.resolve(response)
+
+
+        } catch (error) {
+            console.log('Data received in paymentApi.js catch: ' + error)
+            return Promise.reject(error)
+        }
+    }
 }
 

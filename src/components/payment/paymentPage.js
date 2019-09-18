@@ -36,6 +36,7 @@ export default class PaymentPage extends Component {
       let response = await orderApi.orderBooking();
       if (response.status == true) {
         ConstantValues.zoopOrderId = response.data.orderId
+        ConstantValues.zooptransactionId = response.data.transactionId
         if (paymentType == 'Prepaid') {
           return (
 

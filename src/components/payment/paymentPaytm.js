@@ -6,7 +6,7 @@ export default class paymentPaytm extends Component {
   state = {
 
     // TXN_AMOUNT: ConstantValues.totalPayableAmount.toString(),
-    ORDER_ID: 'ZOOP' + ConstantValues.zoopOrderId,
+    ORDER_ID: ConstantValues.zooptransactionId,
     // INDUSTRY_TYPE_ID: 'Retail',
     CUST_ID: ConstantValues.customerId,
     // CHANNEL_ID: 'WEB',
@@ -25,7 +25,7 @@ export default class paymentPaytm extends Component {
     try {
       let response = JSON.parse(data.title)
       console.log('response : ' + JSON.stringify(response))
-      ConstantValues.gatewayResponse = JSON.stringify(response)
+      ConstantValues.gatewayResponse = response
       if (response.hasOwnProperty('RESPCODE')) {
         ConstantValues.txnId = response.TXNID
         ConstantValues.paymentOrderId = response.ORDERID
@@ -47,25 +47,6 @@ export default class paymentPaytm extends Component {
     } catch (error) {
       console.log('result : ' + JSON.stringify(data))
     }
-
-    // if (response.hasOwnProperty('RESPCODE')){
-    //   if ('01') {
-    //     ToastAndroid.show('Transaction Successful', ToastAndroid.BOTTOM)
-    //   } else {
-    //     ToastAndroid.show('OOPS!! something went wrong!!!', ToastAndroid.BOTTOM)
-    //   }
-    // }
-
-    // if (data.title == 'true') {
-    //   //handle successfull payment here
-    //   console.log('result if payment is true : ' + JSON.stringify(data))
-    //   ToastAndroid.show('Transaction Successful', ToastAndroid.BOTTOM)
-    //   // this.props.navigation.navigate('IrctcConfirmation')
-    // } else if (data.title == 'false') {
-    //   //handle failed payment here
-    //   console.log('result if payment is false: ' + JSON.stringify(data))
-    //   ToastAndroid.show('OOPS!! something went wrong!!!', ToastAndroid.BOTTOM)
-    // }
   }
 
   gotoIrctc = () => {

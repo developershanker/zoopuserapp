@@ -75,9 +75,11 @@ export default class cartApi {
             const apiUrl = 'add-to-cart'
             //body
             const body = {}
+            body['source'] = 'APP'
             body['customerId'] = ConstantValues.customerId
             body['outletId'] = ConstantValues.outletId
             body['items'] = ConstantValues.finalCart
+            body['passengerDetail'] = ConstantValues.passengerDetail
             body['billDetail'] = ConstantValues.billDetail
 
             //headers
