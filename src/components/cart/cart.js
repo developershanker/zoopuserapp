@@ -168,6 +168,7 @@ export default class Cart extends Component {
           },
           {
             text: 'YES', onPress: () => {
+              this.savePassengerDetail(),
               this.items(),
                 this.submitCart()
             }
@@ -218,6 +219,27 @@ export default class Cart extends Component {
       }
     console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
   }
+
+  savePassengerDetail = () => { 
+    ConstantValues.passengerDetail = {
+    'pnr': ConstantValues.pnr,
+    'berth': ConstantValues.seat,
+    'coach': ConstantValues.coach,
+    'eta': ConstantValues.eta,
+    'deliveryDate': ConstantValues.deliveryDate,
+    'deliveryTime': ConstantValues.deliveryTime,
+    'trainId': ConstantValues.trainId,
+    //  'orderDate' : ConstantValues.orderDate,
+    //  'orderTime' : ConstantValues.orderTime,
+    'stationId': ConstantValues.stationId,
+    'stationCode': ConstantValues.stationCode,
+    //'stationName' : ConstantValues.stationName,
+    'passengerName': ConstantValues.customerName,
+    'passengerMobile': ConstantValues.customerPhoneNo,
+    'passengeAlternateMobile': ConstantValues.customeralternateMobile,
+    'passengerEmail': ConstantValues.customerEmailId,
+    //'suggestions': ConstantValues.suggestions = this.state.addMessage
+  }}
   render() {
     const { navigation } = this.props;
     const count = navigation.getParam('count', '0');
@@ -270,9 +292,13 @@ export default class Cart extends Component {
 
                       <View
                         style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }}>
-                        <TouchableOpacity onPress={() => { this.addItemToCart(item), this.state.totalPrice = item.sellingPrice }} disabled={item.itemCount == 0 ? false : true}>
+                        <TouchableOpacity 
+                      // onPress={() => { this.addItemToCart(item), this.state.totalPrice = item.sellingPrice }} 
+                        disabled={item.itemCount == 0 ? false : true}>
                           <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
-                            <TouchableOpacity onPress={() => { this.removeItemFromCart(item) }} disabled={item.itemCount == 0 ? true : false}>
+                            <TouchableOpacity
+                            // onPress={() => { this.removeItemFromCart(item) }}
+                              disabled={item.itemCount == 0 ? true : false}>
                               <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
                             </TouchableOpacity>
 
@@ -280,7 +306,7 @@ export default class Cart extends Component {
 
 
                             <TouchableOpacity onPress={() => {
-                              this.addItemToCart(item)
+                              //this.addItemToCart(item)
                             }}>
                               <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='plus' size={15} color='#1e8728' />
                             </TouchableOpacity>

@@ -1,15 +1,17 @@
 import React, { Component } from "react";
-import { View, Text, ActivityIndicator, StyleSheet, Dimensions, } from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet, Dimensions, ToastAndroid } from "react-native";
 import SplashScreen from "react-native-splash-screen";
 import { SafeAreaView } from "react-navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Icons from "react-native-vector-icons/FontAwesome5";
 import { CustomButton } from "../assests/customButtonLarge.js";
 import ConstantValues from "../constantValues.js";
+import paymentApi from '../payment/paymentApi.js';
 
 export default class irctcConfirmation extends Component {
   componentDidMount() {
     SplashScreen.hide();
+    this.sendPaymentConfirmation()
   }
   constructor(props) {
     super(props);
@@ -20,6 +22,39 @@ export default class irctcConfirmation extends Component {
       irctc_text: "Getting Irctc Id, please wait...",
 
     };
+  }
+
+  async sendPaymentConfirmation() {
+    try {
+      let response = await paymentApi.paymentConfirmation();
+      if (response.status == true) {
+        console.log('data sent successfully...heading to IRCTC...')
+        this.getIrctcId()
+      }
+      else {
+        return (
+          ToastAndroid.show('Oops!! Something went wrong!!', ToastAndroid.LONG)
+        )
+      }
+    } catch (error) {
+      console.log('Data received in paymentPaytm.js catch: ' + error)
+    }
+  }
+
+  async getIrctcId() {
+    try {
+      let response = await paymentApi.getIrctc();
+      if (response.status == true) {
+        console.log('Got Irctc id...')
+
+      } else {
+        return (
+          ToastAndroid.show('Oops!! Something went wrong!!', ToastAndroid.LONG)
+        )
+      }
+    } catch (error) {
+      console.log('Data received in paymentPaytm.js catch: ' + error)
+    }
   }
 
   render() {
@@ -66,8 +101,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Dimensions.get('window').width - 5,
     marginLeft: 5,
-    justifyContent:'center',
-    alignContent:'center'
+    justifyContent: 'center',
+    alignContent: 'center'
   },
   text: {
     alignSelf: "center",
