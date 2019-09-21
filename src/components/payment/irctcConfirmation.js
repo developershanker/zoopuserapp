@@ -7,6 +7,7 @@ import Icons from "react-native-vector-icons/FontAwesome5";
 import { CustomButton } from "../assests/customButtonLarge.js";
 import ConstantValues from "../constantValues.js";
 import paymentApi from '../payment/paymentApi.js';
+import { Fade } from "../assests/fade.js";
 
 export default class irctcConfirmation extends Component {
   componentDidMount() {
@@ -20,7 +21,7 @@ export default class irctcConfirmation extends Component {
       payment_text: "Getting Payment Status, please wait...",
       processingirctc: true,
       irctc_text: "Getting Irctc Id, please wait...",
-
+      irctc_result_icon : ''
     };
   }
 
@@ -45,12 +46,21 @@ export default class irctcConfirmation extends Component {
     try {
       let response = await paymentApi.getIrctc();
       if (response.status == true) {
-        console.log('Got Irctc id...')
-
-      } else {
+        ConstantValues.irctcId = response.data.irctcOrderId      
+        console.log('Got Irctc id...' + ConstantValues.irctcId)
+        this.setState({
+          irctc_text : 'Your IRCTC ID is : ' + ConstantValues.irctcId,
+          processingirctc : false,
+          irctc_result_icon : 'check'
+        })
+      } else if(response.status == false) {
+        this.setState({
+          processingirctc : true,
+        })        
         return (
-          ToastAndroid.show('Oops!! Something went wrong!!', ToastAndroid.LONG)
+          ToastAndroid.show(response.error, ToastAndroid.LONG)
         )
+        // this.getIrctcId()
       }
     } catch (error) {
       console.log('Data received in paymentPaytm.js catch: ' + error)
@@ -79,11 +89,14 @@ export default class irctcConfirmation extends Component {
             <Text style={styles.text}> {ConstantValues.textPayment}</Text>
           </View>
           <View style={{ alignItems: "center", justifyContent: "center", paddingVertical: 20 }}>
-            <Text style={styles.text}> {ConstantValues.textIrctc}</Text>
+            <Text style={styles.text}> {this.state.irctc_text}</Text>
             <ActivityIndicator
               color={"#FF5819"}
               size={40}
-              animating={ConstantValues.irctcLoading} />
+              animating={this.state.processingirctc} />
+              <Fade visible={this.state.processingirctc == false}>
+              <Icons name={this.state.irctc_result_icon} size = {40} color={"#FF5819"}/>
+              </Fade>
           </View>
         </View>
         {/* <CustomButton
@@ -106,7 +119,7 @@ const styles = StyleSheet.create({
   },
   text: {
     alignSelf: "center",
-    fontSize: 15,
+    fontSize: 20,
     fontFamily: "Poppins-Bold",
     color: "#FF5819",
     paddingVertical: 10,

@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 
 
-export const CustomButton = (props) => {
+export const CustomButtonShort = (props) => {
     const { title = 'Enter', style = {}, textStyle = {}, onPress,disabled } = props;
 
     return (
@@ -15,19 +15,19 @@ export const CustomButton = (props) => {
 const styles = StyleSheet.create({
     button: {
         display: 'flex',
-        width: 100,
+        width: 150,
         height: 30,
         borderRadius: 5,
         justifyContent:'center',
         paddingVertical: 20,
         alignItems: 'center',
-        backgroundColor: '#f2c744',
-        shadowColor: '#f2c744',
+        backgroundColor: '#00c74f',
+        shadowColor: '#00c74f',
         shadowOpacity: 0.4,
         shadowOffset: { height: 10, width: 10 },
         shadowRadius: 20,
         margin: 10,
-        borderRadius: 50 / 2,
+        borderRadius: 5,
     },
     text: {
         fontSize: 16,

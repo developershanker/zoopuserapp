@@ -39,7 +39,7 @@ export default class myOrders extends Component {
       let response = await orderApi.orderHistory();
       if (response.status == true) {
         this.setState({
-          orderHistory: response.data
+          orderHistory: response.data.items
         })
       }
     } catch (error) {

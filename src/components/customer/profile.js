@@ -123,9 +123,9 @@ export default class Profile extends Component {
         <TextInput style={styles.input}
           placeholder='Full Name'
           value={this.state.name}
-          keyboardType='default'
+         // keyboardType='default'
           onChangeText={name => this.setState({ name })}
-          autoCapitalize="words"
+          autoCapitalize='words'
         />
         <TextInput style={styles.input}
           placeholder='Email id'

@@ -193,7 +193,7 @@ export default class passengerDetail extends Component {
                     style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Bold', }}
                     placeholder='Any request for the resturent? Please write here'
                     editable={true}
-                    keyboardType='default'
+                    //keyboardType='default'
                     autoCapitalize='sentences'
                     onChangeText={addMessage => this.setState({ addMessage })}
                   />

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "396659053380",
+    "firebase_url": "https://zoop-e2126.firebaseio.com",
+    "project_id": "zoop-e2126",
+    "storage_bucket": "zoop-e2126.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:396659053380:android:0a9cc326f99505a1e2fd11",
+        "android_client_info": {
+          "package_name": "com.zoop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "396659053380-7ifho4o9j20168ckpasgit5o41aptl21.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBzs0657kE9EjksH89i0RzaQB6BgNsius"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "396659053380-7ifho4o9j20168ckpasgit5o41aptl21.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
