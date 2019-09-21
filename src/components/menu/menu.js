@@ -72,7 +72,7 @@ export default class Menu extends Component {
     }
     )
     // this.state.totalCartCount += item.itemCount 
-    this.state.totalPrice += item.sellingPrice  //price adding calculation
+    this.state.totalPrice += item.basePrice  //price adding calculation
     ConstantValues.totalBasePrice = this.state.totalPrice
     let idx = this.state.inCart.findIndex(i => { return i.itemId == item.itemId })
     console.log('idx items are  : ' + idx)
@@ -101,7 +101,7 @@ export default class Menu extends Component {
     }
     )
 
-    this.state.totalPrice -= item.sellingPrice //price calculation
+    this.state.totalPrice -= item.basePrice //price calculation
     ConstantValues.totalBasePrice = this.state.totalPrice
     let idx = this.state.inCart.findIndex(i => { return i.itemId == item.itemId })
     console.log('idx items are  : ' + idx)
@@ -255,7 +255,7 @@ export default class Menu extends Component {
                         <Text style={styles.itemName}>{item.itemName}</Text>
                       </View>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginRight: 20 }}>
-                        <Text style={styles.itemName}>{ConstantValues.rupee} {item.sellingPrice}</Text>
+                        <Text style={styles.itemName}>{ConstantValues.rupee} {item.basePrice}</Text>
                         {/* Incrementor starts here */}
                         <View>
                           {/* Adding item to cart button */}
@@ -350,7 +350,7 @@ export default class Menu extends Component {
                       <Icons name={'carrot'} size={15} color={item.categoryType == 'Veg' ? '#1e8728' : '#eb0909'} />
                       <Text style={{ fontSize: 15, color: '#000000', fontFamily : 'Poppins-Bold'}}>{item.itemName}</Text>
                     </View>
-                    <Text style={{ fontSize: 15, color: '#000000',fontFamily : 'Poppins-SemiBold' }}>{ConstantValues.rupee} {item.sellingPrice}</Text>
+                    <Text style={{ fontSize: 15, color: '#000000',fontFamily : 'Poppins-SemiBold' }}>{ConstantValues.rupee} {item.basePrice}</Text>
                     <Text style={{ fontSize: 10, color: '#c7c3c3',fontFamily : 'Poppins-Regular' }}>{item.itemDescription}</Text>
                   </View>
                   <View>
@@ -358,7 +358,7 @@ export default class Menu extends Component {
 
                     <View
                       style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius:  100 / 10, borderWidth : 1 }}>
-                      <TouchableOpacity onPress={() => { this.addItemToCart(item,index), this.state.totalPrice = item.sellingPrice }} disabled={item.itemCount == 0 ? false : true}>
+                      <TouchableOpacity onPress={() => { this.addItemToCart(item,index), this.state.totalPrice = item.basePrice }} disabled={item.itemCount == 0 ? false : true}>
                         <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
                           <TouchableOpacity onPress={() => { this.removeItemFromCart(item,index) }} disabled={item.itemCount == 0 ? true : false}>
                             <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />

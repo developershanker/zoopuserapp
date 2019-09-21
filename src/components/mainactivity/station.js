@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Dimensions, View, ScrollView, Image, StyleSheet, ToastAndroid, SectionList, TouchableOpacity, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
+import { Text, Dimensions, View, ScrollView, Image, StyleSheet, ToastAndroid, SectionList, TouchableOpacity,TouchableWithoutFeedback, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 // import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
@@ -327,7 +327,7 @@ export default class station extends Component {
                         // } else {
                         return (
                           <View style={styles.outletContainer} key={index} >
-                            <TouchableOpacity style={styles.card}
+                            <TouchableWithoutFeedback style={styles.card}
                               // disabled = {!item.isVisible} 
                               onPress={() => {
                                 this.gotoMenu(
@@ -344,9 +344,10 @@ export default class station extends Component {
                                   item.expectedTime
                                 )
                               }}>
-                              <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.outlet }} style={styles.outletimage} />
+                                <View  style={styles.card}>
+                              <Image source={{ uri: outlets.outletImage }} style={styles.outletimage} />
                               <View style={styles.detail}>
-                                <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'column' }}>
                                   <Text style={styles.outletname}>
                                     {outlets.outletName}
                                   </Text>
@@ -355,7 +356,8 @@ export default class station extends Component {
                                       {outlets.outletRating}
                                     </Text>
                                   </View>
-                                </View>
+                                
+                                
                                 {/* {
                                 outlets.cuisines.map((cuisines, index) => {
                                   return (
@@ -371,8 +373,10 @@ export default class station extends Component {
                                 <Text style={styles.minorder}>
                                   Minimum Order: {ConstantValues.rupee} {outlets.minimumOrderValue}
                                 </Text>
+                                </View>
                               </View>
-                            </TouchableOpacity>
+                              </View>
+                            </TouchableWithoutFeedback>
                           </View>
                         )
                       }
@@ -520,6 +524,7 @@ const styles = StyleSheet.create({
   detail: {
     width: Dimensions.get('screen').width - 100,
     height: 120,
+    flexDirection:'row'
   },
   outletname: {
     paddingTop: 10,
@@ -534,7 +539,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 100 / 2,
     marginLeft: 10,
-    backgroundColor: '#f2c744'
+    backgroundColor: '#ff5819'
   },
   ratingView: {
     backgroundColor: '#30ba57',

@@ -6,13 +6,14 @@ export default class ConstantValues {
   static apiUrl = 'https://appapi.zoopindia.in/'
   //  static apiUrl = 'http://13.126.232.146:3000/'
   //static apiUrl = 'http://10.5.48.206:3000/'
-  // http://10.5.48.206:3000/ local          //http://13.126.232.146:3000/ main
+
   static customer = { name: '', mobileNo: '' }
   static customerName = ''
   static customeralternateMobile = ''
   static customerPhoneNo = ''
   static customerEmailId = ''
   static customerId = ''
+  static customerRefferalCode = ''
   static token = ''
   static isAgent = 0
   static loginCount = null
@@ -49,6 +50,7 @@ export default class ConstantValues {
   static outletRating = null
   static minimumOrderValue = null
   static suggestions = ''
+
 
   //passenger detail
   static pnr = ''

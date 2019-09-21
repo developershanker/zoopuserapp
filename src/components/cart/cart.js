@@ -11,6 +11,8 @@ import { Fade } from '../assests/fade.js';
 import walletApi from '../customer/walletApi.js';
 import { CheckBox } from 'react-native-elements';
 import cartApi from './cartApi.js';
+import AsyncStorage from '@react-native-community/async-storage';
+import firebase from 'react-native-firebase'
 
 
 export default class Cart extends Component {
@@ -47,32 +49,32 @@ export default class Cart extends Component {
     })
     console.log('revisedInCart is' + JSON.stringify(this.state.revisedInCart))
   }
-  addItemToCart = (item) => {
-    item.itemCount = item.itemCount + 1
-    this.setState({
-      count: item.itemCount
-    }
-    )
-    // this.state.totalPrice = item.sellingPrice
-    this.state.revisedInCart.push(item)
-    ConstantValues.inCart = this.state.revisedInCart
-    // console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
-  }
+  // addItemToCart = (item) => {
+  //   item.itemCount = item.itemCount + 1
+  //   this.setState({
+  //     count: item.itemCount
+  //   }
+  //   )
+  //   // this.state.totalPrice = item.sellingPrice
+  //   this.state.revisedInCart.push(item)
+  //   ConstantValues.inCart = this.state.revisedInCart
+  //   // console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
+  // }
 
 
-  removeItemFromCart = (item) => {
+  // removeItemFromCart = (item) => {
 
-    item.itemCount = item.itemCount - 1
-    this.setState({
-      count: item.itemCount
-    }
-    )
-    this.state.revisedInCart.pop(item)
-    // console.log('incart items are [when removed] : ' + JSON.stringify(this.state.inCart))
-    // console.log('incart item.itemCount when ---- : ' + item.itemCount)
-    ConstantValues.inCart = this.state.revisedInCart
-    //console.log('ConstantValues.incart items are [when removed] : ' + JSON.stringify(ConstantValues.inCart))
-  }
+  //   item.itemCount = item.itemCount - 1
+  //   this.setState({
+  //     count: item.itemCount
+  //   }
+  //   )
+  //   this.state.revisedInCart.pop(item)
+  //   // console.log('incart items are [when removed] : ' + JSON.stringify(this.state.inCart))
+  //   // console.log('incart item.itemCount when ---- : ' + item.itemCount)
+  //   ConstantValues.inCart = this.state.revisedInCart
+  //   //console.log('ConstantValues.incart items are [when removed] : ' + JSON.stringify(ConstantValues.inCart))
+  // }
 
   changeCode = (couponCode) => {
     if (couponCode == '') {
@@ -183,6 +185,7 @@ export default class Cart extends Component {
       let response = await cartApi.inCart();
       if (response.status == true) {
         ToastAndroid.show('Added to Cart', ToastAndroid.SHORT)
+        this.createNotificationChannel()
         this.props.navigation.navigate('PassengerDetail')
       } else {
         ToastAndroid.show('Something went wrong', ToastAndroid.LONG)
@@ -196,7 +199,19 @@ export default class Cart extends Component {
       ConstantValues.finalCart.push({
         'itemId': item.itemId,
         'itemName': item.itemName,
+        'itemDescription':item.itemDescription,
+        'categoryId':item.categoryId,
+        //billing details
+        'zoopPrice': item.zoopPrice,
+        'basePrice': item.basePrice,
+        'basePriceGstRate': item.basePriceGstRate,
+        'basePriceGst': item.basePriceGst,
         'sellingPrice': item.sellingPrice,
+        'deliveryCharge': item.deliveryCharge,
+        'deliveryChargeGstRate': item.deliveryChargeGstRate,
+        'deliveryChargeGst': item.deliveryChargeGst,
+        'basePrice' : item.basePrice,
+
         'quantity': item.itemCount,
         'itemTimes': item.itemTimes
       })
@@ -240,6 +255,18 @@ export default class Cart extends Component {
     'passengerEmail': ConstantValues.customerEmailId,
     //'suggestions': ConstantValues.suggestions = this.state.addMessage
   }}
+
+
+  createNotificationChannel = () => {
+    const channel = new firebase.notifications.Android.Channel(
+      'zoop-e2126',//fcm_FirebaseNotifiction_default_channel
+       'Zoop', //Demo app name
+        firebase.notifications.Android.Importance.High)
+            .setDescription('Zoop app description')
+            .setSound('sampleaudio.wav');
+        firebase.notifications().android.createChannel(channel);
+        console.log('channel id of fcm : ' + JSON.stringify(channel))
+  }
   render() {
     const { navigation } = this.props;
     const count = navigation.getParam('count', '0');
@@ -293,7 +320,7 @@ export default class Cart extends Component {
                       <View
                         style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }}>
                         <TouchableOpacity 
-                      // onPress={() => { this.addItemToCart(item), this.state.totalPrice = item.sellingPrice }} 
+                      // onPress={() => { this.addItemToCart(item)} 
                         disabled={item.itemCount == 0 ? false : true}>
                           <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
                             <TouchableOpacity
@@ -305,9 +332,11 @@ export default class Cart extends Component {
                             <Text style={{ fontWeight: 'bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
 
 
-                            <TouchableOpacity onPress={() => {
+                            <TouchableOpacity 
+                            //onPress={() => {
                               //this.addItemToCart(item)
-                            }}>
+                            //}}
+                            >
                               <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='plus' size={15} color='#1e8728' />
                             </TouchableOpacity>
 
@@ -316,7 +345,7 @@ export default class Cart extends Component {
                       </View>
 
                       {/* Adding item to cart button ends here */}
-                      <Text>{ConstantValues.rupee} {item.sellingPrice}</Text>
+                      <Text>{ConstantValues.rupee} {item.basePrice}</Text>
                     </View>
                   }
                   keyExtractor={(item) => item.itemId.toString()}

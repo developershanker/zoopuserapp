@@ -40,10 +40,11 @@ export default class Search extends Component {
       this.state.loginCount = response.data.loginCount
       ConstantValues.customerPhoneNo = response.data.mobile
       ConstantValues.customerName = response.data.fullName
+      ConstantValues.customerRefferalCode = response.data.referralCode
       this.setState({
         name: ConstantValues.customerName
       })
-      console.log('ConstantValues.customerName :' + ConstantValues.customerName)
+      console.log('ConstantValues.customerName :' + ConstantValues.customerName + '\n' +' ConstantValues.customerRefferalCode : ' +  ConstantValues.customerRefferalCode)
       ConstantValues.customerEmailId = response.data.email
       this.setState({
         emailId: ConstantValues.customerEmailId

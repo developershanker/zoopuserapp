@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ScrollView, Dimensions, TouchableOpacity , Alert} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import AsyncStorage from '@react-native-community/async-storage';
+import firebase from 'react-native-firebase'
 
 export default class notifications extends Component {
-  componentDidMount() {
-    SplashScreen.hide();
-  }
+ 
   constructor(props) {
     super(props);
     this.state = {
@@ -23,6 +22,9 @@ export default class notifications extends Component {
         { id: "8", name: 'car', description: 'Your Order is picked up from the resturent.Please be on your seat for better service', date: '03/08/2019', time: '15:25' },
       ]
     };
+  }
+  componentDidMount() {
+    SplashScreen.hide();
   }
 
   render() {

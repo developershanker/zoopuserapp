@@ -38,12 +38,14 @@ import Contact from '../services/contact';
 import FAQ from '../services/faq';
 import Feedback from '../services/feedback';
 import MyOrders from '../customer/myOrders';
+import Invite from '../services/invite.js';
 import MyWallet from '../customer/myWallet';
 import Profile from '../customer/profile';
 import RateUs from '../services/rateUs';
 import LogOut from '../login/logout';
 import TermsActivity from '../services/termsActivity.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Icons from 'react-native-vector-icons/FontAwesome5';
 import { DrawerItems, SafeAreaView } from 'react-navigation';
 ////////-------Extra Services Screens------////////
 import CheckPNR from '../services/checkPnr';
@@ -82,7 +84,7 @@ const AuthStack = createStackNavigator({
     }
   }
 })
-class NavigationDrawerStructure extends Component {
+ class NavigationDrawerStructure extends Component {
   //Structure for the navigatin Drawer
   toggleDrawer = () => {
     //Props to open/close the drawer
@@ -228,6 +230,17 @@ const DrawerNavigator = createDrawerNavigator({
       />
     },
   },
+  Invite: {
+    screen: Invite,
+    navigationOptions: {
+      drawerLabel: 'Invite & Earn',
+      drawerIcon: <Icons
+        name='hand-holding-usd'
+        size={20}
+
+      />
+    },
+  },
   FAQ: {
     screen: FAQ,
     navigationOptions: {
@@ -318,13 +331,6 @@ const AppNavigator = createStackNavigator({
       header: null,
     }
   },
-  // Contact: {
-  //   screen: Contact,
-  //   navigationOptions: {
-  //     header: null,
-  //   }
-
-  // },
   Notifications: {
     screen: Notifications,
     navigationOptions: {

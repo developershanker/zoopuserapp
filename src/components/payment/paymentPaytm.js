@@ -51,8 +51,8 @@ export default class paymentPaytm extends Component {
 
   gotoIrctc = () => {
     ConstantValues.textPayment = 'Payment is received by Zoop \n Your amount is safe with us..'
-    ConstantValues.irctcLoading = true
-    ConstantValues.textIrctc = 'Fetching IRCTC ID...'
+    // ConstantValues.irctcLoading = true
+    // ConstantValues.textIrctc = 'Fetching IRCTC ID...'
     this.props.navigation.navigate('IrctcConfirmation')
   }
 
