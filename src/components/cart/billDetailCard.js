@@ -19,7 +19,7 @@ class billDetailCard extends Component {
       <SafeAreaView style={styles.slide}>
         <View>
           <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-            <Text style={{ fontSize: 20, fontFamily: 'Poppins-Bold', color: '#000000' }}>Bill Details</Text>
+            <Text style={{ fontSize: 20, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Bill Details</Text>
             <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} />
           </View>
           <View
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   tiletext: {
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
     color: '#000000'
   }
 })

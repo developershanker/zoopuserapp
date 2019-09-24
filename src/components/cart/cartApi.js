@@ -120,4 +120,20 @@ export default class cartApi {
         ConstantValues.inCart = []
         ConstantValues.finalCart = []
     }
+    static changeCode = (couponCode) => {
+        if (couponCode == '') {
+        //   this.setState({
+        //     textPromoCode: 'Apply Coupon Code'
+        //   })
+          ConstantValues.appliedCode = 'Apply Coupon Code'
+          console.log('couponCode is : ' + couponCode + '\n' + 'ConstantValues.appliedCode : ' + ConstantValues.appliedCode)
+        //   this.props.navigation.navigate('Cart')
+        } else {
+        //   this.setState({
+        //     textPromoCode: couponCode
+        //   })
+          ConstantValues.appliedCode = couponCode
+          console.log('couponCode is : ' + couponCode+ '\n' + 'ConstantValues.appliedCode : ' + ConstantValues.appliedCode)
+        }
+      }
 }

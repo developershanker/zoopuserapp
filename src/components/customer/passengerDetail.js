@@ -141,11 +141,11 @@ export default class passengerDetail extends Component {
 
               <View style={{ width: Dimensions.get('window').width, paddingVertical: 15, paddingHorizontal: 15 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Seat - {ConstantValues.seat}</Text>
-                  <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Coach - {ConstantValues.coach}</Text>
+                  <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Seat - {ConstantValues.seat}</Text>
+                  <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Coach - {ConstantValues.coach}</Text>
                 </View>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Station - {ConstantValues.stationName}</Text>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Expected Date & Time of Delivery - {ConstantValues.eta}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Station - {ConstantValues.stationName}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Expected Date & Time of Delivery - {ConstantValues.eta}</Text>
               </View>
               <View style={styles.inputView}>
                 <TextInput
@@ -159,7 +159,7 @@ export default class passengerDetail extends Component {
                 />
               </View>
               <View style={{ width: Dimensions.get('window').width, paddingVertical: 15, paddingHorizontal: 15 }}>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
               </View>
               <View style={{ paddingVertical: 20 }}>
                 <View style={styles.inputView}>
@@ -190,7 +190,7 @@ export default class passengerDetail extends Component {
               <View style={{ paddingVertical: 20 }}>
                 <View style={styles.inputView}>
                   <TextInput
-                    style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Bold', }}
+                    style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-SemiBold', }}
                     placeholder='Any request for the resturent? Please write here'
                     editable={true}
                     //keyboardType='default'
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#000000',
     width: Dimensions.get('window').width - 50,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
     alignItems: 'center'
   },
 });

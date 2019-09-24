@@ -49,7 +49,7 @@ export default class Invite extends Component {
 
   render() {
     const width = Dimensions.get('screen').width
-    const msg = 'Hi, upgrade your train food experience by using my code ' + '\'' + ConstantValues.customerRefferalCode + '\'' + ' and get benefits worth Rs 150 when you sign-up at ZoopIndia APP. Download: https://play.google.com/store/apps/details?id=com.zoop.zoopindiaservicel'
+    const msg = 'Hi, upgrade your train food experience by using my code ' + '\'' + ConstantValues.customerRefferalCode + '\'' + ' and get benefits worth Rs 150 when you sign-up at ZoopIndia APP. Download: https://play.google.com/store/apps/details?id=com.zoop.zoopindiaservice'
     return (
       <SafeAreaView>
         <ScrollView>

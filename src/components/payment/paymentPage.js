@@ -27,7 +27,8 @@ export default class PaymentPage extends Component {
       checked: false,
       paymentTypes: [],
       paymentTypeName: '',
-      paymentTypeId: ''
+      paymentTypeId: '',
+      paymentBorderColor:'#000000',
       // backgroundColor : ''
     };
   }
@@ -79,11 +80,15 @@ export default class PaymentPage extends Component {
 
 
   setPaymentInfo = (item) => {
-    this.setState({
+   this.setState({
       paymentTypeName: item.paymentTypeName,
-      paymentTypeId: item.paymentTypeId
+      paymentTypeId: item.paymentTypeId,
+      // paymentBorderColor:'#f15926'
     })
-    console.log('paymentTypeName : ' + this.state.paymentTypeName + '\n' + 'paymentTypeId :' + this.state.paymentTypeId)
+    return(
+      ToastAndroid.show('You selected method : ' + item.paymentTypeName ,ToastAndroid.LONG)
+    ),
+    console.log('paymentTypeName : ' + this.state.paymentTypeName + '\n' + 'paymentTypeId :' + this.state.paymentTypeId),
     console.log('item.paymentTypeName : ' + item.paymentTypeName + '\n' + 'item.paymentTypeId :' + item.paymentTypeId)
   }
 
@@ -136,7 +141,7 @@ export default class PaymentPage extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Bold', fontSize: 25, color: '#000000' }}> Payment Detail </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-SemiBold', fontSize: 25, color: '#000000' }}> Payment Detail </Text>
               </View>
             </View>
             {/* header view ends */}
@@ -145,23 +150,23 @@ export default class PaymentPage extends Component {
             </View>
             {/* passengerDetail view begin here */}
             <View style={{ width: Dimensions.get('window').width - 10, flexDirection: 'row', paddingTop: 10 }}>
-              <Text style={{ fontSize: 20, fontFamily: 'Poppins-Bold', color: '#000000' }}>Passenger Details</Text>
+              <Text style={{ fontSize: 20, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Passenger Details</Text>
               {/* <Image style={{ height: 15, alignSelf: 'center' }} source={require('../images/line.png')} /> */}
             </View>
             <View style={{ width: Dimensions.get('window').width, paddingVertical: 15, paddingHorizontal: 15 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Seat no. {ConstantValues.seat}</Text>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Coach no. {ConstantValues.coach}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Seat no. {ConstantValues.seat}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Coach no. {ConstantValues.coach}</Text>
               </View>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Name : {ConstantValues.customerName}</Text>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', color: '#000000' }}>Alternate No. - {altMobileNo}</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Name : {ConstantValues.customerName}</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Alternate No. - {altMobileNo}</Text>
             </View>
             {/* passengerDetail view ends here */}
             {/* Payment Mode View Starts */}
             <View>
               <View style={{ width: Dimensions.get('window').width - 10, alignItems: 'center', paddingVertical: 10 }}>
-                <Text style={{ fontSize: 20, fontFamily: 'Poppins-Bold' }}>Choose Payment Mode</Text>
+                <Text style={{ fontSize: 20, fontFamily: 'Poppins-SemiBold' }}>Choose Payment Mode</Text>
               </View>
 
 
@@ -171,10 +176,10 @@ export default class PaymentPage extends Component {
                 extraData={this.state}
                 renderItem={({ item }) =>
 
-                  <View style={{ flexDirection: 'column', alignItems: 'flex-start', marginHorizontal: 20 }}>
-                    <View style={styles.paytmView}>
+                  <View style={{ flexDirection: 'column', alignItems: 'center', paddingVertical: 10,paddingHorizontal: 10 }}>
+                    <View style={[styles.paytmView,{borderColor:this.state.paymentBorderColor}]}>
                       <TouchableOpacity onPress={() => {this.setPaymentInfo(item)}}>
-                        <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Bold' }}>{item.paymentTypeName == 'Prepaid' ? 'Pay through Paytm' : 'Cash On Delivery'}</Text>
+                        <Text style={{ color: this.state.paymentBorderColor, fontSize: 15, fontFamily: 'Poppins-SemiBold' }}>{item.paymentTypeName == 'Prepaid' ? 'Pay through Paytm' : 'Cash On Delivery'}</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -202,7 +207,7 @@ export default class PaymentPage extends Component {
                       value="Other"
                       color='#000000'
                     />
-                    <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Bold' }}>Other Payment Option</Text>
+                    <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-SemiBold' }}>Other Payment Option</Text>
                   </View>
                   <Fade visible={this.state.value == "Other" ? true : false}>
                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -211,7 +216,7 @@ export default class PaymentPage extends Component {
                         disabled={false}
                         onValueChange={codActive => this.setState({ codActive })}
                       />
-                      <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Bold' }}>Cash On Delivery</Text>
+                      <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-SemiBold' }}>Cash On Delivery</Text>
                     </View>
                   </Fade>
                 </View>
@@ -222,9 +227,9 @@ export default class PaymentPage extends Component {
                   disabled={false}
                   onValueChange={checked => this.setState({ checked })}
                 />
-                <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Bold' }}>I Agree to </Text>
+                <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-SemiBold' }}>I Agree to </Text>
                 <TouchableOpacity onPress={() => { this.props.navigation.navigate('TermsActivity') }}>
-                  <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Bold', textDecorationLine: 'underline' }}>Terms & Conditions</Text>
+                  <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-SemiBold', textDecorationLine: 'underline' }}>Terms & Conditions</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -257,6 +262,8 @@ const styles = StyleSheet.create({
     marginLeft: 25 // justifyContent: 'space-between',
   },
   paytmView: {
+    width:300,
+    borderWidth:2,
     borderRadius: 100 / 9,
     flexDirection: 'row',
     justifyContent: 'center',
