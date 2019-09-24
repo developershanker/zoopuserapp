@@ -3,16 +3,23 @@ package com.zoop;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+//firebase
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
+
+import com.reactlibrary.RNPayTmPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import io.underscope.react.fbak.RNAccountKitPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,10 +36,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFirebasePackage(),
+            new RNFirebaseMessagingPackage(),
+            new RNFirebaseNotificationsPackage(),
+            new RNPayTmPackage(),
+            new RNDeviceInfo(),
             new SplashScreenReactPackage(),
             new VectorIconsPackage(),
             new AsyncStoragePackage(),
-            new RNAccountKitPackage(),
+            // new RNAccountKitPackage(),
             new RNGestureHandlerPackage()
       );
     }

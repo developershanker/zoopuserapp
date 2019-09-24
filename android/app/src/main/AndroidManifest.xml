@@ -3,16 +3,20 @@ xmlns:tools="http://schemas.android.com/tools"
   package="com.zoop">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.READ_SMS" />
 <uses-permission android:name="android.permission.RECEIVE_SMS" />
 <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
-      android:roundIcon="@mipmap/ic_launcher"
-      android:allowBackup="false"
+      android:roundIcon="@mipmap/ic_launcher_round"
+      android:allowBackup="true"
+      tools:replace="android:allowBackup" 
+      android:fullBackupContent="@xml/backup_config"
       android:theme="@style/AppTheme">
       <activity
         android:name=".MainActivity"
@@ -26,7 +30,7 @@ xmlns:tools="http://schemas.android.com/tools"
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
        <!-- Set the AccountKitActivity theme -->
-    <activity
+    <!-- <activity
       tools:replace="android:theme"
       android:name="com.facebook.accountkit.ui.AccountKitActivity"
       android:theme="@style/LoginThemeYellow" />
@@ -38,7 +42,7 @@ xmlns:tools="http://schemas.android.com/tools"
         android:value="@string/app_name" />
     <meta-data
         android:name="com.facebook.accountkit.ClientToken"
-        android:value="@string/ak_client_token" />
+        android:value="@string/ak_client_token" /> -->
     </application>
 
 </manifest>
