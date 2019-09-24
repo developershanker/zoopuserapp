@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, Switch, Image, SectionList, ScrollView, TouchableOpacity, ActivityIndicator,BackHandler , Alert} from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, Switch, SectionList, ScrollView,Image, TouchableOpacity, ActivityIndicator, BackHandler , Alert} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -189,9 +189,9 @@ export default class Menu extends Component {
 
             <View style={styles.topContainer}>
               <Text style={styles.outletName}> {ConstantValues.outletName} </Text>
-              <Text style={{ fontFamily: 'Poppins-Bold', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
+              <Text style={{ fontFamily: 'Poppins-SemiBold', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
               <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
-                <Text>Veg. Only</Text>
+                <Text style={{ fontFamily: 'Poppins-Medium'}}>Veg. Only</Text>
                 <Switch />
               </View>
 
@@ -199,9 +199,9 @@ export default class Menu extends Component {
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
                 <View style={{ flexDirection: 'row' }}>
                   <Image style={{ width: 30, height: 15 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.fssai }} />
-                  <Text style={{ fontSize: 10, fontFamily: 'Poppins-Bold' }}>Lic No. {this.state.fssaiNo}</Text>
+                  <Text style={{ fontSize: 10, fontFamily: 'Poppins-SemiBold' }}>Lic No. {this.state.fssaiNo}</Text>
                 </View>
-                <Text style={{ fontSize: 10, fontFamily: 'Poppins-Bold', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
+                <Text style={{ fontSize: 10, fontFamily: 'Poppins-SemiBold', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
               </View>
 
 
@@ -212,17 +212,17 @@ export default class Menu extends Component {
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginLeft: 20 }}>
                     <View style={{ flexDirection: 'row' }}>
                       <Icon name='star' size={15} color='#ff9214' />
-                      <Text style={{ fontFamily: 'Poppins-Bold' }}> {ConstantValues.outletRating} </Text>
+                      <Text style={{ fontFamily: 'Poppins-SemiBold' }}> {ConstantValues.outletRating} </Text>
                     </View>
-                    <Text style={{ fontFamily: 'Poppins-Bold' }}>Rating</Text>
+                    <Text style={{ fontFamily: 'Poppins-SemiBold' }}>Rating</Text>
                   </View>
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10 }}>
-                    <Text style={{ fontFamily: 'Poppins-Bold' }}>{ConstantValues.rupee} {ConstantValues.minimumOrderValue}</Text>
-                    <Text style={{ fontFamily: 'Poppins-Bold' }}>Min. Order</Text>
+                    <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{ConstantValues.rupee} {ConstantValues.minimumOrderValue}</Text>
+                    <Text style={{ fontFamily: 'Poppins-SemiBold' }}>Min. Order</Text>
                   </View>
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginRight: 20 }}>
-                    <Text style={{ fontFamily: 'Poppins-Bold' }}>{ConstantValues.haltTime}</Text>
-                    <Text style={{ fontFamily: 'Poppins-Bold' }}>Halt Time</Text>
+                    <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{ConstantValues.haltTime}</Text>
+                    <Text style={{ fontFamily: 'Poppins-SemiBold' }}>Halt Time</Text>
                   </View>
 
                 </View>
@@ -238,7 +238,7 @@ export default class Menu extends Component {
           {/*  MENU ITEM STYLES{GRID} */}
           <View style={{ width: Dimensions.get('window').width }}>
             <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-              <Text style={{ fontSize: 20, fontFamily: 'Poppins-Bold', color: '#000000' }}>Recommended Items</Text>
+              <Text style={{ fontSize: 20, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Recommended Items</Text>
               <Image style={{ alignSelf: 'center', height: 15 }} source={require('../images/line.png')} />
             </View>
             <FlatList
@@ -267,7 +267,7 @@ export default class Menu extends Component {
                                   <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
                                 </TouchableOpacity>
 
-                                <Text style={{ fontFamily: 'Poppins-Bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
+                                <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
 
 
                                 <TouchableOpacity onPress={() => {
@@ -338,7 +338,7 @@ export default class Menu extends Component {
               //  Section Header Rendering
               // renderSectionHeader={({ section }) => (
               //   <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-              //     <Text style={{ fontSize: 20, fontFamily:'Poppins-Bold', color: '#000000' }}>{section.title}</Text>
+              //     <Text style={{ fontSize: 20, fontFamily:'Poppins-SemiBold', color: '#000000' }}>{section.title}</Text>
               //     <Image style={{ alignSelf: 'center', height: 15 }} source={require('../images/line.png')} />
               //   </View>
               // )}
@@ -348,7 +348,7 @@ export default class Menu extends Component {
                   <View style={{ width: Dimensions.get('window').width - 200 }}>
                     <View style={{ flexDirection: 'row' }}>
                       <Icons name={'carrot'} size={15} color={item.categoryType == 'Veg' ? '#1e8728' : '#eb0909'} />
-                      <Text style={{ fontSize: 15, color: '#000000', fontFamily : 'Poppins-Bold'}}>{item.itemName}</Text>
+                      <Text style={{ fontSize: 15, color: '#000000', fontFamily : 'Poppins-SemiBold'}}>{item.itemName}</Text>
                     </View>
                     <Text style={{ fontSize: 15, color: '#000000',fontFamily : 'Poppins-SemiBold' }}>{ConstantValues.rupee} {item.basePrice}</Text>
                     <Text style={{ fontSize: 10, color: '#c7c3c3',fontFamily : 'Poppins-Regular' }}>{item.itemDescription}</Text>
@@ -364,7 +364,7 @@ export default class Menu extends Component {
                             <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
                           </TouchableOpacity>
 
-                          <Text style={{ fontFamily:'Poppins-Bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
+                          <Text style={{ fontFamily:'Poppins-SemiBold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
 
 
                           <TouchableOpacity onPress={() => {
@@ -408,10 +408,10 @@ export default class Menu extends Component {
             <View style={[styles.footer]}>
 
               <View style={styles.itemCountShow}>
-                <Text style={{ marginLeft: 5, fontSize: 20, fontFamily: 'Poppins-Bold', color: '#ffffff' }}>{this.state.totalCartCount} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.rupee}{this.state.totalPrice}</Text>
+                <Text style={{ marginLeft: 5, fontSize: 20, fontFamily: 'Poppins-SemiBold', color: '#ffffff' }}>{this.state.totalCartCount} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.rupee}{this.state.totalPrice}</Text>
               </View>
               <View style={styles.viewcart}>
-                <Text style={{ marginRight: 5, fontSize: 20, fontFamily: 'Poppins-Bold', color: '#ffffff' }}>VIEW CART</Text>
+                <Text style={{ marginRight: 5, fontSize: 20, fontFamily: 'Poppins-SemiBold', color: '#ffffff' }}>VIEW CART</Text>
                 <Icon name={'shopping-bag'} color={'#ffffff'} size={20} />
               </View>
             </View>
@@ -436,10 +436,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   outletName: {
-    paddingTop: 15,
+    // paddingTop: 15,
     fontSize: 20,
     color: '#000000',
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
   },
   card: {
     width: Dimensions.get('window').width,
@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
   // OFFER BOARD STYLES
   offerText: {
     color: '#ffffff',
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
     fontSize: 15
   },
   offerboard: {
@@ -514,7 +514,7 @@ const styles = StyleSheet.create({
     borderRadius: 100 / 5,
   },
   itemName: {
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
     fontSize: 15,
   },
   footer: {
@@ -555,7 +555,8 @@ const styles = StyleSheet.create({
   fabIcon: {
     marginLeft: 10,
     fontSize: 15,
-    color: 'white'
+    color: 'white',
+    fontFamily: 'Poppins-Medium'
   },
   headerTextmodal: {
     alignSelf: 'center',

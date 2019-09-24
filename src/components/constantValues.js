@@ -116,6 +116,8 @@ static MID = 'FIjIdu58691666399235'
   static isWalletUsed = false
   static couponValue = 0
   static couponType = ''
+  static appliedCode = 'Apply Coupon Code'
+  static isCouponApplied = false
   static totalBasePrice = 0
   static totalBasePrice = 0
   static minimumPriceRequired = 0
@@ -166,6 +168,12 @@ static MID = 'FIjIdu58691666399235'
     banner2: 'app-Icon-set/banner2.jpg',
     banner3: 'app-Icon-set/banner3.jpg',
     banner4: 'app-Icon-set/banner4.jpg',
+
+    //Ac coach svg
+    acCoach: 'app-Icon-set/AC+Coach.svg',
+    sleeperCoach:'app-Icon-set/Sleeper+Coach.svg',
+    trainEngine:'app-Icon-set/Train+Engine.svg',
+    
 
 
   }

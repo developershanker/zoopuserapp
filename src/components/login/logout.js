@@ -19,7 +19,7 @@ export default class LogOut extends Component {
     try {
       // await AsyncStorage.removeItem('x-authtoken')
       // await AsyncStorage.removeItem('customerId')
-      // AsyncStorage.removeItem('userInfo')
+      AsyncStorage.removeItem('userInfo')
       console.log('Token and customerId Removed!!')
     } catch (e) {
       console.log('Error in removetoken in logout.js: ' + error)

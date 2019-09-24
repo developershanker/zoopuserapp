@@ -46,8 +46,10 @@ export default class CouponPage extends Component {
         ConstantValues.discount = couponDetail.couponValue
         ConstantValues.couponType = couponDetail.type
         ConstantValues.couponId = couponDetail.couponId
+        ConstantValues.isCouponApplied = true
         console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
         // Cart.changeCode(ConstantValues.couponCode)
+        cartApi.changeCode(couponDetail.couponCode)
         cartApi.billDetail()
         this.props.navigation.navigate('Cart')
     }
@@ -59,6 +61,7 @@ export default class CouponPage extends Component {
                 ConstantValues.couponCode = couponCode
                 // ConstantValues.discount = ConstantValues.couponValue
                 console.log('couponCode : ' + ConstantValues.couponCode)
+                ConstantValues.isCouponApplied = true
                 this.props.navigation.navigate('Cart')
             } else {
                 return(

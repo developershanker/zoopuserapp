@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Dimensions, View, ScrollView, Image, StyleSheet, ToastAndroid, SectionList, TouchableOpacity,TouchableWithoutFeedback, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
+import { Text, Dimensions, View, ScrollView, StyleSheet, ToastAndroid,Image, SectionList, TouchableOpacity,TouchableWithoutFeedback, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 // import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
@@ -7,7 +7,7 @@ import { StationHeader } from './stationHeader.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Modal from "react-native-modal";
-import { CustomButton } from '../assests/customButtonShort.js';
+import { CustomButtonShort } from '../assests/customButtonShort.js';
 import Search from './search.js';
 import searchApi from './searchApi.js';
 import ConstantValues from '../constantValues.js';
@@ -123,6 +123,7 @@ export default class station extends Component {
   scrollEnd = () => this.setState({scrollBegin: false})
 
   render() {
+    const width = Dimensions.get('screen').width
     return (
       <SafeAreaView style={styles.slide}>
 
@@ -247,7 +248,7 @@ export default class station extends Component {
                   />
                 </ScrollView>
               </View>
-              <CustomButton
+              <CustomButtonShort
                 style={{ backgroundColor: '#1fc44e', alignSelf: 'flex-end' }}
                 onPress={() => { this.setState({ visibleModal: null }) }}
                 title='Apply'
@@ -268,7 +269,7 @@ export default class station extends Component {
               showsHorizontalScrollIndicator={false}
               alwaysBounceHorizontal={true}
               contentContainerStyle={styles.contentContainer}>
-              <FlatList
+             <FlatList
                 data={this.state.StationList}
                 // data={this.state.data}
                 horizontal={true}
@@ -507,7 +508,7 @@ const styles = StyleSheet.create({
     borderRadius: 100 / 4,
   },
   fabIcon: {
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-Medium',
     marginLeft: 10,
     fontSize: 15,
     color: 'white'
@@ -530,7 +531,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     marginLeft: 10,
     fontSize: 15,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
     color: '#000000',
     justifyContent: 'center',
   },
@@ -552,7 +553,7 @@ const styles = StyleSheet.create({
   rating: {
     fontSize: 15,
     justifyContent: 'center',
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
     color: '#ffffff'
   },
   stationView: {
@@ -608,7 +609,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   cuisineText: {
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
     fontSize: 15, color: '#000000',
     paddingVertical: 10,
     paddingHorizontal: 10
@@ -616,7 +617,7 @@ const styles = StyleSheet.create({
   textheader: {
     marginLeft: 20,
     fontSize: 20,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
     color: '#000000',
     justifyContent: 'center',
   },

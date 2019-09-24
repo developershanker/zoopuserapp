@@ -21,9 +21,10 @@ export default class Cart extends Component {
     this.getCartItems(ConstantValues.inCart)
     this.getWalletInfo()
     this.billDetail()
-
-    // this.changeCode(ConstantValues.couponCode)
+    this.checkCoupon(ConstantValues.appliedCode)
   }
+ 
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -38,15 +39,18 @@ export default class Cart extends Component {
       walletBalanceUsed: 0,
       textPromoCode: 'Apply Coupon Code',
       OutletMenuInfo: [
-        { key: "1", itemName: "Special Thali", itemImage: require('../images/thali.png'), itemPrice: "175", itemCategory: "Thali", itemType: "veg", itemMarking: "", itemDescription: "" },
-        { key: "2", itemName: "Chicken Curry", itemImage: require('../images/chickencurry.png'), itemPrice: "200", itemCategory: "Main Course", itemType: "nonveg", itemMarking: "", itemDescription: "" },
+        // { key: "1", itemName: "Special Thali", itemImage: require('../images/thali.png'), itemPrice: "175", itemCategory: "Thali", itemType: "veg", itemMarking: "", itemDescription: "" },
+        // { key: "2", itemName: "Chicken Curry", itemImage: require('../images/chickencurry.png'), itemPrice: "200", itemCategory: "Main Course", itemType: "nonveg", itemMarking: "", itemDescription: "" },
       ]
     };
   }
   getCartItems = (inCart) => {
     this.setState({
-      revisedInCart: inCart
+      revisedInCart: inCart,
+      station: ConstantValues.stationName,
+      outletName: ConstantValues.outletName
     })
+    ConstantValues.appliedCode = 'Apply Coupon Code'
     console.log('revisedInCart is' + JSON.stringify(this.state.revisedInCart))
   }
   // addItemToCart = (item) => {
@@ -77,18 +81,30 @@ export default class Cart extends Component {
   // }
 
   changeCode = (couponCode) => {
+
     if (couponCode == '') {
       this.setState({
         textPromoCode: 'Apply Coupon Code'
       })
-
-      console.log('couponCode is : ' + couponCode + 'textPromoCode is : ' + this.state.textPromoCode)
+      ConstantValues.appliedCode = 'Apply Coupon Code'
+     // console.log('couponCode is : ' + couponCode + 'textPromoCode is : ' + this.state.textPromoCode + '\n' + 'ConstantValues.appliedCode : ' + ConstantValues.appliedCode)
       this.props.navigation.navigate('CouponPage')
     } else {
       this.setState({
         textPromoCode: couponCode
       })
-      console.log('couponCode is : ' + couponCode + 'textPromoCode is : ' + this.state.textPromoCode)
+      ConstantValues.appliedCode = couponCode
+     // console.log('couponCode is : ' + couponCode + 'textPromoCode is : ' + this.state.textPromoCode + '\n' + 'ConstantValues.appliedCode : ' + ConstantValues.appliedCode)
+    }
+  }
+  checkCoupon = (couponCode) => {
+    if (ConstantValues.isCouponApplied == true) {
+      ConstantValues.appliedCode == couponCode
+      // this.setState({
+      //   textPromoCode: couponCode
+      // })
+    } else {
+      ConstantValues.appliedCode == 'Apply Coupon Code'
     }
   }
 
@@ -107,6 +123,7 @@ export default class Cart extends Component {
     this.setState({
       textPromoCode: 'Apply Coupon Code'
     })
+    ConstantValues.appliedCode = 'Apply Coupon Code'
     cartApi.billDetail()
   }
 
@@ -133,27 +150,29 @@ export default class Cart extends Component {
   }
 
 
-  walletUsed = () => {
-    this.setState({
-      walletUsed: !this.state.walletUsed
-    })
-    if (this.state.walletUsed == true) {
-      return (
-        ConstantValues.walletBalanceUsed = 50,
+  walletUsed = (walletUsed) => {
+    // this.setState({
+    //   walletUsed: !this.state.walletUsed
+    // })
+    if (walletUsed == true) {
+      
+        ConstantValues.walletBalanceUsed = 0,
         // ConstantValues.discount = 50,
         this.setState({
-          discount: 50
+          discount: 0
         })
-      )
+     
+        cartApi.billDetail()
       // console.log('On this.state.walletUsed == true..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
-    } else if (this.state.walletUsed == false) {
-      return (
+    } else{
+     
         // ConstantValues.discount = 0,
         ConstantValues.walletBalanceUsed = 50,
         this.setState({
           discount: 50
         })
-      )
+     
+        cartApi.billDetail()
       // console.log('On this.state.walletUsed == false..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
     }
   }
@@ -171,7 +190,7 @@ export default class Cart extends Component {
           {
             text: 'YES', onPress: () => {
               this.savePassengerDetail(),
-              this.items(),
+                this.items(),
                 this.submitCart()
             }
           },
@@ -194,13 +213,14 @@ export default class Cart extends Component {
       console.log('Data received in cart.js catch: ' + error)
     }
   }
-  items = () => { ConstantValues.finalCart = []
+  items = () => {
+    ConstantValues.finalCart = []
     this.state.revisedInCart.map((item) =>
       ConstantValues.finalCart.push({
         'itemId': item.itemId,
         'itemName': item.itemName,
-        'itemDescription':item.itemDescription,
-        'categoryId':item.categoryId,
+        'itemDescription': item.itemDescription,
+        'categoryId': item.categoryId,
         //billing details
         'zoopPrice': item.zoopPrice,
         'basePrice': item.basePrice,
@@ -210,7 +230,7 @@ export default class Cart extends Component {
         'deliveryCharge': item.deliveryCharge,
         'deliveryChargeGstRate': item.deliveryChargeGstRate,
         'deliveryChargeGst': item.deliveryChargeGst,
-        'basePrice' : item.basePrice,
+        'basePrice': item.basePrice,
 
         'quantity': item.itemCount,
         'itemTimes': item.itemTimes
@@ -235,37 +255,38 @@ export default class Cart extends Component {
     console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
   }
 
-  savePassengerDetail = () => { 
+  savePassengerDetail = () => {
     ConstantValues.passengerDetail = {
-    'pnr': ConstantValues.pnr,
-    'berth': ConstantValues.seat,
-    'coach': ConstantValues.coach,
-    'eta': ConstantValues.eta,
-    'deliveryDate': ConstantValues.deliveryDate,
-    'deliveryTime': ConstantValues.deliveryTime,
-    'trainId': ConstantValues.trainId,
-    //  'orderDate' : ConstantValues.orderDate,
-    //  'orderTime' : ConstantValues.orderTime,
-    'stationId': ConstantValues.stationId,
-    'stationCode': ConstantValues.stationCode,
-    //'stationName' : ConstantValues.stationName,
-    'passengerName': ConstantValues.customerName,
-    'passengerMobile': ConstantValues.customerPhoneNo,
-    'passengeAlternateMobile': ConstantValues.customeralternateMobile,
-    'passengerEmail': ConstantValues.customerEmailId,
-    //'suggestions': ConstantValues.suggestions = this.state.addMessage
-  }}
+      'pnr': ConstantValues.pnr,
+      'berth': ConstantValues.seat,
+      'coach': ConstantValues.coach,
+      'eta': ConstantValues.eta,
+      'deliveryDate': ConstantValues.deliveryDate,
+      'deliveryTime': ConstantValues.deliveryTime,
+      'trainId': ConstantValues.trainId,
+      //  'orderDate' : ConstantValues.orderDate,
+      //  'orderTime' : ConstantValues.orderTime,
+      'stationId': ConstantValues.stationId,
+      'stationCode': ConstantValues.stationCode,
+      //'stationName' : ConstantValues.stationName,
+      'passengerName': ConstantValues.customerName,
+      'passengerMobile': ConstantValues.customerPhoneNo,
+      'passengeAlternateMobile': ConstantValues.customeralternateMobile,
+      'passengerEmail': ConstantValues.customerEmailId,
+      //'suggestions': ConstantValues.suggestions = this.state.addMessage
+    }
+  }
 
 
   createNotificationChannel = () => {
     const channel = new firebase.notifications.Android.Channel(
       'zoop-e2126',//fcm_FirebaseNotifiction_default_channel
-       'Zoop', //Demo app name
-        firebase.notifications.Android.Importance.High)
-            .setDescription('Zoop app description')
-            .setSound('sampleaudio.wav');
-        firebase.notifications().android.createChannel(channel);
-        console.log('channel id of fcm : ' + JSON.stringify(channel))
+      'Zoop', //Demo app name
+      firebase.notifications.Android.Importance.High)
+      .setDescription('Zoop app description')
+      .setSound('sampleaudio.wav');
+    firebase.notifications().android.createChannel(channel);
+    console.log('channel id of fcm : ' + JSON.stringify(channel))
   }
   render() {
     const { navigation } = this.props;
@@ -283,20 +304,20 @@ export default class Cart extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Bold', fontSize: 25, color: '#000000' }}> Cart </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-SemiBold', fontSize: 25, color: '#000000' }}> Cart </Text>
               </View>
             </View>
             {/* header view ends */}
-            <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width, alignItems: 'center', marginTop: 15 }}>
-              <Text style={{ alignSelf: 'center', fontSize: 20, color: '#000000', fontFamily: 'Poppins-Bold', }}>{this.state.outletName}</Text>
-              <Text style={{ alignSelf: 'center', fontSize: 15, color: '#000000' }}>{this.state.station}</Text>
+            <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width, alignItems: 'center', marginVertical: 15 }}>
+              <Text style={{ alignSelf: 'center', fontSize: 20, color: '#000000', fontFamily: 'Poppins-SemiBold', }}>{this.state.outletName}</Text>
+              <Text style={{ alignSelf: 'center', fontSize: 15, color: '#000000', fontFamily: 'Poppins-SemiBold', }}>{this.state.station}</Text>
             </View>
             {/* Selected Items list */}
             <View>
               <View style={styles.card}>
                 <Fade visible={this.state.revisedInCart.length == 0 ? true : false}>
                   <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>Cart Is Empty</Text>
+                    <Text style={{ alignSelf: 'center', fontSize: 15, color: '#000000', fontFamily: 'Poppins-SemiBold', }}>Cart Is Empty</Text>
                     <CustomButton
                       title='Add Items'
                       onPress={() => {
@@ -311,20 +332,20 @@ export default class Cart extends Component {
                   data={this.state.revisedInCart}
                   extraData={this.state}
                   renderItem={({ item }) =>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 5, marginBottom: 5, alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 5, paddingHorizontal: 10, marginBottom: 5, alignItems: 'center' }}>
                       <Icons name={'carrot'} size={15} color={item.categoryType == 'Veg' ? '#1e8728' : '#eb0909'} />
-                      <Text>{item.itemName}</Text>
+                      <Text style={{ alignSelf: 'center', fontSize: 15, fontFamily: 'Poppins-SemiBold', }}>{item.itemName}</Text>
                       {/* Adding item to cart button */}
 
 
                       <View
                         style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 8, borderWidth: 2 }}>
-                        <TouchableOpacity 
-                      // onPress={() => { this.addItemToCart(item)} 
-                        disabled={item.itemCount == 0 ? false : true}>
+                        <TouchableOpacity
+                          // onPress={() => { this.addItemToCart(item)} 
+                          disabled={item.itemCount == 0 ? false : true}>
                           <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
                             <TouchableOpacity
-                            // onPress={() => { this.removeItemFromCart(item) }}
+                              // onPress={() => { this.removeItemFromCart(item) }}
                               disabled={item.itemCount == 0 ? true : false}>
                               <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
                             </TouchableOpacity>
@@ -332,9 +353,9 @@ export default class Cart extends Component {
                             <Text style={{ fontWeight: 'bold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
 
 
-                            <TouchableOpacity 
+                            <TouchableOpacity
                             //onPress={() => {
-                              //this.addItemToCart(item)
+                            //this.addItemToCart(item)
                             //}}
                             >
                               <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='plus' size={15} color='#1e8728' />
@@ -345,7 +366,7 @@ export default class Cart extends Component {
                       </View>
 
                       {/* Adding item to cart button ends here */}
-                      <Text>{ConstantValues.rupee} {item.basePrice}</Text>
+                      <Text style={{ alignSelf: 'center', fontSize: 15, color: '#000000', fontFamily: 'Poppins-SemiBold', }}>{ConstantValues.rupee} {item.basePrice}</Text>
                     </View>
                   }
                   keyExtractor={(item) => item.itemId.toString()}
@@ -353,68 +374,62 @@ export default class Cart extends Component {
               </View>
               {/* itemCard ends here */}
               {/* Wallet and Coupon Card begin here */}
-              <View
-                style={styles.couponcard}
-              >
-                <View style={{ flexDirection: 'column' }}>
-                  {/* <View style={{ flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}> */}
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      {/* <CheckBox
-                        value={this.state.walletUsed}
-                        disabled={this.state.textPromoCode == ConstantValues.couponCode ? true : false}
-                        onValueChange={walletUsed => this.setState({ walletUsed })}
-                        
+              <View style={styles.couponcard}>
+                <Fade visible={ConstantValues.customerId == '' ? true : false}>
+                  <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ color: '#000000', fontFamily: 'Poppins-SemiBold', fontSize: 15 }}>Enjoy Offers</Text>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('SignUp')}>
+                      <Text style={styles.removetext}>Click here to login</Text>
+                    </TouchableOpacity>
+                  </View>
+                </Fade>
+                <Fade visible={ConstantValues.customerId == '' ? false : true}>
+                  <View style={{ flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' ,alignContent:'center'}}>
 
-                      /> */}
+
                       <CheckBox
-                        // title='Use Wallet Balance'
+                        disabled={this.state.textPromoCode == ConstantValues.couponCode ? true : false}
+                        title='Use Wallet Balance'
                         checked={this.state.walletUsed}
                         onPress={() => {
-                          //this.walletUsed()
-                          walletUsed => this.setState({ walletUsed })
+                          this.setState({walletUsed: !this.state.walletUsed}),
+                         this.walletUsed(this.state.walletUsed)
                         }}
                       />
-                      <Text style={{ fontSize: 15, fontFamily: 'Poppins-Bold', }}>Use Zoop Wallet</Text>
-                    </View>
-                    <View>
-                      <Text style={{ fontSize: 20, fontFamily: 'Poppins-Bold', color: '#000000' }}>{ConstantValues.rupee} {this.state.walletUsed == true ? ConstantValues.walletBalance - 50 : ConstantValues.walletBalance}</Text>
-                    </View>
-                  </View>
-                  <Fade visible={this.state.walletUsed == true ? true : false}>
-                    <View>
-                      <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 15 }} >Discount Provided : {ConstantValues.rupee} 50/-</Text>
-                    </View>
-                  </Fade>
-                  {/* <View style={{ justifyContent: 'center' }}> */}
-                  <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, alignSelf: 'center' }}>OR</Text>
-                  {/* </View> */}
-                  {/* </View> */}
 
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                    <TouchableOpacity onPress={() => this.changeCode(ConstantValues.couponCode)} disabled={this.state.walletUsed == true ? true : false}>
+
+                      <View style={{ flexDirection: 'column',justifyContent:'center', alignItems: 'center'}}>
+                      <Text style={{ fontSize: 10, fontFamily: 'Poppins-Light'}}>Available Balance</Text>
+                      <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>{ConstantValues.rupee} {this.state.walletUsed == true ? ConstantValues.walletBalance - 50 : ConstantValues.walletBalance}</Text>
+                      </View>
+                    </View>
+                    <Text>OR</Text>
+
+
+                    <TouchableOpacity onPress={() => {this.changeCode(ConstantValues.couponCode)}} disabled={this.state.walletUsed == true ? true : false}>
                       <Text style={[styles.coupontext, { color: this.state.walletUsed == true ? '#636666' : '#149db5' }]}>
-                        {this.state.textPromoCode}
+                        {ConstantValues.appliedCode}
                       </Text>
                     </TouchableOpacity>
-                    <Fade visible={this.state.textPromoCode == ConstantValues.couponCode ? true : false}>
+
+                    <Fade visible={ConstantValues.appliedCode == ConstantValues.couponCode ? true : false}>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                        <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular' }}>---Applied---</Text>
+                        <Text style={{ color: '#000000', fontFamily: 'Poppins-Medium',paddingHorizontal:10 }}>Applied!!</Text>
                         <TouchableOpacity onPress={() => this.removeCoupon()}>
                           <Text style={styles.removetext}>REMOVE</Text>
                         </TouchableOpacity>
                       </View>
 
                     </Fade>
-
                   </View>
-                </View>
+                </Fade>
               </View>
               {/* Wallet and Coupon Card ends here */}
               {/* bill detail Card begins here */}
               <View>
                 <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-                  <Text style={{ fontSize: 20, fontFamily: 'Poppins-Bold', color: '#000000' }}>Bill Details</Text>
+                  <Text style={{ fontSize: 20, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Bill Details</Text>
                   <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} />
                 </View>
                 <View
@@ -486,17 +501,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
   },
   couponcard: {
-    // width: Dimensions.get('window').width - 5,
-    // justifyContent: 'center',
-    // borderRadius: 100 / 4,
-    // marginLeft: 5,
-    // marginRight: 10,
-    // marginTop: 10,
-    // alignItems: 'center',
-    // flexDirection: 'row',
-    // paddingBottom: 10,
-    // paddingLeft: 10,
-    // paddingRight: 10
+    width: Dimensions.get('window').width - 5,
     backgroundColor: '#ffffff',//can change as we move to various pages
     marginBottom: 10,//can change as we move to various pages
     marginLeft: '2%', //can change as we move to various pages
@@ -511,13 +516,13 @@ const styles = StyleSheet.create({
   coupontext: {
     fontSize: 20,
     // color:'#149db5',
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
     // textDecorationLine: 'underline'
   },
   removetext: {
     fontSize: 15,
     color: '#b32120',
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
     // textDecorationLine: 'underline'
   },
   billcard: {
@@ -555,7 +560,7 @@ const styles = StyleSheet.create({
 
 
   tiletext: {
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
     color: '#000000'
   }
 
