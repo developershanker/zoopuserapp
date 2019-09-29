@@ -25,7 +25,7 @@ export default class OrderDetail extends Component {
           <View>
             {/* header view */}
             <View style={{ flexDirection: 'row', paddingVertical: 15 }}>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('TrackingOrder')}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'flex-start', width: Dimensions.get('window').width - 100, alignItems: 'flex-start' }}>

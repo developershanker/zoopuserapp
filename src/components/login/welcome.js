@@ -197,26 +197,26 @@ const styles = StyleSheet.create({
     fontSize: 15,
     width: Dimensions.get('window').width - 120,
     color: '#000000',
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     alignItems: 'center'
   },
   inputView: {
-    borderRadius: 100 / 10,
-    borderColor: '#9B9B9B',
-    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: '#e7e7e7',
+    borderWidth: 1,
     marginHorizontal: 15,
     marginVertical: 30
   },
   text: {
     color: '#ffffff',
     textAlign: 'center',
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-Medium',
   },
   text1: {
     fontSize: 25,
     paddingTop: 10,
     color: '#000000',
     textAlign: 'center',
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
   },
 });

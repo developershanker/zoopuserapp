@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Dimensions, View, ScrollView, StyleSheet, ToastAndroid,Image, SectionList, TouchableOpacity,TouchableWithoutFeedback, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
+import { Text, Dimensions, View, ScrollView, StyleSheet,Alert, ToastAndroid,Image, SectionList, TouchableOpacity,TouchableWithoutFeedback, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 // import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
@@ -12,6 +12,9 @@ import Search from './search.js';
 import searchApi from './searchApi.js';
 import ConstantValues from '../constantValues.js';
 import { Fade } from '../assests/fade.js';
+import Spinner from 'react-native-spinkit';
+import { Overlay } from 'react-native-elements';
+import { ZoopLoader } from '../assests/zoopLoader.js';
 
 
 export default class station extends Component {
@@ -24,13 +27,14 @@ export default class station extends Component {
     this.state = {
       firstQuery: '',
       visibleModal: null,
-      animating: true,
+      loading: true,
       stationOpacity: 0.5,
       scrollBegin: false,
       OutletList: [],
       StationList: [],
       CuisinesList: [],
-      checked: []
+      checked: [],
+      isVisible:true
     };
   }
 
@@ -44,7 +48,8 @@ export default class station extends Component {
   FlatListItemSeparator = () => {
     return (
       //Item Separator
-      <View style={{ height: 0.5, width: '100%', backgroundColor: '#C8C8C8' }} />
+      <View style={{ height:0.5, width: '100%', backgroundColor: '#C8C8C8' }} />,
+      <View style={{ height:1, width: '100%', backgroundColor: '#999999' }} />
     );
   };
 
@@ -86,12 +91,28 @@ export default class station extends Component {
         return (
           // <CustomActivityIndicator animating={false} /> ,
           ToastAndroid.show(response.message, ToastAndroid.LONG)
-        )
+        ),
+        this.setState({
+          isVisible:false
+        })
       } else {
         return (
-          ToastAndroid.show(response.error, ToastAndroid.LONG),
+          // ToastAndroid.show(response.error, ToastAndroid.LONG),
+         
+            Alert.alert(
+              'Invalid Input!!',
+              'Your is not valid or expired.Please check and try again!! ',
+              [
+                {
+                  text: 'OK', onPress: () => console.log('Invalid input'),
+                  style:'cancel'
+                },
+              ],
+              { cancelable: false },
+            )
+          ),
           console.log(response.error)
-        )
+        
       }
     } catch (error) {
       console.log('Data received in station.js catch: ' + error)
@@ -126,7 +147,11 @@ export default class station extends Component {
     const width = Dimensions.get('screen').width
     return (
       <SafeAreaView style={styles.slide}>
-
+        {/* <View style={{flexDirection:'column',alignItems:'center'}}>
+        <Spinner size={100} type={'FadingCircleAlt'} color={'#FF5819'} isVisible={this.state.loading}/>
+        </View> */}
+       
+        {/* <Fade visible={this.state.loading == false}> */}
         <View style={styles.topContainer}>
           <View>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
@@ -134,8 +159,10 @@ export default class station extends Component {
             </TouchableOpacity>
           </View>
           {/* Searchbar begins */}
+
           <View style={styles.searchBarView}>
-            <TextInput
+            <Text  style={{ fontSize: 18, fontFamily: 'Poppins-Medium', }}>Pick Station & Restaurant</Text>
+            {/* <TextInput
               style={{ fontSize: 15, fontFamily: 'Poppins-Regular', width: '80%' }}
               placeholder="What would you like to have today?"
               onChangeText={firstQuery => this.setState({ firstQuery })}
@@ -143,8 +170,9 @@ export default class station extends Component {
             />
             <TouchableOpacity onPress={() => { alert(this.state.firstQuery) }}>
               <Icon name={'search'} size={20} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
+
           {/* Searchbar ends */}
         </View>
         {/* FilterModal begins */}
@@ -274,7 +302,7 @@ export default class station extends Component {
                 // data={this.state.data}
                 horizontal={true}
                 renderItem={({ item, index }) =>
-                  <Fade visible={item.isVisible}>
+                  <Fade visible={ item.isVisible && item.outlets.length != 0}>
                     <View style={styles.stationView}>
                     {/* activeOpacity = {this.state.scrollBegin == true ? 1 : 0.5 } */}
                       <TouchableOpacity>
@@ -292,17 +320,16 @@ export default class station extends Component {
             </ScrollView>
           </View>
         </View>
-
-        {/* OutletView starts */}
+       {/* OutletView starts */}
         <ScrollView>
           <View style={styles.slide}>
             {/* Station Header */}
             {/* <StationHeader /> */}
             <FlatList
               data={this.state.StationList}
-              ItemSeparatorComponent={this.FlatListItemSeparator}
+              // ItemSeparatorComponent={this.FlatListItemSeparator}
               renderItem={({ item, index }) =>
-                <Fade visible={item.isVisible}>
+                <Fade visible={item.isVisible && item.outlets.length != 0}>
                   <View>
                     <Text style={styles.textheader}>{item.stationName}</Text>
                     <View style={styles.stextview}>
@@ -318,14 +345,6 @@ export default class station extends Component {
                     {
                       item.outlets.map((outlets, index) => {
 
-                        // console.log('outlets :: ' + JSON.stringify(item.outlets))
-                        // if (item.outlets.length == 0) {
-                        //   return(
-                        //     <View style={{justifyContent:'center',alignItems:'center',backgroundColor: '#ffffff'}} key={index}>
-                        //       <Text style={styles.outletname}>No outlets active in this area</Text>
-                        //       </View>
-                        //   )
-                        // } else {
                         return (
                           <View style={styles.outletContainer} key={index} >
                             <TouchableWithoutFeedback style={styles.card}
@@ -405,6 +424,18 @@ export default class station extends Component {
           </TouchableOpacity>
         </View>
         {/* Floating FAB ends */}
+        <Overlay
+          isVisible={this.state.isVisible}
+          width="auto"
+          height="auto"
+          // windowBackgroundColor='rgba(255, 255, 255, .5)'
+          // overlayBackgroundColor='#ffffff'
+          onBackdropPress={() => this.setState({ isVisible: false })}
+        >
+          <ZoopLoader isVisible={true} text={'Loading...'} />
+
+        </Overlay>
+        {/* </Fade> */}
       </SafeAreaView>
     );
   }
@@ -414,7 +445,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'flex-start',
-    backgroundColor: '#f5f0f0',
+    backgroundColor: '#ffffff',
   },
   topContainer: {
     flexDirection: 'row',
@@ -451,10 +482,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-
-    borderRadius: 100 / 20,
-    borderWidth: 1,
-    borderColor: '#9B9B9B',
     marginHorizontal: 5
   },
   card: {
@@ -531,7 +558,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     marginLeft: 10,
     fontSize: 15,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     color: '#000000',
     justifyContent: 'center',
   },
@@ -543,11 +570,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff5819'
   },
   ratingView: {
-    backgroundColor: '#30ba57',
+    backgroundColor: '#a5ce39',
     marginLeft: 20,
     marginTop: 5,
     width: 35,
-    height: 25,
+    height: 25,   //#0e8341
     alignItems: 'center',
   },
   rating: {
@@ -570,8 +597,9 @@ const styles = StyleSheet.create({
     // marginLeft: 10
   },
   minorder: {
-    fontFamily: 'Poppins-Regular',
-    color: '#eb2f2f',
+    fontFamily: 'Poppins-Light',
+    color: '#b32120',
+    fontSize:12,
     marginLeft: 10,
     marginTop: 20,
   },
@@ -617,7 +645,7 @@ const styles = StyleSheet.create({
   textheader: {
     marginLeft: 20,
     fontSize: 20,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     color: '#000000',
     justifyContent: 'center',
   },

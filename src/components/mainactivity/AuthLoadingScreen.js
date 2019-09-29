@@ -12,6 +12,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase'
 import SplashScreen from 'react-native-splash-screen';
 import ConstantValues from '../constantValues';
+import Spinner from 'react-native-spinkit';
+import { ZoopLoader } from '../assests/zoopLoader';
 
 class AuthLoadingScreen extends Component {
    async componentDidMount() {
@@ -164,13 +166,15 @@ class AuthLoadingScreen extends Component {
     render() {
         return (
             <View style={styles.slide}>
-                <ActivityIndicator
+                {/* <ActivityIndicator
                     color={'#FF5819'}
                     size={40}
-                    animating={true} />
+                    animating={true} /> */}
+                <Spinner size={100} type={'FadingCircleAlt'} color={'#FF5819'} isVisible={true} />
                 <Text style={styles.text}>Loading...</Text>
                 {/* <StatusBar barStyle="default" /> */}
             </View>
+            // <ZoopLoader isVisible={true} text={'Loading...'} />
         );
     }
 }

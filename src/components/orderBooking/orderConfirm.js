@@ -70,8 +70,8 @@ export default class OrderConfirm extends Component {
               </View>
               <CustomButton
                 style={{ backgroundColor: '#1fc44e', alignSelf: 'center', marginBottom: 20, }}
-                onPress={() => this.props.navigation.navigate('TrackingOrder')}
-                title='Track Your Order'
+                onPress={() => this.props.navigation.navigate('MyOrders')}
+                title='View Details'
               />
             </View>
           </View>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity, TextInput, ToastAndroid } from 'react-native';
+import { View,Alert, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity, TextInput, ToastAndroid } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -8,10 +8,13 @@ import { CustomButton } from '../assests/customButtonLarge.js';
 import ConstantValues from '../constantValues.js';
 import { Fade } from '../assests/fade.js';
 import { CheckBox } from 'react-native-elements';
+import { ZoopLoader } from '../assests/zoopLoader.js';
+import { Overlay } from 'react-native-elements';
 
 export default class passengerDetail extends Component {
   componentDidMount() {
     SplashScreen.hide();
+    this.checkPassengerDetail();
     // this.getSeatInfo()
     var that = this;
 
@@ -41,7 +44,8 @@ export default class passengerDetail extends Component {
       skipIrctc: false,
       skipPnr: false,
       date: '',
-      time: ''
+      time: '',
+      isVisible:true
     };
   }
 
@@ -75,6 +79,33 @@ export default class passengerDetail extends Component {
   //     )
   //   }
   // }
+  checkPassengerDetail = () => {
+    if (ConstantValues.pnr == '' || ConstantValues.customerId == '') {
+     console.log('Customer id :' + ConstantValues.customerId + 'PNR :'+ConstantValues.pnr)
+      {
+        return (
+          Alert.alert(
+          'Alert!!',
+          ConstantValues.customerId == '' ? 'Need Login!!' : 'Need PNR',
+            [
+              {
+                text: 'OK',onPress: () => this.props.navigation.navigate('Search'),
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
+        )
+      }
+    } else {
+      this.setState({
+        name:ConstantValues.customerName,
+        altMobileNo:ConstantValues.customeralternateMobile,
+        emailId:ConstantValues.customerEmailId,   
+        isVisible:false
+      })
+    }
+  }
   proceedToPay = () => {
     this.savePassengerDetail()
     {
@@ -121,7 +152,7 @@ export default class passengerDetail extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Bold', fontSize: 20, color: '#000000' }}> Add Passenger Detail </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 20, color: '#000000' }}> Add Passenger Detail </Text>
               </View>
             </View>
             {/* header view ends */}
@@ -141,11 +172,11 @@ export default class passengerDetail extends Component {
 
               <View style={{ width: Dimensions.get('window').width, paddingVertical: 15, paddingHorizontal: 15 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Seat - {ConstantValues.seat}</Text>
-                  <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Coach - {ConstantValues.coach}</Text>
+                  <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Seat - {ConstantValues.seat}</Text>
+                  <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Coach - {ConstantValues.coach}</Text>
                 </View>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Station - {ConstantValues.stationName}</Text>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Expected Date & Time of Delivery - {ConstantValues.eta}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Station - {ConstantValues.stationName}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Expected Date & Time of Delivery - {ConstantValues.eta}</Text>
               </View>
               <View style={styles.inputView}>
                 <TextInput
@@ -153,13 +184,13 @@ export default class passengerDetail extends Component {
                   placeholder='Passenger`s name'
                   editable={true}
                   keyboardType='default'
-                  value={ConstantValues.name == '' ? this.state.name : ConstantValues.customerName}
+                  value={this.state.name}
                   autoCapitalize='characters'
                   onChangeText={name => this.setState({ name })}
                 />
               </View>
-              <View style={{ width: Dimensions.get('window').width, paddingVertical: 15, paddingHorizontal: 15 }}>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
+              <View style={{ width: Dimensions.get('window').width, paddingVertical: 10, paddingHorizontal: 15 }}>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
               </View>
               <View style={{ paddingVertical: 20 }}>
                 <View style={styles.inputView}>
@@ -168,7 +199,7 @@ export default class passengerDetail extends Component {
                     placeholder='Passenger`s Alt. Contact No.'
                     editable={true}
                     keyboardType='number-pad'
-                    value={ConstantValues.customeralternateMobile == '' ? this.state.altMobileNo : ConstantValues.customeralternateMobile}
+                    value={this.state.altMobileNo}
                     autoCapitalize='none'
                     onChangeText={altMobileNo => this.setState({ altMobileNo })}
                   />
@@ -181,7 +212,7 @@ export default class passengerDetail extends Component {
                     placeholder='Passenger`s Email Id.'
                     editable={true}
                     keyboardType='email-address'
-                    value={ConstantValues.customerEmailId == '' ? this.state.emailId : ConstantValues.customerEmailId}
+                    value={this.state.emailId}
                     autoCapitalize='none'
                     onChangeText={emailId => this.setState({ emailId })}
                   />
@@ -190,7 +221,7 @@ export default class passengerDetail extends Component {
               <View style={{ paddingVertical: 20 }}>
                 <View style={styles.inputView}>
                   <TextInput
-                    style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-SemiBold', }}
+                    style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Regular', }}
                     placeholder='Any request for the resturent? Please write here'
                     editable={true}
                     //keyboardType='default'
@@ -232,6 +263,18 @@ export default class passengerDetail extends Component {
           onPress={() => this.proceedToPay()}
           title='Proceed To Pay'
         />
+         <Overlay
+          isVisible={this.state.isVisible}
+          width="auto"
+          height="auto"
+          // windowBackgroundColor='rgba(255, 255, 255, .5)'
+          // overlayBackgroundColor='#ffffff'
+          onBackdropPress={() => this.setState({ isVisible: false })}
+        >
+          <ZoopLoader isVisible={true} text={'Loading...'} />
+
+        </Overlay>
+
       </SafeAreaView>
     );
   }
@@ -245,17 +288,17 @@ const styles = StyleSheet.create({
   },
   inputView: {
     marginLeft: 5,
-    borderRadius: 100 / 10,
-    borderColor: '#9B9B9B',
-    borderWidth: 2,
-    paddingVertical: 5,
-
+    width: Dimensions.get('window').width,
+    borderRadius: 5,
+    borderColor: '#e7e7e7',
+    borderWidth: 1,
+    
   },
   input: {
-    fontSize: 15,
+    fontSize: 20,
     color: '#000000',
     width: Dimensions.get('window').width - 50,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     alignItems: 'center'
   },
 });
