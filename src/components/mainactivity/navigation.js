@@ -5,8 +5,6 @@ import Device from 'react-native-device-info';
 //////-------LOGIN RELATED VIEWS-----------//////
 import AuthLoadingScreen from '../mainactivity/AuthLoadingScreen.js'
 import SignUp from '../login/signUp.js';
-import Authenticated from '../login/authenticated.js'
-import NotAuthenticated from '../login/notAuthenticated.js'
 // import Slider from '../login/slider.js';
 import Register from '../login/register.js';
 import OtpVerify from '../login/otpVerify.js';
@@ -16,7 +14,6 @@ import DeviceInfo from '../assests/deviceInfo.js';
 import Search from './search.js';
 import Welcome from '../login/welcome.js';
 import Station from '../mainactivity/station.js';
-import SearchOption from '../mainactivity/searchOption.js';
 import Notifications from '../services/notifications.js';
 import Menu from '../menu/menu.js';
 import Cart from '../cart/cart.js';
@@ -53,6 +50,8 @@ import SpotTrain from '../services/spotTrain';
 import TrainTimeTable from '../services/trainTimeTable';
 import CoachSequence from '../services/coachSequence';
 import PlatformLocator from '../services/platformLocator';
+import Helpline from '../services/helpline.js';
+import BulkOrder from '../services/bulkOrder.js';
 
 
 import { createStackNavigator, createAppContainer, createDrawerNavigator, createSwitchNavigator } from "react-navigation";
@@ -319,18 +318,6 @@ const AppNavigator = createStackNavigator({
       header: null,
     }
   },
-  Authenticated: {
-    screen: Authenticated,
-    navigationOptions: {
-      header: null,
-    }
-  },
-  NotAuthenticated: {
-    screen: NotAuthenticated,
-    navigationOptions: {
-      header: null,
-    }
-  },
   Notifications: {
     screen: Notifications,
     navigationOptions: {
@@ -356,6 +343,18 @@ const AppNavigator = createStackNavigator({
       header: null,
     }
   },
+  Helpline: {
+    screen: Helpline,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  BulkOrder: {
+    screen: BulkOrder,
+    navigationOptions: {
+      header: null,
+    }
+  },
   LogOut: {
     screen: LogOut,
     navigationOptions: {
@@ -377,12 +376,6 @@ const AppNavigator = createStackNavigator({
   },
   Register: {
     screen: Register,
-    navigationOptions: {
-      header: null,
-    }
-  },
-  SearchOption: {
-    screen: SearchOption,
     navigationOptions: {
       header: null,
     }

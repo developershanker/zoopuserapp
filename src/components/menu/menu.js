@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, Switch, SectionList, ScrollView,Image, TouchableOpacity, ActivityIndicator, BackHandler , Alert} from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, Switch, SectionList, ScrollView, Image, TouchableOpacity, ActivityIndicator, BackHandler, Alert } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -10,6 +10,8 @@ import Modal from "react-native-modal";
 import menuApi from './menuApi.js';
 import ConstantValues from '../constantValues.js';
 import cartApi from '../cart/cartApi.js';
+import { ZoopLoader } from '../assests/zoopLoader.js';
+import { Overlay } from 'react-native-elements';
 
 
 
@@ -35,7 +37,8 @@ export default class Menu extends Component {
       RecommendedMenuInfo: [],
       OutletMenuInfo: [],
       inCart: [],
-      totalCartCount: 0
+      totalCartCount: 0,
+      isVisible: true
     };
   }
   // handleBackPress = () => {
@@ -151,7 +154,7 @@ export default class Menu extends Component {
           offer: response.data.offer,
           RecommendedMenuInfo: response.data.recommendedItems,
           OutletMenuInfo: response.data.items,
-          loading: false
+          isVisible: false
         })
 
 
@@ -167,7 +170,34 @@ export default class Menu extends Component {
     }
   }
 
+  checkCart() {
+    if (this.state.totalPrice >= ConstantValues.minimumOrderValue) {
+      this.props.navigation.navigate('Cart', {
+        count: this.state.inCart.length,
+        totalPrice: this.state.totalPrice
+      })
+      console.log('no minimumorder issue')
+    } else {
+      
+        return (
+          // ToastAndroid.show(response.error, ToastAndroid.LONG),
+         
+            Alert.alert(
+              'Add more items!!',
+              'Order should be atleast Rs.'+ConstantValues.minimumOrderValue,
+              [
+                {
+                  text: 'OK',
+                  style:'cancel'
+                },
+              ],
+              { cancelable: false },
+            )
+          ),
+          console.log('minimumorder issue')
+            }
 
+  }
 
 
   render() {
@@ -189,9 +219,9 @@ export default class Menu extends Component {
 
             <View style={styles.topContainer}>
               <Text style={styles.outletName}> {ConstantValues.outletName} </Text>
-              <Text style={{ fontFamily: 'Poppins-SemiBold', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
+              <Text style={{ fontFamily: 'Poppins-Medium', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
               <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
-                <Text style={{ fontFamily: 'Poppins-Medium'}}>Veg. Only</Text>
+                <Text style={{ fontFamily: 'Poppins-Medium' }}>Veg. Only</Text>
                 <Switch />
               </View>
 
@@ -199,9 +229,9 @@ export default class Menu extends Component {
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
                 <View style={{ flexDirection: 'row' }}>
                   <Image style={{ width: 30, height: 15 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.fssai }} />
-                  <Text style={{ fontSize: 10, fontFamily: 'Poppins-SemiBold' }}>Lic No. {this.state.fssaiNo}</Text>
+                  <Text style={{ fontSize: 10, fontFamily: 'Poppins-Medium' }}>Lic No. {this.state.fssaiNo}</Text>
                 </View>
-                <Text style={{ fontSize: 10, fontFamily: 'Poppins-SemiBold', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
+                <Text style={{ fontSize: 10, fontFamily: 'Poppins-Medium', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
               </View>
 
 
@@ -212,34 +242,34 @@ export default class Menu extends Component {
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginLeft: 20 }}>
                     <View style={{ flexDirection: 'row' }}>
                       <Icon name='star' size={15} color='#ff9214' />
-                      <Text style={{ fontFamily: 'Poppins-SemiBold' }}> {ConstantValues.outletRating} </Text>
+                      <Text style={{ fontFamily: 'Poppins-Medium' }}> {ConstantValues.outletRating} </Text>
                     </View>
-                    <Text style={{ fontFamily: 'Poppins-SemiBold' }}>Rating</Text>
+                    <Text style={{ fontFamily: 'Poppins-Medium' }}>Rating</Text>
                   </View>
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10 }}>
-                    <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{ConstantValues.rupee} {ConstantValues.minimumOrderValue}</Text>
-                    <Text style={{ fontFamily: 'Poppins-SemiBold' }}>Min. Order</Text>
+                    <Text style={{ fontFamily: 'Poppins-Medium' }}>{ConstantValues.rupee} {ConstantValues.minimumOrderValue}</Text>
+                    <Text style={{ fontFamily: 'Poppins-Medium' }}>Min. Order</Text>
                   </View>
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginRight: 20 }}>
-                    <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{ConstantValues.haltTime}</Text>
-                    <Text style={{ fontFamily: 'Poppins-SemiBold' }}>Halt Time</Text>
+                    <Text style={{ fontFamily: 'Poppins-Medium' }}>{ConstantValues.haltTime}</Text>
+                    <Text style={{ fontFamily: 'Poppins-Medium' }}>Halt Time</Text>
                   </View>
 
                 </View>
               </View>
               {/* Offer text label */}
-              <Fade visible={this.state.offer.length != 0}>
+              {/* <Fade visible={this.state.offer.length != 0}>
                 <View style={styles.offerboard}>
                   <Text style={styles.offerText}>Offer:- {this.state.offer}</Text>
                 </View>
-              </Fade>
+              </Fade> */}
             </View>
           </View>
           {/*  MENU ITEM STYLES{GRID} */}
           <View style={{ width: Dimensions.get('window').width }}>
-            <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-              <Text style={{ fontSize: 20, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Recommended Items</Text>
-              <Image style={{ alignSelf: 'center', height: 15 }} source={require('../images/line.png')} />
+            <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 10 }}>
+              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Medium', color: '#000000' }}>Recommended Items</Text>
+              {/* <Image style={{ alignSelf: 'center', height: 15 }} source={require('../images/line.png')} /> */}
             </View>
             <FlatList
               style={{ width: Dimensions.get('window').width }}
@@ -247,33 +277,49 @@ export default class Menu extends Component {
               extraData={this.state}
               renderItem={({ item, index }) =>
                 <View>
-                  <View style={styles.menuGridCardContainer}>
-                    <View>
-                      <Image style={styles.itemImage} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.menu }} />
-                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Icons name={'carrot'} size={15} color={item.categoryType == 'Veg' ? '#1e8728' : '#eb0909'} />
-                        <Text style={styles.itemName}>{item.itemName}</Text>
+                  <View style={styles.menuCardContainer}>
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+
+                      <View style={{ flexDirection: 'column', paddingHorizontal: 5, paddingVertical: 5 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'flex-start', paddingTop: 10, paddingHorizontal: 5 }}>
+                          <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryType == 'Veg' ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
+                          <View style={{ flexDirection: 'column', paddingHorizontal: 5, paddingVertical: 5 }}>
+                            <Text style={styles.itemName}>{item.itemName}</Text>
+                            <Text style={{ width: 200, fontSize: 10, color: '#c7c3c3', fontFamily: 'Poppins-Regular', paddingHorizontal: 5, }}>{item.itemDescription}</Text>
+                            <Text style={styles.itemName}>{ConstantValues.rupee} {item.basePrice}</Text>
+                          </View>
+                        </View>
+
                       </View>
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginRight: 20 }}>
-                        <Text style={styles.itemName}>{ConstantValues.rupee} {item.basePrice}</Text>
-                        {/* Incrementor starts here */}
+                      {/* Incrementor starts here */}
+                      <View style={{ flexDirection: 'column', paddingVertical: 5, justifyContent: 'center', alignItems: 'center', width: 150 }}>
+                        {/* <Fade visible={item.image != null}>
+                          <Image style={styles.itemImage} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.menu }} />
+                        </Fade> */}
                         <View>
+
                           {/* Adding item to cart button */}
                           <View
-                            style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius: 100 / 10, borderWidth: 1 }} key={index}>
+                            style={{ alignItems: 'center', width: 90, borderColor: '#60b246', borderRadius: 6, borderWidth: 1 }} key={index}>
                             <TouchableOpacity onPress={() => { this.addItemToCart(item, index) }} disabled={item.itemCount == 0 ? false : true}>
-                              <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
-                                <TouchableOpacity onPress={() => { this.removeItemFromCart(item) }} disabled={item.itemCount == 0 ? true : false}>
-                                  <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
+                              <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center', justifyContent: 'space-around' }}>
+                                <TouchableOpacity onPress={() => { this.removeItemFromCart(item,index) }} disabled={item.itemCount == 0 ? true : false}>
+                                  <View style={[styles.plusminus,{opacity: item.itemCount == 0 ? 0 : 100,borderTopRightRadius:1,borderBottomRightRadius:1,borderRightColor:'#60b246',borderRightWidth: 1}]}>
+                                    <Icon name='minus' size={10} color='#60b246' />
+                                  </View>
+
                                 </TouchableOpacity>
 
-                                <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
+                                <Text style={{ fontFamily: 'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5}}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
 
 
                                 <TouchableOpacity onPress={() => {
                                   this.addItemToCart(item, index)
                                 }}>
-                                  <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='plus' size={15} color='#1e8728' />
+                                  <View style={[styles.plusminus, { opacity: item.itemCount == 0 ? 0 : 100, borderTopLeftRadius: 1, borderBottomLeftRadius: 1, borderLeftColor: '#60b246', borderLeftWidth: 1 }]}>
+                                    <Icon name='plus' size={10} color='#60b246' />
+                                  </View>
                                 </TouchableOpacity>
 
                               </View>
@@ -281,13 +327,13 @@ export default class Menu extends Component {
                           </View>
                           {/* Adding item to cart button ends */}
                         </View>
-                        {/* Incrementor ends here */}
                       </View>
+                      {/* Incrementor ends here */}
+
                     </View>
                   </View>
                 </View>
               }
-              numColumns={2}
               keyExtractor={(item) => item.itemId.toString()}
             />
 
@@ -338,7 +384,7 @@ export default class Menu extends Component {
               //  Section Header Rendering
               // renderSectionHeader={({ section }) => (
               //   <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-              //     <Text style={{ fontSize: 20, fontFamily:'Poppins-SemiBold', color: '#000000' }}>{section.title}</Text>
+              //     <Text style={{ fontSize: 20, fontFamily:'Poppins-Medium', color: '#000000' }}>{section.title}</Text>
               //     <Image style={{ alignSelf: 'center', height: 15 }} source={require('../images/line.png')} />
               //   </View>
               // )}
@@ -347,30 +393,30 @@ export default class Menu extends Component {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 10 }}>
                   <View style={{ width: Dimensions.get('window').width - 200 }}>
                     <View style={{ flexDirection: 'row' }}>
-                      <Icons name={'carrot'} size={15} color={item.categoryType == 'Veg' ? '#1e8728' : '#eb0909'} />
-                      <Text style={{ fontSize: 15, color: '#000000', fontFamily : 'Poppins-SemiBold'}}>{item.itemName}</Text>
+                      <Icons name={'carrot'} size={15} color={item.categoryType == 'Veg' ? '#60b246' : '#eb0909'} />
+                      <Text style={{ fontSize: 15, color: '#000000', fontFamily : 'Poppins-Medium'}}>{item.itemName}</Text>
                     </View>
-                    <Text style={{ fontSize: 15, color: '#000000',fontFamily : 'Poppins-SemiBold' }}>{ConstantValues.rupee} {item.basePrice}</Text>
+                    <Text style={{ fontSize: 15, color: '#000000',fontFamily : 'Poppins-Medium' }}>{ConstantValues.rupee} {item.basePrice}</Text>
                     <Text style={{ fontSize: 10, color: '#c7c3c3',fontFamily : 'Poppins-Regular' }}>{item.itemDescription}</Text>
                   </View>
                   <View>
 
 
                     <View
-                      style={{ alignItems: 'center', width: 80, borderColor: '#1e8728', borderRadius:  100 / 10, borderWidth : 1 }}>
+                      style={{ alignItems: 'center', width: 80, borderColor: '#60b246', borderRadius:  100 / 10, borderWidth : 1 }}>
                       <TouchableOpacity onPress={() => { this.addItemToCart(item,index), this.state.totalPrice = item.basePrice }} disabled={item.itemCount == 0 ? false : true}>
                         <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
                           <TouchableOpacity onPress={() => { this.removeItemFromCart(item,index) }} disabled={item.itemCount == 0 ? true : false}>
-                            <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='minus' size={15} color='#1e8728' />
+                            <Icon style={[styles.plusminus,{opacity: item.itemCount == 0 ? 0 : 100}]}} name='minus' size={15} color='#60b246' />
                           </TouchableOpacity>
 
-                          <Text style={{ fontFamily:'Poppins-SemiBold', color: '#1e8728', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
+                          <Text style={{ fontFamily:'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
 
 
                           <TouchableOpacity onPress={() => {
                             this.addItemToCart(item,index)
                           }}>
-                            <Icon style={{ opacity: item.itemCount == 0 ? 0 : 100 }} name='plus' size={15} color='#1e8728' />
+                            <Icon style={[styles.plusminus,{opacity: item.itemCount == 0 ? 0 : 100}]}} name='plus' size={15} color='#60b246' />
                           </TouchableOpacity>
 
                         </View>
@@ -397,26 +443,31 @@ export default class Menu extends Component {
         {/* Floating FAB ends */}
         {/*  Footer  */}
         <Fade visible={visible}>
-          <TouchableOpacity onPress={() => {
-
-            this.props.navigation.navigate('Cart', {
-              count: this.state.inCart.length,
-              totalPrice: this.state.totalPrice
-            })
-          }}
+          <TouchableOpacity onPress={() => this.checkCart() }
             disabled={false}>
             <View style={[styles.footer]}>
 
               <View style={styles.itemCountShow}>
-                <Text style={{ marginLeft: 5, fontSize: 20, fontFamily: 'Poppins-SemiBold', color: '#ffffff' }}>{this.state.totalCartCount} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.rupee}{this.state.totalPrice}</Text>
+                <Text style={{ marginLeft: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>{this.state.totalCartCount} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.rupee}{this.state.totalPrice}</Text>
               </View>
               <View style={styles.viewcart}>
-                <Text style={{ marginRight: 5, fontSize: 20, fontFamily: 'Poppins-SemiBold', color: '#ffffff' }}>VIEW CART</Text>
+                <Text style={{ marginRight: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>VIEW CART</Text>
                 <Icon name={'shopping-bag'} color={'#ffffff'} size={20} />
               </View>
             </View>
           </TouchableOpacity>
         </Fade>
+        <Overlay
+          isVisible={this.state.isVisible}
+          width="auto"
+          height="auto"
+          // windowBackgroundColor='rgba(255, 255, 255, .5)'
+          // overlayBackgroundColor='#ffffff'
+          onBackdropPress={() => this.setState({ isVisible: false })}
+        >
+          <ZoopLoader isVisible={true} text={'Loading...'} />
+
+        </Overlay>
       </SafeAreaView>
     );
   }
@@ -439,12 +490,12 @@ const styles = StyleSheet.create({
     // paddingTop: 15,
     fontSize: 20,
     color: '#000000',
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Medium',
   },
   card: {
     width: Dimensions.get('window').width,
     height: 100,
-    borderRadius: 100 / 4,
+    borderRadius: 6,
     margin: 5,
     alignItems: 'center',
     flexDirection: 'row',
@@ -457,13 +508,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     shadowOpacity: 0.4,
     borderBottomColor: '#e4e4e4',
-    borderBottomWidth: 4,
+    borderBottomWidth: 2,
   },
   // OFFER BOARD STYLES
   offerText: {
     color: '#ffffff',
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Medium',
     fontSize: 15
+  },
+  plusminus: {
+    width: 30,
+    justifyContent:'center',
+    alignItems:'center',
+    height:30,
+    borderRadius:6
   },
   offerboard: {
     height: 35,
@@ -488,41 +546,39 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 100 / 5
   },
   //  MENU ITEM STYLES{GRID}
-  menuGridCardContainer: {
-    flexDirection: 'column',
+  menuCardContainer: {
+    flexDirection: 'row',
     alignSelf: 'center',
-    width: Dimensions.get('window').width / 2,
-    height: Dimensions.get('window').width / 2,
-    borderRadius: 100 / 5,
+    width: Dimensions.get('window').width - 10,
+    borderRadius: 6,
     backgroundColor: '#ffffff',//can change as we move to various pages
     marginBottom: 10,//can change as we move to various pages
     marginLeft: '2%', //can change as we move to various pages
-    borderColor: '#e4e4e4',
-    borderWidth: 1,
+    // borderColor: '#e4e4e4',
+    // borderWidth: 1,
     shadowOpacity: 0.4,
-    borderBottomColor: '#e4e4e4',
-    borderBottomWidth: 4,
   },
   itemImage: {
-    marginTop: 5,
-    marginBottom: 5,
-    marginRight: 15,
+    marginVertical: 5,
     justifyContent: 'center',
     alignSelf: 'center',
-    width: Dimensions.get('window').width / 2 - 15,
-    height: Dimensions.get('window').width / 2 - 100,
-    borderRadius: 100 / 5,
+    width: 95,
+    height: 95,
+    borderRadius: 5,
   },
   itemName: {
-    fontFamily: 'Poppins-SemiBold',
+    paddingHorizontal: 5,
+    width: 200,
+    fontFamily: 'Poppins-Light',
     fontSize: 15,
+    color: '#000000'
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: Dimensions.get('window').width,
-    height: 60,
-    backgroundColor: '#0e8341',
+    height: 50,
+    backgroundColor: '#60b246',
     alignContent: 'center',
 
   },
@@ -531,7 +587,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     marginRight: 15,
     alignSelf: 'flex-end',
-
+    justifyContent: 'center'
   },
   itemCountShow: {
     flexDirection: 'row',
@@ -560,7 +616,7 @@ const styles = StyleSheet.create({
   },
   headerTextmodal: {
     alignSelf: 'center',
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Medium',
     fontSize: 20,
     color: '#000000',
     paddingVertical: 10

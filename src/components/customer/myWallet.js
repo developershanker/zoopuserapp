@@ -9,6 +9,7 @@ import BillCardDetail from '../cart/billDetailCard.js';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import { Fade } from '../assests/fade.js';
 import walletApi from '../customer/walletApi.js'
+import { Overlay } from 'react-native-elements';
 
 export default class myWallet extends Component {
   componentDidMount() {
@@ -19,7 +20,8 @@ export default class myWallet extends Component {
     super(props);
     this.state = {
       walletBalance: null,
-      data: []
+      data: [],
+      isVisible:true
     };
   }
 
@@ -92,7 +94,18 @@ export default class myWallet extends Component {
                 keyExtractor={(item) => item.walletId.toString()}
               />
             </View>
+                <Fade visible={ConstantValues.customerId == ''}>
+            <Overlay
+              isVisible={this.state.isVisible}
+              windowBackgroundColor="rgba( 77, 75, 75, .5)"
+              overlayBackgroundColor='#e7e7e7'
+              width="auto"
+              height="auto"
+            >
+              <TouchableOpacity onPress={() => this.setState({ isVisible: false })}><Text>Need to login</Text></TouchableOpacity>
 
+            </Overlay>
+            </Fade>
 
           </View>
         </ScrollView>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text,Dimensions } from 'react-native';
 
 
 export const CustomButton = (props) => {
@@ -15,14 +15,14 @@ export const CustomButton = (props) => {
 const styles = StyleSheet.create({
     button: {
         display: 'flex',
-        width: 300,
+        width: Dimensions.get('window').width - 20,
         height: 30,
         borderRadius: 5,
         justifyContent:'center',
         paddingVertical: 20,
         alignItems: 'center',
-        backgroundColor: '#FF5819',
-        shadowColor: '#FF5819',
+        backgroundColor: '#ff5819',
+        shadowColor: '#ff5819',
         shadowOpacity: 0.4,
         shadowOffset: { height: 10, width: 10 },
         shadowRadius: 20,
@@ -34,6 +34,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#ffffff',
         justifyContent:'center',
-        fontFamily:'Poppins-Bold'
+        fontFamily:'Poppins-SemiBold'
     },
 });

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import {Picker, View,Text, StyleSheet, TextInput, ToastAndroid , PermissionsAndroid  } from 'react-native';
+import {Picker, View,Text, StyleSheet, TextInput, ToastAndroid , PermissionsAndroid ,Alert } from 'react-native';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import SplashScreen from 'react-native-splash-screen';
 import CustomTouchableOpacity from '../assests/customTouchableOpacity';
 import loginApi from '../login/loginApi.js';
 import { Fade } from '../assests/fade.js';
 import ConstantValues from '../constantValues.js';
+import Modal from "react-native-modal";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export default class Profile extends Component {
@@ -22,6 +24,7 @@ export default class Profile extends Component {
       referredBy: '',
       altmobile: '',
       loginCount: null,
+      visibleModal:'center'
     };
   }
   ///checking Input Validation
@@ -32,10 +35,36 @@ export default class Profile extends Component {
           this.editUserInfo(name, emailId, altMobile, referredBy)
           // this.onRegister()
         } else {
-          ToastAndroid.show('Please Enter Email Id', ToastAndroid.LONG)
+          //ToastAndroid.show('Please Enter Email Id', ToastAndroid.LONG)
+          return (
+            Alert.alert(
+              'Invalid Input!!',
+              'Please Enter Email Id.',
+              [
+                {
+                  text: 'OK', onPress: () => console.log('Invalid email id'),
+                  style:'cancel'
+                },
+              ],
+              { cancelable: false },
+            )
+          )
         }
       } else {
-        ToastAndroid.show('Please Enter Name', ToastAndroid.LONG)
+        // ToastAndroid.show('Please Enter Name', ToastAndroid.LONG)
+        return (
+          Alert.alert(
+            'Invalid Input!!',
+            'Please Enter Name.',
+            [
+              {
+                text: 'OK', onPress: () => console.log('Invalid name'),
+                style:'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
+        )
       }
     } catch (error) {
       console.log('Data received in profile.js catch: ' + error)
@@ -151,8 +180,8 @@ export default class Profile extends Component {
         </View>
         <CustomButton
           title="Submit"
-          disabled={ this.state.name.length == 0 ? true : false}
-          style={{ backgroundColor:  this.state.name.length == 0 ? '#9b9b9b' : '#1fc44e', alignSelf: 'center', marginBottom: 20, }}
+          disabled={ this.state.name == '' ? true : false}
+          style={{ backgroundColor:'#1fc44e', alignSelf: 'center', marginBottom: 20, }}
           onPress={() => {
             this.isEmpty(this.state.name, this.state.emailId, this.state.altmobile, this.state.referredBy)
             // this.props.navigation.navigate('Search')
