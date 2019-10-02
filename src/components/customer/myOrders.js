@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions, Alert, TouchableOpacity, FlatList, Image, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions, Alert, TouchableOpacity, FlatList, Image, ToastAndroid ,TouchableWithoutFeedback} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SplashScreen from 'react-native-splash-screen';
 import Icons from 'react-native-vector-icons/FontAwesome5';
@@ -13,6 +13,7 @@ import { CheckBox } from 'react-native-elements';
 import orderApi from '../orderBooking/orderApi.js';
 import { ZoopLoader } from '../assests/zoopLoader.js';
 import { Overlay } from 'react-native-elements';
+import moment from "moment";
 
 
 
@@ -72,32 +73,38 @@ export default class myOrders extends Component {
                 extraData={this.state}
                 renderItem={({ item }) =>
                   <View>
-                    <TouchableOpacity>
+                    <TouchableWithoutFeedback>
                       <View style={styles.card}>
-                        {item.items.map((items,index) => {
-                          return (
-                            <View key={index}>
-                              <View style={styles.tile}>
+                                 <View style={styles.tile}>
                                 <Text style={styles.tiletext}>Ordered On</Text>
-                                <Text style={styles.tiletext}>{items.created}</Text>
+                                <Text style={styles.tiletext}>{ item.bookingDate == null ? 'Date not available' : moment(item.bookingDate).format('DD-MM-YYYY HH:mm A')}</Text>
                               </View>
+                            
+                          
+                              <View>
                               <View style={styles.tile}>
                                 <Text style={styles.tiletext}>Item</Text>
-                                <Text style={styles.tiletext}>{items.itemName}</Text>
+                        {item.items.map((items,index) => {
+                          // const itemName = items.itemName.join()
+                          return (
+                              <View style={{width:150,justifyContent:'center'}} key={index}>
+                                  <Text style={styles.tiletextitem}>{items.itemName},</Text>
                               </View>
-                            </View>
                           )
                         })}
+                         </View>
+                            </View>
                         <View style={styles.tile}>
                           <Text style={styles.tiletext}>Total Amount</Text>
-                          <Text style={[styles.tiletext, { color: '#1fc44e' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
+                          <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
                         </View>
                         <View style={styles.tile}>
-                          <Text style={[styles.tiletext, { color: item.orderStatus == 'Delivered' ? '#000000' : '#1fc44e' }]}>{item.orderStatus}</Text>
-                          <Text style={[styles.tiletext, { color: '#f15926' }]}>Repeat Order</Text>
+                            <Text style={[styles.tiletext, { color: '#000000' }]}>Status :</Text>
+                          <Text style={[styles.tiletext, { color: item.orderStatus == 'Delivered' ? '#000000' : '#60b246' }]}>{item.orderStatus}</Text>
+                          {/* <Text style={[styles.tiletext, { color: '#f15926' }]}>Repeat Order</Text> */}
                         </View>
                       </View>
-                    </TouchableOpacity>
+                    </TouchableWithoutFeedback>
                   </View>
                 }
                 keyExtractor={(item) => item.orderId.toString()}
@@ -137,7 +144,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     shadowOpacity: 0.4,
     borderBottomColor: '#e4e4e4',
-    borderBottomWidth: 4,
+    borderBottomWidth: 2,
   },
   tile: {
     width: Dimensions.get('screen').width - 20,
@@ -149,5 +156,10 @@ const styles = StyleSheet.create({
   tiletext: {
     fontFamily: 'Poppins-Regular',
     color: '#000000'
+  },
+  tiletextitem:{
+    fontFamily: 'Poppins-Regular',
+    color: '#6a6e6c',
+    fontSize:12
   }
 });

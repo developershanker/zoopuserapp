@@ -15,7 +15,7 @@ export const ZoopLoader = (props) => {
         
       <View>
         <Spinner size={50} type={'FadingCircleAlt'} color={'#FF5819'} isVisible={isvisible} />
-        <Text style={styles.text}>{text}</Text>
+        {/* <Text style={styles.text}>{text}</Text> */}
       </View>
        
     );

@@ -57,7 +57,7 @@ export default class feedback extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Bold', fontSize: 25, color: '#000000' }}> FeedBack </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 25, color: '#000000' }}> FeedBack </Text>
               </View>
             </View>
             {/* header view ends */}
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   inputS: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     width: '80%',
     fontSize: 15,
     marginVertical: 40
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     marginVertical: 40
   },
   textS: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     fontSize: 20,
     // color: '#000000'
   },

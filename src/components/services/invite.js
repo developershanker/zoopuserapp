@@ -18,7 +18,7 @@ export default class Invite extends Component {
     super(props);
     this.state = {
       phone: '123456789',
-      backgroundColor: '#00c74f',
+      backgroundColor: '#60b246',
       copyMsg: 'TAP TO COPY'
     };
   }
@@ -60,13 +60,13 @@ export default class Invite extends Component {
                 {/* <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} /> */}
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Bold', fontSize: 25, color: '#000000' }}> Refer & Earn </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 25, color: '#000000' }}> Refer & Earn </Text>
               </View>
             </View>
             {/* header view ends */}
             <View style={{ paddingVertical: 20, justifyContent: 'center', alignItems: 'center' }}>
 
-              <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-SemiBold', fontSize: 15, color: '#000000', paddingVertical: 10 }}>
+              <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Regular', fontSize: 15, color: '#000000', paddingVertical: 10 }}>
                 Refer friends and earn.
                 </Text>
 

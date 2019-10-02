@@ -19,7 +19,7 @@ class billDetailCard extends Component {
       <SafeAreaView style={styles.slide}>
         <View>
           <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-            <Text style={{ fontSize: 20, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Bill Details</Text>
+            <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>Bill Details</Text>
             <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} />
           </View>
           <View
@@ -37,11 +37,11 @@ class billDetailCard extends Component {
                     </View>
                     <View style={styles.tile}>
                       <Text style={styles.tiletext}>Discount</Text>
-                      <Text style={[styles.tiletext, { color: '#1fc44e' }]}> {ConstantValues.rupee} {ConstantValues.couponValue}</Text>
+                      <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {ConstantValues.couponValue}</Text>
                     </View>
                     <View style={styles.tile}>
                       <Text style={styles.tiletext}>Used Wallet Balance</Text>
-                      <Text style={[styles.tiletext, { color: '#1fc44e' }]}>{ConstantValues.rupee} {ConstantValues.walletBalanceUsed}</Text>
+                      <Text style={[styles.tiletext, { color: '#60b246' }]}>{ConstantValues.rupee} {ConstantValues.walletBalanceUsed}</Text>
                     </View>
                     <View style={styles.tile}>
                       <Text style={styles.tiletext}>Add GST 5%</Text>
@@ -69,17 +69,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   billcard: {
-    // width: Dimensions.get('window').width,
-    // borderRadius: 100 / 4,
-    // // marginLeft: 5,
-    // // marginRight: 10,
-    // // marginTop: 10,
-    // alignItems: 'center',
-    // flexDirection: 'row',
-    // // paddingTop: 10,
-    // // paddingBottom: 10,
-    // // paddingLeft: 10,
-    // // paddingRight: 10
     backgroundColor: '#ffffff',//can change as we move to various pages
     marginBottom: 10,//can change as we move to various pages
     marginLeft: '2%', //can change as we move to various pages
@@ -89,17 +78,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     shadowOpacity: 0.4,
     borderBottomColor: '#e4e4e4',
-    borderBottomWidth: 4,
+    borderBottomWidth: 2,
   },
   tile: {
     width: Dimensions.get('screen').width - 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 10,
-    paddingVertical: 10
+    paddingVertical: 5
   },
   tiletext: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     color: '#000000'
   }
 })

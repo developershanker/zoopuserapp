@@ -145,7 +145,7 @@ class AuthLoadingScreen extends Component {
                 ConstantValues.customerId = customerId
                 console.log('ConstantValues.token : ' + ConstantValues.token)
                 console.log('ConstantValues.customerId : ' + ConstantValues.customerId)
-                this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+                this.props.navigation.navigate(userToken ? 'App' : 'App');
             } else {
                 return (
                     ToastAndroid.show('Something went wrong!!', ToastAndroid.BOTTOM)
@@ -153,7 +153,7 @@ class AuthLoadingScreen extends Component {
             }
 
         } catch (error) {
-            this.props.navigation.navigate('Auth')
+            this.props.navigation.navigate('App')
             console.log('Error in getting stored value from asyncstorage: ' + error)
         }
 
@@ -170,8 +170,8 @@ class AuthLoadingScreen extends Component {
                     color={'#FF5819'}
                     size={40}
                     animating={true} /> */}
-                <Spinner size={100} type={'FadingCircleAlt'} color={'#FF5819'} isVisible={true} />
-                <Text style={styles.text}>Loading...</Text>
+                <Spinner size={100} type={'FadingCircleAlt'} color={'#898c8b'} isVisible={true} />
+                {/* <Text style={styles.text}>Loading...</Text> */}
                 {/* <StatusBar barStyle="default" /> */}
             </View>
             // <ZoopLoader isVisible={true} text={'Loading...'} />

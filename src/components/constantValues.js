@@ -43,6 +43,7 @@ export default class ConstantValues {
 
   //station and outlet
   static searchString = ''
+  static navigationChannel = ''
 
   //order constant module
   static stationId = ''
@@ -156,7 +157,10 @@ static MID = 'FIjIdu58691666399235'
   static imgurl = {
     facebook: 'app-Icon-set/Facebook.png',
     twitter: 'app-Icon-set/Twitter.png',
+    instagram:'app-Icon-set/Instagram.png',
     location: 'app-Icon-set/location.png',
+    call:'app-Icon-set/Call.png',
+    email:'app-Icon-set/Email.png',
     fssai: 'app-Icon-set/fssai.png',
     paytm: 'app-Icon-set/paytmnew.png',
     outlet: 'app-Icon-set/Biryani.jpg',
@@ -189,10 +193,17 @@ static MID = 'FIjIdu58691666399235'
     pnrCheck:'app-Icon-set/PNR+Status.png',
     bulkOrder:'app-Icon-set/Banner+Icon.png',
     veg:'app-Icon-set/Veg.png',
-    nonveg:'app-Icon-set/Non-Veg.png'
-
-
-
+    nonveg:'app-Icon-set/Non-Veg.png',
+    myorders:'app-Icon-set/My+Orders.png',
+    myProfile:'app-Icon-set/Profile.png',
+    homeScreen:'app-Icon-set/Home.png',
+    myWallet:'app-Icon-set/Wallet.png',
+    contactus:'app-Icon-set/Contact+Us.png',
+    invite:'app-Icon-set/Invite+&+earn.png',
+    faq:'app-Icon-set/FAQ.png',
+    rate:'app-Icon-set/Rate+us.png',
+    tnc:'app-Icon-set/Terms+&+Condition.png',
+    
   }
 
 }
