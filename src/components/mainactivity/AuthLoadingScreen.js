@@ -12,6 +12,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase'
 import SplashScreen from 'react-native-splash-screen';
 import ConstantValues from '../constantValues';
+import Spinner from 'react-native-spinkit';
+import { ZoopLoader } from '../assests/zoopLoader';
 
 class AuthLoadingScreen extends Component {
    async componentDidMount() {
@@ -143,7 +145,7 @@ class AuthLoadingScreen extends Component {
                 ConstantValues.customerId = customerId
                 console.log('ConstantValues.token : ' + ConstantValues.token)
                 console.log('ConstantValues.customerId : ' + ConstantValues.customerId)
-                this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+                this.props.navigation.navigate(userToken ? 'App' : 'App');
             } else {
                 return (
                     ToastAndroid.show('Something went wrong!!', ToastAndroid.BOTTOM)
@@ -151,7 +153,7 @@ class AuthLoadingScreen extends Component {
             }
 
         } catch (error) {
-            this.props.navigation.navigate('Auth')
+            this.props.navigation.navigate('App')
             console.log('Error in getting stored value from asyncstorage: ' + error)
         }
 
@@ -164,13 +166,15 @@ class AuthLoadingScreen extends Component {
     render() {
         return (
             <View style={styles.slide}>
-                <ActivityIndicator
+                {/* <ActivityIndicator
                     color={'#FF5819'}
                     size={40}
-                    animating={true} />
-                <Text style={styles.text}>Loading...</Text>
+                    animating={true} /> */}
+                <Spinner size={100} type={'FadingCircleAlt'} color={'#898c8b'} isVisible={true} />
+                {/* <Text style={styles.text}>Loading...</Text> */}
                 {/* <StatusBar barStyle="default" /> */}
             </View>
+            // <ZoopLoader isVisible={true} text={'Loading...'} />
         );
     }
 }

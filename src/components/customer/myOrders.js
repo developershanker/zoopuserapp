@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions, Alert, TouchableOpacity, FlatList, Image, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions, Alert, TouchableOpacity, FlatList, Image, ToastAndroid ,TouchableWithoutFeedback} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SplashScreen from 'react-native-splash-screen';
 import Icons from 'react-native-vector-icons/FontAwesome5';
@@ -11,6 +11,10 @@ import { Fade } from '../assests/fade.js';
 import walletApi from '../customer/walletApi.js';
 import { CheckBox } from 'react-native-elements';
 import orderApi from '../orderBooking/orderApi.js';
+import { ZoopLoader } from '../assests/zoopLoader.js';
+import { Overlay } from 'react-native-elements';
+import moment from "moment";
+
 
 
 export default class myOrders extends Component {
@@ -21,16 +25,8 @@ export default class myOrders extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      orderHistory: [
-        // { id: 1, orderedOn: '15/06/2019', item: 'Special Thali', totalAmount: '150', status: 'Delivered' },
-        // { id: 2, orderedOn: '15/06/2019', item: 'Special Thali', totalAmount: '120', status: 'Upcoming' },
-        // { id: 3, orderedOn: '15/06/2019', item: 'Special Thali', totalAmount: '130', status: 'Delivered' },
-        // { id: 4, orderedOn: '15/06/2019', item: 'Special Thali', totalAmount: '200', status: 'Upcoming' },
-        // { id: 5, orderedOn: '15/06/2019', item: 'Special Thali', totalAmount: '150', status: 'Delivered' },
-        // { id: 6, orderedOn: '15/06/2019', item: 'Special Thali', totalAmount: '150', status: 'Upcoming' },
-        // { id: 7, orderedOn: '15/06/2019', item: 'Special Thali', totalAmount: '150', status: 'Upcoming' },
-        // { id: 8, orderedOn: '15/06/2019', item: 'Special Thali', totalAmount: '150', status: 'Delivered' },
-      ]
+      orderHistory: [],
+      isVisible:true,
     };
   }
 
@@ -39,13 +35,21 @@ export default class myOrders extends Component {
       let response = await orderApi.orderHistory();
       if (response.status == true) {
         this.setState({
-          orderHistory: response.data.items
+          orderHistory: response.data,
+          isVisible:false
         })
       }
     } catch (error) {
       console.log('Data received in myOrder.js catch: ' + error)
     }
   }
+
+  // gotoDetail(item){
+  //   item.items.map((items,index) =>{
+  //     ConstantValues.orderedItems = items
+  //     console.log('ConstantValues.orderedItems : ' + ConstantValues.orderedItems)
+  //   })
+  // }
 
   render() {
     return (
@@ -58,36 +62,49 @@ export default class myOrders extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Bold', fontSize: 25, color: '#000000' }}> Order History </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 20, color: '#000000' }}> Order History </Text>
               </View>
             </View>
             {/* header view ends */}
-            <View>
+            <View style={{ width: Dimensions.get('screen').width }}>
               <FlatList
+                style={{ width: Dimensions.get('screen').width }}
                 data={this.state.orderHistory}
                 extraData={this.state}
                 renderItem={({ item }) =>
                   <View>
-                    <TouchableOpacity onPress={() => { this.props.navigation.navigate('DeliveryMark') }}>
+                    <TouchableWithoutFeedback>
                       <View style={styles.card}>
-                        <View style={styles.tile}>
-                          <Text style={styles.tiletext}>Ordered On</Text>
-                          <Text style={styles.tiletext}>{item.deliveryDate}</Text>
-                        </View>
-                        <View style={styles.tile}>
-                          <Text style={styles.tiletext}>Item</Text>
-                          <Text style={styles.tiletext}>{item.item}</Text>
-                        </View>
+                                 <View style={styles.tile}>
+                                <Text style={styles.tiletext}>Ordered On</Text>
+                                <Text style={styles.tiletext}>{ item.bookingDate == null ? 'Date not available' : moment(item.bookingDate).format('DD-MM-YYYY HH:mm A')}</Text>
+                              </View>
+                            
+                          
+                              <View>
+                              <View style={styles.tile}>
+                                <Text style={styles.tiletext}>Item</Text>
+                        {item.items.map((items,index) => {
+                          // const itemName = items.itemName.join()
+                          return (
+                              <View style={{width:150,justifyContent:'center'}} key={index}>
+                                  <Text style={styles.tiletextitem}>{items.itemName},</Text>
+                              </View>
+                          )
+                        })}
+                         </View>
+                            </View>
                         <View style={styles.tile}>
                           <Text style={styles.tiletext}>Total Amount</Text>
-                          <Text style={[styles.tiletext, { color: '#1fc44e' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
+                          <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
                         </View>
                         <View style={styles.tile}>
-                          <Text style={[styles.tiletext, { color: item.status == 'Upcoming' ? '#1fc44e' : '#000000' }]}>{item.status}</Text>
-                          <Text style={[styles.tiletext, { color: '#f15926' }]}>Repeat Order</Text>
+                            <Text style={[styles.tiletext, { color: '#000000' }]}>Status :</Text>
+                          <Text style={[styles.tiletext, { color: item.orderStatus == 'Delivered' ? '#000000' : '#60b246' }]}>{item.orderStatus}</Text>
+                          {/* <Text style={[styles.tiletext, { color: '#f15926' }]}>Repeat Order</Text> */}
                         </View>
                       </View>
-                    </TouchableOpacity>
+                    </TouchableWithoutFeedback>
                   </View>
                 }
                 keyExtractor={(item) => item.orderId.toString()}
@@ -95,6 +112,17 @@ export default class myOrders extends Component {
             </View>
           </View>
         </ScrollView>
+        <Overlay
+          isVisible={this.state.isVisible}
+          width="auto"
+          height="auto"
+          // windowBackgroundColor='rgba(255, 255, 255, .5)'
+          // overlayBackgroundColor='#ffffff'
+          onBackdropPress={() => this.setState({ isVisible: false })}
+        >
+          <ZoopLoader isVisible={true} text={'Loading...'} />
+
+        </Overlay>
       </SafeAreaView>
     );
   }
@@ -116,7 +144,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     shadowOpacity: 0.4,
     borderBottomColor: '#e4e4e4',
-    borderBottomWidth: 4,
+    borderBottomWidth: 2,
   },
   tile: {
     width: Dimensions.get('screen').width - 20,
@@ -126,7 +154,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   tiletext: {
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-Regular',
     color: '#000000'
+  },
+  tiletextitem:{
+    fontFamily: 'Poppins-Regular',
+    color: '#6a6e6c',
+    fontSize:12
   }
 });

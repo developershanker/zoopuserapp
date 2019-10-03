@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import {Dimensions} from 'react-native'
 import Device from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
+import Spinner from 'react-native-spinkit';
 export default class ConstantValues {
-  static apiUrl = 'https://appapi.zoopindia.in/'
+   static apiUrl = 'https://appapi.zoopindia.in/'
   //  static apiUrl = 'http://13.126.232.146:3000/'
   //static apiUrl = 'http://10.5.48.206:3000/'
 
@@ -20,7 +22,7 @@ export default class ConstantValues {
 
   static walletBalance = null
   // static walletSummary = { }
-  static rupee = <Icon name={'rupee'} size={15} />
+  static rupee = <Icon name={'rupee'}/>
   static orderRating = ''
   static source = 'APP'
   static device = {
@@ -36,9 +38,12 @@ export default class ConstantValues {
     deviceType: Device.getDeviceType(),
     osBuildId: Device.getBuildId(),
   }
+  static deviceWidth = Dimensions.get('screen').width
+  static deviceHeight = Dimensions.get('screen').height
 
   //station and outlet
   static searchString = ''
+  static navigationChannel = ''
 
   //order constant module
   static stationId = ''
@@ -139,25 +144,30 @@ static MID = 'FIjIdu58691666399235'
 
   //zoopOrderId
   static zoopOrderId = 0
+  static orderedItems = []
 
   //paytm credentials
   static merchant_key = 'klbGlV59135347348753'
   //Icon set in app
-  // https://zoop.s3.ap-south-1.amazonaws.com/app-Icon-set/AC+Coach.svg
+  // https://zoop.s3.ap-south-1.amazonaws.com/app-Icon-set/AC+Coach.png
   static bucket = 'zoop-dev-local'
   static region = 's3.ap-south-1'
   static url = 'amazonaws.com/'
   static IconUrl = 'https://' + this.bucket + '.' + this.region + '.' + this.url
   static imgurl = {
-    facebook: 'app-Icon-set/Facebook.svg',
-    twitter: 'app-Icon-set/Twitter.svg',
-    location: 'app-Icon-set/location.svg',
+    facebook: 'app-Icon-set/Facebook.png',
+    twitter: 'app-Icon-set/Twitter.png',
+    instagram:'app-Icon-set/Instagram.png',
+    location: 'app-Icon-set/location.png',
+    call:'app-Icon-set/Call.png',
+    email:'app-Icon-set/Email.png',
     fssai: 'app-Icon-set/fssai.png',
     paytm: 'app-Icon-set/paytmnew.png',
     outlet: 'app-Icon-set/Biryani.jpg',
     menu: 'app-Icon-set/Idli_Sambhar.jpg',
-    deliveryboy: 'app-Icon-set/Delivery+Boy.svg',
+    deliveryboy: 'app-Icon-set/Delivery+Boy.png',
     deliveryboypng: 'app-Icon-set/deliveryboy.png',
+
     //logos
     zooporange: 'app-Icon-set/zooplogoorange.png',
     zoopwhite: 'app-Icon-set/zooplogowhite.png',
@@ -169,13 +179,31 @@ static MID = 'FIjIdu58691666399235'
     banner3: 'app-Icon-set/banner3.jpg',
     banner4: 'app-Icon-set/banner4.jpg',
 
-    //Ac coach svg
-    acCoach: 'app-Icon-set/AC+Coach.svg',
-    sleeperCoach:'app-Icon-set/Sleeper+Coach.svg',
-    trainEngine:'app-Icon-set/Train+Engine.svg',
+    //Ac coach png
+    acCoach: 'app-Icon-set/AC+Coach.png',
+    sleeperCoach:'app-Icon-set/Sleeper+Coach.png',
+    trainEngine:'app-Icon-set/Train+Engine.png',
     
-
-
+    //icon set
+    helpline: 'app-Icon-set/Helpline.png',
+    coachSequence: 'app-Icon-set/Coach+Sequence.png',
+    platformLocator: 'app-Icon-set/Platform+Locator.png',
+    spotYourTrain: 'app-Icon-set/Spot+your+train.png',
+    trainTimeTable:'app-Icon-set/Train+Timetable.png',
+    pnrCheck:'app-Icon-set/PNR+Status.png',
+    bulkOrder:'app-Icon-set/Banner+Icon.png',
+    veg:'app-Icon-set/Veg.png',
+    nonveg:'app-Icon-set/Non-Veg.png',
+    myorders:'app-Icon-set/My+Orders.png',
+    myProfile:'app-Icon-set/Profile.png',
+    homeScreen:'app-Icon-set/Home.png',
+    myWallet:'app-Icon-set/Wallet.png',
+    contactus:'app-Icon-set/Contact+Us.png',
+    invite:'app-Icon-set/Invite+&+earn.png',
+    faq:'app-Icon-set/FAQ.png',
+    rate:'app-Icon-set/Rate+us.png',
+    tnc:'app-Icon-set/Terms+&+Condition.png',
+    
   }
 
 }

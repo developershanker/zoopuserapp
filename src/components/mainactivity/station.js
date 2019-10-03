@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Dimensions, View, ScrollView, StyleSheet, ToastAndroid,Image, SectionList, TouchableOpacity,TouchableWithoutFeedback, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
+import { Text, Dimensions, View, ScrollView, StyleSheet,Alert, ToastAndroid,Image, SectionList, TouchableOpacity,TouchableWithoutFeedback, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 // import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
@@ -12,6 +12,10 @@ import Search from './search.js';
 import searchApi from './searchApi.js';
 import ConstantValues from '../constantValues.js';
 import { Fade } from '../assests/fade.js';
+import Spinner from 'react-native-spinkit';
+import { Overlay } from 'react-native-elements';
+import { ZoopLoader } from '../assests/zoopLoader.js';
+import moment from "moment";
 
 
 export default class station extends Component {
@@ -24,13 +28,14 @@ export default class station extends Component {
     this.state = {
       firstQuery: '',
       visibleModal: null,
-      animating: true,
+      loading: true,
       stationOpacity: 0.5,
       scrollBegin: false,
       OutletList: [],
       StationList: [],
       CuisinesList: [],
-      checked: []
+      checked: [],
+      isVisible:true
     };
   }
 
@@ -44,7 +49,8 @@ export default class station extends Component {
   FlatListItemSeparator = () => {
     return (
       //Item Separator
-      <View style={{ height: 0.5, width: '100%', backgroundColor: '#C8C8C8' }} />
+      <View style={{ height:0.5, width: '100%', backgroundColor: '#C8C8C8' }} />,
+      <View style={{ height:1, width: '100%', backgroundColor: '#999999' }} />
     );
   };
 
@@ -86,12 +92,28 @@ export default class station extends Component {
         return (
           // <CustomActivityIndicator animating={false} /> ,
           ToastAndroid.show(response.message, ToastAndroid.LONG)
-        )
+        ),
+        this.setState({
+          isVisible:false
+        })
       } else {
         return (
-          ToastAndroid.show(response.error, ToastAndroid.LONG),
+          // ToastAndroid.show(response.error, ToastAndroid.LONG),
+         
+            Alert.alert(
+              'Invalid Input!!',
+              'Your is not valid or expired.Please check and try again!! ',
+              [
+                {
+                  text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
+                  style:'cancel'
+                },
+              ],
+              { cancelable: false },
+            )
+          ),
           console.log(response.error)
-        )
+        
       }
     } catch (error) {
       console.log('Data received in station.js catch: ' + error)
@@ -99,12 +121,13 @@ export default class station extends Component {
   }
 
   gotoMenu = (stationId, outletId, stationName, stationCode, haltTime,arrDate,arrival, outletName, outletRating, minimumOrderValue, eta) => {
+    const momemtHaltTime = moment(haltTime,'HHmmss').format('mm')
     ConstantValues.stationId = stationId,
       ConstantValues.outletId = outletId,
       ConstantValues.stationName = stationName,
       ConstantValues.stationCode = stationCode
       ConstantValues.outletName = outletName,
-      ConstantValues.haltTime = haltTime,
+      ConstantValues.haltTime = momemtHaltTime,
       ConstantValues.deliveryDate = arrDate, //actual date of arraival
       ConstantValues.deliveryTime = arrival, //expected date of arraival
       ConstantValues.outletRating = outletRating,
@@ -112,6 +135,7 @@ export default class station extends Component {
     ConstantValues.eta = eta
     console.log('ConstantValues.stationId : ' + ConstantValues.stationId),
       console.log('ConstantValues.outletId : ' + ConstantValues.outletId),
+      console.log('ConstantValues.haltTime : ' + ConstantValues.haltTime),
       this.props.navigation.navigate('Menu')
   }
   selectedStation = (item,index) => {
@@ -123,10 +147,14 @@ export default class station extends Component {
   scrollEnd = () => this.setState({scrollBegin: false})
 
   render() {
-    const width = Dimensions.get('screen').width
+    const width = Dimensions.get('window').width
     return (
       <SafeAreaView style={styles.slide}>
-
+        {/* <View style={{flexDirection:'column',alignItems:'center'}}>
+        <Spinner size={100} type={'FadingCircleAlt'} color={'#FF5819'} isVisible={this.state.loading}/>
+        </View> */}
+       
+        {/* <Fade visible={this.state.loading == false}> */}
         <View style={styles.topContainer}>
           <View>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
@@ -134,17 +162,11 @@ export default class station extends Component {
             </TouchableOpacity>
           </View>
           {/* Searchbar begins */}
+
           <View style={styles.searchBarView}>
-            <TextInput
-              style={{ fontSize: 15, fontFamily: 'Poppins-Regular', width: '80%' }}
-              placeholder="What would you like to have today?"
-              onChangeText={firstQuery => this.setState({ firstQuery })}
-              value={this.state.firstQuery}
-            />
-            <TouchableOpacity onPress={() => { alert(this.state.firstQuery) }}>
-              <Icon name={'search'} size={20} />
-            </TouchableOpacity>
+            <Text  style={{ fontSize: 18, fontFamily: 'Poppins-Medium', }}>Pick Station & Restaurant</Text>
           </View>
+
           {/* Searchbar ends */}
         </View>
         {/* FilterModal begins */}
@@ -157,72 +179,6 @@ export default class station extends Component {
             style={styles.bottomModal}
           >
             <View style={styles.modalView}>
-              <View style={styles.modalViewHeading}>
-                <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 20, color: '#000000' }}>Filter</Text>
-              </View>
-              <View style={styles.filterCardRow}>
-                {/* box and title */}
-                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                  <TouchableOpacity>
-                    <View style={styles.filterCard}>
-                      <Icon name={'star'} size={25} color={'#ffcc12'} />
-                    </View>
-                  </TouchableOpacity>
-                  <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 10, color: '#000' }}>Ratings</Text>
-                </View>
-
-                {/* box and title */}
-                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                  <TouchableOpacity>
-                    <View style={styles.filterCard}>
-                      <Icon name={'percent'} size={25} color={'#000'} />
-                    </View>
-                  </TouchableOpacity>
-                  <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 10, color: '#000' }}>Discount</Text>
-                </View>
-
-                {/* box and title */}
-                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                  <TouchableOpacity>
-                    <View style={styles.filterCard}>
-                      <Icon name={'rupee'} size={25} color={'#6ea83e'} />
-                    </View>
-                  </TouchableOpacity>
-                  <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 10, color: '#000' }}>High Cost</Text>
-                </View>
-
-                {/* box and title */}
-                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                  <TouchableOpacity>
-                    <View style={styles.filterCard}>
-                      <Icon name={'rupee'} size={25} color={'#fe0006'} />
-                    </View>
-                  </TouchableOpacity>
-                  <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 10, color: '#000' }}>Low Cost</Text>
-                </View>
-
-                {/* box and title */}
-                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                  <TouchableOpacity>
-                    <View style={styles.filterCard}>
-                      <Icon name={'clock-o'} size={25} color={'#000'} />
-                    </View>
-                  </TouchableOpacity>
-                  <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 10, color: '#000' }}>Time</Text>
-                </View>
-
-                {/* box and title */}
-                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                  <TouchableOpacity>
-                    <View style={styles.filterCard}>
-                      <Icons name={'carrot'} size={25} color={'#6ea83e'} />
-                    </View>
-                  </TouchableOpacity>
-                  <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 10, color: '#000' }}>Veg.</Text>
-                </View>
-
-
-              </View>
               <View>
                 <Text style={styles.cuisineText}>Cuisines</Text>
               </View>
@@ -241,7 +197,7 @@ export default class station extends Component {
                           disabled={false}
                           onValueChange={() => this.handleChange(index)}
                         />
-                        <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Bold' }}>{item.cuisineName}</Text>
+                        <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Regular' }}>{item.cuisineName}</Text>
                       </View>
                     }
                     keyExtractor={(item) => item.cuisineId.toString()}
@@ -274,14 +230,14 @@ export default class station extends Component {
                 // data={this.state.data}
                 horizontal={true}
                 renderItem={({ item, index }) =>
-                  <Fade visible={item.isVisible}>
+                  <Fade visible={ item.isVisible && item.outlets.length != 0}>
                     <View style={styles.stationView}>
                     {/* activeOpacity = {this.state.scrollBegin == true ? 1 : 0.5 } */}
                       <TouchableOpacity>
                         <Image style={styles.roundImage} source={item.stationImage == null ? require('../images/1.png') : { uri: item.stationImage }} />
                         <View style={styles.name}>
-                          <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular' , justifyContent:'center', alignSelf:'center' }}>{item.stationName}</Text>
-                          <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf:'center' }}>{item.arrivalTime}</Text>
+                          <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf:'center' }}>{item.stationName}</Text>
+                          <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf:'center' }}>{moment(item.arrivalTime,'HHmmss').format('hh:mm A')}</Text>
                         </View>
                       </TouchableOpacity>
                     </View>
@@ -292,23 +248,22 @@ export default class station extends Component {
             </ScrollView>
           </View>
         </View>
-
-        {/* OutletView starts */}
+       {/* OutletView starts */}
         <ScrollView>
           <View style={styles.slide}>
             {/* Station Header */}
             {/* <StationHeader /> */}
             <FlatList
               data={this.state.StationList}
-              ItemSeparatorComponent={this.FlatListItemSeparator}
+              // ItemSeparatorComponent={this.FlatListItemSeparator}
               renderItem={({ item, index }) =>
-                <Fade visible={item.isVisible}>
-                  <View>
+                <Fade visible={item.isVisible && item.outlets.length != 0}>
+                  <View style={{ borderRadius: 5, borderColor: '#e7e7e7', borderWidth: 1, marginVertical: 10 ,marginHorizontal:10}}>
                     <Text style={styles.textheader}>{item.stationName}</Text>
                     <View style={styles.stextview}>
-                      <Text style={styles.stext}>Halt Mins : {item.haltTime}</Text>
-                      <Text style={styles.stext}> S.T.A:{item.arrivalTime} |</Text>
-                      <Text style={styles.stext}> E.T.A:{item.expectedTime}</Text>
+                      <Text style={styles.stext}>Halt : {moment(item.haltTime, 'HHmmss').format('mm')} mins | </Text>
+                      <Text style={styles.stext}> S.T.A : {moment(item.arrivalTime, 'HHmmss').format('hh:mm A')} | </Text>
+                      <Text style={styles.stext}> E.T.A : {moment(item.expectedTime, 'HHmmss').format('hh:mm A')}</Text>
                     </View>
 
                     {/* OutletView starts */}
@@ -318,14 +273,6 @@ export default class station extends Component {
                     {
                       item.outlets.map((outlets, index) => {
 
-                        // console.log('outlets :: ' + JSON.stringify(item.outlets))
-                        // if (item.outlets.length == 0) {
-                        //   return(
-                        //     <View style={{justifyContent:'center',alignItems:'center',backgroundColor: '#ffffff'}} key={index}>
-                        //       <Text style={styles.outletname}>No outlets active in this area</Text>
-                        //       </View>
-                        //   )
-                        // } else {
                         return (
                           <View style={styles.outletContainer} key={index} >
                             <TouchableWithoutFeedback style={styles.card}
@@ -349,6 +296,7 @@ export default class station extends Component {
                               <Image source={{ uri: outlets.outletImage }} style={styles.outletimage} />
                               <View style={styles.detail}>
                                 <View style={{ flexDirection: 'column' }}>
+                                  <View style={{flexDirection:'row',justifyContent:'space-around'}}>
                                   <Text style={styles.outletname}>
                                     {outlets.outletName}
                                   </Text>
@@ -357,22 +305,23 @@ export default class station extends Component {
                                       {outlets.outletRating}
                                     </Text>
                                   </View>
+                                  </View>
                                 
                                 
                                 {/* {
                                 outlets.cuisines.map((cuisines, index) => {
                                   return (
-                                    <View style={{width:400,flexDirection:'row',}} key = {index}>
+                                    <View style={{flexDirection:'row',}} key = {index}>
                                       <Text style={styles.cuisine}>
-                                        {cuisines.cuisineName} , 
+                                        {cuisines.cuisineName}
                                       </Text>
                                     </View>
                                   )
                                 }
-                                )} */}
-
+                                )
+                                } */}
                                 <Text style={styles.minorder}>
-                                  Minimum Order: {ConstantValues.rupee} {outlets.minimumOrderValue}
+                                  Min. Order : {ConstantValues.rupee} {outlets.minimumOrderValue}
                                 </Text>
                                 </View>
                               </View>
@@ -405,6 +354,18 @@ export default class station extends Component {
           </TouchableOpacity>
         </View>
         {/* Floating FAB ends */}
+        <Overlay
+          isVisible={this.state.isVisible}
+          width="auto"
+          height="auto"
+          // windowBackgroundColor='rgba(255, 255, 255, .5)'
+          // overlayBackgroundColor='#ffffff'
+          onBackdropPress={() => this.setState({ isVisible: false })}
+        >
+          <ZoopLoader isVisible={true}/>
+
+        </Overlay>
+        {/* </Fade> */}
       </SafeAreaView>
     );
   }
@@ -414,7 +375,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'flex-start',
-    backgroundColor: '#f5f0f0',
+    backgroundColor: '#ffffff',
   },
   topContainer: {
     flexDirection: 'row',
@@ -451,10 +412,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-
-    borderRadius: 100 / 20,
-    borderWidth: 1,
-    borderColor: '#9B9B9B',
     marginHorizontal: 5
   },
   card: {
@@ -462,12 +419,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,//can change as we move to various pages
     marginLeft: '2%', //can change as we move to various pages
     width: '96%', //can change as we move to various pages
-    borderColor: '#e4e4e4',
-    borderRadius: 100 / 9,
-    borderWidth: 1,
-    shadowOpacity: 0.4,
-    borderBottomColor: '#e4e4e4',
-    borderBottomWidth: 4,
+    // borderColor: '#e4e4e4',
+    // borderRadius: 100 / 9,
+    // borderWidth: 1,
+    // shadowOpacity: 0.4,
+    // borderBottomColor: '#e4e4e4',
+    // borderBottomWidth: 4,
     alignItems: 'center',
     flexDirection: 'row',
   },
@@ -494,7 +451,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 5,
     justifyContent:'center',
-    alignSelf:'center'
+    alignSelf:'center',
+    width:100
   },
   image: {
     width: 100,
@@ -528,27 +486,29 @@ const styles = StyleSheet.create({
     flexDirection:'row'
   },
   outletname: {
+    width:130,
     paddingTop: 10,
     marginLeft: 10,
     fontSize: 15,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     color: '#000000',
     justifyContent: 'center',
   },
   roundImage: {
-    width: 60,
-    height: 60,
+    width: 70,
+    height: 70,
     borderRadius: 100 / 2,
-    marginLeft: 10,
+    marginLeft: 20,
     backgroundColor: '#ff5819'
   },
   ratingView: {
-    backgroundColor: '#30ba57',
+    backgroundColor: '#a5ce39',
     marginLeft: 20,
     marginTop: 5,
     width: 35,
-    height: 25,
+    height: 25,   //#0e8341
     alignItems: 'center',
+    borderRadius:5
   },
   rating: {
     fontSize: 15,
@@ -557,7 +517,7 @@ const styles = StyleSheet.create({
     color: '#ffffff'
   },
   stationView: {
-    width: 80,
+    width: 100,
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center'
@@ -570,8 +530,9 @@ const styles = StyleSheet.create({
     // marginLeft: 10
   },
   minorder: {
-    fontFamily: 'Poppins-Regular',
-    color: '#eb2f2f',
+    fontFamily: 'Poppins-Light',
+    color: '#b32120',
+    fontSize:12,
     marginLeft: 10,
     marginTop: 20,
   },
@@ -617,20 +578,22 @@ const styles = StyleSheet.create({
   textheader: {
     marginLeft: 20,
     fontSize: 20,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     color: '#000000',
     justifyContent: 'center',
   },
   stext: {
     fontSize: 13,
     fontFamily: 'Poppins-Regular',
-    color: '#000000',
+    color: '#898c8b',
     alignItems: 'center'
   },
   stextview: {
+    marginLeft: 20,
     flexDirection: 'row',
-    marginLeft: Dimensions.get('window').width - 250,
-    justifyContent: 'center'
+    width: Dimensions.get('window').width,
+    justifyContent: 'flex-start',
+    alignItems:'flex-start'
   }
 
 })

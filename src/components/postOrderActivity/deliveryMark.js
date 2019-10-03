@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: Dimensions.get('screen').width,
-    backgroundColor: '#4a8538',
+    backgroundColor: '#60b246',
     flexDirection: 'row',
     height: 100,
     justifyContent: 'space-evenly',

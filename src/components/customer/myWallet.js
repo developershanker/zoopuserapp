@@ -9,6 +9,7 @@ import BillCardDetail from '../cart/billDetailCard.js';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import { Fade } from '../assests/fade.js';
 import walletApi from '../customer/walletApi.js'
+import { Overlay } from 'react-native-elements';
 
 export default class myWallet extends Component {
   componentDidMount() {
@@ -19,7 +20,8 @@ export default class myWallet extends Component {
     super(props);
     this.state = {
       walletBalance: null,
-      data: []
+      data: [],
+      isVisible:true
     };
   }
 
@@ -58,19 +60,19 @@ export default class myWallet extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Bold', fontSize: 20, color: '#000000' }}> My Wallet Statement </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 20, color: '#000000' }}> My Wallet Statement </Text>
               </View>
             </View>
             {/* header view ends */}
             <View style={{ flexDirection: 'row', paddingVertical: 10, paddingHorizontal: 10 }}>
-              <Text style={{ color: '#000000', fontFamily: 'Poppins-SemiBold', fontSize: 15 }}>ZOOP WALLET : </Text>
-              <Text style={{ color: '#00c74f', fontFamily: 'Poppins-SemiBold', fontSize: 15 }}>{ConstantValues.rupee} {this.state.walletBalance}</Text>
+              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 15 }}>ZOOP WALLET : </Text>
+              <Text style={{ color: '#60b246', fontFamily: 'Poppins-Regular', fontSize: 15 }}>{ConstantValues.rupee} {this.state.walletBalance}</Text>
             </View>
 
             <View style={{ flexDirection: 'row', height: 50, backgroundColor: '#e4e4e4', justifyContent: 'space-around', alignItems: 'center', alignContent: 'center' }}>
-              <Text style={{ color: '#000000', fontFamily: 'Poppins-SemiBold', fontSize: 12 }}>Date</Text>
-              <Text style={{ color: '#000000', fontFamily: 'Poppins-SemiBold', fontSize: 12 }}>Particular</Text>
-              <Text style={{ color: '#000000', fontFamily: 'Poppins-SemiBold', fontSize: 12 }}>Amount</Text>
+              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 }}>Date</Text>
+              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 }}>Particular</Text>
+              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 }}>Amount</Text>
             </View>
             {/* Wallet summary Card  */}
             <View>
@@ -81,9 +83,9 @@ export default class myWallet extends Component {
                   <View>
                     <View style={styles.card}>
                       <View style={{ flexDirection: 'row', paddingVertical: 10, paddingHorizontal: 20 , justifyContent: 'space-between', alignItems: 'center',}}>
-                        <Text style={{ color: item.transactionType == 'CREDIT' ? '#00c74f' : '#b32120', fontFamily: 'Poppins-SemiBold', fontSize: 15 }}>{ConstantValues.rupee} {item.amount}</Text>
-                        <Text style={{ width: 150,color: '#000000', fontFamily: 'Poppins-SemiBold', fontSize: 12 }}>{item.particulars}</Text>
-                        <Text style={{ color: '#000000', fontFamily: 'Poppins-SemiBold', fontSize: 15 }}> {ConstantValues.rupee} {item.balance}</Text>
+                        <Text style={{ color: item.transactionType == 'CREDIT' ? '#60b246' : '#b32120', fontFamily: 'Poppins-Regular', fontSize: 15 }}>{ConstantValues.rupee} {item.amount}</Text>
+                        <Text style={{ width: 150,color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 }}>{item.particulars}</Text>
+                        <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 15 }}> {ConstantValues.rupee} {item.balance}</Text>
                       </View>
 
                     </View>
@@ -92,7 +94,18 @@ export default class myWallet extends Component {
                 keyExtractor={(item) => item.walletId.toString()}
               />
             </View>
+                <Fade visible={ConstantValues.customerId == ''}>
+            <Overlay
+              isVisible={this.state.isVisible}
+              windowBackgroundColor="rgba( 77, 75, 75, .5)"
+              overlayBackgroundColor='#e7e7e7'
+              width="auto"
+              height="auto"
+            >
+              <TouchableOpacity onPress={() => this.setState({ isVisible: false })}><Text>Need to login</Text></TouchableOpacity>
 
+            </Overlay>
+            </Fade>
 
           </View>
         </ScrollView>

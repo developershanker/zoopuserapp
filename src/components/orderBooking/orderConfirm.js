@@ -19,7 +19,7 @@ export default class OrderConfirm extends Component {
     try {
       const result = await Share.share({
         message:
-          'React Native | A framework for building native apps using React',
+          'Order Detail from Zoop: \n Order Id:'+ConstantValues.irctcId,
       });
 
       if (result.action === Share.sharedAction) {
@@ -55,23 +55,23 @@ export default class OrderConfirm extends Component {
               <View style={styles.imageView}>
                 <Image style={styles.image} source={require('../images/placed.png')} />
               </View>
-              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Bold' }}>Your Order has been placed successfully</Text>
-                <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Bold' }}>Zoop Order Id : {ConstantValues.zoopOrderId}</Text>
-                <Text style={{ fontSize: 20, color: '#FF3D00', fontFamily: 'Poppins-Bold' }}>Enjoy the meal :)</Text>
+              <View style={{ justifyContent: 'center', alignItems: 'center' ,flexDirection:'column',paddingVertical:5}}>
+                <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Medium' }}>Your Order has been placed successfully</Text>
+                <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Medium' }}>Zoop Order Id : {ConstantValues.zoopOrderId}</Text>
+                <Text style={{ fontSize: 20, color: '#FF3D00', fontFamily: 'Poppins-Medium' }}>Enjoy the meal :)</Text>
               </View>
-              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              {/* <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <TouchableOpacity onPress={() => { this.onShare() }}>
                   <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <Icon name={'share-alt'} size={30} color={'#000'} />
-                    <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Bold', paddingVertical: 10 }}>Share Details</Text>
+                    <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Medium', paddingVertical: 10 }}>Share Details</Text>
                   </View>
                 </TouchableOpacity>
-              </View>
+              </View> */}
               <CustomButton
-                style={{ backgroundColor: '#1fc44e', alignSelf: 'center', marginBottom: 20, }}
-                onPress={() => this.props.navigation.navigate('TrackingOrder')}
-                title='Track Your Order'
+                style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
+                onPress={()=>{this.props.navigation.navigate('OrderDetail')}}
+                title='View Details'
               />
             </View>
           </View>

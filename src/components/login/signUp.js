@@ -72,6 +72,7 @@ export default class SignUp extends Component {
               style={styles.image}
               source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
             />
+               
 
 
           </ImageBackground>
@@ -107,12 +108,16 @@ export default class SignUp extends Component {
               textStyle={styles.text}
 
             />
-            <View style={{ flexDirection: 'row', paddingVertical: 20, alignItems: 'center' }}>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-SemiBold', color: '#000000' }}>Already Registered?</Text>
+           
+            <View style={{ flexDirection: 'row', paddingVertical: 10, alignItems: 'center' }}>
+              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Already Registered?</Text>
               <TouchableOpacity onPress={() => { this.props.navigation.navigate('Welcome') }}>
                 <Text style={styles.logintext}>Login</Text>
               </TouchableOpacity>
             </View>
+            <TouchableOpacity style={styles.skipView} onPress={() => { this.props.navigation.navigate('Search') }}>
+              <Text style={styles.skip}>Skip</Text>
+            </TouchableOpacity>
           </View>
           {/* </FadeInView> */}
 
@@ -138,8 +143,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff'
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     alignItems: 'center'
   },
   button: {
@@ -157,44 +162,56 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     margin: 10,
   },
+  skipView:{
+    width:100,
+    justifyContent:'center',
+    alignItems:'center',
+    borderWidth:1,
+    borderRadius: 5,
+    borderColor:'#e7e7e7',
+    backgroundColor:'rgba(252, 252, 252,0.5)',
+    paddingVertical:5,
+    paddingHorizontal:5
+  },
 
   skip: {
-    alignItems: 'baseline',
+    alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ffffff'
+    fontFamily: 'Poppins-Medium',
+    fontSize:15
   },
   input: {
     fontSize: 15,
     width: Dimensions.get('window').width - 120,
     color: '#000000',
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     alignItems: 'center'
   },
   inputView: {
-    borderRadius: 100 / 10,
+    borderRadius: 5,
     borderColor: '#9B9B9B',
-    borderWidth: 2,
+    borderWidth: 1,
     marginHorizontal: 15,
     marginVertical: 30
   },
   text: {
     color: '#ffffff',
     textAlign: 'center',
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-Medium',
   },
   text1: {
     fontSize: 25,
     paddingTop: 10,
     color: '#000000',
     textAlign: 'center',
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
   },
   logintext: {
     paddingHorizontal: 5,
     fontSize: 15,
     color: '#FF5819',
     textAlign: 'center',
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     textDecorationLine: 'underline'
   }
 });

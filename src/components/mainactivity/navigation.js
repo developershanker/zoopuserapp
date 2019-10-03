@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, Button, TouchableOpacity, Image, Platform, ScrollView, Dimensions } from 'react-native';
+import { View, Text, Button, TouchableOpacity, Image,Linking, Platform, ScrollView, Dimensions ,StyleSheet} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import Device from 'react-native-device-info';
 //////-------LOGIN RELATED VIEWS-----------//////
 import AuthLoadingScreen from '../mainactivity/AuthLoadingScreen.js'
 import SignUp from '../login/signUp.js';
-import Authenticated from '../login/authenticated.js'
-import NotAuthenticated from '../login/notAuthenticated.js'
 // import Slider from '../login/slider.js';
 import Register from '../login/register.js';
 import OtpVerify from '../login/otpVerify.js';
@@ -16,7 +14,6 @@ import DeviceInfo from '../assests/deviceInfo.js';
 import Search from './search.js';
 import Welcome from '../login/welcome.js';
 import Station from '../mainactivity/station.js';
-import SearchOption from '../mainactivity/searchOption.js';
 import Notifications from '../services/notifications.js';
 import Menu from '../menu/menu.js';
 import Cart from '../cart/cart.js';
@@ -53,6 +50,8 @@ import SpotTrain from '../services/spotTrain';
 import TrainTimeTable from '../services/trainTimeTable';
 import CoachSequence from '../services/coachSequence';
 import PlatformLocator from '../services/platformLocator';
+import Helpline from '../services/helpline.js';
+import BulkOrder from '../services/bulkOrder.js';
 
 
 import { createStackNavigator, createAppContainer, createDrawerNavigator, createSwitchNavigator } from "react-navigation";
@@ -89,13 +88,14 @@ const AuthStack = createStackNavigator({
   toggleDrawer = () => {
     //Props to open/close the drawer
     this.props.navigationProps.toggleDrawer();
-    if (Platform.OS === 'android' && Device.hasNotch()) {
-      SafeAreaView.setStatusBarHeight(
-        /* Some value for status bar height + notch height */
-        30
+    // if (Platform.OS === 'android' && Device.hasNotch()) {
+    //   SafeAreaView.setStatusBarHeight(
+    //     /* Some value for status bar height + notch height */
+    // onPress={this.toggleDrawer.bind(this)}
+    //     30
 
-      );
-    }
+    //   );
+    // }
   };
   render() {
 
@@ -103,14 +103,16 @@ const AuthStack = createStackNavigator({
       <SafeAreaView style={{ flexDirection: 'row' }}>
         <View>
 
-          <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
+          <TouchableOpacity onPress={()=>this.props.navigationProps.toggleDrawer()}>
             {/*Donute Button Image */}
-
-            <Icon
-              name='bars'
-              size={20}
-              style={{ marginLeft: 15 }}
-            />
+            <View style={{ width: 50, height: 50, justifyContent: 'center', alignItems: 'center' }}>
+              <Icon
+                name='bars'
+                size={20}
+                style={{ marginLeft: 15 }}
+              />
+            </View>
+            
           </TouchableOpacity>
 
         </View>
@@ -124,13 +126,17 @@ class NotificationSection extends Component {
   }
   render() {
     return (
-      <TouchableOpacity onPress={this.openNotification.bind(this)}>
-
-        <Icon
+      <TouchableOpacity 
+      // onPress={this.openNotification.bind(this)}
+      >
+          <View style={{ width: 50, height: 50, justifyContent: 'center', alignItems: 'center' }}>
+          <Icon
           name='bell'
           size={20}
           style={{ marginRight: 15 }}
         />
+          </View>
+        
       </TouchableOpacity>
     )
   }
@@ -147,6 +153,10 @@ class HeaderIcon extends Component {
     )
   }
 }
+gotoLink = () => {
+  let link = 'https://play.google.com/store/apps/details?id=com.zoop.zoopindiaservice'
+  Linking.openURL(link);
+}
 
 const CustomDrawerComponent = (props) => (
 
@@ -154,12 +164,17 @@ const CustomDrawerComponent = (props) => (
     <ScrollView>
       <View style={{ backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center', paddingVertical: 20 }}>
         <Image
-          style={{ width: 150, height: 60 }}
+          style={{ width: 150, height: 80 }}
           source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
         ></Image>
       </View>
 
+      <View style={{justifyContent:'center',alignItems:'center'}}></View>
       <DrawerItems {...props} />
+
+      
+
+      
  {/* <Icon name='sign-in' size={10} style={{color:'#000000'}}/> */}
       {/* <TouchableOpacity>
         <Footer style={{ backgroundColor: '#FF9800' }}>
@@ -177,133 +192,141 @@ const DrawerNavigator = createDrawerNavigator({
   Search: {
     screen: Search,
     navigationOptions: {
-      drawerLabel: 'Home',
-      drawerIcon: <Icon
-        name='home'
-        size={20}
-
-      />
+      drawerLabel:
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.homeScreen}}/>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Home</Text>
+      </View>
+     
     }
   },
   Profile: {
     screen: Profile,
     navigationOptions: {
-      drawerLabel: 'Profile',
-      drawerIcon: <Icon
-        name='user'
-        size={20}
-
-      />
+      drawerLabel:
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myProfile}}/>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Profile</Text>
+      </View>
     }
   },
   MyOrders: {
     screen: MyOrders,
     navigationOptions: {
-      drawerLabel: 'My Order',
-      drawerIcon: <Icon
-        name='shopping-basket'
-        size={20}
-
-      />
+      drawerLabel:
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myorders}}/>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>My Orders</Text>
+      </View>
     }
   },
   MyWallet: {
     screen: MyWallet,
     navigationOptions: {
-      drawerLabel: 'My Wallet',
-      header: null,
-      drawerIcon: <Icon
-        name='plus'
-        size={20}
-
-      />
+      drawerLabel:
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myWallet}}/>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>My Wallet</Text>
+      </View>
     }
   },
   Contact: {
     screen: Contact,
     navigationOptions: {
-      drawerLabel: 'Contact',
-      drawerIcon: <Icon
-        name='phone'
-        size={20}
-
-      />
+      drawerLabel:
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.contactus}}/>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Contact Us</Text>
+      </View>
     },
   },
   Invite: {
     screen: Invite,
     navigationOptions: {
-      drawerLabel: 'Invite & Earn',
-      drawerIcon: <Icons
-        name='hand-holding-usd'
-        size={20}
+      drawerLabel:
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.invite}}/>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Invite & Earn</Text>
+      </View>
 
-      />
+     
     },
   },
   FAQ: {
     screen: FAQ,
     navigationOptions: {
-      drawerLabel: 'FAQ',
-      drawerIcon: <Icon
-        name='question'
-        size={20}
-
-      />
+      drawerLabel:
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.faq}}/>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>FAQ</Text>
+      </View>
     }
   },
   Feedback: {
     screen: Feedback,
     navigationOptions: {
-      drawerLabel: 'Feedback',
-      drawerIcon: <Icon
+      drawerLabel:
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
+        
+         <Icon
+         style={{paddingVertical:10}}
         name='pencil-square'
-        size={20}
-
+        size={25}
       />
+       <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Feedback</Text>
+      </View>
+      // drawerIcon: <Icon
+      //   name='pencil-square'
+      //   size={25}
+
+      // />
     }
   },
   RateUs: {
     screen: RateUs,
-    navigationOptions: {
-      drawerLabel: 'Rate Us',
-      drawerIcon: <Icon
-        name='star'
-        size={20}
 
-      />
+    navigationOptions: {
+      drawerLabel:
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.rate}}/>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Rate Us</Text>
+      </View>
     }
   },
   TermsActivity: {
     screen: TermsActivity,
     navigationOptions: {
-      drawerLabel: 'Terms & Conditions',
-      drawerIcon: <Icon
-        name='book'
-        size={20}
-      />
+      drawerLabel:
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.tnc}}/>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Terms & Conditions</Text>
+      </View>
     }
   },
   Login: {
-    screen: Welcome,
+    screen: ConstantValues.customerId == '' ? Welcome : LogOut,
     navigationOptions: {
-      drawerLabel: 'Login',
-      drawerIcon: <Icon
+     drawerLabel:
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
+         {/* <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.tnc}}/> */}
+         <Icon
         name='user'
         size={20}
       />
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>{ConstantValues.customerId == '' ? 'Login' : 'LogOut'}</Text>
+      </View>
     }
   },
-  LogOut: {
-    screen: LogOut,
-    navigationOptions: {
-      drawerLabel: 'LogOut',
-      drawerIcon: <Icon
-        name='user'
-        size={20}
-      />
-    }
-  },
+  // LogOut: {
+  //   screen: LogOut,
+  //   navigationOptions: {
+  //     drawerLabel: 'LogOut',
+  //     drawerIcon: <Icon
+  //       name='user'
+  //       size={20}
+  //     />
+  //   }
+  // },
 
 }, {
   contentComponent: CustomDrawerComponent,
@@ -315,18 +338,6 @@ const DrawerNavigator = createDrawerNavigator({
 const AppNavigator = createStackNavigator({
   SignUp: {
     screen: SignUp,
-    navigationOptions: {
-      header: null,
-    }
-  },
-  Authenticated: {
-    screen: Authenticated,
-    navigationOptions: {
-      header: null,
-    }
-  },
-  NotAuthenticated: {
-    screen: NotAuthenticated,
     navigationOptions: {
       header: null,
     }
@@ -356,6 +367,18 @@ const AppNavigator = createStackNavigator({
       header: null,
     }
   },
+  Helpline: {
+    screen: Helpline,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  BulkOrder: {
+    screen: BulkOrder,
+    navigationOptions: {
+      header: null,
+    }
+  },
   LogOut: {
     screen: LogOut,
     navigationOptions: {
@@ -377,12 +400,6 @@ const AppNavigator = createStackNavigator({
   },
   Register: {
     screen: Register,
-    navigationOptions: {
-      header: null,
-    }
-  },
-  SearchOption: {
-    screen: SearchOption,
     navigationOptions: {
       header: null,
     }
@@ -518,6 +535,11 @@ const AppNavigator = createStackNavigator({
 
 
 );
+const styles = StyleSheet.create({
+  drawerLabel:{
+
+  }
+});
 // export default createAppContainer(AppNavigator);
 // export default createAppContainer(DrawerNavigator);
 export default createAppContainer(

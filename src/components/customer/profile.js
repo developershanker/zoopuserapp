@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import {Picker, View,Text, StyleSheet, TextInput, ToastAndroid , PermissionsAndroid  } from 'react-native';
+import {Picker, View,Text, StyleSheet, TextInput, ToastAndroid , PermissionsAndroid ,Alert } from 'react-native';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import SplashScreen from 'react-native-splash-screen';
 import CustomTouchableOpacity from '../assests/customTouchableOpacity';
 import loginApi from '../login/loginApi.js';
 import { Fade } from '../assests/fade.js';
 import ConstantValues from '../constantValues.js';
+import Modal from "react-native-modal";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export default class Profile extends Component {
@@ -22,20 +24,64 @@ export default class Profile extends Component {
       referredBy: '',
       altmobile: '',
       loginCount: null,
+      visibleModal:'center'
     };
   }
   ///checking Input Validation
   async isEmpty(name, emailId, altMobile, referredBy) {
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     try {
       if (name != '') {
         if (emailId != '') {
-          this.editUserInfo(name, emailId, altMobile, referredBy)
+          if (re.test(emailId)) {
+            this.editUserInfo(name, emailId, altMobile, referredBy)
           // this.onRegister()
+          }else{
+            return (
+              Alert.alert(
+                'Invalid Input!!',
+                'Incorrect Email format!!'+ '\n'+'Please enter correct Email Id!!',
+                [
+                  {
+                    text: 'OK', onPress: () => console.log('Invalid email id'),
+                    style:'cancel'
+                  },
+                ],
+                { cancelable: false },
+              )
+            )
+          }
         } else {
-          ToastAndroid.show('Please Enter Email Id', ToastAndroid.LONG)
+          //ToastAndroid.show('Please Enter Email Id', ToastAndroid.LONG)
+          return (
+            Alert.alert(
+              'Invalid Input!!',
+              'Please Enter Email Id.',
+              [
+                {
+                  text: 'OK', onPress: () => console.log('Invalid email id'),
+                  style:'cancel'
+                },
+              ],
+              { cancelable: false },
+            )
+          )
         }
       } else {
-        ToastAndroid.show('Please Enter Name', ToastAndroid.LONG)
+        // ToastAndroid.show('Please Enter Name', ToastAndroid.LONG)
+        return (
+          Alert.alert(
+            'Invalid Input!!',
+            'Please Enter Name.',
+            [
+              {
+                text: 'OK', onPress: () => console.log('Invalid name'),
+                style:'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
+        )
       }
     } catch (error) {
       console.log('Data received in profile.js catch: ' + error)
@@ -75,9 +121,17 @@ export default class Profile extends Component {
       let response = await loginApi.editUserInfo(name, emailId, altMobile, referredBy)
       console.log('data received in profile.js : ' + JSON.stringify(response))
       if (response.status == true) {
+        // this.setState({
+        //   name:ConstantValues.customerName,
+        //   altmobile:ConstantValues.customeralternateMobile,
+        //   emailId:ConstantValues.customerEmailId,
+        // })
+        ConstantValues.customerName = name
+        ConstantValues.customerEmailId = emailId
+        ConstantValues.customeralternateMobile = altMobile
         return (
           ToastAndroid.show('Profile Updated Successfully', ToastAndroid.LONG),
-          this.props.navigation.navigate('Search')
+          this.props.navigation.navigate(ConstantValues.navigationChannel)
         )
       }
       else {
@@ -136,6 +190,7 @@ export default class Profile extends Component {
         <TextInput style={styles.input}
           placeholder='Alternate Mobile No.'
           value={this.state.altmobile}
+          maxLength={10}
           keyboardType='number-pad'
           onChangeText={altmobile => this.setState({ altmobile })}
         />
@@ -151,20 +206,20 @@ export default class Profile extends Component {
         </View>
         <CustomButton
           title="Submit"
-          disabled={ this.state.name.length == 0 ? true : false}
-          style={{ backgroundColor:  this.state.name.length == 0 ? '#9b9b9b' : '#1fc44e', alignSelf: 'center', marginBottom: 20, }}
+          disabled={ this.state.name == '' ? true : false}
+          style={{ backgroundColor:'#60b246', alignSelf: 'center', marginBottom: 20, }}
           onPress={() => {
             this.isEmpty(this.state.name, this.state.emailId, this.state.altmobile, this.state.referredBy)
             // this.props.navigation.navigate('Search')
           }}
         />
-        <CustomTouchableOpacity
+        {/* <CustomTouchableOpacity
           text="Skip >>"
           color="#1abc9c"
           onPress={() => {
             this.props.navigation.navigate('Search')
           }}
-        />
+        /> */}
       </View>
     );
   }
@@ -191,11 +246,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   input: {
-    width: '80%',
+    width: '100%',
     marginBottom: 5,
     fontSize: 20,
     paddingHorizontal:10,
-    fontFamily: 'Poppins-SemiBold'
+    fontFamily: 'Poppins-Regular'
   },
   card: {
     backgroundColor: '#ffffff',//can change as we move to various pages

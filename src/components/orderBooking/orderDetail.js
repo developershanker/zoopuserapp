@@ -1,23 +1,31 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, Image, ScrollView, TouchableOpacity,TouchableWithoutFeedback } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import ConstantValues from '../constantValues';
+import BillDetailCard from '../cart/billDetailCard.js';
 
 export default class OrderDetail extends Component {
   componentDidMount() {
     SplashScreen.hide();
+    this.getOrderDetails()
   }
   constructor(props) {
     super(props);
     this.state = {
       orderedItem: [
-        { id: '1', itemName: 'Special Thali', itemPrice: '175', itemQuantity: 0 },
-        { id: '2', itemName: 'Special Non Veg Thali', itemPrice: '175', itemQuantity: 0 },
+        // { id: '1', itemName: 'Special Thali', itemPrice: '175', itemQuantity: 0 },
+        // { id: '2', itemName: 'Special Non Veg Thali', itemPrice: '175', itemQuantity: 0 },
       ]
     };
   }
 
+  getOrderDetails(){
+    this.setState({
+      orderedItem:ConstantValues.finalCart
+    })
+  }
   render() {
     return (
       <SafeAreaView style={styles.slide}>
@@ -25,24 +33,23 @@ export default class OrderDetail extends Component {
           <View>
             {/* header view */}
             <View style={{ flexDirection: 'row', paddingVertical: 15 }}>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('TrackingOrder')}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'flex-start', width: Dimensions.get('window').width - 100, alignItems: 'flex-start' }}>
-                <Text style={{ fontFamily:'Poppins-Bold', fontSize: 20, color: '#000000' }}> ORDER ID </Text>
-                <Text style={{ fontFamily:'Poppins-Bold', fontSize: 20, color: '#000000' }}> 242559 </Text>
+                <Text style={{ fontFamily:'Poppins-Medium', fontSize: 15, color: '#000000' }}> ORDER ID </Text>
+                <Text style={{ fontFamily:'Poppins-Medium', fontSize: 15, color: '#000000' }}> {ConstantValues.irctcId}</Text>
                 <View style={{ flexDirection: 'row', width: Dimensions.get('screen').width, paddingTop: 10 }}>
                   <Text style={styles.infoView}> 08/08/2019 </Text>
                   <Text style={styles.infoView}> 12:35 AM </Text>
-                  <Text style={styles.infoView}> No.of Items:2</Text>
                 </View>
-                <Text style={{ fontSize: 15, color: '#000000' }}>Order will reach in 20 minutes</Text>
+                {/* <Text style={{ fontSize: 15, color: '#000000' }}>Order will reach in 20 minutes</Text> */}
               </View>
             </View>
             {/* header view ends */}
             <View>
               <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10 }}>
-                <Text style={{ fontSize: 20, fontFamily:'Poppins-Bold', color: '#000000' }}> Order Details </Text>
+                <Text style={{fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}> Order Details </Text>
                 <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} />
               </View>
               <View
@@ -51,29 +58,33 @@ export default class OrderDetail extends Component {
                   data={this.state.orderedItem}
                   renderItem={({ item }) =>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 10 }}>
-                      <Text style={{ fontFamily:'Poppins-Bold', color: '#000000', fontSize: 15 }}>{item.itemName}</Text>
+                      <Text style={{ fontFamily:'Poppins-Regular', color: '#000000', fontSize: 15 }}>{item.itemName}</Text>
                       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         {/* <Icon name={'rupee-sign'} size={15}/> */}
-                        <Text style={{ fontFamily:'Poppins-Bold', color: '#000000', fontSize: 15 }}>Rs. {item.itemPrice}</Text>
+                        <Text style={{ fontFamily:'Poppins-Regular', color: '#000000', fontSize: 15 }}>{ConstantValues.rupee} {item.basePrice}</Text>
                       </View>
                     </View>
                   }
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => item.itemId.toString()}
                 />
               </View>
 
             </View>
             <View>
-              {/* <BillDetailCard /> */}
+            <BillDetailCard/>
+            </View>
+          
+            {/* <View>
+             
               <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10 }}>
-                <Text style={{ fontSize: 20, fontFamily:'Poppins-Bold', color: '#000000' }}> Bill Details </Text>
+                <Text style={{ fontSize: 20, fontFamily:'Poppins-Regular', color: '#000000' }}> Bill Details </Text>
                 <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} />
               </View>
               <View
                 style={styles.card}
               >
                 <View>
-                  {/* <Text style={{fontSize:15,fontWeight:'bold',padding:5}}></Text> */}
+                
                   <View style={styles.tile}>
                     <Text style={styles.tiletext}>ITEM TOTAL</Text>
                     <Text style={styles.tiletext}>Rs. 200</Text>
@@ -91,13 +102,13 @@ export default class OrderDetail extends Component {
                     <Text style={styles.tiletext}>Rs. 200</Text>
                   </View>
                   <View style={styles.tile}>
-                    <Text style={{fontFamily:'Poppins-Bold',color: '#4ce065',fontSize:20}}>Total Paid</Text>
-                    <Text style={{fontFamily:'Poppins-Bold',color: '#4ce065',fontSize:20}}>Rs. 200</Text>
+                    <Text style={{fontFamily:'Poppins-Regular',color: '#4ce065',fontSize:20}}>Total Paid</Text>
+                    <Text style={{fontFamily:'Poppins-Regular',color: '#4ce065',fontSize:20}}>Rs. 200</Text>
                   </View>
 
                 </View>
               </View>
-            </View>
+            </View> */}
 
           </View>
         </ScrollView>
@@ -115,22 +126,19 @@ const styles = StyleSheet.create({
   infoView: {
     color: '#e39494',
     fontSize: 15,
-    fontFamily:'Poppins-Bold',
+    fontFamily:'Poppins-Regular',
 
   },
   card: {
-    width: Dimensions.get('window').width - 5,
-    borderRadius: 100 / 4,
+    width: Dimensions.get('window').width,
+    borderRadius: 5,
     marginLeft: 5,
     marginRight: 10,
     marginTop: 10,
     alignItems: 'center',
     flexDirection: 'row',
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-
+    paddingVertical:5,
+    paddingHorizontal:5,
     backgroundColor: '#ffffff',//can change as we move to various pages
     marginBottom: 10,//can change as we move to various pages
     // marginLeft: '2%', //can change as we move to various pages
@@ -140,7 +148,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     shadowOpacity: 0.4,
     borderBottomColor: '#e4e4e4',
-    borderBottomWidth: 4,
+    borderBottomWidth: 2,
   },
   tile: {
     width: Dimensions.get('screen').width - 25,
@@ -150,7 +158,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   tiletext: {
-    fontFamily:'Poppins-Bold',
+    fontFamily:'Poppins-Regular',
     color: '#000000'
   }
 })
