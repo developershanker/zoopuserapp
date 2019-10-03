@@ -86,7 +86,7 @@ export default class contact extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Bold', fontSize: 25, color: '#000000' }}> Contact Us </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 25, color: '#000000' }}> Contact Us </Text>
               </View>
             </View>
             {/* header view ends */}
@@ -106,7 +106,7 @@ export default class contact extends Component {
                 onChangeText={description => this.setState({ description })}
               />
               <CustomButton
-                style={{ backgroundColor: '#1fc44e', alignSelf: 'center', marginBottom: 20, }}
+                style={{ backgroundColor: '#1fc44e', alignSelf: 'center', marginBottom: 20, width:300 }}
                 onPress={() => { this.sendContent(this.state.name, this.state.description) }}
                 title='Submit'
               />
@@ -114,17 +114,15 @@ export default class contact extends Component {
 
             <View>
               <View style={styles.detailview}>
-                <Image style={styles.image} source={require('../images/location.png')} />
-                {/* <Image  source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.location}} />
-                {console.log('Image url is  : ' + ConstantValues.IconUrl+ConstantValues.imgurl.location)} */}
+                <Image style={styles.image} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.location }} />
                 <Text style={styles.detailText}> {this.state.zoopAddress} </Text>
               </View>
               <View style={styles.detailview}>
-                <Image style={styles.image} source={require('../images/call.png')} />
+                <Image style={styles.image} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.call }} />
                 <Text style={styles.detailText}> {this.state.zoopPhone} </Text>
               </View>
               <View style={styles.detailview}>
-                <Image style={styles.image} source={require('../images/email.png')} />
+                <Image style={styles.image} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.email }} />
                 <Text style={styles.detailText}> {this.state.zoopEmail} </Text>
               </View>
             </View>
@@ -135,19 +133,19 @@ export default class contact extends Component {
 
                 <View style={styles.cardS}>
                   <TouchableOpacity onPress={() => this.gotoLink(ConstantValues.zoopFacebook)}>
-                    <Image style={styles.imageS} source={require('../images/facebook.png')} />
+                    <Image style={styles.imageS}  source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.facebook }} />
                   </TouchableOpacity>
                 </View>
 
                 <View style={styles.cardS}>
                   <TouchableOpacity onPress={() => this.gotoLink(ConstantValues.zoopTwitter)}>
-                    <Image style={styles.imageS} source={require('../images/twitter.png')} />
+                    <Image style={styles.imageS}  source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.twitter }} />
                   </TouchableOpacity>
                 </View>
 
                 <View style={styles.cardS}>
                   <TouchableOpacity onPress={() => this.gotoLink(ConstantValues.zoopInstagram)}>
-                    <Image style={styles.imageS} source={require('../images/insta.png')} />
+                    <Image style={styles.imageS}  source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.instagram }} />
                   </TouchableOpacity>
                 </View>
 
@@ -175,36 +173,37 @@ const styles = StyleSheet.create({
     marginLeft: '2%', //can change as we move to various pages
     width: '96%', //can change as we move to various pages
     borderColor: '#e4e4e4',
-    borderRadius: 100 / 9,
+    borderRadius: 5,
     borderWidth: 1,
     shadowOpacity: 0.4,
     borderBottomColor: '#e4e4e4',
-    borderBottomWidth: 4,
+    borderBottomWidth: 2,
     paddingVertical: 10
   },
   cardS: {
     alignItems: 'center',
+    width:60,
     justifyContent: 'center',
     backgroundColor: '#ffffff',//can change as we move to various pages
     marginBottom: 10,//can change as we move to various pages
     // marginLeft: '2%', //can change as we move to various pages
     // width: '96%', //can change as we move to various pages
     borderColor: '#e4e4e4',
-    borderRadius: 100 / 9,
+    borderRadius: 5,
     borderWidth: 1,
     shadowOpacity: 0.4,
     borderBottomColor: '#e4e4e4',
-    borderBottomWidth: 4,
+    borderBottomWidth: 2,
     paddingVertical: 5
   },
   inputS: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     width: '80%',
     fontSize: 15,
     marginVertical: 40
   },
   textS: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     fontSize: 20,
     color: '#000000'
   },
@@ -225,7 +224,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   detailText: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     fontSize: 15,
     color: '#000000'
   },
@@ -233,7 +232,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'flex-start',
-    width: Dimensions.get('screen').width - 100,
+    width: Dimensions.get('screen').width,
     paddingVertical: 10
   }
 });

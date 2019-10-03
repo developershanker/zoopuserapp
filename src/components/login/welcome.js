@@ -117,13 +117,13 @@ export default class Welcome extends Component {
               textStyle={styles.text}
 
             />
-            <CustomTouchableOpacity
+            {/* <CustomTouchableOpacity
               text="Skip >>"
               color="#1abc9c"
               onPress={() => {
                 this.props.navigation.navigate('Search')
               }}
-            />
+            /> */}
           </View>
           {/* </FadeInView> */}
 

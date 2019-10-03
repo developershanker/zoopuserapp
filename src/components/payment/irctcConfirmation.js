@@ -58,15 +58,17 @@ export default class irctcConfirmation extends Component {
         ConstantValues.irctcId = response.data.irctcOrderId
         console.log('Got Irctc id...' + ConstantValues.irctcId)
         this.setState({
-          irctc_text: 'Your IRCTC ID is : ' + ConstantValues.irctcId,
+          irctc_text: 'Your IRCTC ID : ' + ConstantValues.irctcId,
           overallStatus: 'Your Order has been placed successfully!!',
           processingirctc: false,
           irctc_result_icon: 'check'
         })
       } else if (response.status == false) {
         this.setState({
-          processingirctc: true,
-          irctc_text: 'Processing... PLease wait...'
+          processingirctc: false,
+          irctc_text: 'Processing for IRCTC Id',
+          overallStatus: 'Payment Done.. Processing for IRCTC Id',
+          irctc_result_icon: 'exclamation'
         })
         console.log(response.error)
       }
@@ -121,8 +123,8 @@ export default class irctcConfirmation extends Component {
         </View>
         <Fade visible={this.state.processingirctc == false}>
           <CustomButton
-            style={{ backgroundColor: '#1fc44e', alignSelf: 'center', marginBottom: 20, }}
-            onPress={() => this.props.navigation.navigate('MyOrders')}
+            style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
+            onPress={()=>{this.props.navigation.navigate('OrderDetail')}}
             title='View Details'
           />
         </Fade>

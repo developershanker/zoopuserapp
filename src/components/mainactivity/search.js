@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet, Clipboard, Button,Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList } from 'react-native';
+import { View, Dimensions, StyleSheet, Clipboard,Platform,Linking, Button,Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { RadioButton, Text } from 'react-native-paper';
 import { CustomButton } from '../assests/customButtonLarge';
@@ -83,6 +83,7 @@ export default class Search extends Component {
             // ref={component => this._textInput = component}
             style={styles.input}
             placeholder={this.state.value}
+            enablesReturnKeyAutomatically={true}
             keyboardType='number-pad'
             maxLength={10}
             onValueChange={placeholder => this.setState({ placeholder })}
@@ -102,13 +103,14 @@ export default class Search extends Component {
           <Autocomplete
             autoCapitalize="none"
             autoCorrect={false}
+            enablesReturnKeyAutomatically={true}
             data={trains.length === 1 && comp(query, trains[0].trainNumberAndName) ? [] : trains}
             defaultValue={query}
             inputContainerStyle = {styles.inputViewD}
             // listContainerStyle={styles.autocompleteContainer}
             style={{fontSize:15,fontFamily:'Poppins-Regular',color: '#635c5a',}}
             onChangeText={text => this.setState({ query: text })}
-            placeholder="Enter Train No."
+            placeholder="Enter Train Name/No."
             renderItem={({ item }) => (
               <View>
                 <ScrollView contentContainerStyle={styles.dropdown}>
@@ -159,16 +161,34 @@ export default class Search extends Component {
 
   searchBy(text) {
     if (text != '') {
-      ConstantValues.searchString = text,
-        console.log('ConstantValues.searchString is ....' + ConstantValues.searchString)
-      this.props.navigation.navigate('Station')
+      if (text.length == 10 || text.length == 5) {
+        ConstantValues.searchString = text,
+          console.log('ConstantValues.searchString is ....' + ConstantValues.searchString)
+        this.props.navigation.navigate('Station')
+      } else {
+        return (
+          ToastAndroid.show('Incorrect Input length', ToastAndroid.LONG)
+        )
+      }
     } else {
       return (
         ToastAndroid.show('Invalid Input', ToastAndroid.LONG)
       )
     }
-
   }
+  dialCall = () => {
+
+    let phoneNumber = '';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = 'tel:${8010802222}';
+    }
+    else {
+      phoneNumber = 'telprompt:${8010802222}';
+    }
+
+    Linking.openURL(phoneNumber);
+  };
   
   render() {
     let position = Animated.divide(this.scrollX, width);
@@ -194,7 +214,7 @@ export default class Search extends Component {
                     value="Enter PNR"
                     color='#757271'
                   />
-                  <Text style={styles.text}>PNR</Text>
+                  <Text style={styles.text}>PNR on Ticket</Text>
                 </View>
 
 
@@ -204,7 +224,7 @@ export default class Search extends Component {
                     color='#757271'
                   // onPress={this.showTrain()}     
                   />
-                  <Text style={styles.text}>Train No.</Text>
+                  <Text style={styles.text}>Train Name/No.</Text>
                 </View>
 
               </View>
@@ -221,7 +241,7 @@ export default class Search extends Component {
                   this.searchBy(this.state.text)
                   // this.props.navigation.navigate('Station')
                 }}
-                title='Search'
+                title='Search Restaurants'
               />
             </View>
             {/* extra services view starts */}
@@ -234,24 +254,25 @@ export default class Search extends Component {
               </View>
 
               <View>
-                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('TrainTimeTable')}>
-                  <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.trainTimeTable }} />
-                  <Text style={styles.GridViewTextLayout}>TRAIN TIME TABLE</Text>
+                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('CoachSequence')} disabled={true}>
+                  <Text style={{color:'#8c0d0d',fontSize: 8,fontFamily:'Poppins-Regular',justifyContent: 'center',alignItems:'center',}}>Coming Soon...</Text>
+                  <Image style={{opacity:0.2,width:50,height:50}} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.coachSequence }} />
+                  <Text style={[styles.GridViewTextLayout,{opacity:0.2}]}>COACH SEQUENCE</Text>
                 </TouchableOpacity>
               </View>
 
               <View>
-                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('PlatformLocator')}>
-                  <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.platformLocator }} />
-                  <Text style={styles.GridViewTextLayout}>PLATFORM LOCATOR</Text>
+                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.dialCall()}>
+                  <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.helpline }} />
+                  <Text style={styles.GridViewTextLayout}>HELPLINE</Text>
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={styles.gridContainer}>
+            {/* <View style={styles.gridContainer}>
                 <View>
-                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('CoachSequence')}>
-                  <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.coachSequence}} />
-                  <Text style={styles.GridViewTextLayout}>COACH SEQUENCE</Text>
+                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('TrainTimeTable')}>
+                  <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.trainTimeTable}} />
+                  <Text style={styles.GridViewTextLayout}>TRAIN TIME TABLE</Text>
                 </TouchableOpacity>
               </View>
 
@@ -263,12 +284,12 @@ export default class Search extends Component {
               </View>
 
               <View>
-                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('Helpline')}>
-                  <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.helpline}} />
-                  <Text style={styles.GridViewTextLayout}>HELPLINE</Text>
+                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('PlatformLocator')}>
+                  <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.platformLocator}} />
+                  <Text style={styles.GridViewTextLayout}>PLATFORM LOCATOR</Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View> */}
             {/* extra services view starts */}
             <View style={styles.scroll}>
               <ScrollView
@@ -344,8 +365,7 @@ const styles = StyleSheet.create({
     flex:1,
     alignItems: 'stretch',
     justifyContent: 'center',
-    marginLeft: 10,
-    marginBottom: 10
+    marginLeft: 10
   },
   img: {
     width: Dimensions.get('window').width,

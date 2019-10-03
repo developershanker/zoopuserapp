@@ -15,6 +15,7 @@ import { Overlay } from 'react-native-elements';
 
 
 
+
 export default class Menu extends Component {
   componentDidMount() {
     SplashScreen.hide();
@@ -172,11 +173,30 @@ export default class Menu extends Component {
 
   checkCart() {
     if (this.state.totalPrice >= ConstantValues.minimumOrderValue) {
-      this.props.navigation.navigate('Cart', {
-        count: this.state.inCart.length,
-        totalPrice: this.state.totalPrice
-      })
-      console.log('no minimumorder issue')
+      if(ConstantValues.customerId != ''){
+        this.props.navigation.navigate('Cart')
+      console.log('neither minimumorder issue nor login issue')
+      }else{
+        ConstantValues.navigationChannel = 'Cart'
+        return (
+          // ToastAndroid.show(response.error, ToastAndroid.LONG),
+         
+            Alert.alert(
+              'Alert!!',
+              'Need Login',
+              [
+                {
+                  text: 'OK',onPress: () => this.props.navigation.navigate('Welcome') ,
+                  style:'cancel'
+                },
+              ],
+              { cancelable: false },
+            )
+          ),
+          console.log('Login issue')
+            }
+      
+      
     } else {
       
         return (
@@ -210,28 +230,38 @@ export default class Menu extends Component {
         <ScrollView>
           <View >
             {/* go back navigator icon */}
-            <View>
+            {/* <View>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Station')}>
-                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+                <Icon name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
-            </View>
+            </View> */}
             {/* go back navigator icon ends here */}
 
             <View style={styles.topContainer}>
-              <Text style={styles.outletName}> {ConstantValues.outletName} </Text>
-              <Text style={{ fontFamily: 'Poppins-Medium', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
+              <View style={{ flexDirection: 'row',width:Dimensions.get('screen').width }}>
+                <View style={{ justifyContent: 'flex-start', alignContent: 'flex-start', padding: 20}}>
+                  <TouchableOpacity onPress={() => this.props.navigation.navigate('Station')}>
+                    <Icon name={'chevron-left'} size={20} color={'#000000'} />
+                  </TouchableOpacity>
+                </View>
+                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center' ,width:Dimensions.get('screen').width-80,paddingTop:10}}>
+                  <Text style={styles.outletName}> {ConstantValues.outletName} </Text>
+                  <Text style={{ fontFamily: 'Poppins-Medium', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
+                </View>
+              </View>
+              
               <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
-                <Text style={{ fontFamily: 'Poppins-Medium' }}>Veg. Only</Text>
+                <Text style={{ fontFamily: 'Poppins-Regular' }}>Veg. Only</Text>
                 <Switch />
               </View>
 
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Image style={{ width: 30, height: 15 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.fssai }} />
-                  <Text style={{ fontSize: 10, fontFamily: 'Poppins-Medium' }}>Lic No. {this.state.fssaiNo}</Text>
+                  {/* <Image style={{ width: 30, height: 15 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.fssai }} /> */}
+                  <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular' }}> FSSAI Lic No. {this.state.fssaiNo}</Text>
                 </View>
-                <Text style={{ fontSize: 10, fontFamily: 'Poppins-Medium', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
+                <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
               </View>
 
 
@@ -242,17 +272,17 @@ export default class Menu extends Component {
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginLeft: 20 }}>
                     <View style={{ flexDirection: 'row' }}>
                       <Icon name='star' size={15} color='#ff9214' />
-                      <Text style={{ fontFamily: 'Poppins-Medium' }}> {ConstantValues.outletRating} </Text>
+                      <Text style={{ fontFamily: 'Poppins-Regular' }}> {ConstantValues.outletRating} </Text>
                     </View>
-                    <Text style={{ fontFamily: 'Poppins-Medium' }}>Rating</Text>
+                    <Text style={{ fontFamily: 'Poppins-Regular' }}>Rating</Text>
                   </View>
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10 }}>
-                    <Text style={{ fontFamily: 'Poppins-Medium' }}>{ConstantValues.rupee} {ConstantValues.minimumOrderValue}</Text>
-                    <Text style={{ fontFamily: 'Poppins-Medium' }}>Min. Order</Text>
+                    <Text style={{ fontFamily: 'Poppins-Regular' }}>{ConstantValues.rupee} {ConstantValues.minimumOrderValue}</Text>
+                    <Text style={{ fontFamily: 'Poppins-Regular' }}>Min. Order</Text>
                   </View>
                   <View style={{ flexDirection: 'column', alignItems: 'center', margin: 10, marginRight: 20 }}>
-                    <Text style={{ fontFamily: 'Poppins-Medium' }}>{ConstantValues.haltTime}</Text>
-                    <Text style={{ fontFamily: 'Poppins-Medium' }}>Halt Time</Text>
+                    <Text style={{ fontFamily: 'Poppins-Regular' }}>{ConstantValues.haltTime} minutes</Text>
+                    <Text style={{ fontFamily: 'Poppins-Regular' }}>Halt Time</Text>
                   </View>
 
                 </View>
@@ -282,13 +312,18 @@ export default class Menu extends Component {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
 
                       <View style={{ flexDirection: 'column', paddingHorizontal: 5, paddingVertical: 5 }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'flex-start', paddingTop: 10, paddingHorizontal: 5 }}>
-                          <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryType == 'Veg' ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
+                        <View style={{ flexDirection: 'row', alignItems: 'flex-start', paddingTop: 5, paddingHorizontal: 5 }}>
+
+                          <View style={{ paddingTop: 8}}>
+                            <Image style={{ width: 15, height: 15, }} source={{ uri: item.categoryType == 'Veg' ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
+                          </View>
+
                           <View style={{ flexDirection: 'column', paddingHorizontal: 5, paddingVertical: 5 }}>
                             <Text style={styles.itemName}>{item.itemName}</Text>
-                            <Text style={{ width: 200, fontSize: 10, color: '#c7c3c3', fontFamily: 'Poppins-Regular', paddingHorizontal: 5, }}>{item.itemDescription}</Text>
+                            <Text style={{ width: 200, fontSize: 10, color: '#898c8b', fontFamily: 'Poppins-Regular', paddingHorizontal: 5, }}>{item.itemDescription}</Text>
                             <Text style={styles.itemName}>{ConstantValues.rupee} {item.basePrice}</Text>
                           </View>
+
                         </View>
 
                       </View>
@@ -301,23 +336,23 @@ export default class Menu extends Component {
 
                           {/* Adding item to cart button */}
                           <View
-                            style={{ alignItems: 'center', width: 90, borderColor: '#60b246', borderRadius: 6, borderWidth: 1 }} key={index}>
+                            style={{ alignItems: 'center', width: 90, borderColor: '#898c8b', borderRadius: 6, borderWidth: 1 }} key={index}>
                             <TouchableOpacity onPress={() => { this.addItemToCart(item, index) }} disabled={item.itemCount == 0 ? false : true}>
                               <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center', justifyContent: 'space-around' }}>
                                 <TouchableOpacity onPress={() => { this.removeItemFromCart(item,index) }} disabled={item.itemCount == 0 ? true : false}>
-                                  <View style={[styles.plusminus,{opacity: item.itemCount == 0 ? 0 : 100,borderTopRightRadius:1,borderBottomRightRadius:1,borderRightColor:'#60b246',borderRightWidth: 1}]}>
+                                  <View style={[styles.plusminus,{opacity: item.itemCount == 0 ? 0 : 100}]}>
                                     <Icon name='minus' size={10} color='#60b246' />
                                   </View>
 
                                 </TouchableOpacity>
 
-                                <Text style={{ fontFamily: 'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5}}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
+                                <Text style={{ fontFamily: 'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5}}>{item.itemCount == 0 ? 'ADD' : item.itemCount}</Text>
 
 
                                 <TouchableOpacity onPress={() => {
                                   this.addItemToCart(item, index)
                                 }}>
-                                  <View style={[styles.plusminus, { opacity: item.itemCount == 0 ? 0 : 100, borderTopLeftRadius: 1, borderBottomLeftRadius: 1, borderLeftColor: '#60b246', borderLeftWidth: 1 }]}>
+                                  <View style={[styles.plusminus, { opacity: item.itemCount == 0 ? 0 : 100}]}>
                                     <Icon name='plus' size={10} color='#60b246' />
                                   </View>
                                 </TouchableOpacity>
@@ -494,7 +529,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: Dimensions.get('window').width,
-    height: 100,
+    height: 60,
     borderRadius: 6,
     margin: 5,
     alignItems: 'center',
@@ -580,14 +615,15 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: '#60b246',
     alignContent: 'center',
+    alignItems:'center'
 
   },
   viewcart: {
     flexDirection: 'row',
-    marginBottom: 15,
+    marginBottom: 10,
     marginRight: 15,
-    alignSelf: 'flex-end',
-    justifyContent: 'center'
+    alignSelf: 'flex-end'
+  
   },
   itemCountShow: {
     flexDirection: 'row',
@@ -617,7 +653,7 @@ const styles = StyleSheet.create({
   headerTextmodal: {
     alignSelf: 'center',
     fontFamily: 'Poppins-Medium',
-    fontSize: 20,
+    fontSize: 15,
     color: '#000000',
     paddingVertical: 10
   },

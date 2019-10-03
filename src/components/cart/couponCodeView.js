@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet,TouchableWithoutFeedback} from 'react-native';
+
 
 export const CouponCodeView = (props) =>{
-    const {title='ZOOP' , style = {}, textStyle = {}} = props;
+    const {title='ZOOP' , style = {}, textStyle = {},onPress} = props;
 
     return(
+        <TouchableWithoutFeedback onPress={onPress}>
         <View style={[styles.codeView, style ]}>
             <Text style={[styles.text, textStyle]}>{props.title}</Text>
         </View>
+        </TouchableWithoutFeedback>
     )
 }
 
@@ -20,7 +23,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         borderColor: '#f59120',
         borderRadius: 100 / 8,
-        borderWidth:2,
+        borderWidth:1,
         borderStyle:'dashed'
     },
     text: {
@@ -28,7 +31,7 @@ const styles = StyleSheet.create({
         width:'auto',
         textTransform: 'uppercase',
         color: '#f59120',
-        fontFamily:'Poppins-Bold',
+        fontFamily:'Poppins-Medium',
         justifyContent:'center'
     },
 });

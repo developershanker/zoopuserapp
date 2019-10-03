@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions, Alert, TouchableOpacity, FlatList, Image, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput, Alert, TouchableOpacity, FlatList, Image, ToastAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import SplashScreen from 'react-native-splash-screen';
@@ -12,14 +12,18 @@ import walletApi from '../customer/walletApi.js';
 import { CheckBox } from 'react-native-elements';
 import cartApi from './cartApi.js';
 import AsyncStorage from '@react-native-community/async-storage';
-import firebase from 'react-native-firebase'
+import firebase from 'react-native-firebase';
+import Modal from "react-native-modal";
+import { CouponCodeView } from './couponCodeView.js';
+import moment from 'moment';
 
 
 export default class Cart extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.getCartItems(ConstantValues.inCart)
-    this.getWalletInfo()
+    this.getWalletInfo(),
+      this.getCoupons();
     this.billDetail()
     this.checkCoupon(ConstantValues.appliedCode)
   }
@@ -38,6 +42,9 @@ export default class Cart extends Component {
       walletUsed: false,
       walletBalanceUsed: 0,
       textPromoCode: 'Apply Coupon Code',
+      visibleModal: null,
+      couponCode: '',
+      CouponDetail: [],
       OutletMenuInfo: [
         // { key: "1", itemName: "Special Thali", itemImage: require('../images/thali.png'), itemPrice: "175", itemCategory: "Thali", itemType: "veg", itemMarking: "", itemDescription: "" },
         // { key: "2", itemName: "Chicken Curry", itemImage: require('../images/chickencurry.png'), itemPrice: "200", itemCategory: "Main Course", itemType: "nonveg", itemMarking: "", itemDescription: "" },
@@ -125,14 +132,14 @@ export default class Cart extends Component {
 
 
   changeCode = (couponCode) => {
-
     if (couponCode == '') {
       this.setState({
-        textPromoCode: 'Apply Coupon Code'
+        textPromoCode: 'Apply Coupon Code',
+        visibleModal: 'bottom'
       })
       ConstantValues.appliedCode = 'Apply Coupon Code'
       // console.log('couponCode is : ' + couponCode + 'textPromoCode is : ' + this.state.textPromoCode + '\n' + 'ConstantValues.appliedCode : ' + ConstantValues.appliedCode)
-      this.props.navigation.navigate('CouponPage')
+      // this.props.navigation.navigate('CouponPage')
     } else {
       this.setState({
         textPromoCode: couponCode
@@ -220,6 +227,81 @@ export default class Cart extends Component {
       // console.log('On this.state.walletUsed == false..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
     }
   }
+
+  async getCoupons() {
+    try {
+      let response = await cartApi.getCoupons();
+
+      if (response.status == true) {
+        this.setState({
+          CouponDetail: response.data
+        })
+      } else {
+        ToastAndroid.show(response.error, ToastAndroid.LONG),
+          console.log(response.error)
+      }
+    } catch (error) {
+      console.log('Data received in menu.js catch: ' + error)
+    }
+  }
+
+
+  applyCoupons = (couponDetail) => {
+    if ( ConstantValues.totalPayableAmount >= couponDetail.minimumOrderValue) {
+      // console.log('couponCode : ' + JSON.stringify(couponDetail))
+      ConstantValues.couponCode = couponDetail.couponCode
+      ConstantValues.couponValue = couponDetail.couponValue
+      ConstantValues.discount = couponDetail.couponValue
+      ConstantValues.couponType = couponDetail.type
+      ConstantValues.couponId = couponDetail.couponId
+      ConstantValues.isCouponApplied = true
+      console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
+      // Cart.changeCode(ConstantValues.couponCode)
+      cartApi.changeCode(couponDetail.couponCode)
+      cartApi.billDetail()
+      this.setState({ 
+        visibleModal: null ,
+        textPromoCode: couponDetail.couponCode
+      })
+    } else {
+      return (
+        // ToastAndroid.show(response.error, ToastAndroid.LONG),
+
+        Alert.alert(
+          'Invalid Coupon',
+          'This Coupon Code is not valid in this order ',
+          [
+            {
+              text: 'OK', onPress: () => this.setState({ visibleModal: null }),
+              style: 'cancel'
+            },
+          ],
+          { cancelable: false },
+        )
+      )
+    }
+
+  }
+
+  applyCouponsFromInput = (couponCode, couponDetail) => {
+    if (couponCode != '') {
+      if (couponCode == 'ZOOP100') {
+        ConstantValues.couponCode = couponCode
+        // ConstantValues.discount = ConstantValues.couponValue
+        console.log('couponCode : ' + ConstantValues.couponCode)
+        ConstantValues.isCouponApplied = true
+
+        this.setState({ visibleModal: null })
+      } else {
+        return (
+          ToastAndroid.show('Invalid Promo Code', ToastAndroid.LONG)
+        )
+      }
+    } else {
+      ToastAndroid.show('Please Enter Promo Code', ToastAndroid.LONG)
+    }
+  }
+
   confirmCart = () => {
     if (ConstantValues.totalBasePrice >= ConstantValues.minimumOrderValue) {
       return (
@@ -396,25 +478,25 @@ export default class Cart extends Component {
                   data={this.state.revisedInCart}
                   extraData={this.state}
                   renderItem={({ item, index }) =>
-                    <View style={{ flexDirection: 'row', justifyContent:'space-around', marginTop: 5, marginBottom: 5, alignItems: 'center', width: Dimensions.get('window').width }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 5, marginBottom: 5, alignContent: 'space-around', width: Dimensions.get('window').width }}>
                       <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryType == 'Veg' ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
-                      <Text style={{ alignSelf: 'center', fontSize: 15, fontFamily: 'Poppins-Regular', }}>{item.itemName}</Text>
+                      <Text style={{ fontSize: 13, fontFamily: 'Poppins-Regular', width: 100 }}>{item.itemName}</Text>
                       {/* Adding item to cart button */}
                       <View
-                        style={{ alignItems: 'center', width: 90, borderColor: '#60b246', borderRadius: 6, borderWidth: 1 }} key={index}>
-                        <TouchableOpacity 
-                        // onPress={() => { this.addItemToCart(item, index) }}
-                        disabled={item.itemCount == 0 ? false : true}
+                        style={{ alignItems: 'center', width: 90, height: 31, borderColor: '#898c8b', borderRadius: 6, borderWidth: 1 }} key={index}>
+                        <TouchableOpacity
+                          // onPress={() => { this.addItemToCart(item, index) }}
+                          disabled={item.itemCount == 0 ? false : true}
                         >
-                          
+
                           <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center', justifyContent: 'space-around' }}>
 
-                            <TouchableOpacity 
-                            // onPress={() => { this.removeItemFromCart(item, index) }} 
-                            disabled={item.itemCount == 0 ? true : false}
+                            <TouchableOpacity
+                              // onPress={() => { this.removeItemFromCart(item, index) }} 
+                              disabled={item.itemCount == 0 ? true : false}
                             >
 
-                              <View style={[styles.plusminus, { opacity: item.itemCount == 0 ? 0 : 100, borderTopRightRadius: 1, borderBottomRightRadius: 1, borderRightColor: '#60b246', borderRightWidth: 1 }]}>
+                              <View style={[styles.plusminus, { opacity: item.itemCount == 0 ? 0 : 100}]}>
                                 <Icon name='minus' size={10} color='#60b246' />
                               </View>
 
@@ -423,10 +505,10 @@ export default class Cart extends Component {
                             <Text style={{ fontFamily: 'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
 
 
-                            <TouchableOpacity 
+                            <TouchableOpacity
                             // onPress={() => {this.addItemToCart(item, index)}}
                             >
-                              <View style={[styles.plusminus, { opacity: item.itemCount == 0 ? 0 : 100, borderTopLeftRadius: 1, borderBottomLeftRadius: 1, borderLeftColor: '#60b246', borderLeftWidth: 1 }]}>
+                              <View style={[styles.plusminus, { opacity: item.itemCount == 0 ? 0 : 100 }]}>
                                 <Icon name='plus' size={10} color='#60b246' />
                               </View>
                             </TouchableOpacity>
@@ -436,7 +518,7 @@ export default class Cart extends Component {
                       </View>
 
                       {/* Adding item to cart button ends here */}
-                      <Text style={{ alignSelf: 'center', fontSize: 15, color: '#000000', fontFamily: 'Poppins-Regular', }}>{ConstantValues.rupee} {item.basePrice}</Text>
+                      <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Regular', }}>{ConstantValues.rupee} {item.basePrice}</Text>
                     </View>
                   }
                   keyExtractor={(item) => item.itemId.toString()}
@@ -455,12 +537,9 @@ export default class Cart extends Component {
                 </Fade>
                 <Fade visible={ConstantValues.customerId == '' ? false : true}>
                   <View style={{ flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center' }}>
-
-
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignContent: 'center' }}>
                       <CheckBox
                         disabled={this.state.textPromoCode == ConstantValues.couponCode ? true : false}
-                        title='Use Wallet Balance'
                         textStyle={{ fontFamily: 'Poppins-Regular' }}
                         checked={this.state.walletUsed}
                         onPress={() => {
@@ -468,13 +547,17 @@ export default class Cart extends Component {
                             this.walletUsed(this.state.walletUsed)
                         }}
                       />
-
+                      <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: 150, paddingHorizontal: 10 }}>
+                        <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Use Wallet Balance</Text>
+                        <Text style={{ fontSize: 10, fontFamily: 'Poppins-Light', color: '#000000',alignSelf:'center' }}>Max. Rs.50 per order can be used</Text>
+                      </View>
 
                       <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ fontSize: 10, fontFamily: 'Poppins-Light' }}>Available Balance</Text>
                         <Text style={{ fontSize: 20, fontFamily: 'Poppins-Regular', color: '#000000' }}>{ConstantValues.rupee} {this.state.walletUsed == true ? ConstantValues.walletBalance - 50 : ConstantValues.walletBalance}</Text>
                       </View>
                     </View>
+
                     <Text>OR</Text>
 
 
@@ -542,6 +625,70 @@ export default class Cart extends Component {
             </View>
           </View>
         </ScrollView>
+
+        <Modal
+          isVisible={this.state.visibleModal === 'bottom'}
+          onBackButtonPress={() => this.setState({ visibleModal: null })}
+          onSwipeComplete={() => this.setState({ visibleModal: null })}
+          swipeDirection={['left', 'right', 'down']}
+          style={styles.bottomModal}
+        >
+
+          <View style={styles.modalView}>
+            <View style={styles.promocodeInput}>
+              <TextInput
+                style={{ fontSize: 15, textTransform: 'uppercase', fontFamily: 'Poppins-Medium', width: 200 }}
+                placeholder='Enter Promo Code'
+                // keyboardType='default'
+                autoCapitalize='characters'
+                onChangeText={couponCode => this.setState({ couponCode })}
+              />
+              <TouchableOpacity onPress={() => { this.applyCouponsFromInput(this.state.couponCode, this.state.CouponDetail) }}>
+                <Text style={{ color: '#60b246', fontSize: 15, fontFamily: 'Poppins-Medium', }}>APPLY</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{ width: Dimensions.get('window').width - 10, flexDirection: 'row', paddingTop: 10 }}>
+              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Medium', paddingHorizontal: 10 }}>Available Coupons</Text>
+              {/* <Image style={{ height: 10, alignSelf: 'center' }} source={require('../images/line.png')} /> */}
+            </View>
+
+
+            {/* CouponDetail Card begin Here */}
+            <View>
+              <FlatList
+                data={this.state.CouponDetail}
+                renderItem={({ item, index }) =>
+
+                  <View style={styles.card}>
+                    <View>
+                      <CouponCodeView
+                        onPress={()=>{this.applyCoupons(item)}}
+                        title={item.couponCode}
+                      />
+                      <Text style={{ paddingTop: 5, color: '#000000', fontFamily: 'Poppins-Regular', }}>{item.discription}</Text>
+                      <Text style={{ paddingTop: 5, fontFamily: 'Poppins-Regular', }}>Validity of this coupon is: {moment(item.validityStartDate).format('DD-MM-YYYY HH:mm A')}</Text>
+                    </View>
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.applyCoupons(item)
+                      }}
+                    >
+                      <Text style={{ color: '#60b246', fontSize: 15, fontFamily: 'Poppins-Medium', alignSelf: 'flex-end', marginRight: 25 }}>APPLY</Text>
+                    </TouchableOpacity>
+
+                  </View>
+
+                }
+                keyExtractor={item => item.couponId.toString()}
+              />
+            </View>
+            {/* CouponDetail Card ends Here  */}
+          </View>
+
+        </Modal>
+
         <CustomButton
           disabled={this.state.revisedInCart.length == 0 ? true : false}
           style={{ backgroundColor: this.state.revisedInCart.length == 0 ? '#9b9b9b' : '#60b246', alignSelf: 'center', marginBottom: 20, }}
@@ -560,16 +707,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   card: {
-    backgroundColor: '#ffffff',//can change as we move to various pages
-    marginBottom: 10,//can change as we move to various pages
-    marginLeft: '2%', //can change as we move to various pages
-    width: '96%', //can change as we move to various pages
-    borderColor: '#e4e4e4',
-    borderRadius: 100 / 9,
+    // backgroundColor: '#ffffff',//can change as we move to various pages
+    // marginBottom: 10,//can change as we move to various pages
+    // marginLeft: '2%', //can change as we move to various pages
+    // width: '96%', //can change as we move to various pages
+    // borderColor: '#e4e4e4',
+    // borderRadius: 100 / 9,
+    // borderWidth: 1,
+    // shadowOpacity: 0.4,
+    // borderBottomColor: '#e4e4e4',
+    // borderBottomWidth: 2,
+    width: Dimensions.get('screen').width,
+    paddingHorizontal: 5,
+    paddingVertical: 5
+  },
+  promocodeInput: {
+    borderRadius: 100 / 8,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
     borderWidth: 1,
-    shadowOpacity: 0.4,
-    borderBottomColor: '#e4e4e4',
-    borderBottomWidth: 2,
+    width: '96%',
+    borderColor: '#626663',
   },
   couponcard: {
     width: Dimensions.get('window').width - 5,
@@ -625,6 +784,21 @@ const styles = StyleSheet.create({
   tiletext: {
     fontFamily: 'Poppins-Regular',
     color: '#000000'
-  }
+  },
+  bottomModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  modalView: {
+    width: Dimensions.get('screen').width,
+    backgroundColor: '#ffffff',
+    // flexDirection: 'column',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderTopStartRadius: 100 / 5,
+    borderTopEndRadius: 100 / 5
+  },
 
 });
