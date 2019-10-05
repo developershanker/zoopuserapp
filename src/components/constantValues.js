@@ -5,9 +5,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Spinner from 'react-native-spinkit';
 export default class ConstantValues {
-  //static apiUrl = 'https://appapi.zoopindia.in/'
+  static apiUrl = 'https://appapi.zoopindia.in/'
   //  static apiUrl = 'http://13.126.232.146:3000/'
-  static apiUrl = 'http://10.5.48.206:3000/'
+  //static apiUrl = 'http://10.5.48.206:3000/'
 
   static customer = { name: '', mobileNo: '' }
   static customerName = ''
