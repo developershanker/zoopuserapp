@@ -23,6 +23,7 @@ import PassengerDetail from '../customer/passengerDetail.js';
 import PaymentPage from '../payment/paymentPage.js';
 import PaymentPaytm from '../payment/paymentPaytm.js';
 import IrctcConfirmation from '../payment/irctcConfirmation.js';
+import IrctcConfirmationCod from '../payment/irctcConfirmationCod.js';
 ///////------Order Process Files-------//////
 import OrderConfirm from '../orderBooking/orderConfirm.js';
 import DeliveryMark from '../postOrderActivity/deliveryMark.js';
@@ -195,7 +196,9 @@ const DrawerNavigator = createDrawerNavigator({
       drawerLabel:
       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
          <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.homeScreen}}/>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Home</Text>
+         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Home</Text>
+         </View>
       </View>
      
     }
@@ -206,7 +209,9 @@ const DrawerNavigator = createDrawerNavigator({
       drawerLabel:
       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
          <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myProfile}}/>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Profile</Text>
+         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Profile</Text>
+         </View>
       </View>
     }
   },
@@ -216,7 +221,9 @@ const DrawerNavigator = createDrawerNavigator({
       drawerLabel:
       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
          <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myorders}}/>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>My Orders</Text>
+         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>My Orders</Text>
+         </View>
       </View>
     }
   },
@@ -226,7 +233,9 @@ const DrawerNavigator = createDrawerNavigator({
       drawerLabel:
       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
          <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myWallet}}/>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>My Wallet</Text>
+         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>My Wallet</Text>
+         </View>
       </View>
     }
   },
@@ -236,7 +245,9 @@ const DrawerNavigator = createDrawerNavigator({
       drawerLabel:
       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
          <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.contactus}}/>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Contact Us</Text>
+         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Contact Us</Text>
+         </View>
       </View>
     },
   },
@@ -246,7 +257,9 @@ const DrawerNavigator = createDrawerNavigator({
       drawerLabel:
       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
          <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.invite}}/>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Invite & Earn</Text>
+         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Invite & Earn</Text>
+         </View>
       </View>
 
      
@@ -258,7 +271,9 @@ const DrawerNavigator = createDrawerNavigator({
       drawerLabel:
       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
          <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.faq}}/>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>FAQ</Text>
+         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>FAQ</Text>
+         </View>
       </View>
     }
   },
@@ -268,18 +283,11 @@ const DrawerNavigator = createDrawerNavigator({
       drawerLabel:
       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
         
-         <Icon
-         style={{paddingVertical:10}}
-        name='pencil-square'
-        size={25}
-      />
-       <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Feedback</Text>
+        <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.feedback}}/>
+      <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Feedback</Text>
+         </View>
       </View>
-      // drawerIcon: <Icon
-      //   name='pencil-square'
-      //   size={25}
-
-      // />
     }
   },
   RateUs: {
@@ -289,7 +297,9 @@ const DrawerNavigator = createDrawerNavigator({
       drawerLabel:
       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
          <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.rate}}/>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Rate Us</Text>
+         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Rate Us</Text>
+         </View>
       </View>
     }
   },
@@ -299,7 +309,9 @@ const DrawerNavigator = createDrawerNavigator({
       drawerLabel:
       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
          <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.tnc}}/>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>Terms & Conditions</Text>
+         <View style={{width:120,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Terms & Condition</Text>
+         </View>
       </View>
     }
   },
@@ -312,8 +324,11 @@ const DrawerNavigator = createDrawerNavigator({
          <Icon
         name='user'
         size={20}
+        color={'#612621'}
       />
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:15,color:'#000000'}}>{ConstantValues.customerId == '' ? 'Login' : 'LogOut'}</Text>
+         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Login</Text>
+         </View>
       </View>
     }
   },
@@ -491,12 +506,12 @@ const AppNavigator = createStackNavigator({
       header: null,
     }
   },
-  // MyWallet: {
-  //   screen: MyWallet,
-  //   navigationOptions: {
-  //     header: null
-  //   }
-  // },
+  IrctcConfirmationCod: {
+    screen: IrctcConfirmationCod,
+    navigationOptions: {
+      header: null
+    }
+  },
   CheckPNR: {
     screen: CheckPNR,
     navigationOptions: {

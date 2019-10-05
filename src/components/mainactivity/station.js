@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Dimensions, View, ScrollView, StyleSheet,Alert, ToastAndroid,Image, SectionList, TouchableOpacity,TouchableWithoutFeedback, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
+import { Text, Dimensions, View, ScrollView, StyleSheet, Alert, ToastAndroid, Image, SectionList, TouchableOpacity, TouchableWithoutFeedback, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 // import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
@@ -32,25 +32,27 @@ export default class station extends Component {
       stationOpacity: 0.5,
       scrollBegin: false,
       OutletList: [],
+      FilteredOutletList: [],
       StationList: [],
       CuisinesList: [],
       checked: [],
-      isVisible:true
+      isVisible: true
     };
   }
 
 
-  handleChange = (index) => {
+  handleChange = (index,cuisine) => {
     let checked = [...this.state.checked];
     checked[index] = !checked[index];
     this.setState({ checked });
+    console.log('Cuisines selected:' + cuisine )
   }
 
   FlatListItemSeparator = () => {
     return (
       //Item Separator
-      <View style={{ height:0.5, width: '100%', backgroundColor: '#C8C8C8' }} />,
-      <View style={{ height:1, width: '100%', backgroundColor: '#999999' }} />
+      <View style={{ height: 0.5, width: '100%', backgroundColor: '#C8C8C8' }} /> ,
+      <View style={{ height: 1, width: '100%', backgroundColor: '#999999' }} />
     );
   };
 
@@ -83,77 +85,103 @@ export default class station extends Component {
         ConstantValues.trainId = response.data.trainDetails.trainId
         ConstantValues.trainNumber = response.data.trainDetails.trainNumber
         ConstantValues.trainName = response.data.trainDetails.trainName
-
         this.setState({
           StationList: response.data.trainRoutes,
         })
-        ConstantValues.seat = response.data.seatInfo.berth
-        ConstantValues.coach = response.data.seatInfo.coach
-        return (
-          // <CustomActivityIndicator animating={false} /> ,
-          ToastAndroid.show(response.message, ToastAndroid.LONG)
-        ),
-        this.setState({
-          isVisible:false
-        })
-      } else {
-        return (
-          // ToastAndroid.show(response.error, ToastAndroid.LONG),
-         
+        //console.log('Stations are : ' + JSON.stringify(this.state.StationList) + '\n' + 'Station length is : ' + this.state.StationList.length)
+        if (this.state.StationList && this.state.StationList.length) {
+          this.setState({
+            StationList: response.data.trainRoutes,
+          })
+        } else {
+          return (
             Alert.alert(
-              'Invalid Input!!',
-              'Your is not valid or expired.Please check and try again!! ',
+              'Alert!!',
+              'No Stations to display!!',
               [
                 {
                   text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
-                  style:'cancel'
+                  style: 'cancel'
                 },
               ],
               { cancelable: false },
             )
-          ),
+          )
+        }
+
+        if (ConstantValues.searchString.length == 10) {
+          ConstantValues.seat = response.data.seatInfo.berth
+          ConstantValues.coach = response.data.seatInfo.coach
+          ConstantValues.passengerInfo = response.data.passengerInfo
+        } else {
+          ConstantValues.seat = ''
+          ConstantValues.coach = ''
+        }
+          this.setState({
+            isVisible: false
+          })
+      } else {
+        return (
+          Alert.alert(
+            'Invalid Input!!',
+            'Your input is not valid or expired.Please check and try again!! ',
+            [
+              {
+                text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
+        ),
           console.log(response.error)
-        
+
       }
     } catch (error) {
       console.log('Data received in station.js catch: ' + error)
     }
   }
 
-  gotoMenu = (stationId, outletId, stationName, stationCode, haltTime,arrDate,arrival, outletName, outletRating, minimumOrderValue, eta) => {
-    const momemtHaltTime = moment(haltTime,'HHmmss').format('mm')
+  gotoMenu = (stationId, outletId, stationName, stationCode, haltTime, arrDate, arrival, outletName, outletRating, minimumOrderValue,cutOffTime,zoopCustomerDeliveryCharge,zoopCustomerDeliveryChargeGstRate,zoopCustomerDeliveryChargeGst,eta) => {
+    const momemtHaltTime = moment(haltTime, 'HHmmss').format('mm')
     ConstantValues.stationId = stationId,
       ConstantValues.outletId = outletId,
       ConstantValues.stationName = stationName,
       ConstantValues.stationCode = stationCode
-      ConstantValues.outletName = outletName,
+    ConstantValues.outletName = outletName,
       ConstantValues.haltTime = momemtHaltTime,
       ConstantValues.deliveryDate = arrDate, //actual date of arraival
       ConstantValues.deliveryTime = arrival, //expected date of arraival
       ConstantValues.outletRating = outletRating,
       ConstantValues.minimumOrderValue = minimumOrderValue
+      ConstantValues.cuttoff = cutOffTime
+      ConstantValues.deliveryCharge = (zoopCustomerDeliveryCharge == null ? 0 : zoopCustomerDeliveryCharge)
+      ConstantValues.deliveryChargegst = (zoopCustomerDeliveryChargeGst == null ? 0 : zoopCustomerDeliveryChargeGst)
+      ConstantValues.deliveryChargegstRate = (zoopCustomerDeliveryChargeGstRate == null ? 0 : zoopCustomerDeliveryChargeGstRate)
     ConstantValues.eta = eta
     console.log('ConstantValues.stationId : ' + ConstantValues.stationId),
       console.log('ConstantValues.outletId : ' + ConstantValues.outletId),
       console.log('ConstantValues.haltTime : ' + ConstantValues.haltTime),
+      console.log('ConstantValues.deliveryCharge : ' + ConstantValues.deliveryCharge + '\n' + 'ConstantValues.deliveryChargegst : ' + ConstantValues.deliveryChargegst + '\n' + 'ConstantValues.deliveryChargegstRate : ' + ConstantValues.deliveryChargegstRate )
       this.props.navigation.navigate('Menu')
   }
-  selectedStation = (item,index) => {
+  selectedStation = (item, index) => {
     this.setState({
-         stationOpacity : 1
+      stationOpacity: 1
     })
   }
-  scrollStart = () => this.setState({scrollBegin: true})  
-  scrollEnd = () => this.setState({scrollBegin: false})
+  scrollStart = () => this.setState({ scrollBegin: true })
+  scrollEnd = () => this.setState({ scrollBegin: false })
 
   render() {
     const width = Dimensions.get('window').width
+    let temp = ''
     return (
       <SafeAreaView style={styles.slide}>
         {/* <View style={{flexDirection:'column',alignItems:'center'}}>
         <Spinner size={100} type={'FadingCircleAlt'} color={'#FF5819'} isVisible={this.state.loading}/>
         </View> */}
-       
+
         {/* <Fade visible={this.state.loading == false}> */}
         <View style={styles.topContainer}>
           <View>
@@ -164,7 +192,7 @@ export default class station extends Component {
           {/* Searchbar begins */}
 
           <View style={styles.searchBarView}>
-            <Text  style={{ fontSize: 18, fontFamily: 'Poppins-Medium', }}>Pick Station & Restaurant</Text>
+            <Text style={{ fontSize: 18, fontFamily: 'Poppins-Medium', }}>Pick Station & Restaurant</Text>
           </View>
 
           {/* Searchbar ends */}
@@ -195,7 +223,7 @@ export default class station extends Component {
                         <CheckBox
                           value={this.state.checked[index]}
                           disabled={false}
-                          onValueChange={() => this.handleChange(index)}
+                          onValueChange={() => this.handleChange(index ,item.cuisineName)}
                         />
                         <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Regular' }}>{item.cuisineName}</Text>
                       </View>
@@ -219,25 +247,25 @@ export default class station extends Component {
         <View style={styles.stationContainer}>
           <View style={styles.scroll}>
             <ScrollView
-            //  onScrollBeginDrag={this.scrollStart}
-            //  onScrollEndDrag={this.scrollEnd}
+              //  onScrollBeginDrag={this.scrollStart}
+              //  onScrollEndDrag={this.scrollEnd}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               alwaysBounceHorizontal={true}
               contentContainerStyle={styles.contentContainer}>
-             <FlatList
+              <FlatList
                 data={this.state.StationList}
                 // data={this.state.data}
                 horizontal={true}
                 renderItem={({ item, index }) =>
-                  <Fade visible={ item.isVisible && item.outlets.length != 0}>
+                  <Fade visible={item.isVisible && item.outlets.length != 0}>
                     <View style={styles.stationView}>
-                    {/* activeOpacity = {this.state.scrollBegin == true ? 1 : 0.5 } */}
+                      {/* activeOpacity = {this.state.scrollBegin == true ? 1 : 0.5 } */}
                       <TouchableOpacity>
                         <Image style={styles.roundImage} source={item.stationImage == null ? require('../images/1.png') : { uri: item.stationImage }} />
                         <View style={styles.name}>
-                          <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf:'center' }}>{item.stationName}</Text>
-                          <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf:'center' }}>{moment(item.arrivalTime,'HHmmss').format('hh:mm A')}</Text>
+                          <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf: 'center' }}>{item.stationName}</Text>
+                          <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf: 'center' }}>{moment(item.arrivalTime, 'HHmmss').format('hh:mm A')}</Text>
                         </View>
                       </TouchableOpacity>
                     </View>
@@ -248,7 +276,7 @@ export default class station extends Component {
             </ScrollView>
           </View>
         </View>
-       {/* OutletView starts */}
+        {/* OutletView starts */}
         <ScrollView>
           <View style={styles.slide}>
             {/* Station Header */}
@@ -258,7 +286,7 @@ export default class station extends Component {
               // ItemSeparatorComponent={this.FlatListItemSeparator}
               renderItem={({ item, index }) =>
                 <Fade visible={item.isVisible && item.outlets.length != 0}>
-                  <View style={{ borderRadius: 5, borderColor: '#e7e7e7', borderWidth: 1, marginVertical: 10 ,marginHorizontal:10}}>
+                  <View style={{ borderRadius: 5, borderColor: '#e7e7e7', borderWidth: 1, marginVertical: 10, marginHorizontal: 10 }}>
                     <Text style={styles.textheader}>{item.stationName}</Text>
                     <View style={styles.stextview}>
                       <Text style={styles.stext}>Halt : {moment(item.haltTime, 'HHmmss').format('mm')} mins | </Text>
@@ -272,7 +300,8 @@ export default class station extends Component {
 
                     {
                       item.outlets.map((outlets, index) => {
-
+                          
+                        temp = ''
                         return (
                           <View style={styles.outletContainer} key={index} >
                             <TouchableWithoutFeedback style={styles.card}
@@ -289,42 +318,50 @@ export default class station extends Component {
                                   outlets.outletName,
                                   outlets.outletRating,
                                   outlets.minimumOrderValue,
+                                  //outlets
+                                  outlets.cutOffTime,
+                                  outlets.zoopCustomerDeliveryCharge,
+                                  outlets.zoopCustomerDeliveryChargeGstRate,
+                                  outlets.zoopCustomerDeliveryChargeGst,
                                   item.expectedTime
                                 )
                               }}>
-                                <View  style={styles.card}>
-                              <Image source={{ uri: outlets.outletImage }} style={styles.outletimage} />
-                              <View style={styles.detail}>
-                                <View style={{ flexDirection: 'column' }}>
-                                  <View style={{flexDirection:'row',justifyContent:'space-around'}}>
-                                  <Text style={styles.outletname}>
-                                    {outlets.outletName}
-                                  </Text>
-                                  <View style={styles.ratingView}>
-                                    <Text style={styles.rating}>
-                                      {outlets.outletRating}
-                                    </Text>
-                                  </View>
-                                  </View>
-                                
-                                
-                                {/* {
-                                outlets.cuisines.map((cuisines, index) => {
-                                  return (
-                                    <View style={{flexDirection:'row',}} key = {index}>
-                                      <Text style={styles.cuisine}>
-                                        {cuisines.cuisineName}
+                              <View style={styles.card}>
+                                <Image source={{ uri: outlets.outletImage }} style={styles.outletimage} />
+                                <View style={styles.detail}>
+                                  <View style={{ flexDirection: 'column' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                                      <Text style={styles.outletname}>
+                                        {outlets.outletName}
                                       </Text>
+                                      <View style={styles.ratingView}>
+                                        <Text style={styles.rating}>
+                                          {outlets.outletRating}
+                                        </Text>
+                                      </View>
                                     </View>
-                                  )
+
+
+                                    {
+                                outlets.cuisines.map((cuisines, index) => {
+                                 
+                                  temp += cuisines.cuisineName + ', ';
+                                 
                                 }
                                 )
-                                } */}
-                                <Text style={styles.minorder}>
-                                  Min. Order : {ConstantValues.rupee} {outlets.minimumOrderValue}
-                                </Text>
+                                }
+                                
+                                  {/* <View style={{flexDirection:'row'}}> */}
+                                    <Text style={styles.cuisine}>
+                                      {temp.slice(0,-2)} 
+                                    </Text>
+                                  {/* </View> */}
+                                
+                                    <Text style={styles.minorder}>
+                                      Min. Order : {ConstantValues.rupee} {outlets.minimumOrderValue}
+                                    </Text>
+                                  </View>
                                 </View>
-                              </View>
                               </View>
                             </TouchableWithoutFeedback>
                           </View>
@@ -362,7 +399,7 @@ export default class station extends Component {
           // overlayBackgroundColor='#ffffff'
           onBackdropPress={() => this.setState({ isVisible: false })}
         >
-          <ZoopLoader isVisible={true}/>
+          <ZoopLoader isVisible={true} />
 
         </Overlay>
         {/* </Fade> */}
@@ -450,9 +487,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     margin: 5,
-    justifyContent:'center',
-    alignSelf:'center',
-    width:100
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: 100
   },
   image: {
     width: 100,
@@ -483,10 +520,10 @@ const styles = StyleSheet.create({
   detail: {
     width: Dimensions.get('screen').width - 100,
     height: 120,
-    flexDirection:'row'
+    flexDirection: 'row'
   },
   outletname: {
-    width:130,
+    width: 130,
     paddingTop: 10,
     marginLeft: 10,
     fontSize: 15,
@@ -508,7 +545,7 @@ const styles = StyleSheet.create({
     width: 35,
     height: 25,   //#0e8341
     alignItems: 'center',
-    borderRadius:5
+    borderRadius: 5
   },
   rating: {
     fontSize: 15,
@@ -523,18 +560,18 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   cuisine: {
-    // width:150,
+    width:150,
     // flexDirection:'row',
     fontSize: 10,
     fontFamily: 'Poppins-Regular',
-    // marginLeft: 10
+    marginLeft: 10
   },
   minorder: {
     fontFamily: 'Poppins-Light',
     color: '#b32120',
-    fontSize:12,
+    fontSize: 12,
     marginLeft: 10,
-    marginTop: 20,
+    marginTop: 10,
   },
   modalViewHeading: {
     justifyContent: 'center',
@@ -593,7 +630,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: Dimensions.get('window').width,
     justifyContent: 'flex-start',
-    alignItems:'flex-start'
+    alignItems: 'flex-start'
   }
 
 })

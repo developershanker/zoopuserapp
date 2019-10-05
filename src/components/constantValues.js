@@ -5,9 +5,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Spinner from 'react-native-spinkit';
 export default class ConstantValues {
-   static apiUrl = 'https://appapi.zoopindia.in/'
+  //static apiUrl = 'https://appapi.zoopindia.in/'
   //  static apiUrl = 'http://13.126.232.146:3000/'
-  //static apiUrl = 'http://10.5.48.206:3000/'
+  static apiUrl = 'http://10.5.48.206:3000/'
 
   static customer = { name: '', mobileNo: '' }
   static customerName = ''
@@ -51,6 +51,7 @@ export default class ConstantValues {
   static stationCode = ''
   static outletId = ''
   static outletName = ''
+  static cuttoff = ''
   static haltTime = ''
   static outletRating = null
   static minimumOrderValue = null
@@ -72,6 +73,7 @@ export default class ConstantValues {
   static deliveryTime = ''
   static schArrivalDate = ''
   static seatInfo = []
+  static passengerInfo = []
   static passengerDetail = []
 
 
@@ -131,6 +133,9 @@ static MID = 'FIjIdu58691666399235'
   static walletBalanceUsed = 0
   static gst = 0
   static deliveryCharge = 0
+  static deliveryChargegst= 0
+  static deliveryChargegstRate = 0
+  static basePriceGstRate= 0
   static totalPayableAmount = 0
   static inCart = []
   static finalCart = []
@@ -203,6 +208,7 @@ static MID = 'FIjIdu58691666399235'
     faq:'app-Icon-set/FAQ.png',
     rate:'app-Icon-set/Rate+us.png',
     tnc:'app-Icon-set/Terms+&+Condition.png',
+    feedback:'app-Icon-set/edit.png'
     
   }
 
