@@ -6,7 +6,11 @@ import {
     View,
     Text,
     ToastAndroid,
-    Alert
+    Alert,
+    Linking,
+    BackHandler,
+    Dimensions,
+    TouchableOpacity
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase'
@@ -14,114 +18,158 @@ import SplashScreen from 'react-native-splash-screen';
 import ConstantValues from '../constantValues';
 import Spinner from 'react-native-spinkit';
 import { ZoopLoader } from '../assests/zoopLoader';
+import Modal from 'react-native-modal';
+import Device from 'react-native-device-info';
+import servicesApi from '../services/servicesApi';
+import { CustomButtonShort } from '../assests/customButtonShort';
 
 class AuthLoadingScreen extends Component {
    async componentDidMount() {
         SplashScreen.hide();
-        this._bootstrapAsync();
-        this.checkPermission();
-        this.createNotificationListeners(); //add this line
+        this.checkAppVersion();
+        // this.tokenAsync();
+        // this.checkPermission();
+        // this.createNotificationListeners(); //add this line
     }
-    componentWillUnmount() {
-        this.notificationListener;
-        this.notificationOpenedListener;
-    }
+    // componentWillUnmount() {
+    //     this.notificationListener;
+    //     this.notificationOpenedListener;
+    // }
+    constructor(props) {
+        super(props);
+        this.state = {
+            showVersionUpdateModal : null,
+            loader:true
+        };
+      }
     //-------------------------notification management---------------------
     //1
-    async checkPermission() {
-        const enabled = await firebase.messaging().hasPermission();
-        if (enabled) {
-            this.getToken();
-        } else {
-            this.requestPermission();
-        }
-    }
+    // async checkPermission() {
+    //     const enabled = await firebase.messaging().hasPermission();
+    //     if (enabled) {
+    //         this.getToken();
+    //     } else {
+    //         this.requestPermission();
+    //     }
+    // }
 
-    //3
-    async getToken() {
-        let fcmToken = await AsyncStorage.getItem('fcmToken');
-        if (!fcmToken) {
-            fcmToken = await firebase.messaging().getToken();
-            if (fcmToken) {
-                // user has a device token
-                console.log('fcmToken:', fcmToken);
-                await AsyncStorage.setItem('fcmToken', fcmToken);
-            }
-        }
-        console.log('fcmToken:', fcmToken);
-    }
+    // //3
+    // async getToken() {
+    //     let fcmToken = await AsyncStorage.getItem('fcmToken');
+    //     if (!fcmToken) {
+    //         fcmToken = await firebase.messaging().getToken();
+    //         if (fcmToken) {
+    //             // user has a device token
+    //             console.log('fcmToken:', fcmToken);
+    //             await AsyncStorage.setItem('fcmToken', fcmToken);
+    //         }
+    //     }
+    //     console.log('fcmToken:', fcmToken);
+    // }
 
-    //2
-    async requestPermission() {
+    // //2
+    // async requestPermission() {
+    //     try {
+    //         await firebase.messaging().requestPermission();
+    //         // User has authorised
+    //         this.getToken();
+    //     } catch (error) {
+    //         // User has rejected permissions
+    //         console.log('permission rejected');
+    //     }
+    // }
+
+
+    // async createNotificationListeners() {
+    //     /*
+    //     * Triggered when a particular notification has been received in foreground
+    //     * */
+    //     this.notificationListener = firebase.notifications().onNotification((notification) => {
+    //         const { title, body } = notification;
+    //         console.log('onNotification:');
+    //         const localNotification = new firebase.notifications.Notification({
+    //             sound: 'sampleaudio',
+    //             show_in_foreground: true,
+    //         })
+    //             .setSound('sampleaudio.wav')
+    //             .setNotificationId(notification.notificationId)
+    //             .setTitle(notification.title)
+    //             .setBody(notification.body)
+    //             .android.setChannelId('fcm_FirebaseNotifiction_default_channel') // e.g. the id you chose above
+    //             .android.setSmallIcon('@drawable/ic_launcher') // create this icon in Android Studio
+    //             .android.setColor('#000000') // you can set a color here
+    //             .android.setPriority(firebase.notifications.Android.Priority.High);
+    //         firebase.notifications()
+    //             .displayNotification(localNotification)
+    //             .catch(err => console.error(err));
+    //     });
+    //     const channel = new firebase.notifications.Android.Channel('fcm_FirebaseNotifiction_default_channel', 'Demo app name', firebase.notifications.Android.Importance.High)
+    //         .setDescription('Demo app description')
+    //         .setSound('sampleaudio.wav');
+    //     firebase.notifications().android.createChannel(channel);
+
+    //     /*
+    //     * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
+    //     * */
+    //     this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+    //         const { title, body } = notificationOpen.notification;
+    //         console.log('onNotificationOpened:');
+    //         Alert.alert(title, body)
+    //     });
+
+    //     /*
+    //     * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
+    //     * */
+    //     const notificationOpen = await firebase.notifications().getInitialNotification();
+    //     if (notificationOpen) {
+    //         const { title, body } = notificationOpen.notification;
+    //         console.log('getInitialNotification:');
+    //         Alert.alert(title, body)
+
+    //     }
+    //     /*
+    //     * Triggered for data only payload in foreground
+    //     * */
+    //     this.messageListener = firebase.messaging().onMessage((message) => {
+    //         //process data message
+    //         console.log("JSON.stringify:", JSON.stringify(message));
+    //     });
+    // }
+
+  async checkAppVersion(){
+        const appVersion =  Device.getVersion();
+        console.log('App Version is : ' + appVersion)
         try {
-            await firebase.messaging().requestPermission();
-            // User has authorised
-            this.getToken();
+            let response = await servicesApi.checkAppVersion(appVersion)
+            if (response.status == true) {
+               console.log('App Version data is :' + response.data)
+               if (response.data == true) {
+                console.log('Status of App Version data is :' + response.data + 'App version matched!!!')
+                    this.tokenAsync()
+               } else if(response.data == false) {
+                   this.setState({
+                       loader:false,
+                       showVersionUpdateModal : 'center'
+                   })
+               }
+            } else {
+                console.log('Error in getting app version')
+                this.setState({
+                    loader:false,
+                    showVersionUpdateModal : 'center'
+                })
+            }
         } catch (error) {
-            // User has rejected permissions
-            console.log('permission rejected');
+            console.log('I am in catch of getversionAPI.Error in getting app version ' + error)
         }
+        
     }
 
 
-    async createNotificationListeners() {
-        /*
-        * Triggered when a particular notification has been received in foreground
-        * */
-        this.notificationListener = firebase.notifications().onNotification((notification) => {
-            const { title, body } = notification;
-            console.log('onNotification:');
-            const localNotification = new firebase.notifications.Notification({
-                sound: 'sampleaudio',
-                show_in_foreground: true,
-            })
-                .setSound('sampleaudio.wav')
-                .setNotificationId(notification.notificationId)
-                .setTitle(notification.title)
-                .setBody(notification.body)
-                .android.setChannelId('fcm_FirebaseNotifiction_default_channel') // e.g. the id you chose above
-                .android.setSmallIcon('@drawable/ic_launcher') // create this icon in Android Studio
-                .android.setColor('#000000') // you can set a color here
-                .android.setPriority(firebase.notifications.Android.Priority.High);
-            firebase.notifications()
-                .displayNotification(localNotification)
-                .catch(err => console.error(err));
-        });
-        const channel = new firebase.notifications.Android.Channel('fcm_FirebaseNotifiction_default_channel', 'Demo app name', firebase.notifications.Android.Importance.High)
-            .setDescription('Demo app description')
-            .setSound('sampleaudio.wav');
-        firebase.notifications().android.createChannel(channel);
-
-        /*
-        * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
-        * */
-        this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-            const { title, body } = notificationOpen.notification;
-            console.log('onNotificationOpened:');
-            Alert.alert(title, body)
-        });
-
-        /*
-        * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
-        * */
-        const notificationOpen = await firebase.notifications().getInitialNotification();
-        if (notificationOpen) {
-            const { title, body } = notificationOpen.notification;
-            console.log('getInitialNotification:');
-            Alert.alert(title, body)
-
-        }
-        /*
-        * Triggered for data only payload in foreground
-        * */
-        this.messageListener = firebase.messaging().onMessage((message) => {
-            //process data message
-            console.log("JSON.stringify:", JSON.stringify(message));
-        });
-    }
-
-
-
+    gotoLink = () => {
+        let link = 'https://play.google.com/store/apps/details?id=com.zoop.zoopindiaservice'
+        Linking.openURL(link);
+      }
 
     //  ---------------------fetchingusertoken for zoop app------------------
 
@@ -129,7 +177,7 @@ class AuthLoadingScreen extends Component {
 
 
     // Fetch the token from storage then navigate to our appropriate place
-    _bootstrapAsync = async () => {
+    tokenAsync = async () => {
         try {
             const storedValues = await AsyncStorage.getItem('userInfo')
             // console.log('JSON.stringify(storedValues) : ' + JSON.stringify(storedValues))
@@ -170,11 +218,37 @@ class AuthLoadingScreen extends Component {
                     color={'#FF5819'}
                     size={40}
                     animating={true} /> */}
-                <Spinner size={100} type={'FadingCircleAlt'} color={'#898c8b'} isVisible={true} />
+                <Spinner size={100} type={'FadingCircleAlt'} color={'#898c8b'} isVisible={this.state.loader} />
                 {/* <Text style={styles.text}>Loading...</Text> */}
                 {/* <StatusBar barStyle="default" /> */}
+               
+                   <Modal
+                    isVisible={this.state.showVersionUpdateModal === 'center'}
+                    // onBackButtonPress={() => this.setState({ visibleModal: null })}
+                    // onSwipeComplete={() => this.setState({ visibleModal: null })}
+                    // swipeDirection={['left', 'right', 'down']}
+                    style={styles.centerModal}
+                   >
+                       <View style={styles.modalView}>
+                            <Text style={{fontSize: 20,color:'#F15926',fontFamily: 'Poppins-Medium'}}>Update Available</Text>
+                            <Text style={{fontSize: 15,color:'#696b6a',fontFamily: 'Poppins-Regular',textAlign:'center',alignSelf:'center'}}>New version of Zoop available! Download and get better app experience</Text>
+                            <View style={{flexDirection:'row',paddingHorizontal:10}}>
+                               <CustomButtonShort
+                               title='Update'
+                                onPress={() => this.gotoLink()}
+                               />
+                               <CustomButtonShort
+                               style={{backgroundColor:'#696b6a'}}
+                               title='Exit'
+                               onPress = {() => BackHandler.exitApp()}
+                               />
+                            </View>
+                       </View>
+                   </Modal>
+               
             </View>
             // <ZoopLoader isVisible={true} text={'Loading...'} />
+
         );
     }
 }
@@ -192,7 +266,25 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Bold',
         color: '#FF5819',
         paddingVertical: 10
-    }
+    },
+    centerModal:{
+        justifyContent:'center',
+        alignContent:'center',
+        alignSelf:'center',
+        // margin: 0,
+    },
+    modalView: {
+        width: Dimensions.get('screen').width - 20,
+        height:200,
+        backgroundColor: '#ffffff',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius:5,
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+        
+      }
 
 })
 

@@ -180,6 +180,7 @@ export default class passengerDetail extends Component {
       'passengerMobile': ConstantValues.customerPhoneNo,
       'passengeAlternateMobile': ConstantValues.customeralternateMobile,
       'passengerEmail': ConstantValues.customerEmailId,
+      'passengerSeatInfo':ConstantValues.passengerInfo,
       'suggestions': ConstantValues.suggestions = this.state.addMessage
     }
   }
@@ -222,13 +223,14 @@ export default class passengerDetail extends Component {
                 />
               </View>
 
-              <View style={{ width: Dimensions.get('window').width, paddingVertical: 15, paddingHorizontal: 15 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Seat - {ConstantValues.seat}</Text>
-                  <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Coach - {ConstantValues.coach}</Text>
+              <View style={[styles.billcard,{marginTop:10}]}>
+                <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent:'space-between' }}>
+                 <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' ,  paddingHorizontal: 10, paddingVertical: 5 }}>Coach : {ConstantValues.coach}</Text>
+                  <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' ,  paddingHorizontal: 10, paddingVertical: 5 }}>Seat : {ConstantValues.seat}</Text>
+                  
                 </View>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Station - {ConstantValues.stationName}</Text>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Expected Date & Time of Delivery - {ConstantValues.eta}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' ,  paddingHorizontal: 10, paddingVertical: 5 }}>Station : {ConstantValues.stationName}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' ,  paddingHorizontal: 10, paddingVertical: 5 }}>Expected Date & Time of Delivery : {ConstantValues.eta}</Text>
               </View>
               <View style={styles.inputView}>
                 <TextInput
@@ -401,7 +403,7 @@ const styles = StyleSheet.create({
   },
   inputView: {
     marginLeft: 5,
-    width: Dimensions.get('window').width,
+    width: Dimensions.get('window').width-10,
     borderRadius: 5,
     borderColor: '#e7e7e7',
     borderWidth: 1,
@@ -455,5 +457,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontFamily: 'Poppins-Bold',
     justifyContent: 'center',
+  },
+  billcard: {
+    backgroundColor: '#ffffff',//can change as we move to various pages
+    marginBottom: 10,//can change as we move to various pages
+    marginLeft: '2%', //can change as we move to various pages
+    width: '96%', //can change as we move to various pages
+    borderColor: '#e4e4e4',
+    borderRadius: 100 / 9,
+    borderWidth: 1,
+    shadowOpacity: 0.4,
+    borderBottomColor: '#e4e4e4',
+    borderBottomWidth: 2,
   },
 });

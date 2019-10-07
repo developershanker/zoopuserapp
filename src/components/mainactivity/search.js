@@ -193,9 +193,9 @@ export default class Search extends Component {
   render() {
     let position = Animated.divide(this.scrollX, width);
     return (
-      <SafeAreaView>
+      <SafeAreaView style={styles.slide} >
         <ScrollView>
-          <View style={styles.slide} >
+          <View>
 
             <View>
               <Image style={styles.imageTop} source={require('../images/Home.jpg')} />
@@ -213,6 +213,7 @@ export default class Search extends Component {
                   <RadioButton
                     value="Enter PNR"
                     color='#757271'
+
                   />
                   <Text style={styles.text}>PNR on Ticket</Text>
                 </View>
@@ -234,16 +235,15 @@ export default class Search extends Component {
             </View>
             <View style={styles.main}>
               {this.trainList(this.state.value)}
-
-              <CustomButton
+            </View>
+            <CustomButton
+            style={{alignSelf: 'center'}}
                 onPress={() => {
-                  // this.showTrain(),
+                  
                   this.searchBy(this.state.text)
-                  // this.props.navigation.navigate('Station')
                 }}
                 title='Search Restaurants'
               />
-            </View>
             {/* extra services view starts */}
             <View style={styles.gridContainer}>
               <View>

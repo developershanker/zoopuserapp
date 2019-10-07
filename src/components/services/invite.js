@@ -7,11 +7,13 @@ import Icons from 'react-native-vector-icons/FontAwesome5';
 import ConstantValues from '../constantValues';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import { CustomButtonShort } from '../assests/customButtonShort';
+import loginApi from '../login/loginApi';
 
 
 export default class Invite extends Component {
   componentDidMount() {
     SplashScreen.hide();
+    this.checkRegister()
   }
 
   constructor(props) {
@@ -21,6 +23,40 @@ export default class Invite extends Component {
       backgroundColor: '#60b246',
       copyMsg: 'TAP TO COPY'
     };
+  }
+
+
+  checkRegister(){
+    if ( ConstantValues.customerId == '') {
+      return(
+        Alert.alert(
+          'Need Login!!',
+          'Please LOGIN to Proceed.',
+          [
+            {
+              text: 'OK', onPress: () => this.props.navigation.navigate('Welcome'),
+              style: 'cancel'
+            },
+          ],
+          { cancelable: false },
+        )
+      )
+    } else {
+      this.onRegister()
+    }
+  }
+  async onRegister() {
+    try {
+      let response = await loginApi.getUserRegister();
+      console.log('data received in register.js : ' + JSON.stringify(response))
+      ConstantValues.loginCount = response.data.loginCount
+      ConstantValues.customerPhoneNo = response.data.mobile
+      ConstantValues.customerName = response.data.fullName
+      ConstantValues.customerRefferalCode = response.data.referralCode
+      
+    } catch (error) {
+      console.log('Data received in register.js catch: ' + error)
+    }
   }
   shareToWhatsApp = (text) => {
     Linking.openURL(`whatsapp://send?text=${text}`);

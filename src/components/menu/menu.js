@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, Switch, SectionList, ScrollView, Image, TouchableOpacity, ActivityIndicator, BackHandler, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions,  SectionList, ScrollView, Image, TouchableOpacity, ActivityIndicator, BackHandler, Alert } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -12,6 +12,7 @@ import ConstantValues from '../constantValues.js';
 import cartApi from '../cart/cartApi.js';
 import { ZoopLoader } from '../assests/zoopLoader.js';
 import { Overlay } from 'react-native-elements';
+import { Switch } from 'react-native-paper';
 
 
 
@@ -20,6 +21,7 @@ export default class Menu extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.getMenu()
+    //this.enableOnlyVeg()
     //this.backHandler = BackHandler.addEventListener('hardwareBackPress',this.handleBackPress);    
   }
 
@@ -30,6 +32,7 @@ export default class Menu extends Component {
       offer: '',
       gstin: '',
       fssaiNo: '',
+      vegOnly:false,
       loading: false,
       count: 0,
       show: 'Add',
@@ -39,7 +42,8 @@ export default class Menu extends Component {
       OutletMenuInfo: [],
       inCart: [],
       totalCartCount: 0,
-      isVisible: true
+      isVisible: true,
+      onlyVegMenu:[]
     };
   }
   // handleBackPress = () => {
@@ -47,16 +51,16 @@ export default class Menu extends Component {
   //     Alert.alert(
   //       'Confirm!!',
   //       'Are you sure you want to go back? All items from the cart will be removed.',
-  //       [// { text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+        // [// { text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
   //         {
   //           text: 'NO',
-  //           onPress: () => console.log('Cancel Pressed'),
+            // onPress: () => console.log('Cancel Pressed'),
   //           style: 'cancel',
   //         },
   //         {
   //           text: 'YES', onPress: () => {
   //             cartApi.resetCart();
-  //             console.log('ConstantValues.inCart : ' + ConstantValues.inCart + '\n' + 'ConstantValues.finalCart : ' + ConstantValues.finalCart)
+              // console.log('ConstantValues.inCart : ' + ConstantValues.inCart + '\n' + 'ConstantValues.finalCart : ' + ConstantValues.finalCart)
   //             return true
   //           }
   //         },
@@ -89,7 +93,7 @@ export default class Menu extends Component {
     // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
     ConstantValues.inCart = this.state.inCart
     this.cartCalculate(item)
-    //console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
+    // console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
   }
 
 
@@ -121,7 +125,7 @@ export default class Menu extends Component {
     // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
     ConstantValues.inCart = this.state.inCart
     this.cartCalculate(item)
-    //console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
+    // console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
   }
 
   cartCalculate = (item) => {
@@ -157,6 +161,39 @@ export default class Menu extends Component {
           OutletMenuInfo: response.data.items,
           isVisible: false
         })
+        if (this.state.OutletMenuInfo && this.state.OutletMenuInfo.length) {
+          this.setState({
+            gstin: response.data.outlet.gstin,
+            fssaiNo: response.data.outlet.fssaiNo,
+            offer: response.data.offer,
+            RecommendedMenuInfo: response.data.recommendedItems,
+            OutletMenuInfo: response.data.items,
+            isVisible: false
+          })
+          this.setState({
+            onlyVegMenu: this.state.OutletMenuInfo.filter((item) => {
+              //console.log('item`s categoryType are:   ' + item.categoryType)
+              return item.categoryType == 'Veg'
+            })
+          })
+           // console.log('Veg Items are:' + JSON.stringify(this.state.onlyVegMenu))
+          
+        } else {
+          return(
+            
+            Alert.alert(
+              'Alert!!',
+              'No Items to display.Select another station',
+              [
+                {
+                  text: 'OK',onPress: () => this.props.navigation.navigate('Station') ,
+                  style:'cancel'
+                },
+              ],
+              { cancelable: false },
+            )
+          )
+        }
 
 
       } else {
@@ -174,6 +211,8 @@ export default class Menu extends Component {
   checkCart() {
     if (this.state.totalPrice >= ConstantValues.minimumOrderValue) {
       if(ConstantValues.customerId != ''){
+        ConstantValues.walletBalanceUsed = 0
+        ConstantValues.couponValue = 0
         this.props.navigation.navigate('Cart')
       console.log('neither minimumorder issue nor login issue')
       }else{
@@ -218,7 +257,16 @@ export default class Menu extends Component {
             }
 
   }
-
+  // enableOnlyVeg = () =>{      
+  //       this.setState({
+  //         onlyVegMenu : this.state.OutletMenuInfo.filter((item)=>{
+            // console.log('item`s categoryType are:   ' + item.categoryType)
+  //          return  item.categoryType == 'Veg'
+  //         })
+  //       }),
+      // console.log('Veg Items are:' + JSON.stringify(this.state.onlyVegMenu))
+  //   }
+  
 
   render() {
     const visible = this.state.inCart.length == 0 ? false : true
@@ -227,6 +275,30 @@ export default class Menu extends Component {
     return (
       <SafeAreaView style={styles.slide}>
         {/* <ZoopLoader show={this.state.loading}/> */}
+        <View style={{ width: Dimensions.get('window').width,alignItems: 'center',justifyContent: 'center',backgroundColor: '#ffffff'}}>
+          <View style={{ flexDirection: 'row', width: Dimensions.get('screen').width }}>
+            <View style={{ justifyContent: 'flex-start', alignContent: 'flex-start', padding: 20 }}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Station')}>
+                <Icon name={'chevron-left'} size={20} color={'#000000'} />
+              </TouchableOpacity>
+            </View>
+            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: Dimensions.get('screen').width - 80, paddingTop: 10 }}>
+              <Text style={styles.outletName}> {ConstantValues.outletName} </Text>
+              <Text style={{ fontFamily: 'Poppins-Medium', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
+            </View>
+          </View>
+
+          <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
+            <Text style={{ fontFamily: 'Poppins-Regular' }}>Veg. Only</Text>
+            <Switch
+              value={this.state.vegOnly}
+              onValueChange={
+                (vegOnly) => this.setState({ vegOnly })
+               }
+              
+            />
+          </View>
+        </View>
         <ScrollView>
           <View >
             {/* go back navigator icon */}
@@ -238,28 +310,13 @@ export default class Menu extends Component {
             {/* go back navigator icon ends here */}
 
             <View style={styles.topContainer}>
-              <View style={{ flexDirection: 'row',width:Dimensions.get('screen').width }}>
-                <View style={{ justifyContent: 'flex-start', alignContent: 'flex-start', padding: 20}}>
-                  <TouchableOpacity onPress={() => this.props.navigation.navigate('Station')}>
-                    <Icon name={'chevron-left'} size={20} color={'#000000'} />
-                  </TouchableOpacity>
-                </View>
-                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center' ,width:Dimensions.get('screen').width-80,paddingTop:10}}>
-                  <Text style={styles.outletName}> {ConstantValues.outletName} </Text>
-                  <Text style={{ fontFamily: 'Poppins-Medium', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
-                </View>
-              </View>
-              
-              <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
-                <Text style={{ fontFamily: 'Poppins-Regular' }}>Veg. Only</Text>
-                <Switch />
-              </View>
+             
 
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
                 <View style={{ flexDirection: 'row' }}>
                   {/* <Image style={{ width: 30, height: 15 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.fssai }} /> */}
-                  <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular' }}> FSSAI Lic No. {this.state.fssaiNo}</Text>
+                  <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular' }}> fssai Lic No. {this.state.fssaiNo}</Text>
                 </View>
                 <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', marginRight: 10 }}>GST No. {this.state.gstin}</Text>
               </View>
@@ -303,7 +360,7 @@ export default class Menu extends Component {
             </View>
             <FlatList
               style={{ width: Dimensions.get('window').width }}
-              data={this.state.OutletMenuInfo}
+              data={this.state.vegOnly == true ? this.state.onlyVegMenu : this.state.OutletMenuInfo}
               extraData={this.state}
               renderItem={({ item, index }) =>
                 <View>
@@ -336,7 +393,7 @@ export default class Menu extends Component {
 
                           {/* Adding item to cart button */}
                           <View
-                            style={{ alignItems: 'center', width: 90, borderColor: '#898c8b', borderRadius: 6, borderWidth: 1 }} key={index}>
+                            style={{ alignItems: 'center', width: 90, borderColor: '#d4d4d4', borderRadius: 6, borderWidth: 1 }} key={index}>
                             <TouchableOpacity onPress={() => { this.addItemToCart(item, index) }} disabled={item.itemCount == 0 ? false : true}>
                               <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center', justifyContent: 'space-around' }}>
                                 <TouchableOpacity onPress={() => { this.removeItemFromCart(item,index) }} disabled={item.itemCount == 0 ? true : false}>
@@ -523,6 +580,7 @@ const styles = StyleSheet.create({
   },
   outletName: {
     // paddingTop: 15,
+    alignSelf:'center',
     fontSize: 20,
     color: '#000000',
     fontFamily: 'Poppins-Medium',

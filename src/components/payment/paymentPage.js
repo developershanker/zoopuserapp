@@ -43,17 +43,13 @@ export default class PaymentPage extends Component {
         ConstantValues.zooptransactionId = response.data.transactionId
         if (paymentType == 'Prepaid') {
           return (
-
            ToastAndroid.show('Requesting payment, please wait...', ToastAndroid.LONG),
             this.props.navigation.navigate('PaymentPaytm')
-            // this.props.navigation.navigate('OrderConfirm')
           )
-        } else {
+        } else if(paymentType == 'COD'){
           return (
-
-            ToastAndroid.show('!! Order Placed Successfully !!', ToastAndroid.LONG),
-            // this.props.navigation.navigate('PaymentPaytm')
-            this.props.navigation.navigate('OrderConfirm')
+            ToastAndroid.show('Requesting IRCTC , please wait...', ToastAndroid.LONG),
+            this.props.navigation.navigate('IrctcConfirmationCod')
           )
         }
        
@@ -98,26 +94,6 @@ export default class PaymentPage extends Component {
 
 
   paymentDetails = () => {
-    // if (this.state.codActive == true) {
-    //   ConstantValues.paymentType = this.state.paymentTypeName
-    //   ConstantValues.paymentTypeId = this.state.paymentTypeId
-    //   ConstantValues.refNo = 'N.A'
-    //   ConstantValues.paymentDetails = {
-    //     'referenceNo' : ConstantValues.refNo,
-    //     'paymentType' : ConstantValues.paymentType,
-    //     'paymentTypeId':ConstantValues.paymentTypeId
-    //   }
-    //   this.orderBooking()
-    // } else {
-    //   ConstantValues.paymentType = this.state.paymentTypeName
-    //   ConstantValues.paymentTypeId = this.state.paymentTypeId
-    //   ConstantValues.refNo = ''
-    //   ConstantValues.paymentDetails = {
-    //     'referenceNo' : ConstantValues.refNo,
-    //     'paymentType' : ConstantValues.paymentType,
-    //     'paymentTypeId':ConstantValues.paymentTypeId
-    //   }
-    //   this.orderBooking()
     if(this.state.paymentTypeName == 'COD' || this.state.paymentTypeName == 'Prepaid'){
       ConstantValues.paymentType = this.state.paymentTypeName,
       ConstantValues.paymentTypeId = this.state.paymentTypeId,
@@ -165,14 +141,15 @@ export default class PaymentPage extends Component {
               <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>Passenger Details</Text>
               {/* <Image style={{ height: 15, alignSelf: 'center' }} source={require('../images/line.png')} /> */}
             </View>
-            <View style={{ width: Dimensions.get('window').width, paddingVertical: 15, paddingHorizontal: 15 }}>
+            <View style={styles.billcard}>
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Seat no. {ConstantValues.seat}</Text>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Coach no. {ConstantValues.coach}</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' ,  paddingHorizontal: 10, paddingVertical: 5}}>Coach no. {ConstantValues.coach}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Seat no. {ConstantValues.seat}</Text>
+                
               </View>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Name : {ConstantValues.customerName}</Text>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Alternate No. - {ConstantValues.customeralternateMobile}</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' , paddingHorizontal: 10, paddingVertical: 5}}>Name : {ConstantValues.customerName}</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Alternate No. - {ConstantValues.customeralternateMobile}</Text>
             </View>
             {/* passengerDetail view ends here */}
             {/* Payment Mode View Starts */}
@@ -295,5 +272,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#ebe8e8',
     paddingVertical: 10,
     paddingHorizontal: 10
-  }
+  },
+  billcard: {
+    backgroundColor: '#ffffff',//can change as we move to various pages
+    marginBottom: 10,//can change as we move to various pages
+    marginLeft: '2%', //can change as we move to various pages
+    width: '96%', //can change as we move to various pages
+    borderColor: '#e4e4e4',
+    borderRadius: 100 / 9,
+    borderWidth: 1,
+    shadowOpacity: 0.4,
+    borderBottomColor: '#e4e4e4',
+    borderBottomWidth: 2,
+  },
 });
