@@ -1,5 +1,6 @@
 import ConstantValues from '../constantValues.js';
 import qs from 'qs';
+import moment from 'moment';
 
 const baseURL = ConstantValues.apiUrl
 
@@ -105,6 +106,48 @@ export default class servicesApi {
 
             return Promise.resolve(response)
 
+        } catch (error) {
+            console.log('Data received in serviceApi catch: ' + error)
+            return Promise.reject(error)
+        }
+    }
+    static async sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment){
+        try {
+            //url
+            const apiUrl = 'bulk-orders'
+            //body
+            const body = {}
+            body['fullName'] = fullName
+            body['mobile'] = mobile
+            body['email'] = email
+            body['totalPassenger'] = totalPassenger
+            body['journeyDate'] = moment(journeyDate,'DD-MM-YYYY').format('YYYY-MM-DD')
+            body['pnr'] = pnr
+            body['comment'] = comment
+            
+            //calling api for response
+            const response = await this.apiCall(apiUrl, 'POST', body, {})
+            console.log(response)
+
+            return Promise.resolve(response)
+
+        } catch (error) {
+            console.log('Data received in serviceApi catch: ' + error)
+            return Promise.reject(error)
+        }
+    }
+    static async checkAppVersion(versionName){
+        try {
+            //url
+            const apiUrl = 'version-check'
+            //body
+            const body = {}
+            body['versionName'] = versionName
+            //calling api for response
+            const response = await this.apiCall(apiUrl, 'POST', body, {})
+            console.log(response)
+
+            return Promise.resolve(response)
         } catch (error) {
             console.log('Data received in serviceApi catch: ' + error)
             return Promise.reject(error)

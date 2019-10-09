@@ -32,8 +32,16 @@ class billDetailCard extends Component {
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.totalBasePrice}</Text>
                     </View>
                     <View style={styles.tile}>
+                      <Text style={styles.tiletext}>Add GST 5%</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.gst).toFixed(2)}</Text>
+                    </View>
+                    <View style={styles.tile}>
                       <Text style={styles.tiletext}>Delivery Charges</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.deliveryCharge}</Text>
+                    </View>
+                    <View style={styles.tile}>
+                      <Text style={styles.tiletext}>Add GST 18%</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.deliveryChargegst.toFixed(2))}</Text>
                     </View>
                     <View style={styles.tile}>
                       <Text style={styles.tiletext}>Discount</Text>
@@ -43,14 +51,10 @@ class billDetailCard extends Component {
                       <Text style={styles.tiletext}>Used Wallet Balance</Text>
                       <Text style={[styles.tiletext, { color: '#60b246' }]}>{ConstantValues.rupee} {ConstantValues.walletBalanceUsed}</Text>
                     </View>
-                    <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Add GST 5%</Text>
-                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.gst).toFixed(2)}</Text>
-                    </View>
 
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>To Pay</Text>
-                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
+                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:20}]}>Order Total</Text>
+                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:20}]}>{ConstantValues.rupee} {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
                     </View>
 
                   </View>

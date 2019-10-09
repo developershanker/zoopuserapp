@@ -367,15 +367,17 @@ export default class Cart extends Component {
         'itemName': item.itemName,
         'itemDescription': item.itemDescription,
         'categoryId': item.categoryId,
+        'typeId':item.typeId,
+        'cuisineId':item.cuisineId,
         //billing details
         'zoopPrice': item.zoopPrice,
         'basePrice': item.basePrice,
         'basePriceGstRate': item.basePriceGstRate,
         'basePriceGst': item.basePriceGst,
         'sellingPrice': item.sellingPrice,
-        'deliveryCharge': item.deliveryCharge,
-        'deliveryChargeGstRate': item.deliveryChargeGstRate,
-        'deliveryChargeGst': item.deliveryChargeGst,
+        'zoopCustomerDeliveryCharge': item.zoopCustomerDeliveryCharge,
+        'zoopCustomerDeliveryChargeGstRate': item.zoopCustomerDeliveryChargeGstRate,
+        'zoopCustomerDeliveryChargeGst': item.zoopCustomerDeliveryChargeGst,
         'basePrice': item.basePrice,
 
         'quantity': item.itemCount,
@@ -386,7 +388,8 @@ export default class Cart extends Component {
   }
   billDetail = () => {
     ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
-      ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst,
+    // ConstantValues.deliveryChargegst = (ConstantValues.deliveryCharge/100) * ConstantValues.deliveryChargegstRate,
+      ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst,
       ConstantValues.billDetail = {
         'totalAmount': ConstantValues.totalBasePrice,
         'deliveryCharge': ConstantValues.deliveryCharge,
@@ -419,6 +422,7 @@ export default class Cart extends Component {
       'passengerMobile': ConstantValues.customerPhoneNo,
       'passengeAlternateMobile': ConstantValues.customeralternateMobile,
       'passengerEmail': ConstantValues.customerEmailId,
+      'passengerSeatInfo':ConstantValues.passengerInfo,
       //'suggestions': ConstantValues.suggestions = this.state.addMessage
     }
   }
@@ -536,46 +540,55 @@ export default class Cart extends Component {
                   </View>
                 </Fade>
                 <Fade visible={ConstantValues.customerId == '' ? false : true}>
-                  <View style={{ flexDirection: 'column', alignContent: 'center', alignItems: 'center' }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignContent: 'center' }}>
-                      <CheckBox
-                        disabled={this.state.textPromoCode == ConstantValues.couponCode ? true : false}
-                        textStyle={{ fontFamily: 'Poppins-Regular' }}
-                        checked={this.state.walletUsed}
-                        onPress={() => {
-                          this.setState({ walletUsed: !this.state.walletUsed }),
-                            this.walletUsed(this.state.walletUsed)
-                        }}
-                      />
-                      <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: 150, paddingHorizontal: 10 }}>
-                        <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Use Wallet Balance</Text>
-                        <Text style={{ fontSize: 10, fontFamily: 'Poppins-Light', color: '#000000',alignSelf:'center' }}>Max. Rs.50 per order can be used</Text>
+                  <View style={{ flexDirection: 'column', }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                        <CheckBox
+                          disabled={this.state.textPromoCode == ConstantValues.couponCode ? true : false}
+                          textStyle={{ fontFamily: 'Poppins-Regular' }}
+                          checked={this.state.walletUsed}
+                          onPress={() => {
+                            this.setState({ walletUsed: !this.state.walletUsed }),
+                              this.walletUsed(this.state.walletUsed)
+                          }}
+                        />
+                        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: 180 }}>
+                          <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Use Wallet Balance</Text>
+                          <Text style={{ fontSize: 10, fontFamily: 'Poppins-Light', color: '#000000', alignSelf: 'center' }}>(Max. Rs.50 per order can be used)</Text>
+                        </View>
                       </View>
-
                       <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ fontSize: 10, fontFamily: 'Poppins-Light' }}>Available Balance</Text>
                         <Text style={{ fontSize: 20, fontFamily: 'Poppins-Regular', color: '#000000' }}>{ConstantValues.rupee} {this.state.walletUsed == true ? ConstantValues.walletBalance - 50 : ConstantValues.walletBalance}</Text>
                       </View>
                     </View>
 
-                    <Text>OR</Text>
+
+                    <Text style={{alignSelf:'center',fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000'}}>OR</Text>
 
 
-                    <TouchableOpacity onPress={() => { this.changeCode(ConstantValues.couponCode) }} disabled={this.state.walletUsed == true ? true : false}>
-                      <Text style={[styles.coupontext, { color: this.state.walletUsed == true ? '#636666' : '#149db5' }]}>
-                        {ConstantValues.appliedCode}
-                      </Text>
-                    </TouchableOpacity>
 
-                    <Fade visible={ConstantValues.appliedCode == ConstantValues.couponCode ? true : false}>
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                        <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', paddingHorizontal: 10 }}>Applied!!</Text>
-                        <TouchableOpacity onPress={() => this.removeCoupon()}>
-                          <Text style={styles.removetext}>REMOVE</Text>
-                        </TouchableOpacity>
-                      </View>
+                    <View style={{justifyContent:'center',alignContent:'center',alignItems:'center'}}>
+                      <TouchableOpacity onPress={() => { this.changeCode(ConstantValues.couponCode) }} disabled={this.state.walletUsed == true ? true : false}>
+                        <Text style={[styles.coupontext, { color: this.state.walletUsed == true ? '#636666' : '#149db5' }]}>
+                          {ConstantValues.appliedCode}
+                        </Text>
+                      </TouchableOpacity>
 
-                    </Fade>
+                      <Fade visible={ConstantValues.appliedCode == ConstantValues.couponCode ? true : false}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                          <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', paddingHorizontal: 10 }}>Applied!!</Text>
+                          <TouchableOpacity onPress={() => this.removeCoupon()}>
+                            <Text style={styles.removetext}>REMOVE</Text>
+                          </TouchableOpacity>
+                        </View>
+
+                      </Fade>
+                    </View>
+                   
+
+
+                   
                   </View>
                 </Fade>
               </View>
@@ -596,8 +609,16 @@ export default class Cart extends Component {
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.totalBasePrice}</Text>
                     </View>
                     <View style={styles.tile}>
+                      <Text style={styles.tiletext}>Add GST 5%</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.gst).toFixed(2)}</Text>
+                    </View>
+                    <View style={styles.tile}>
                       <Text style={styles.tiletext}>Delivery Charges</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.deliveryCharge}</Text>
+                    </View>
+                    <View style={styles.tile}>
+                      <Text style={styles.tiletext}>Add GST 18%</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.deliveryChargegst).toFixed(2)}</Text>
                     </View>
                     <View style={styles.tile}>
                       <Text style={styles.tiletext}>Discount</Text>
@@ -607,14 +628,11 @@ export default class Cart extends Component {
                       <Text style={styles.tiletext}>Used Wallet Balance</Text>
                       <Text style={[styles.tiletext, { color: '#60b246' }]}>{ConstantValues.rupee} {ConstantValues.walletBalanceUsed}</Text>
                     </View>
-                    <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Add GST 5%</Text>
-                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.gst).toFixed(2)}</Text>
-                    </View>
+                   
 
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>To Pay</Text>
-                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
+                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:20}]}>Order Total</Text>
+                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:20}]}>{ConstantValues.rupee} {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
                     </View>
 
                   </View>
@@ -754,7 +772,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     // color:'#149db5',
     fontFamily: 'Poppins-Medium',
-    // textDecorationLine: 'underline'
+    textDecorationLine: 'underline'
   },
   removetext: {
     fontSize: 15,

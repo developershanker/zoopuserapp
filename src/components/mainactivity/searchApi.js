@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet, Clipboard, Button, ScrollView, Image, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
+import { View, Dimensions, StyleSheet, Clipboard, Button, ScrollView, Image, TextInput, TouchableOpacity, ToastAndroid, } from 'react-native';
 import ConstantValues from '../constantValues.js';
 
 
@@ -65,6 +65,7 @@ export default class searchApi extends Component {
                 ConstantValues.pnr = searchString
                 apiUrl = 'search/pnr'
             } else if (searchString.length == 5) {
+                ConstantValues.pnr = ''
                 apiUrl = 'search/train'
             } else {
                 return (
