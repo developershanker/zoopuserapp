@@ -84,7 +84,16 @@ export default class bulkOrder extends Component {
             ],
             { cancelable: false },
           )
-        )
+        ),
+        this.setState({
+          fullName: '',
+          mobile: '',
+          email: '',
+          totalPassenger: '',
+          journeyDate: '',
+          pnr: '',
+          comment: '',
+        })
       } else {
         return (
          ToastAndroid.show('Something went wrong!! Try again later!!',ToastAndroid.LONG)
@@ -156,11 +165,11 @@ export default class bulkOrder extends Component {
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.input}
-                  placeholder='Enter the number of passengers'
+                  placeholder='Enter the number of passengers.'
                   editable={true}
                   keyboardType='number-pad'
                   value={this.state.totalPassenger}
-                  // autoCapitalize='words'
+                  maxLength={4}
                   onChangeText={totalPassenger => this.setState({ totalPassenger })}
                 />
               </View>

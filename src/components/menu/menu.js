@@ -222,7 +222,7 @@ export default class Menu extends Component {
          
             Alert.alert(
               'Alert!!',
-              'Need Login',
+              'Please LOGIN to Proceed.',
               [
                 {
                   text: 'OK',onPress: () => this.props.navigation.navigate('Welcome') ,
@@ -257,15 +257,15 @@ export default class Menu extends Component {
             }
 
   }
-  // enableOnlyVeg = () =>{      
-  //       this.setState({
-  //         onlyVegMenu : this.state.OutletMenuInfo.filter((item)=>{
-            // console.log('item`s categoryType are:   ' + item.categoryType)
-  //          return  item.categoryType == 'Veg'
-  //         })
-  //       }),
-      // console.log('Veg Items are:' + JSON.stringify(this.state.onlyVegMenu))
-  //   }
+
+ 
+    scrollToTag = (item) => {
+      this.setState({ visibleModal: null })     
+      this.flatListRef.scrollToEnd({animated: true});
+      console.log("Item scrolled is....." + item)
+    }
+  
+
   
 
   render() {
@@ -360,6 +360,9 @@ export default class Menu extends Component {
             </View>
             <FlatList
               style={{ width: Dimensions.get('window').width }}
+              onContentSizeChange={() => this.flatListRef.scrollToEnd({animated: true})}
+              onLayout={() => this.flatListRef.scrollToEnd({animated: true})}
+              ref={(ref) => { this.flatListRef = ref; }}
               data={this.state.vegOnly == true ? this.state.onlyVegMenu : this.state.OutletMenuInfo}
               extraData={this.state}
               renderItem={({ item, index }) =>
@@ -443,7 +446,8 @@ export default class Menu extends Component {
               <View style={styles.modalView}>
                 {
                   this.state.OutletMenuInfo.map((item) => {
-                    //to avoid duplicate interies in array
+
+                    //to avoid duplicate enteries in array
                     if (uniqueTags.indexOf(item.typeName) === -1) {
                       uniqueTags.push(item.typeName)
                     }
@@ -453,7 +457,7 @@ export default class Menu extends Component {
                   uniqueTags.map((item, index) => {
                     return (
                       <View style={styles.modalItemView} key={index}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>this.scrollToTag(index)}>
                           <Text style={styles.headerTextmodal}>{item}</Text>
                         </TouchableOpacity>
                       </View>
@@ -540,7 +544,7 @@ export default class Menu extends Component {
             <View style={[styles.footer]}>
 
               <View style={styles.itemCountShow}>
-                <Text style={{ marginLeft: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>{this.state.totalCartCount} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.rupee}{this.state.totalPrice}</Text>
+                <Text style={{ marginLeft: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>{this.state.totalCartCount} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.bigrupee}{this.state.totalPrice}</Text>
               </View>
               <View style={styles.viewcart}>
                 <Text style={{ marginRight: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>VIEW CART</Text>
@@ -580,6 +584,7 @@ const styles = StyleSheet.create({
   },
   outletName: {
     // paddingTop: 15,
+    textAlign:'center',
     alignSelf:'center',
     fontSize: 20,
     color: '#000000',

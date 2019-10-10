@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {Picker, View,Text, StyleSheet, TextInput, ToastAndroid , PermissionsAndroid ,Alert } from 'react-native';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import SplashScreen from 'react-native-splash-screen';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Icons from 'react-native-vector-icons/FontAwesome5';
 import CustomTouchableOpacity from '../assests/customTouchableOpacity';
 import loginApi from '../login/loginApi.js';
 import { Fade } from '../assests/fade.js';
@@ -176,6 +178,7 @@ export default class Profile extends Component {
         <View style = {styles.card}>
         <TextInput style={styles.input}
           placeholder='Full Name'
+          maxLength={25}
           value={this.state.name}
          // keyboardType='default'
           onChangeText={name => this.setState({ name })}
@@ -194,14 +197,14 @@ export default class Profile extends Component {
           keyboardType='number-pad'
           onChangeText={altmobile => this.setState({ altmobile })}
         />
-        <Fade visible={visible} >
+        {/* <Fade visible={visible} >
           <TextInput style={styles.input}
             placeholder='Referral Code (if any)'
             keyboardType='default'
             value={this.state.referredBy}
             onChangeText={referredBy => this.setState({ referredBy })}
           />
-        </Fade>
+        </Fade> */}
 
         </View>
         <CustomButton
@@ -213,13 +216,7 @@ export default class Profile extends Component {
             // this.props.navigation.navigate('Search')
           }}
         />
-        {/* <CustomTouchableOpacity
-          text="Skip >>"
-          color="#1abc9c"
-          onPress={() => {
-            this.props.navigation.navigate('Search')
-          }}
-        /> */}
+       
       </View>
     );
   }
@@ -240,15 +237,15 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: 'black',
-    fontFamily: 'Poppins-Bold',
-    fontSize: 30,
+    fontFamily: 'Poppins-Medium',
+    fontSize: 20,
     marginBottom: 10,
     justifyContent: 'center',
   },
   input: {
     width: '100%',
     marginBottom: 5,
-    fontSize: 20,
+    fontSize: 15,
     paddingHorizontal:10,
     fontFamily: 'Poppins-Regular'
   },
@@ -258,11 +255,11 @@ const styles = StyleSheet.create({
     marginLeft: '2%', //can change as we move to various pages
     width: '96%', //can change as we move to various pages
     borderColor: '#e4e4e4',
-    borderRadius: 100 / 9,
+    borderRadius: 6,
     borderWidth: 1,
     shadowOpacity: 0.4,
     borderBottomColor: '#e4e4e4',
-    borderBottomWidth: 4,
+    borderBottomWidth: 2,
   },
 })
 

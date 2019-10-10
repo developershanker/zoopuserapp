@@ -5,12 +5,12 @@ import ConstantValues from '../constantValues.js';
 export default class paymentPaytm extends Component {
   state = {
 
-    // TXN_AMOUNT: ConstantValues.totalPayableAmount.toString(),
+    TXN_AMOUNT: ConstantValues.totalPayableAmount.toString(),
     ORDER_ID: ConstantValues.zooptransactionId,
     // INDUSTRY_TYPE_ID: 'Retail',
     CUST_ID: ConstantValues.customerId,
     // CHANNEL_ID: 'WEB',
-    TXN_AMOUNT: '1',
+    // TXN_AMOUNT: '1',
     // WEBSITE: 'WEBSTAGING',
     // MID: 'KUWvPg16478930006146',
     // PAYTM_MERCHANT_KEY: 'FpX3qfcBtFDz&6kr',

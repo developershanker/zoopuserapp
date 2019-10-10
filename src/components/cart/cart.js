@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions, TextInput, Alert, TouchableOpacity, FlatList, Image, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, ScrollView,KeyboardAvoidingView, Dimensions, TextInput, Alert, TouchableOpacity, FlatList, Image, ToastAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import SplashScreen from 'react-native-splash-screen';
@@ -26,6 +26,20 @@ export default class Cart extends Component {
       this.getCoupons();
     this.billDetail()
     this.checkCoupon(ConstantValues.appliedCode)
+    var that = this;
+
+    var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    var hours = new Date().getHours(); //Current Hours
+    var min = new Date().getMinutes(); //Current Minutes
+    var sec = new Date().getSeconds(); //Current Seconds
+
+    that.setState({
+      //  date : date + '/' + month + '/' + year,
+      date: year + '-' + month + '-' + date,
+      time: hours + ':' + min + ':' + sec
+    })
   }
 
 
@@ -41,14 +55,14 @@ export default class Cart extends Component {
       walletBalance: 0,
       walletUsed: false,
       walletBalanceUsed: 0,
+      totalPayableAmount:0,
       textPromoCode: 'Apply Coupon Code',
       visibleModal: null,
       couponCode: '',
       CouponDetail: [],
-      OutletMenuInfo: [
-        // { key: "1", itemName: "Special Thali", itemImage: require('../images/thali.png'), itemPrice: "175", itemCategory: "Thali", itemType: "veg", itemMarking: "", itemDescription: "" },
-        // { key: "2", itemName: "Chicken Curry", itemImage: require('../images/chickencurry.png'), itemPrice: "200", itemCategory: "Main Course", itemType: "nonveg", itemMarking: "", itemDescription: "" },
-      ]
+      arrayCoupon:[],
+      itemFromCart:[],
+      OutletMenuInfo: []
     };
   }
   getCartItems = (inCart) => {
@@ -62,7 +76,7 @@ export default class Cart extends Component {
   }
   addItemToCart = (item, index) => {
     let itemId = item.itemId
-    let inCart = this.state.revisedInCart
+    let inCart = this.state.itemFromCart
 
     item.itemCount = item.itemCount + 1
     this.setState({
@@ -72,20 +86,20 @@ export default class Cart extends Component {
     // this.state.totalCartCount += item.itemCount 
     this.state.totalPrice += item.basePrice  //price adding calculation
     ConstantValues.totalBasePrice = this.state.totalPrice
-    let idx = this.state.revisedInCart.findIndex(i => { return i.itemId == item.itemId })
+    let idx = this.state.itemFromCart.findIndex(i => { return i.itemId == item.itemId })
     console.log('idx items are  : ' + idx)
     if (idx > -1) {
-      this.state.revisedInCart[idx].itemCount = this.state.revisedInCart[idx].itemCount + 1;
+      this.state.itemFromCart[idx].itemCount = this.state.itemFromCart[idx].itemCount + 1;
     } else {
-      this.state.revisedInCart.push(Object.assign({}, item))
+      this.state.itemFromCart.push(Object.assign({}, item))
     }
-    console.log('revisedInCart items are [when added] : ' + JSON.stringify(this.state.revisedInCart))
+    console.log('itemFromCart items are [when added] : ' + JSON.stringify(this.state.itemFromCart))
     // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
-    ConstantValues.inCart = this.state.revisedInCart
+    ConstantValues.inCart = this.state.itemFromCart
     // this.cartCalculate(item)
     cartApi.billDetail()
 
-    //console.log('ConstantValues.revisedInCart items are [when added] : ' + JSON.stringify(ConstantValues.revisedInCart))
+    //console.log('ConstantValues.itemFromCart items are [when added] : ' + JSON.stringify(ConstantValues.itemFromCart))
   }
 
 
@@ -93,7 +107,7 @@ export default class Cart extends Component {
 
   removeItemFromCart = (item, index) => {
     let itemId = item.itemId
-    let inCart = this.state.revisedInCart
+    let inCart = this.state.itemFromCart
 
     item.itemCount = item.itemCount - 1
     this.setState({
@@ -103,19 +117,19 @@ export default class Cart extends Component {
 
     this.state.totalPrice -= item.basePrice //price calculation
     ConstantValues.totalBasePrice = this.state.totalPrice
-    let idx = this.state.revisedInCart.findIndex(i => { return i.itemId == item.itemId })
+    let idx = this.state.itemFromCart.findIndex(i => { return i.itemId == item.itemId })
     console.log('idx items are  : ' + idx)
     if (idx > -1) {
-      if (this.state.revisedInCart[idx].itemCount == 1) {
-        this.state.revisedInCart.splice(idx)
+      if (this.state.itemFromCart[idx].itemCount == 1) {
+        this.state.itemFromCart.splice(idx)
       } else {
-        this.state.revisedInCart[idx].itemCount = this.state.revisedInCart[idx].itemCount - 1;
+        this.state.itemFromCart[idx].itemCount = this.state.itemFromCart[idx].itemCount - 1;
         this.state.totalCartCount -= item.itemCount
       }
     }
-    console.log('incart items are [when removed] : ' + JSON.stringify(this.state.revisedInCart))
+    console.log('incart items are [when removed] : ' + JSON.stringify(this.state.itemFromCart))
     // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
-    ConstantValues.InCart = this.state.revisedInCart
+    ConstantValues.InCart = this.state.itemFromCart
     // this.cartCalculate(item)
     cartApi.billDetail()
     //console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
@@ -123,7 +137,7 @@ export default class Cart extends Component {
 
   // cartCalculate = (item) => {
   //   let totalCartCount = 0
-  //   this.state.revisedInCart.forEach(i => {
+  //   this.state.itemFromCart.forEach(i => {
   //     totalCartCount = totalCartCount + i.itemCount
   //   })
   //   this.state.totalCartCount = totalCartCount
@@ -171,6 +185,7 @@ export default class Cart extends Component {
     ConstantValues.couponValue = 0
     ConstantValues.couponType = ''
     ConstantValues.discount = 0
+    ConstantValues.rateDiscount = 0
     this.setState({
       textPromoCode: 'Apply Coupon Code'
     })
@@ -248,28 +263,45 @@ export default class Cart extends Component {
 
   applyCoupons = (couponDetail) => {
     if ( ConstantValues.totalPayableAmount >= couponDetail.minimumOrderValue) {
-      // console.log('couponCode : ' + JSON.stringify(couponDetail))
-      ConstantValues.couponCode = couponDetail.couponCode
-      ConstantValues.couponValue = couponDetail.couponValue
-      ConstantValues.discount = couponDetail.couponValue
-      ConstantValues.couponType = couponDetail.type
-      ConstantValues.couponId = couponDetail.couponId
-      ConstantValues.isCouponApplied = true
-      console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
-      // Cart.changeCode(ConstantValues.couponCode)
-      cartApi.changeCode(couponDetail.couponCode)
-      cartApi.billDetail()
-      this.setState({ 
-        visibleModal: null ,
-        textPromoCode: couponDetail.couponCode
-      })
-    } else {
+        if (couponDetail.type == 'RATE') {
+          ConstantValues.rateDiscount = ((ConstantValues.totalBasePrice / 100) * couponDetail.couponValue).toFixed(2)
+          ConstantValues.couponCode = couponDetail.couponCode
+          ConstantValues.couponValue = couponDetail.couponValue
+          ConstantValues.discount = ConstantValues.rateDiscount
+          ConstantValues.couponType = couponDetail.type
+          ConstantValues.couponId = couponDetail.couponId
+          ConstantValues.isCouponApplied = true
+          console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
+          console.log('ConstantValues.rateDiscount : ' + ConstantValues.rateDiscount)
+          cartApi.changeCode(couponDetail.couponCode)
+          cartApi.billDetail()
+          this.setState({ 
+            visibleModal: null ,
+            textPromoCode: couponDetail.couponCode
+          })
+        } else {
+          ConstantValues.couponCode = couponDetail.couponCode
+          ConstantValues.couponValue = couponDetail.couponValue
+          ConstantValues.discount = couponDetail.couponValue
+          ConstantValues.couponType = couponDetail.type
+          ConstantValues.couponId = couponDetail.couponId
+          ConstantValues.isCouponApplied = true
+          console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
+          // Cart.changeCode(ConstantValues.couponCode)
+          cartApi.changeCode(couponDetail.couponCode)
+          cartApi.billDetail()
+          this.setState({ 
+            visibleModal: null ,
+            textPromoCode: couponDetail.couponCode
+          })
+        }
+     } else {
       return (
         // ToastAndroid.show(response.error, ToastAndroid.LONG),
 
         Alert.alert(
           'Invalid Coupon',
-          'This Coupon Code is not valid in this order ',
+          'Minimum Order Value for Promo Code Required. Just add a few more items and Save Big.',
           [
             {
               text: 'OK', onPress: () => this.setState({ visibleModal: null }),
@@ -283,18 +315,53 @@ export default class Cart extends Component {
 
   }
 
-  applyCouponsFromInput = (couponCode, couponDetail) => {
+  applyCouponsFromInput = (couponCode) => {
     if (couponCode != '') {
-      if (couponCode == 'ZOOP100') {
-        ConstantValues.couponCode = couponCode
-        // ConstantValues.discount = ConstantValues.couponValue
-        console.log('couponCode : ' + ConstantValues.couponCode)
-        ConstantValues.isCouponApplied = true
-
-        this.setState({ visibleModal: null })
+      let coupon = this.state.CouponDetail.filter((item)=>{
+        return item.couponCode == couponCode
+      })
+      if (coupon.length != 0) {
+        coupon.map((coupon)=>{
+          console.log('coupon matched//////////////////////'+ JSON.stringify(coupon)+'coupon length : '+coupon.length)
+          if (ConstantValues.totalPayableAmount >= coupon.minimumOrderValue) {
+            ConstantValues.couponCode = coupon.couponCode
+            ConstantValues.couponValue = coupon.couponValue
+            ConstantValues.discount = coupon.couponValue
+            ConstantValues.couponType = coupon.type
+            ConstantValues.couponId = coupon.couponId
+            ConstantValues.isCouponApplied = true
+            console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
+            // Cart.changeCode(ConstantValues.couponCode)
+            cartApi.changeCode(coupon.couponCode)
+            cartApi.billDetail()
+            this.setState({ 
+              visibleModal: null ,
+              textPromoCode: coupon.couponCode
+            })
+          } else {
+            return (
+              // ToastAndroid.show(response.error, ToastAndroid.LONG),
+      
+              Alert.alert(
+                'Invalid Coupon',
+                'Minimum Order Value for Promo Code Required. Just add a few more items and Save Big.',
+                [
+                  {
+                    text: 'OK', onPress: () => this.setState({ visibleModal: null }),
+                    style: 'cancel'
+                  },
+                ],
+                { cancelable: false },
+              )
+            )
+          }
+        })
+        
+     
+        
       } else {
         return (
-          ToastAndroid.show('Invalid Promo Code', ToastAndroid.LONG)
+          ToastAndroid.show('Oops !! That\`s an Invalid Code. Please try again.', ToastAndroid.LONG)
         )
       }
     } else {
@@ -387,6 +454,7 @@ export default class Cart extends Component {
     console.log('items are : ' + ConstantValues.finalCart)
   }
   billDetail = () => {
+
     ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
     // ConstantValues.deliveryChargegst = (ConstantValues.deliveryCharge/100) * ConstantValues.deliveryChargegstRate,
       ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst,
@@ -410,8 +478,8 @@ export default class Cart extends Component {
       'berth': ConstantValues.seat,
       'coach': ConstantValues.coach,
       'eta': ConstantValues.eta,
-      'deliveryDate': ConstantValues.deliveryDate,
-      'deliveryTime': ConstantValues.deliveryTime,
+      'deliveryDate': (ConstantValues.isAgent == 1 ? this.state.date:ConstantValues.deliveryDate),
+      'deliveryTime': (ConstantValues.isAgent == 1 ? this.state.time:ConstantValues.deliveryTime),
       'trainId': ConstantValues.trainId,
       //  'orderDate' : ConstantValues.orderDate,
       //  'orderTime' : ConstantValues.orderTime,
@@ -489,14 +557,14 @@ export default class Cart extends Component {
                       <View
                         style={{ alignItems: 'center', width: 90, height: 31, borderColor: '#898c8b', borderRadius: 6, borderWidth: 1 }} key={index}>
                         <TouchableOpacity
-                          // onPress={() => { this.addItemToCart(item, index) }}
+                         // onPress={() => { this.addItemToCart(item, index) }}
                           disabled={item.itemCount == 0 ? false : true}
                         >
 
                           <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center', justifyContent: 'space-around' }}>
 
                             <TouchableOpacity
-                              // onPress={() => { this.removeItemFromCart(item, index) }} 
+                            // onPress={() => { this.removeItemFromCart(item, index) }} 
                               disabled={item.itemCount == 0 ? true : false}
                             >
 
@@ -510,7 +578,7 @@ export default class Cart extends Component {
 
 
                             <TouchableOpacity
-                            // onPress={() => {this.addItemToCart(item, index)}}
+                         //  onPress={() => {this.addItemToCart(item, index)}}
                             >
                               <View style={[styles.plusminus, { opacity: item.itemCount == 0 ? 0 : 100 }]}>
                                 <Icon name='plus' size={10} color='#60b246' />
@@ -534,7 +602,7 @@ export default class Cart extends Component {
                 <Fade visible={ConstantValues.customerId == '' ? true : false}>
                   <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 15 }}>Enjoy Offers</Text>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('SignUp')}>
+                    <TouchableOpacity onPress={() =>this.props.navigation.navigate('Welcome')}>
                       <Text style={styles.removetext}>Click here to login</Text>
                     </TouchableOpacity>
                   </View>
@@ -554,7 +622,7 @@ export default class Cart extends Component {
                         />
                         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: 180 }}>
                           <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Use Wallet Balance</Text>
-                          <Text style={{ fontSize: 10, fontFamily: 'Poppins-Light', color: '#000000', alignSelf: 'center' }}>(Max. Rs.50 per order can be used)</Text>
+                          <Text style={{ fontSize: 10, fontFamily: 'Poppins-Light', color: '#000000', alignSelf: 'center' }}>(Rs.50 per order can be used)</Text>
                         </View>
                       </View>
                       <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -622,17 +690,20 @@ export default class Cart extends Component {
                     </View>
                     <View style={styles.tile}>
                       <Text style={styles.tiletext}>Discount</Text>
-                      <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {ConstantValues.couponValue}</Text>
+                      <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {ConstantValues.couponValue}</Text>
                     </View>
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Used Wallet Balance</Text>
-                      <Text style={[styles.tiletext, { color: '#60b246' }]}>{ConstantValues.rupee} {ConstantValues.walletBalanceUsed}</Text>
+                      <Text style={styles.tiletext}>Wallet Balance Used</Text>
+                      <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {ConstantValues.walletBalanceUsed}</Text>
                     </View>
                    
 
                     <View style={styles.tile}>
-                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:20}]}>Order Total</Text>
-                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:20}]}>{ConstantValues.rupee} {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
+                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:16}]}>Order Total</Text>
+                      <View style={{flexDirection:'row'}}>
+                      <Icon name={'rupee'} size={20} color={'#000000'}/>
+                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:16}]}> {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
+                      </View>
                     </View>
 
                   </View>
@@ -643,7 +714,7 @@ export default class Cart extends Component {
             </View>
           </View>
         </ScrollView>
-
+        <KeyboardAvoidingView enabled>
         <Modal
           isVisible={this.state.visibleModal === 'bottom'}
           onBackButtonPress={() => this.setState({ visibleModal: null })}
@@ -674,6 +745,7 @@ export default class Cart extends Component {
 
             {/* CouponDetail Card begin Here */}
             <View>
+              <ScrollView>
               <FlatList
                 data={this.state.CouponDetail}
                 renderItem={({ item, index }) =>
@@ -685,7 +757,7 @@ export default class Cart extends Component {
                         title={item.couponCode}
                       />
                       <Text style={{ paddingTop: 5, color: '#000000', fontFamily: 'Poppins-Regular', }}>{item.discription}</Text>
-                      <Text style={{ paddingTop: 5, fontFamily: 'Poppins-Regular', }}>Validity of this coupon is: {moment(item.validityStartDate).format('DD-MM-YYYY HH:mm A')}</Text>
+                      <Text style={{ paddingTop: 5, fontFamily: 'Poppins-Regular', }}>Validity of this coupon is: {moment(item.validityEndDate).format('DD-MM-YYYY HH:mm A')}</Text>
                     </View>
 
                     <TouchableOpacity
@@ -701,11 +773,13 @@ export default class Cart extends Component {
                 }
                 keyExtractor={item => item.couponId.toString()}
               />
+              </ScrollView>
             </View>
             {/* CouponDetail Card ends Here  */}
           </View>
 
         </Modal>
+        </KeyboardAvoidingView>
 
         <CustomButton
           disabled={this.state.revisedInCart.length == 0 ? true : false}
