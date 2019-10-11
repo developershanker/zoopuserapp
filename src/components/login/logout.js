@@ -34,7 +34,7 @@ export default class LogOut extends Component {
         <CustomButton
           title="Go to Signup"
           onPress={() => {
-            this.props.navigation.navigate('SignUp')
+            this.props.navigation.navigate('Welcome')
           }}
         />
       </View>
@@ -48,12 +48,13 @@ const styles = StyleSheet.create({
     height: Dimensions.get('screen').height,
     backgroundColor: '#ffffff',
     alignItems: 'center',
+    justifyContent:'center'
   },
   text1: {
     fontSize: 25,
     paddingTop: 10,
     color: '#000000',
     textAlign: 'center',
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
   },
 });

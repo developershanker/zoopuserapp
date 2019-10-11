@@ -59,12 +59,14 @@ export default class orderApi extends Component {
             //body
             const body = {}
             body['customerId'] = ConstantValues.customerId
+            body['isAgent'] = ConstantValues.isAgent
             body['outletId'] = ConstantValues.outletId
             body['source'] = 'APP'
             body['items'] = ConstantValues.finalCart
             body['billDetail'] = ConstantValues.billDetail
             body['passengerDetail'] = ConstantValues.passengerDetail
             body['paymentDetail'] = ConstantValues.paymentDetails
+            body['agent'] = ConstantValues.agentAction
 
 
 

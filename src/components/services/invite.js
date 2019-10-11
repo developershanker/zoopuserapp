@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Clipboard, ScrollView, Platform, Dimensions, Alert, TouchableOpacity, FlatList, Image, ToastAndroid, Linking } from 'react-native';
+import { View, Text, StyleSheet, Clipboard, ScrollView, Platform, Dimensions, Alert, TouchableOpacity, FlatList, Image, ToastAndroid, Linking,Share } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -21,7 +21,8 @@ export default class Invite extends Component {
     this.state = {
       phone: '123456789',
       backgroundColor: '#60b246',
-      copyMsg: 'TAP TO COPY'
+      copyMsg: 'TAP TO COPY',
+      referralCode:''
     };
   }
 
@@ -53,6 +54,9 @@ export default class Invite extends Component {
       ConstantValues.customerPhoneNo = response.data.mobile
       ConstantValues.customerName = response.data.fullName
       ConstantValues.customerRefferalCode = response.data.referralCode
+      this.setstate({
+        referralCode:response.data.referralCode
+      })
       
     } catch (error) {
       console.log('Data received in register.js catch: ' + error)
@@ -81,6 +85,26 @@ export default class Invite extends Component {
         backgroundColor: '#9b9b9b',
         copyMsg: 'COPIED!!'
       })
+  };
+  onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+        'Hi, upgrade your train food experience by using my code ' + '\'' + ConstantValues.customerRefferalCode + '\'' + ' and get benefits worth Rs 150 when you sign-up at ZoopIndia APP. Download: https://play.google.com/store/apps/details?id=com.zoop.zoopindiaservice',
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   render() {
@@ -111,13 +135,13 @@ export default class Invite extends Component {
                 </Text>
 
               <View style={{ width: width, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                <TouchableOpacity>
+                <TouchableOpacity  onPress={()=>this.onShare()}>
                   <View style={styles.cardS}>
                     <Icon style={{ paddingHorizontal: 5 }} name={'facebook'} size={25} color={'#3b5998'} />
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity>
+                <TouchableOpacity  onPress={()=>this.onShare()}>
                   <View style={styles.cardS}>
                     <Icon name={'twitter'} size={25} color={'#00acee'} />
                   </View>
@@ -129,7 +153,7 @@ export default class Invite extends Component {
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>this.onShare()}>
                   <View style={styles.cardS}>
                     <Icon name={'share-alt'} size={25} color={'#000000'} />
                   </View>
@@ -137,7 +161,7 @@ export default class Invite extends Component {
               </View>
               <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', paddingVertical: 10 }}>OR</Text>
               <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular' }}>Share your personal invite code</Text>
-              <Text style={{ fontSize: 40, fontFamily: 'Poppins-Regular', color: '#00acee', paddingVertical: 15 }}>{ConstantValues.customerRefferalCode}</Text>
+              <Text style={{ fontSize: 40, fontFamily: 'Poppins-Regular', color: '#00acee', paddingVertical: 15 }}>{ConstantValues.customerRefferalCode == '' ? this.state.referralCode : ConstantValues.customerRefferalCode}</Text>
 
               <CustomButtonShort
                 style={{ backgroundColor: this.state.backgroundColor }}

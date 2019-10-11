@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Dimensions} from 'react-native'
+import {Dimensions,Text} from 'react-native'
 import Device from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
@@ -23,6 +23,7 @@ export default class ConstantValues {
   static walletBalance = null
   // static walletSummary = { }
   static rupee = <Icon name={'rupee'}/>
+  static bigrupee = <Icon name={'rupee'} size={15}/>
   static orderRating = ''
   static source = 'APP'
   static device = {
@@ -57,6 +58,18 @@ export default class ConstantValues {
   static minimumOrderValue = null
   static suggestions = ''
 
+  //order tracking css
+  static paymentFailed = <Text style={{fontFamily: 'Poppins-Medium',color:'#cc1b1b'}}>Payment Failed</Text> 
+  static paymentPending = <Text style={{fontFamily: 'Poppins-Medium',color:'#f52a2a'}}>Payment Pending</Text> 
+  static booked = <Text style={{fontFamily: 'Poppins-Medium',color:'#e95225'}}>Booked</Text> 
+  static sentToOutlet = <Text style={{fontFamily: 'Poppins-Medium',color:'#71e3e3'}}>Send To Outlet</Text> 
+  static underPreparation =<Text style={{fontFamily: 'Poppins-Medium',color:'#e0e643'}}>Under Preparation</Text>  
+  static outForDelivery =<Text style={{fontFamily: 'Poppins-Medium',color:'#27cfbb'}}>Out for Delivery</Text> 
+  static delivered =<Text style={{fontFamily: 'Poppins-Medium',color:'#43d12a'}}>Deliverd</Text> 
+  static notDelivered =<Text style={{fontFamily: 'Poppins-Medium',color:'#393e59'}}>Not Delivered</Text> 
+  static badDelivery =<Text style={{fontFamily: 'Poppins-Medium',color:'#4f4e4e'}}>Bad Delivery</Text> 
+  static cancelled =<Text style={{fontFamily: 'Poppins-Medium',color:'#252629'}}>Cancelled</Text> 
+
 
   //passenger detail
   static pnr = ''
@@ -64,6 +77,11 @@ export default class ConstantValues {
   static seat = ''
   static eta = ''
   static ata = ''
+  static openTime = ''
+  static closeTime = ''
+  static weeklyOff = ''
+  static dateOfOrder = ''
+  static timeOfOrder = ''
   static trainId = 0
   static trainNumber = ''
   static trainName = ''
@@ -75,7 +93,7 @@ export default class ConstantValues {
   static seatInfo = []
   static passengerInfo = []
   static passengerDetail = []
-
+  static rateDiscount = 0
 
   //payment variables
   static paymentMode = '' //paytm   cod   payu
@@ -84,6 +102,12 @@ export default class ConstantValues {
   static paymentTypeId = ''
   static paymentDetails = []
   static zooptransactionId = ''
+
+  //agent cred
+  static agentAction = []
+  static skipSms = 0
+  static skipIrctc = 0
+  static skipPnr = 0
 
     //ZoopWE12498126199605
   // <string name="merchant_key">klbGlV59135347348753</string>
@@ -137,6 +161,7 @@ static MID = 'FIjIdu58691666399235'
   static deliveryChargegstRate = 0
   static basePriceGstRate= 0
   static totalPayableAmount = 0
+  static arrayCoupon = []
   static inCart = []
   static finalCart = []
   static billDetail = []
@@ -208,7 +233,9 @@ static MID = 'FIjIdu58691666399235'
     faq:'app-Icon-set/FAQ.png',
     rate:'app-Icon-set/Rate+us.png',
     tnc:'app-Icon-set/Terms+&+Condition.png',
-    feedback:'app-Icon-set/edit.png'
+    feedback:'app-Icon-set/edit.png',
+    outletVeg:'app-Icon-set/veg.png',
+    outletNonveg:'app-Icon-set/nonveg.png'
     
   }
 

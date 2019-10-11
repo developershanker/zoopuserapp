@@ -1,4 +1,4 @@
-package com.zoop;
+package com.zoop.zoopindiaservice;
 
 import android.app.Application;
 
@@ -9,7 +9,7 @@ import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 
-import com.reactlibrary.RNPayTmPackage;
+// import com.reactlibrary.RNPayTmPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -41,7 +41,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RNFirebasePackage(),
             new RNFirebaseMessagingPackage(),
             new RNFirebaseNotificationsPackage(),
-            new RNPayTmPackage(),
+            // new RNPayTmPackage(),
             new RNDeviceInfo(),
             new SplashScreenReactPackage(),
             new VectorIconsPackage(),

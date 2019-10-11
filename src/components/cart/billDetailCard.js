@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Dimensions, Image } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import cartApi from './cartApi';
 import ConstantValues from '../constantValues'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Icons from 'react-native-vector-icons/FontAwesome5';
 
 class billDetailCard extends Component {
   componentDidMount() {
@@ -20,7 +22,7 @@ class billDetailCard extends Component {
         <View>
           <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
             <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>Bill Details</Text>
-            <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} />
+            {/* <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} /> */}
           </View>
           <View
                   style={styles.billcard}
@@ -53,8 +55,11 @@ class billDetailCard extends Component {
                     </View>
 
                     <View style={styles.tile}>
-                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:20}]}>Order Total</Text>
-                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:20}]}>{ConstantValues.rupee} {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
+                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:16}]}>Order Total</Text>
+                      <View style={{flexDirection:'row'}}>
+                      <Icon name={'rupee'} size={20} />
+                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:16}]}> {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
+                      </View>
                     </View>
 
                   </View>

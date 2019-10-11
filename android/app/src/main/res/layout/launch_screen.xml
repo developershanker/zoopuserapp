@@ -18,17 +18,18 @@
         android:gravity="center"
         android:src="@drawable/zooplogowhite200"
         />
+        </LinearLayout>
         <LinearLayout
        android:layout_width="match_parent"
-       android:layout_height="400dp"
-       android:gravity="bottom"
+       android:layout_height="180dp"
+       android:layout_alignParentBottom="true"
        android:orientation="vertical"
         >
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp" 
+        android:layout_width="80dp"
+        android:layout_height="80dp" 
         android:layout_gravity="center"
-        android:src="@drawable/irctclogo"
+        android:src="@drawable/logoirctc"
     />
     <TextView
      android:layout_width="match_parent"
@@ -45,5 +46,5 @@
      android:textColor="#ffffff"
     />
     </LinearLayout>
-    </LinearLayout>
+    
 </RelativeLayout>

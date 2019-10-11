@@ -86,7 +86,7 @@ export default class feedback extends Component {
               />
               </View>
               <CustomButton
-                style={{ backgroundColor: '#1fc44e', alignSelf: 'center', marginBottom: 20, }}
+                style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
                 onPress={() => { this.sendFeedback(this.state.name, this.state.email,this.state.message) }}
                 title='Send'
               />
