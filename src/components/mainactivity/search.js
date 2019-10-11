@@ -278,23 +278,26 @@ export default class Search extends Component {
             </View>
             {/* <View style={styles.gridContainer}>
                 <View>
-                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('TrainTimeTable')}>
-                  <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.trainTimeTable}} />
-                  <Text style={styles.GridViewTextLayout}>TRAIN TIME TABLE</Text>
+                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('TrainTimeTable')} disabled={true}>
+                <Text style={{color:'#8c0d0d',fontSize: 8,fontFamily:'Poppins-Regular',justifyContent: 'center',alignItems:'center',}}>Coming Soon...</Text>
+                  <Image  style={{opacity:0.2,width:50,height:50}} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.trainTimeTable}} />
+                  <Text  style={[styles.GridViewTextLayout,{opacity:0.2}]}>TRAIN TIME TABLE</Text>
                 </TouchableOpacity>
               </View>
 
               <View>
-                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('CheckPNR')}>
-                  <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.pnrCheck }} />
-                  <Text style={styles.GridViewTextLayout}>PNR CHECK</Text>
+                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('CheckPNR')} disabled={true}>
+                <Text style={{color:'#8c0d0d',fontSize: 8,fontFamily:'Poppins-Regular',justifyContent: 'center',alignItems:'center',}}>Coming Soon...</Text>
+                  <Image  style={{opacity:0.2,width:50,height:50}} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.pnrCheck }} />
+                  <Text  style={[styles.GridViewTextLayout,{opacity:0.2}]}>PNR CHECK</Text>
                 </TouchableOpacity>
               </View>
 
               <View>
-                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('PlatformLocator')}>
-                  <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.platformLocator}} />
-                  <Text style={styles.GridViewTextLayout}>PLATFORM LOCATOR</Text>
+                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('PlatformLocator')} disabled={true}>
+                <Text style={{color:'#8c0d0d',fontSize: 8,fontFamily:'Poppins-Regular',justifyContent: 'center',alignItems:'center',}}>Coming Soon...</Text>
+                  <Image  style={{opacity:0.2,width:50,height:50}} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.platformLocator}} />
+                  <Text  style={[styles.GridViewTextLayout,{opacity:0.2}]}>PLATFORM LOCATOR</Text>
                 </TouchableOpacity>
               </View>
             </View> */}

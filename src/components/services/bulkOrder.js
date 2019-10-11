@@ -25,7 +25,7 @@ export default class bulkOrder extends Component {
   onSubmitBulkOrder = (fullName, mobile, email, totalPassenger, journeyDate, pnr, comment) => {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (fullName != '') {
-      if (mobile != '') {
+      if (mobile != '' && mobile.length == 10) {
         if (email != '') {
           if (re.test(email)) {
             if (totalPassenger != '') {

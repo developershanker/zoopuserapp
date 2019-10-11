@@ -5443,11 +5443,6 @@ react-native-paper@^2.16.0:
     react-lifecycles-compat "^3.0.4"
     react-native-safe-area-view "^0.12.0"
 
-react-native-paytm@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/react-native-paytm/-/react-native-paytm-1.0.4.tgz#b343abc82b48af023593661ec4de0737456c012e"
-  integrity sha1-s0OryCtIrwI1k2YexN4HN0VsAS4=
-
 react-native-ratings@^6.3.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-6.4.0.tgz#1923e445dbb4092eb880937ac4f7498b06815c3c"

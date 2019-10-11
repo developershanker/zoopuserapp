@@ -21,6 +21,7 @@ export default class Menu extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.getMenu()
+    // this.refreshCart()
     //this.enableOnlyVeg()
     //this.backHandler = BackHandler.addEventListener('hardwareBackPress',this.handleBackPress);    
   }
@@ -69,6 +70,7 @@ export default class Menu extends Component {
   //     )
   //   )
   // }
+ 
 
   addItemToCart = (item, index) => {
     let itemId = item.itemId
@@ -530,12 +532,12 @@ export default class Menu extends Component {
           </View> */}
         </ScrollView>
         {/* Floating FAB starts */}
-        <View >
+        {/* <View >
           <TouchableOpacity onPress={() => { this.setState({ visibleModal: 'bottom' }) }} style={styles.fab}>
             <Icons name={'utensils'} size={15} color={'#ffffff'} />
             <Text style={styles.fabIcon}>MENU</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
         {/* Floating FAB ends */}
         {/*  Footer  */}
         <Fade visible={visible}>

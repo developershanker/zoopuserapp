@@ -233,7 +233,9 @@ static MID = 'FIjIdu58691666399235'
     faq:'app-Icon-set/FAQ.png',
     rate:'app-Icon-set/Rate+us.png',
     tnc:'app-Icon-set/Terms+&+Condition.png',
-    feedback:'app-Icon-set/edit.png'
+    feedback:'app-Icon-set/edit.png',
+    outletVeg:'app-Icon-set/veg.png',
+    outletNonveg:'app-Icon-set/nonveg.png'
     
   }
 

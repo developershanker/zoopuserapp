@@ -683,6 +683,7 @@ export default class passengerDetail extends Component {
                     borderRadius: 5,
                     borderColor: '#e7e7e7',
                     borderWidth: 1,
+                    paddingVertical:10
                   },
                   dateText: {
                     fontSize: 15,
@@ -694,7 +695,6 @@ export default class passengerDetail extends Component {
                   placeholderText: {
                     textAlign: 'center',
                     fontSize: 15,
-                    color: '#',
                     color: '#989c9a',
                     fontFamily: 'Poppins-Regular',
                   }
@@ -745,6 +745,11 @@ export default class passengerDetail extends Component {
                 style={{ backgroundColor: '#FF5819', justifyContent: 'center', }}
 
 
+              />
+              <CustomButton
+              title='Close'
+              style={{backgroundColor:'#9b9b9b',justifyContent: 'center',}}
+              onPress={() => this.setState({ enterSeatInfo : null })}
               />
             </View>
           </View>
@@ -817,7 +822,7 @@ const styles = StyleSheet.create({
     borderColor: '#e7e7e7',
     borderWidth: 1,
     marginHorizontal: 15,
-    marginVertical: 30
+    marginVertical: 10
   },
   inputmodal: {
     fontSize: 15,

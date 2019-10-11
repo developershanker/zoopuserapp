@@ -28,7 +28,7 @@ export default class PaymentPage extends Component {
     this.state = {
       value: 0,
       codActive: false,
-      checked: false,
+      checked: true,
       paymentTypes: [],
       paymentTypeName: '',
       paymentTypeId: '',

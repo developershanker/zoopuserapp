@@ -68,76 +68,81 @@ export default class Cart extends Component {
   getCartItems = (inCart) => {
     this.setState({
       revisedInCart: inCart,
+      totalPrice:ConstantValues.totalBasePrice,
       station: ConstantValues.stationName,
       outletName: ConstantValues.outletName
     })
     ConstantValues.appliedCode = 'Apply Coupon Code'
     console.log('revisedInCart is' + JSON.stringify(this.state.revisedInCart))
   }
-  addItemToCart = (item, index) => {
-    let itemId = item.itemId
-    let inCart = this.state.itemFromCart
+  // addItemToCart = (item, index) => {
+  //   let itemId = item.itemId
+  //   let inCart = ConstantValues.inCart
 
-    item.itemCount = item.itemCount + 1
-    this.setState({
-      count: item.itemCount
-    }
-    )
-    // this.state.totalCartCount += item.itemCount 
-    this.state.totalPrice += item.basePrice  //price adding calculation
-    ConstantValues.totalBasePrice = this.state.totalPrice
-    let idx = this.state.itemFromCart.findIndex(i => { return i.itemId == item.itemId })
-    console.log('idx items are  : ' + idx)
-    if (idx > -1) {
-      this.state.itemFromCart[idx].itemCount = this.state.itemFromCart[idx].itemCount + 1;
-    } else {
-      this.state.itemFromCart.push(Object.assign({}, item))
-    }
-    console.log('itemFromCart items are [when added] : ' + JSON.stringify(this.state.itemFromCart))
-    // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
-    ConstantValues.inCart = this.state.itemFromCart
-    // this.cartCalculate(item)
-    cartApi.billDetail()
+  //   //item.itemCount = item.itemCount + 1
+  //   this.setState({
+  //     count: item.itemCount
+  //   }
+  //   )
+  //   // this.state.totalCartCount += item.itemCount 
+  //   this.state.totalPrice += item.basePrice  //price adding calculation
+  //   ConstantValues.totalBasePrice = this.state.totalPrice
+  //   let idx = inCart.findIndex(i => { return i.itemId == item.itemId })
+  //   console.log('idx items are  : ' + idx)
+  //   if (idx > -1) {
+  //     inCart[idx].itemCount = inCart[idx].itemCount + 1;
+  //   } else {
+  //     inCart.push(Object.assign({}, item))
+  //   }
+  //   console.log('itemFromCart items are [when added] : ' + JSON.stringify(inCart))
+  //   // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
+  //   ConstantValues.inCart = inCart
+   
+  //   // this.cartCalculate(item)
+  //   cartApi.billDetail()
 
-    //console.log('ConstantValues.itemFromCart items are [when added] : ' + JSON.stringify(ConstantValues.itemFromCart))
-  }
+  //   //console.log('ConstantValues.itemFromCart items are [when added] : ' + JSON.stringify(ConstantValues.itemFromCart))
+  // }
 
 
 
 
-  removeItemFromCart = (item, index) => {
-    let itemId = item.itemId
-    let inCart = this.state.itemFromCart
+  // removeItemFromCart = (item, index) => {
+  //   let itemId = item.itemId
+  //   let inCart = ConstantValues.inCart
 
-    item.itemCount = item.itemCount - 1
-    this.setState({
-      count: item.itemCount
-    }
-    )
+  //   //item.itemCount = item.itemCount - 1
+  //   this.setState({
+  //     count: item.itemCount
+  //   }
+  //   )
 
-    this.state.totalPrice -= item.basePrice //price calculation
-    ConstantValues.totalBasePrice = this.state.totalPrice
-    let idx = this.state.itemFromCart.findIndex(i => { return i.itemId == item.itemId })
-    console.log('idx items are  : ' + idx)
-    if (idx > -1) {
-      if (this.state.itemFromCart[idx].itemCount == 1) {
-        this.state.itemFromCart.splice(idx)
-      } else {
-        this.state.itemFromCart[idx].itemCount = this.state.itemFromCart[idx].itemCount - 1;
-        this.state.totalCartCount -= item.itemCount
-      }
-    }
-    console.log('incart items are [when removed] : ' + JSON.stringify(this.state.itemFromCart))
-    // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
-    ConstantValues.InCart = this.state.itemFromCart
-    // this.cartCalculate(item)
-    cartApi.billDetail()
-    //console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
-  }
+  //   this.state.totalPrice -= item.basePrice //price calculation
+  //   ConstantValues.totalBasePrice = this.state.totalPrice
+  //   let idx = inCart.findIndex(i => { return i.itemId == item.itemId })
+  //   console.log('idx items are  : ' + idx)
+  //   if (idx > -1) {
+  //     if (inCart[idx].itemCount == 1) {
+  //       inCart.splice(idx)
+  //     } else {
+  //       inCart[idx].itemCount = inCart[idx].itemCount - 1;
+  //       this.state.totalCartCount -= item.itemCount
+  //     }
+  //   }
+  //   console.log('incart items are [when removed] : ' + JSON.stringify(inCart))
+  //   // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
+  //   ConstantValues.InCart = inCart
+  //   // this.cartCalculate(item)
+  //   this.setState({
+  //     revisedInCart : inCart
+  //   })
+  //   cartApi.billDetail()
+  //   //console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
+  // }
 
   // cartCalculate = (item) => {
   //   let totalCartCount = 0
-  //   this.state.itemFromCart.forEach(i => {
+  //   inCart.forEach(i => {
   //     totalCartCount = totalCartCount + i.itemCount
   //   })
   //   this.state.totalCartCount = totalCartCount
@@ -495,6 +500,11 @@ export default class Cart extends Component {
     }
   }
 
+  gobackToMenu(){
+    ConstantValues.inCart = []
+    ConstantValues.finalCart = []
+    this.props.navigation.navigate('Menu')
+  }
 
   createNotificationChannel = () => {
     const channel = new firebase.notifications.Android.Channel(
@@ -538,10 +548,12 @@ export default class Cart extends Component {
                     <Text style={{ alignSelf: 'center', fontSize: 15, color: '#000000', fontFamily: 'Poppins-Regular', }}>Cart Is Empty</Text>
                     <CustomButton
                       title='Add Items'
-                      onPress={() => {
-                        this.props.navigation.navigate('Menu'),
-                          cartApi.resetCart()
-                      }}
+                      onPress={() => this.gobackToMenu()
+                      //   {
+                      //   this.props.navigation.navigate('Menu'),
+                      //     cartApi.resetCart()
+                      // }
+                    }
                     />
                   </View>
                 </Fade>
@@ -550,14 +562,18 @@ export default class Cart extends Component {
                   data={this.state.revisedInCart}
                   extraData={this.state}
                   renderItem={({ item, index }) =>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 5, marginBottom: 5, alignContent: 'space-around', width: Dimensions.get('window').width }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 5, marginBottom: 5, alignContent: 'flex-start', width: Dimensions.get('window').width }}>
+                      <View style={{width:30,alignItems:'center'}}>
                       <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryType == 'Veg' ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
+                      </View>
+                     
                       <Text style={{ fontSize: 13, fontFamily: 'Poppins-Regular', width: 100 }}>{item.itemName}</Text>
                       {/* Adding item to cart button */}
+                      <View style={{width:200,flexDirection: 'row',justifyContent:'space-around',alignContent:'space-around'}}>
                       <View
                         style={{ alignItems: 'center', width: 90, height: 31, borderColor: '#898c8b', borderRadius: 6, borderWidth: 1 }} key={index}>
                         <TouchableOpacity
-                         // onPress={() => { this.addItemToCart(item, index) }}
+                          //onPress={() => { this.addItemToCart(item, index) }}
                           disabled={item.itemCount == 0 ? false : true}
                         >
 
@@ -567,20 +583,21 @@ export default class Cart extends Component {
                             // onPress={() => { this.removeItemFromCart(item, index) }} 
                               disabled={item.itemCount == 0 ? true : false}
                             >
-
-                              <View style={[styles.plusminus, { opacity: item.itemCount == 0 ? 0 : 100}]}>
+                                {/* 0 */}
+                              <View style={[styles.plusminus, { opacity: 0}]}>
                                 <Icon name='minus' size={10} color='#60b246' />
                               </View>
 
                             </TouchableOpacity>
+                            {/* {item.itemCount == 0 ? 'Add' : item.itemCount} */}
 
-                            <Text style={{ fontFamily: 'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
+                            <Text style={{ fontFamily: 'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5 }}> X {item.itemCount}</Text>
 
 
                             <TouchableOpacity
-                         //  onPress={() => {this.addItemToCart(item, index)}}
+                          //onPress={() => {this.addItemToCart(item, index)}}
                             >
-                              <View style={[styles.plusminus, { opacity: item.itemCount == 0 ? 0 : 100 }]}>
+                              <View style={[styles.plusminus, { opacity: 0 }]}>
                                 <Icon name='plus' size={10} color='#60b246' />
                               </View>
                             </TouchableOpacity>
@@ -591,6 +608,7 @@ export default class Cart extends Component {
 
                       {/* Adding item to cart button ends here */}
                       <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Regular', }}>{ConstantValues.rupee} {item.basePrice}</Text>
+                      </View>
                     </View>
                   }
                   keyExtractor={(item) => item.itemId.toString()}
@@ -883,6 +901,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: Dimensions.get('screen').width,
+    height:400,
     backgroundColor: '#ffffff',
     // flexDirection: 'column',
     // justifyContent: 'center',

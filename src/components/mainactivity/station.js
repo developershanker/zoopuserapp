@@ -380,10 +380,18 @@ export default class station extends Component {
                                       {temp.slice(0,-2)} 
                                     </Text>
                                   {/* </View> */}
-                                
-                                    <Text style={styles.minorder}>
+                                      <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                                      <Text style={styles.minorder}>
                                       Min. Order : {ConstantValues.rupee} {outlets.minimumOrderValue}
                                     </Text>
+                                    <View style={{flexDirection:'row',justifyContent:'flex-end',alignContent:'flex-end',paddingLeft:30}}>
+                                    <Image source={{uri : ConstantValues.IconUrl + ConstantValues.imgurl.veg}} style={{width:15,height:15,alignSelf:'center'}}/>
+                                   
+                                    <Image source={{uri : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg}} style={{width:15,height:15,alignSelf:'center',opacity:outlets.isPureVeg == 0 ? 1 : 0}}/>
+                                    
+                                    </View>
+                                      </View>
+                                   
                                   </View>
                                 </View>
                               </View>
@@ -446,7 +454,7 @@ const styles = StyleSheet.create({
   stationContainer: {
     margin: 5,
     alignItems: 'stretch',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: '#ffffff',
   },
   bottomModal: {
@@ -567,7 +575,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 5,
     width: 35,
-    height: 25,   //#0e8341
+    height: 20,   //#0e8341
     alignItems: 'center',
     borderRadius: 5
   },
