@@ -283,6 +283,7 @@ export default class PaymentPage extends Component {
                       {
                         item.paymentTypeName == 'Prepaid' ? <Image source={require('../images/paytmnew.png')} /> : <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Regular',textAlign:'center' }}>Cash On Delivery</Text>
                       }
+                      
                     </View>
                   </View>
                   </TouchableWithoutFeedback>
@@ -290,7 +291,6 @@ export default class PaymentPage extends Component {
                 }
                 keyExtractor={(item) => item.paymentTypeId.toString()}
               />
-
 
            
               <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center',paddingVertical: 20,paddingHorizontal: 20  }}>

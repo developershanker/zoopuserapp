@@ -354,7 +354,7 @@ export default class station extends Component {
                                 <Image source={{ uri: outlets.outletImage }} style={styles.outletimage} />
                                 <View style={styles.detail}>
                                   <View style={{ flexDirection: 'column' }}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around',alignItems:'center'}}>
                                       <Text style={styles.outletname}>
                                         {outlets.outletName}
                                       </Text>

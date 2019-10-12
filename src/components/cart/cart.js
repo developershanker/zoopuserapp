@@ -225,27 +225,47 @@ export default class Cart extends Component {
     // this.setState({
     //   walletUsed: !this.state.walletUsed
     // })
-    if (walletUsed == true) {
+    if(ConstantValues.totalBasePrice >= 150){
+      if (walletUsed == true) {
 
-      ConstantValues.walletBalanceUsed = 0,
-        // ConstantValues.discount = 50,
-        this.setState({
-          discount: 0
-        })
-
-      cartApi.billDetail()
-      // console.log('On this.state.walletUsed == true..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
-    } else {
-
-      // ConstantValues.discount = 0,
-      ConstantValues.walletBalanceUsed = 50,
-        this.setState({
-          discount: 50
-        })
-
-      cartApi.billDetail()
-      // console.log('On this.state.walletUsed == false..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
+        ConstantValues.walletBalanceUsed = 0,
+          // ConstantValues.discount = 50,
+          this.setState({
+            discount: 0
+          })
+  
+        cartApi.billDetail()
+        // console.log('On this.state.walletUsed == true..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
+      } else {
+  
+        // ConstantValues.discount = 0,
+        ConstantValues.walletBalanceUsed = 50,
+          this.setState({
+            discount: 50
+          })
+  
+        cartApi.billDetail()
+        // console.log('On this.state.walletUsed == false..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
+      }
     }
+    else {
+      return (
+        // ToastAndroid.show(response.error, ToastAndroid.LONG),
+
+        Alert.alert(
+          'Wallet Alert!!',
+          'Minimum Order Value to use wallet is Rs. 150. Just add a few more items to use.',
+          [
+            {
+              text: 'OK', onPress: () => this.props.navigation.navigate('Menu'),
+              style: 'cancel'
+            },
+          ],
+          { cancelable: false },
+        )
+      )
+    }
+    
   }
 
   async getCoupons() {
