@@ -40,8 +40,12 @@ export default class OrderDetail extends Component {
                 <Text style={{ fontFamily:'Poppins-Medium', fontSize: 15, color: '#000000' }}> ORDER ID </Text>
                 <Text style={{ fontFamily:'Poppins-Medium', fontSize: 15, color: '#000000' }}> {ConstantValues.irctcId}</Text>
                 <View style={{ flexDirection: 'row', width: Dimensions.get('screen').width, paddingTop: 10 }}>
-                  <Text style={styles.infoView}> 08/08/2019 </Text>
-                  <Text style={styles.infoView}> 12:35 AM </Text>
+                  <Text style={styles.infoView}> {ConstantValues.orderDate} </Text>
+                  <Text style={styles.infoView}> {ConstantValues.orderTime} </Text>
+                </View>
+                <View style={{ flexDirection: 'column', width: Dimensions.get('screen').width, paddingTop: 10 }}>
+                  <Text style={[styles.infoView,{color:'#000000'}]}>Station :  {ConstantValues.stationName} </Text>
+                  <Text style={[styles.infoView,{color:'#000000'}]}>Restaurant : {ConstantValues.outletName} </Text>
                 </View>
                 {/* <Text style={{ fontSize: 15, color: '#000000' }}>Order will reach in 20 minutes</Text> */}
               </View>
@@ -70,7 +74,7 @@ export default class OrderDetail extends Component {
               </View>
 
             </View>
-            <View>
+            <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10 }}>
             <BillDetailCard/>
             </View>
           

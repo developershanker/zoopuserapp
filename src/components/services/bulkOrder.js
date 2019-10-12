@@ -25,7 +25,7 @@ export default class bulkOrder extends Component {
   onSubmitBulkOrder = (fullName, mobile, email, totalPassenger, journeyDate, pnr, comment) => {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (fullName != '') {
-      if (mobile != '') {
+      if (mobile != '' && mobile.length == 10) {
         if (email != '') {
           if (re.test(email)) {
             if (totalPassenger != '') {
@@ -84,7 +84,16 @@ export default class bulkOrder extends Component {
             ],
             { cancelable: false },
           )
-        )
+        ),
+        this.setState({
+          fullName: '',
+          mobile: '',
+          email: '',
+          totalPassenger: '',
+          journeyDate: '',
+          pnr: '',
+          comment: '',
+        })
       } else {
         return (
          ToastAndroid.show('Something went wrong!! Try again later!!',ToastAndroid.LONG)
@@ -156,11 +165,11 @@ export default class bulkOrder extends Component {
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.input}
-                  placeholder='Enter the number of passengers'
+                  placeholder='Enter the number of passengers.'
                   editable={true}
                   keyboardType='number-pad'
                   value={this.state.totalPassenger}
-                  // autoCapitalize='words'
+                  maxLength={4}
                   onChangeText={totalPassenger => this.setState({ totalPassenger })}
                 />
               </View>

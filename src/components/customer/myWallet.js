@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, CheckBox, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList } from 'react-native';
+import { View, Alert,CheckBox, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import SplashScreen from 'react-native-splash-screen';
@@ -10,19 +10,53 @@ import { CustomButton } from '../assests/customButtonLarge.js';
 import { Fade } from '../assests/fade.js';
 import walletApi from '../customer/walletApi.js'
 import { Overlay } from 'react-native-elements';
+import loginApi from '../login/loginApi.js';
 
 export default class myWallet extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    this.getWalletInfo();
+    this.checkRegister()
   }
   constructor(props) {
     super(props);
     this.state = {
       walletBalance: null,
       data: [],
-      isVisible:true
+      
     };
+  }
+  checkRegister(){
+    if ( ConstantValues.customerId == '') {
+      return(
+        Alert.alert(
+          'Need Login!!',
+          'Please LOGIN to Proceed.',
+          [
+            {
+              text: 'OK', onPress: () => this.props.navigation.navigate('Welcome'),
+              style: 'cancel'
+            },
+          ],
+          { cancelable: false },
+        )
+      )
+    } else {
+      this.onRegister()
+    }
+  }
+  async onRegister() {
+    try {
+      let response = await loginApi.getUserRegister();
+      console.log('data received in register.js : ' + JSON.stringify(response))
+      ConstantValues.loginCount = response.data.loginCount
+      ConstantValues.customerPhoneNo = response.data.mobile
+      ConstantValues.customerName = response.data.fullName
+      ConstantValues.customerRefferalCode = response.data.referralCode
+    
+      this.getWalletInfo();
+    } catch (error) {
+      console.log('Data received in register.js catch: ' + error)
+    }
   }
 
   async getWalletInfo() {
@@ -94,18 +128,7 @@ export default class myWallet extends Component {
                 keyExtractor={(item) => item.walletId.toString()}
               />
             </View>
-                <Fade visible={ConstantValues.customerId == ''}>
-            <Overlay
-              isVisible={this.state.isVisible}
-              windowBackgroundColor="rgba( 77, 75, 75, .5)"
-              overlayBackgroundColor='#e7e7e7'
-              width="auto"
-              height="auto"
-            >
-              <TouchableOpacity onPress={() => this.setState({ isVisible: false })}><Text>Need to login</Text></TouchableOpacity>
-
-            </Overlay>
-            </Fade>
+               
 
           </View>
         </ScrollView>

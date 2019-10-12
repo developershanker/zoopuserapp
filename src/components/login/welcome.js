@@ -91,6 +91,7 @@ export default class Welcome extends Component {
               placeholder="Enter Mobile No."
               keyboardType='number-pad'
               maxLength={10}
+              textContentType='telephoneNumber'
               onChangeText={mobile => this.setState({ mobile })}
               value={this.state.mobile}
             />

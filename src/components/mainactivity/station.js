@@ -22,6 +22,21 @@ export default class station extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.showStation(ConstantValues.searchString);
+    var that = this;
+
+    var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    var hours = new Date().getHours(); //Current Hours
+    var min = new Date().getMinutes(); //Current Minutes
+    var sec = new Date().getSeconds(); //Current Seconds
+
+    that.setState({
+      //  date : date + '/' + month + '/' + year,
+      date: year + '-' + month + '-' + date,
+      time: hours + ':' + min + ':' + sec
+    })
+    // console.log('Todays date is...............................................' + date)
   }
   constructor(props) {
     super(props);
@@ -124,7 +139,7 @@ export default class station extends Component {
         return (
           Alert.alert(
             'Invalid Input!!',
-            'Your input is not valid or expired.Please check and try again!! ',
+            response.error,
             [
               {
                 text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
@@ -142,23 +157,28 @@ export default class station extends Component {
     }
   }
 
-  gotoMenu = (stationId, outletId, stationName, stationCode, haltTime, arrDate, arrival, outletName, outletRating, minimumOrderValue,cutOffTime,zoopCustomerDeliveryCharge,zoopCustomerDeliveryChargeGstRate,zoopCustomerDeliveryChargeGst,eta) => {
+  gotoMenu = (stationId, outletId, stationName, stationCode,arrivalTime,haltTime, arrDate, arrival, outletName, outletRating, minimumOrderValue,cutOffTime,zoopCustomerDeliveryCharge,zoopCustomerDeliveryChargeGstRate,zoopCustomerDeliveryChargeGst,eta,openTime,closeTime,weeklyOff) => {
     const momemtHaltTime = moment(haltTime, 'HHmmss').format('mm')
-    ConstantValues.stationId = stationId,
+      ConstantValues.stationId = stationId,
       ConstantValues.outletId = outletId,
       ConstantValues.stationName = stationName,
       ConstantValues.stationCode = stationCode
-    ConstantValues.outletName = outletName,
+      ConstantValues.ata = arrivalTime
+      ConstantValues.outletName = outletName,
       ConstantValues.haltTime = momemtHaltTime,
-      ConstantValues.deliveryDate = arrDate, //actual date of arraival
-      ConstantValues.deliveryTime = arrival, //expected date of arraival
+      ConstantValues.deliveryDate = (ConstantValues.searchString == 10 ? arrDate : this.state.date), //actual date of arraival
+      ConstantValues.deliveryTime = (ConstantValues.searchString == 10 ? arrival : arrivalTime), //expected date of arraival
       ConstantValues.outletRating = outletRating,
       ConstantValues.minimumOrderValue = minimumOrderValue
       ConstantValues.cuttoff = cutOffTime
       ConstantValues.deliveryCharge = (zoopCustomerDeliveryCharge == null ? 0 : zoopCustomerDeliveryCharge)
       ConstantValues.deliveryChargegst = (zoopCustomerDeliveryChargeGst == null ? 0 : zoopCustomerDeliveryChargeGst)
       ConstantValues.deliveryChargegstRate = (zoopCustomerDeliveryChargeGstRate == null ? 0 : zoopCustomerDeliveryChargeGstRate)
-    ConstantValues.eta = eta
+      ConstantValues.eta = eta
+      ConstantValues.openTime = openTime
+      ConstantValues.closeTime = closeTime
+      ConstantValues.weeklyOff = weeklyOff
+      
     console.log('ConstantValues.stationId : ' + ConstantValues.stationId),
       console.log('ConstantValues.outletId : ' + ConstantValues.outletId),
       console.log('ConstantValues.haltTime : ' + ConstantValues.haltTime),
@@ -312,6 +332,7 @@ export default class station extends Component {
                                   outlets.outletId,
                                   item.stationName,
                                   item.stationCode,
+                                  item.arrivalTime,
                                   item.haltTime,
                                   item.arrDate, //actual date of arraival
                                   item.arrival,//actual time of arraival
@@ -323,14 +344,17 @@ export default class station extends Component {
                                   outlets.zoopCustomerDeliveryCharge,
                                   outlets.zoopCustomerDeliveryChargeGstRate,
                                   outlets.zoopCustomerDeliveryChargeGst,
-                                  item.expectedTime
+                                  item.expectedTime,
+                                  outlets.openTime,
+                                  outlets.closeTime,
+                                  outlets.weeklyOff
                                 )
                               }}>
                               <View style={styles.card}>
                                 <Image source={{ uri: outlets.outletImage }} style={styles.outletimage} />
                                 <View style={styles.detail}>
                                   <View style={{ flexDirection: 'column' }}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around',alignItems:'center'}}>
                                       <Text style={styles.outletname}>
                                         {outlets.outletName}
                                       </Text>
@@ -356,10 +380,18 @@ export default class station extends Component {
                                       {temp.slice(0,-2)} 
                                     </Text>
                                   {/* </View> */}
-                                
-                                    <Text style={styles.minorder}>
+                                      <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                                      <Text style={styles.minorder}>
                                       Min. Order : {ConstantValues.rupee} {outlets.minimumOrderValue}
                                     </Text>
+                                    <View style={{flexDirection:'row',justifyContent:'flex-end',alignContent:'flex-end',paddingLeft:30}}>
+                                    <Image source={{uri : ConstantValues.IconUrl + ConstantValues.imgurl.veg}} style={{width:15,height:15,alignSelf:'center'}}/>
+                                   
+                                    <Image source={{uri : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg}} style={{width:15,height:15,alignSelf:'center',opacity:outlets.isPureVeg == 0 ? 1 : 0}}/>
+                                    
+                                    </View>
+                                      </View>
+                                   
                                   </View>
                                 </View>
                               </View>
@@ -380,7 +412,7 @@ export default class station extends Component {
 
         </ScrollView>
         {/* Floating FAB starts */}
-        <View>
+        {/* <View>
           <TouchableOpacity style={styles.fab} onPress={() => {
             this.showCuisines();
             this.setState({ visibleModal: 'bottom' })
@@ -389,7 +421,7 @@ export default class station extends Component {
             <Icon name={'filter'} size={20} color={'#ffffff'} />
             <Text style={styles.fabIcon}>Filter</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
         {/* Floating FAB ends */}
         <Overlay
           isVisible={this.state.isVisible}
@@ -422,7 +454,7 @@ const styles = StyleSheet.create({
   stationContainer: {
     margin: 5,
     alignItems: 'stretch',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: '#ffffff',
   },
   bottomModal: {
@@ -543,12 +575,13 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 5,
     width: 35,
-    height: 25,   //#0e8341
+    height: 20,   //#0e8341
     alignItems: 'center',
     borderRadius: 5
   },
   rating: {
-    fontSize: 15,
+    textAlign:'center',
+    fontSize: 13,
     justifyContent: 'center',
     fontFamily: 'Poppins-SemiBold',
     color: '#ffffff'
@@ -571,7 +604,7 @@ const styles = StyleSheet.create({
     color: '#b32120',
     fontSize: 12,
     marginLeft: 10,
-    marginTop: 10,
+    marginTop: 5,
   },
   modalViewHeading: {
     justifyContent: 'center',

@@ -144,6 +144,7 @@ class NotificationSection extends Component {
 
 }
 class HeaderIcon extends Component {
+
   render() {
     return (
       <View>
@@ -204,7 +205,7 @@ const DrawerNavigator = createDrawerNavigator({
     }
   },
   Profile: {
-    screen: Profile,
+    screen: Register,
     navigationOptions: {
       drawerLabel:
       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
@@ -310,28 +311,30 @@ const DrawerNavigator = createDrawerNavigator({
       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
          <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.tnc}}/>
          <View style={{width:120,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Terms & Condition</Text>
+         <Text style={{fontFamily:'Poppins-Medium',fontSize:13,color:'#000000'}}>Terms & Conditions</Text>
          </View>
       </View>
     }
   },
-  Login: {
-    screen: ConstantValues.customerId == '' ? Welcome : LogOut,
-    navigationOptions: {
-     drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
-         {/* <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.tnc}}/> */}
-         <Icon
-        name='user'
-        size={20}
-        color={'#612621'}
-      />
-         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Login</Text>
-         </View>
-      </View>
-    }
-  },
+  // Login: {
+  //   screen:Welcome,
+  //   navigationOptions: {
+  //    drawerLabel:
+  //    <Fade visible = {ConstantValues.customerId == ''}>
+  //     <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
+  //        {/* <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.tnc}}/> */}
+  //        <Icon
+  //       name='user'
+  //       size={20}
+  //       color={'#612621'}
+  //     />
+  //        <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+  //        <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Login</Text>
+  //        </View>
+  //     </View>
+  //     </Fade>
+  //   }
+  // },
   // LogOut: {
   //   screen: LogOut,
   //   navigationOptions: {

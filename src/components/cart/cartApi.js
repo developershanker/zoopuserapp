@@ -101,8 +101,9 @@ export default class cartApi {
 
     static billDetail = () => {
         ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
+        ConstantValues.couponValue = ConstantValues.rateDiscount == 0 ? ConstantValues.couponValue : ConstantValues.rateDiscount
        // ConstantValues.deliveryChargegst = (ConstantValues.deliveryCharge/100) * ConstantValues.deliveryChargegstRate,
-        ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst
+        ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.gst + ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst - ConstantValues.couponValue - ConstantValues.walletBalanceUsed
         ConstantValues.billDetail = {
             'totalAmount': ConstantValues.totalBasePrice,
             'deliveryCharge': ConstantValues.deliveryCharge,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions, Alert, TouchableOpacity, FlatList, Image, ToastAndroid ,TouchableWithoutFeedback} from 'react-native';
+import { View, Text, Alert, StyleSheet, ScrollView, Dimensions, TouchableOpacity, FlatList, Image, ToastAndroid, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SplashScreen from 'react-native-splash-screen';
 import Icons from 'react-native-vector-icons/FontAwesome5';
@@ -14,21 +14,43 @@ import orderApi from '../orderBooking/orderApi.js';
 import { ZoopLoader } from '../assests/zoopLoader.js';
 import { Overlay } from 'react-native-elements';
 import moment from "moment";
+import loginApi from '../customer/walletApi.js';
 
 
 
 export default class myOrders extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    this.orderHistory()
+    this.checkRegister()
   }
   constructor(props) {
     super(props);
     this.state = {
       orderHistory: [],
-      isVisible:true,
+      isVisible: true,
     };
   }
+
+  checkRegister() {
+    if (ConstantValues.customerId == '') {
+      return (
+        Alert.alert(
+          'Need Login!!',
+          'Please LOGIN to Proceed.',
+          [
+            {
+              text: 'OK', onPress: () => this.props.navigation.navigate('Welcome'),
+              style: 'cancel'
+            },
+          ],
+          { cancelable: false },
+        )
+      )
+    } else {
+      this.orderHistory()
+    }
+  }
+
 
   async orderHistory() {
     try {
@@ -36,12 +58,73 @@ export default class myOrders extends Component {
       if (response.status == true) {
         this.setState({
           orderHistory: response.data,
-          isVisible:false
+          isVisible: false
         })
+        if (this.state.orderHistory && this.state.orderHistory.length) {
+          this.setState({
+            orderHistory: response.data,
+            isVisible: false
+          })
+        } else {
+          return (
+            Alert.alert(
+              'No Order Found!',
+              'Please Book Order!!',
+              [
+                {
+                  text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
+                  style: 'cancel'
+                },
+              ],
+              { cancelable: false },
+            )
+          )
+        }
       }
     } catch (error) {
       console.log('Data received in myOrder.js catch: ' + error)
     }
+  }
+
+  showStatus(orderStatus) {
+    if (orderStatus == '') {
+      return (
+        <Text> - </Text>
+      )
+    }
+    else if (orderStatus == 'Payment Failed') {
+      return (
+        ConstantValues.paymentFailed
+      )
+    }
+    else if (orderStatus == 'Payment Pending') {
+      return (ConstantValues.paymentFailed)
+    }
+    else if (orderStatus == 'Booked') {
+      return (ConstantValues.booked)
+    }
+    else if (orderStatus == 'Sent to Outlet') {
+      return (ConstantValues.sentToOutlet)
+    }
+    else if (orderStatus == 'Under Preparation') {
+      return (ConstantValues.underPreparation)
+    }
+    else if (orderStatus == 'Out for Delivery') {
+      return (ConstantValues.outForDelivery)
+    }
+    else if (orderStatus == 'Deliverd') {
+      return (ConstantValues.delivered)
+    }
+    else if (orderStatus == 'Not Delivered') {
+      return (ConstantValues.notDelivered)
+    }
+    else if (orderStatus == 'Bad Delivery') {
+      return (ConstantValues.badDelivery)
+    }
+    else if (orderStatus == 'Cancelled') {
+      return (ConstantValues.cancelled)
+    }
+
   }
 
   // gotoDetail(item){
@@ -52,6 +135,7 @@ export default class myOrders extends Component {
   // }
 
   render() {
+    let temp = ''
     return (
       <SafeAreaView style={styles.slide}>
         <ScrollView>
@@ -75,35 +159,56 @@ export default class myOrders extends Component {
                   <View>
                     <TouchableWithoutFeedback>
                       <View style={styles.card}>
-                                 <View style={styles.tile}>
-                                <Text style={styles.tiletext}>Ordered On</Text>
-                                <Text style={styles.tiletext}>{ item.bookingDate == null ? 'Date not available' : moment(item.bookingDate).format('DD-MM-YYYY HH:mm A')}</Text>
-                              </View>
-                            
-                          
-                              <View>
-                              <View style={styles.tile}>
-                                <Text style={styles.tiletext}>Item</Text>
-                        {item.items.map((items,index) => {
-                          // const itemName = items.itemName.join()
-                          return (
-                              <View style={{width:150,justifyContent:'center'}} key={index}>
-                                  <Text style={styles.tiletextitem}>{items.itemName},</Text>
-                              </View>
-                          )
-                        })}
-                         </View>
-                            </View>
                         <View style={styles.tile}>
-                          <Text style={styles.tiletext}>Total Amount</Text>
+                          <View style={{width:100,alignItems:'flex-end'}}>
+                          <Text style={styles.tiletext}>Ordered On :</Text>
+                          </View>
+                          
+                          
+                          <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.bookingDate).format('DD-MM-YYYY HH:mm')}</Text>
+                        </View>
+
+
+                        <View>
+                          <View style={styles.tile}>
+                          <View style={{width:100,alignItems:'flex-end'}}>
+                            <Text style={styles.tiletext}>Item :</Text>
+                            </View>
+                            {item.items.map((items, index) => {
+                              // const itemName = items.itemName.join()
+                              temp = items.itemName + ', '
+                            }
+                            )
+                            }
+                            <View style={{ width: 150, alignItems: 'flex-end' }}>
+                              
+                              <Text style={styles.tiletextitem}>{temp.slice(0, -2)}</Text>
+                            </View>
+                          </View>
+                        </View>
+                        <View style={styles.tile}>
+                        <View style={{width:100,alignItems:'flex-end'}}>
+                          <Text style={styles.tiletext}>Total Amount :</Text>
+                          </View>
+                          
                           <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
                         </View>
                         <View style={styles.tile}>
-                            <Text style={[styles.tiletext, { color: '#000000' }]}>Status :</Text>
-                          <Text style={[styles.tiletext, { color: item.orderStatus == 'Delivered' ? '#000000' : '#60b246' }]}>{item.orderStatus}</Text>
+                        <View style={{width:100,alignItems:'flex-end'}}>
+                          <Text style={[styles.tiletext, { color: '#000000' }]}>Status :</Text>
+                          </View>
+                          {/* <Text style={[styles.tiletext, { color: orderStatus == 'Delivered' ? '#000000' : '#60b246' }]}>{orderStatus}</Text> */}
+                          <View>
+                            {
+                              this.showStatus(item.orderStatus)
+                            }
+                          </View>
+
+
                           {/* <Text style={[styles.tiletext, { color: '#f15926' }]}>Repeat Order</Text> */}
                         </View>
                       </View>
+                      
                     </TouchableWithoutFeedback>
                   </View>
                 }
@@ -150,16 +255,16 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width - 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     paddingVertical: 10
   },
   tiletext: {
     fontFamily: 'Poppins-Regular',
     color: '#000000'
   },
-  tiletextitem:{
+  tiletextitem: {
     fontFamily: 'Poppins-Regular',
     color: '#6a6e6c',
-    fontSize:12
+    fontSize: 12
   }
 });

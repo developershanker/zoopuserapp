@@ -106,7 +106,7 @@ export default class contact extends Component {
                 onChangeText={description => this.setState({ description })}
               />
               <CustomButton
-                style={{ backgroundColor: '#1fc44e', alignSelf: 'center', marginBottom: 20, width:300 }}
+                style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, width:300 }}
                 onPress={() => { this.sendContent(this.state.name, this.state.description) }}
                 title='Submit'
               />

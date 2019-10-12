@@ -1,4 +1,4 @@
-package com.zoop;
+package com.zoop.zoopindiaservice;
 
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet, Clipboard,Platform,Linking, Button,Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList } from 'react-native';
+import { View, Dimensions, StyleSheet, Clipboard,Platform,Linking,KeyboardAvoidingView, Button,Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { RadioButton, Text } from 'react-native-paper';
 import { CustomButton } from '../assests/customButtonLarge';
@@ -30,6 +30,7 @@ export default class Search extends Component {
       email: '',
       query: '',
       trains: [],
+      
     };
   }
   scrollX = new Animated.Value(0)
@@ -39,6 +40,7 @@ export default class Search extends Component {
       console.log('data received in register.js : ' + JSON.stringify(response))
       ConstantValues.loginCount = response.data.loginCount
       this.state.loginCount = response.data.loginCount
+      ConstantValues.isAgent = response.data.isAgent
       ConstantValues.customerPhoneNo = response.data.mobile
       ConstantValues.customerName = response.data.fullName
       ConstantValues.customerRefferalCode = response.data.referralCode
@@ -83,6 +85,7 @@ export default class Search extends Component {
             // ref={component => this._textInput = component}
             style={styles.input}
             placeholder={this.state.value}
+            clearButtonMode={'always'}
             enablesReturnKeyAutomatically={true}
             keyboardType='number-pad'
             maxLength={10}
@@ -103,6 +106,7 @@ export default class Search extends Component {
           <Autocomplete
             autoCapitalize="none"
             autoCorrect={false}
+            clearButtonMode={'always'}
             enablesReturnKeyAutomatically={true}
             data={trains.length === 1 && comp(query, trains[0].trainNumberAndName) ? [] : trains}
             defaultValue={query}
@@ -118,9 +122,12 @@ export default class Search extends Component {
                     query: item.trainNumberAndName,
                     text: item.trainNumber
                   })}>
+                    <View style={{width:Dimensions.get('window').width - 20,paddingHorizontal:10,paddingVertical:10,justifyContent:'center'}}>
                     <Text style={styles.itemText}>
                       {item.trainNumberAndName}
                     </Text>
+                    </View>
+                    
                   </TouchableOpacity>
                 </ScrollView>
               </View>
@@ -194,7 +201,8 @@ export default class Search extends Component {
     let position = Animated.divide(this.scrollX, width);
     return (
       <SafeAreaView style={styles.slide} >
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps = 'handled'>
+          <KeyboardAvoidingView enabled>
           <View>
 
             <View>
@@ -205,7 +213,7 @@ export default class Search extends Component {
             </View>
 
             <RadioButton.Group
-              onValueChange={value => this.setState({ value })}
+              onValueChange={value => this.setState({ value,text:'',query:'' })}
               value={this.state.value}
             >
               <View style={styles.radioButton}>
@@ -270,23 +278,26 @@ export default class Search extends Component {
             </View>
             {/* <View style={styles.gridContainer}>
                 <View>
-                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('TrainTimeTable')}>
-                  <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.trainTimeTable}} />
-                  <Text style={styles.GridViewTextLayout}>TRAIN TIME TABLE</Text>
+                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('TrainTimeTable')} disabled={true}>
+                <Text style={{color:'#8c0d0d',fontSize: 8,fontFamily:'Poppins-Regular',justifyContent: 'center',alignItems:'center',}}>Coming Soon...</Text>
+                  <Image  style={{opacity:0.2,width:50,height:50}} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.trainTimeTable}} />
+                  <Text  style={[styles.GridViewTextLayout,{opacity:0.2}]}>TRAIN TIME TABLE</Text>
                 </TouchableOpacity>
               </View>
 
               <View>
-                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('CheckPNR')}>
-                  <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.pnrCheck }} />
-                  <Text style={styles.GridViewTextLayout}>PNR CHECK</Text>
+                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('CheckPNR')} disabled={true}>
+                <Text style={{color:'#8c0d0d',fontSize: 8,fontFamily:'Poppins-Regular',justifyContent: 'center',alignItems:'center',}}>Coming Soon...</Text>
+                  <Image  style={{opacity:0.2,width:50,height:50}} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.pnrCheck }} />
+                  <Text  style={[styles.GridViewTextLayout,{opacity:0.2}]}>PNR CHECK</Text>
                 </TouchableOpacity>
               </View>
 
               <View>
-                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('PlatformLocator')}>
-                  <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.platformLocator}} />
-                  <Text style={styles.GridViewTextLayout}>PLATFORM LOCATOR</Text>
+                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('PlatformLocator')} disabled={true}>
+                <Text style={{color:'#8c0d0d',fontSize: 8,fontFamily:'Poppins-Regular',justifyContent: 'center',alignItems:'center',}}>Coming Soon...</Text>
+                  <Image  style={{opacity:0.2,width:50,height:50}} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.platformLocator}} />
+                  <Text  style={[styles.GridViewTextLayout,{opacity:0.2}]}>PLATFORM LOCATOR</Text>
                 </TouchableOpacity>
               </View>
             </View> */}
@@ -333,6 +344,7 @@ export default class Search extends Component {
               })}
             </View>
           </View>
+          </KeyboardAvoidingView>
         </ScrollView>
         {/* <DeliveryMark/> */}
       </SafeAreaView>
@@ -350,7 +362,7 @@ const styles = StyleSheet.create({
   slide: {
     flex: 1,
     width: Dimensions.get('window').width,
-    alignItems: 'stretch',
+    height: Dimensions.get('window').height,
     justifyContent: 'center',
     backgroundColor: '#ffffff',
     flexDirection: 'column',
@@ -422,8 +434,8 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 15,
-    fontFamily: 'Poppins-Regular'
-    // margin: 2
+    fontFamily: 'Poppins-Regular',
+   textAlign:'center'
   },
   input: {
     fontSize: 15,
