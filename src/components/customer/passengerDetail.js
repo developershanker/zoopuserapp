@@ -14,6 +14,7 @@ import Modal from "react-native-modal";
 import searchApi from '../mainactivity/searchApi.js';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
+import ConstantsFormPnr from '../constantsFormPnr.js';
 
 export default class passengerDetail extends Component {
   componentDidMount() {
@@ -64,7 +65,8 @@ export default class passengerDetail extends Component {
       ButtonStateHolder: true,  //on state ture it will disable the button
       backgroundColor: '#9c9595',
       modalRegister: null,
-      stationInfo: []
+      stationInfo: [],
+      
     };
   }
 
@@ -169,25 +171,7 @@ export default class passengerDetail extends Component {
             // enterPnr: ConstantValues.pnr,
             stationInfo: response.data.trainRoutes
           })
-          this.state.stationInfo.map((item) => {
-            //checking station
-            if (ConstantValues.stationId == item.stationId) {
-              ConstantValues.deliveryDate = item.arrDate
-              ConstantValues.deliveryTime = item.arrival
-              ConstantValues.dateOfOrder = this.state.date
-              ConstantValues.timeOfOrder = this.state.time
-              
-              console.log('ConstantValues.deliveryDate : ' + ConstantValues.deliveryDate + '\n' +
-               'ConstantValues.deliveryTime : ' + ConstantValues.deliveryTime + '\n' + 
-               'ConstantValues.cuttoff : ' + ConstantValues.cuttoff + '\n' + 
-               'ConstantValues.openTime : ' + ConstantValues.openTime  + '\n' +
-               'ConstantValues.closeTime : ' +  ConstantValues.closeTime  + '\n' +
-               'ConstantValues.weeklyOff : ' + ConstantValues.weeklyOff + '\n' +
-               'ConstantValues.dateOfOrder : '+ConstantValues.dateOfOrder+ '\n' +
-               'ConstantValues.timeOfOrder : ' + ConstantValues.timeOfOrder 
-               )
-            }
-          })
+         this.getstationData()
         } else {
           return (
             Alert.alert(
@@ -232,6 +216,77 @@ export default class passengerDetail extends Component {
       }
     } catch (error) {
       console.log('Data received in passengerDetail.js catch: ' + error)
+    }
+  }
+
+  getstationData(){
+    this.state.stationInfo.map((item) => {
+      //checking station
+      if (ConstantValues.stationId == item.stationId) {
+        ConstantValues.deliveryDate = item.arrDate
+        ConstantValues.deliveryTime = item.arrival
+        ConstantValues.dateOfOrder = this.state.date
+        ConstantValues.timeOfOrder = this.state.time
+        
+        console.log('ConstantValues.deliveryDate : ' + ConstantValues.deliveryDate + '\n' +
+         'ConstantValues.deliveryTime : ' + ConstantValues.deliveryTime + '\n' + 
+         'ConstantValues.cuttoff : ' + ConstantValues.cuttoff + '\n' + 
+         'ConstantValues.openTime : ' + ConstantValues.openTime  + '\n' +
+         'ConstantValues.closeTime : ' +  ConstantValues.closeTime  + '\n' +
+         'ConstantValues.weeklyOff : ' + ConstantValues.weeklyOff + '\n' +
+         'ConstantValues.dateOfOrder : '+ ConstantValues.dateOfOrder + '\n' +
+         'ConstantValues.timeOfOrder : ' + ConstantValues.timeOfOrder 
+         )
+        
+        //  {item.outlets.map((outlet)=>{
+        //    if (ConstantValues.outletId == outlet.outletId ) {
+        //      ConstantsFormPnr.weeklyOff = outlet.weeklyOff
+        //      ConstantsFormPnr.cuttoff = outlet.cutOffTime
+        //      ConstantsFormPnr.openTime = outlet.openTime
+        //      ConstantsFormPnr.closeTime = outlet.closeTime
+        //      console.log(
+        //       'ConstantsFormPnr.weeklyOff : ' + ConstantsFormPnr.weeklyOff + '\n' +
+        //      'ConstantsFormPnr.weeklyOff : ' + ConstantsFormPnr.weeklyOff + '\n' +
+        //      'ConstantsFormPnr.cuttoff : ' + ConstantsFormPnr.cuttoff + '\n' +
+        //      'ConstantsFormPnr.openTime : ' + ConstantsFormPnr.openTime + '\n' +
+        //      'ConstantsFormPnr.closeTime : ' + ConstantsFormPnr.closeTime )
+        //    }
+        //    else{
+        //     console.log('unmatch outlet')
+        //   }
+        //  })}
+      }else{
+        console.log('unmatch station')
+      }
+    })
+  }
+
+  checkShortTime(){
+//ConstantValues.weeklyOff == ConstantsFormPnr.weeklyOff
+    let openTime = moment(ConstantValues.openTime,'HH:mm:ss')
+    let closeTime= moment(ConstantValues.closeTime,'HH:mm:ss')
+    let timeOfOrder = moment(ConstantValues.timeOfOrder,'HH:mm:ss')
+    let deliverytime = moment(ConstantValues.deliveryTime,'HH:mm')
+    
+    console.log(timeOfOrder.isBefore(closeTime))
+    if (timeOfOrder.isAfter(openTime) && timeOfOrder.isBefore(closeTime)) {
+     console.log('Order Booked')
+     
+      
+    } else {
+      return (
+        Alert.alert(
+          'Alert',
+          'Bookings currently closed for this station. Kindly choose another upcoming station. Thanks',
+          [
+            {
+              text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
+              style: 'cancel'
+            }
+          ],
+          { cancelable: false },
+        )
+      )
     }
   }
 
@@ -534,7 +589,7 @@ export default class passengerDetail extends Component {
         </ScrollView>
         <CustomButton
           style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
-          onPress={() => this.proceedToPay()}
+          onPress={() => this.proceedToPay() }  //this.proceedToPay()
           title='Proceed To Pay'
         />
 

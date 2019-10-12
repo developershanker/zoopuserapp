@@ -274,6 +274,7 @@ export default class Menu extends Component {
     const visible = this.state.inCart.length == 0 ? false : true
     // const fssaiVisible = this.state.fssaiNo == null ? false : true
     const uniqueTags = []
+    const uniqueHeader = []
     return (
       <SafeAreaView style={styles.slide}>
         {/* <ZoopLoader show={this.state.loading}/> */}
@@ -356,10 +357,10 @@ export default class Menu extends Component {
           </View>
           {/*  MENU ITEM STYLES{GRID} */}
           <View style={{ width: Dimensions.get('window').width }}>
-            <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 10 }}>
+            {/* <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 10 }}>
               <Text style={{ fontSize: 15, fontFamily: 'Poppins-Medium', color: '#000000' }}>Recommended Items</Text>
-              {/* <Image style={{ alignSelf: 'center', height: 15 }} source={require('../images/line.png')} /> */}
-            </View>
+             
+            </View> */}
             <FlatList
               style={{ width: Dimensions.get('window').width }}
               onContentSizeChange={() => this.flatListRef.scrollToEnd({animated: true})}
@@ -369,8 +370,34 @@ export default class Menu extends Component {
               extraData={this.state}
               renderItem={({ item, index }) =>
                 <View>
-                  <View style={styles.menuCardContainer}>
+                   {/* {
+                     
+                  this.state.OutletMenuInfo.map((item) => {
 
+                    //to avoid duplicate enteries in array
+                    if (uniqueHeader.indexOf(item.typeName) === -1) {
+                      uniqueHeader.push(item.typeName)
+                    }
+
+                  })
+                }
+                   {
+                  uniqueTags.map((item, index) => {
+                     return(
+                        <View  style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10}} key={index}>
+                        <Text style={{ fontSize: 15, fontFamily: 'Poppins-Medium', color: '#000000' }}>{item}</Text>
+                      </View>
+                      )
+                  })
+                } */}
+                {/* <Fade visible={false}>
+                  <View  style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10}}>
+                 
+                      <Text style={{ fontSize: 15, fontFamily: 'Poppins-Medium', color: '#000000' }}>{item.typeName}</Text>
+                     
+                    </View>
+                    </Fade> */}
+                  <View style={styles.menuCardContainer}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
 
                       <View style={{ flexDirection: 'column', paddingHorizontal: 5, paddingVertical: 5 }}>
@@ -455,7 +482,8 @@ export default class Menu extends Component {
                     }
 
                   })
-                }{
+                }
+                {
                   uniqueTags.map((item, index) => {
                     return (
                       <View style={styles.modalItemView} key={index}>
@@ -546,7 +574,7 @@ export default class Menu extends Component {
             <View style={[styles.footer]}>
 
               <View style={styles.itemCountShow}>
-                <Text style={{ marginLeft: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>{this.state.totalCartCount} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.bigrupee}{this.state.totalPrice}</Text>
+                <Text style={{ marginLeft: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>{this.state.totalCartCount} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.bigrupee} {this.state.totalPrice}</Text>
               </View>
               <View style={styles.viewcart}>
                 <Text style={{ marginRight: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>VIEW CART</Text>
