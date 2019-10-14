@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions,  SectionList, ScrollView, Image, TouchableOpacity, ActivityIndicator, BackHandler, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, SectionList, ScrollView, Image, TouchableOpacity, ActivityIndicator, BackHandler, Alert } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -33,7 +33,7 @@ export default class Menu extends Component {
       offer: '',
       gstin: '',
       fssaiNo: '',
-      vegOnly:false,
+      vegOnly: false,
       loading: false,
       count: 0,
       show: 'Add',
@@ -44,7 +44,7 @@ export default class Menu extends Component {
       inCart: [],
       totalCartCount: 0,
       isVisible: true,
-      onlyVegMenu:[]
+      onlyVegMenu: []
     };
   }
   // handleBackPress = () => {
@@ -52,16 +52,16 @@ export default class Menu extends Component {
   //     Alert.alert(
   //       'Confirm!!',
   //       'Are you sure you want to go back? All items from the cart will be removed.',
-        // [// { text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+  // [// { text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
   //         {
   //           text: 'NO',
-            // onPress: () => console.log('Cancel Pressed'),
+  // onPress: () => console.log('Cancel Pressed'),
   //           style: 'cancel',
   //         },
   //         {
   //           text: 'YES', onPress: () => {
   //             cartApi.resetCart();
-              // console.log('ConstantValues.inCart : ' + ConstantValues.inCart + '\n' + 'ConstantValues.finalCart : ' + ConstantValues.finalCart)
+  // console.log('ConstantValues.inCart : ' + ConstantValues.inCart + '\n' + 'ConstantValues.finalCart : ' + ConstantValues.finalCart)
   //             return true
   //           }
   //         },
@@ -70,7 +70,7 @@ export default class Menu extends Component {
   //     )
   //   )
   // }
- 
+
 
   addItemToCart = (item, index) => {
     let itemId = item.itemId
@@ -139,12 +139,18 @@ export default class Menu extends Component {
     console.log('totalCartCount is :  ' + totalCartCount)
   }
 
-  FlatListItemSeparator = () => {
-    return (
-      //Item Separator
-      <View style={{ height: 0.5, width: '100%', backgroundColor: '#C8C8C8' }} />
-    );
-  };
+  // FlatListItemSeparator = () => {
+  //   this.state.OutletMenuInfo.map((item, index) => {
+  //     return (
+  //       //Item Separator
+  //       // <View style={{ height: 0.5, width: '100%', backgroundColor: '#C8C8C8' }} />
+  //       <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 5 }} >
+  //         <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>{item.typeName}</Text>
+  //       </View>
+  //     )
+  //   }
+  //   )
+  // };
 
   //getting menudetails
   async getMenu() {
@@ -178,18 +184,18 @@ export default class Menu extends Component {
               return item.categoryType == 'Veg'
             })
           })
-           // console.log('Veg Items are:' + JSON.stringify(this.state.onlyVegMenu))
-          
+          // console.log('Veg Items are:' + JSON.stringify(this.state.onlyVegMenu))
+
         } else {
-          return(
-            
+          return (
+
             Alert.alert(
               'Alert!!',
               'No Items to display.Select another station',
               [
                 {
-                  text: 'OK',onPress: () => this.props.navigation.navigate('Station') ,
-                  style:'cancel'
+                  text: 'OK', onPress: () => this.props.navigation.navigate('Station'),
+                  style: 'cancel'
                 },
               ],
               { cancelable: false },
@@ -212,73 +218,85 @@ export default class Menu extends Component {
 
   checkCart() {
     if (this.state.totalPrice >= ConstantValues.minimumOrderValue) {
-      if(ConstantValues.customerId != ''){
+      if (ConstantValues.customerId != '') {
         ConstantValues.walletBalanceUsed = 0
         ConstantValues.couponValue = 0
         this.props.navigation.navigate('Cart')
-      console.log('neither minimumorder issue nor login issue')
-      }else{
+        console.log('neither minimumorder issue nor login issue')
+      } else {
         ConstantValues.navigationChannel = 'Cart'
         return (
           // ToastAndroid.show(response.error, ToastAndroid.LONG),
-         
-            Alert.alert(
-              'Alert!!',
-              'Please LOGIN to Proceed.',
-              [
-                {
-                  text: 'OK',onPress: () => this.props.navigation.navigate('Welcome') ,
-                  style:'cancel'
-                },
-              ],
-              { cancelable: false },
-            )
-          ),
+
+          Alert.alert(
+            'Alert!!',
+            'Please LOGIN to Proceed.',
+            [
+              {
+                text: 'OK', onPress: () => this.props.navigation.navigate('Welcome'),
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
+        ),
           console.log('Login issue')
-            }
-      
-      
+      }
+
+
     } else {
-      
-        return (
-          // ToastAndroid.show(response.error, ToastAndroid.LONG),
-         
-            Alert.alert(
-              'Add more items!!',
-              'Order should be atleast Rs.'+ConstantValues.minimumOrderValue,
-              [
-                {
-                  text: 'OK',
-                  style:'cancel'
-                },
-              ],
-              { cancelable: false },
-            )
-          ),
-          console.log('minimumorder issue')
-            }
+
+      return (
+        // ToastAndroid.show(response.error, ToastAndroid.LONG),
+
+        Alert.alert(
+          'Add more items!!',
+          'Order should be atleast Rs.' + ConstantValues.minimumOrderValue,
+          [
+            {
+              text: 'OK',
+              style: 'cancel'
+            },
+          ],
+          { cancelable: false },
+        )
+      ),
+        console.log('minimumorder issue')
+    }
 
   }
 
- 
-    scrollToTag = (item) => {
-      this.setState({ visibleModal: null })     
-      this.flatListRef.scrollToEnd({animated: true});
-      console.log("Item scrolled is....." + item)
-    }
-  
 
-  
+  scrollToTag = (item) => {
+    this.setState({ visibleModal: null })
+    this.flatListRef.scrollToEnd({ animated: true });
+    console.log("Item scrolled is....." + item)
+  }
+  // listHeader = () => {
+  //   return (
+  //     <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10 }}>
+
+  //       <Text style={{ fontSize: 15, fontFamily: 'Poppins-Medium', color: '#000000' }}>This is Header</Text>
+
+  //     </View>
+  //   )
+  // }
+
+
+
 
   render() {
     const visible = this.state.inCart.length == 0 ? false : true
     // const fssaiVisible = this.state.fssaiNo == null ? false : true
     const uniqueTags = []
     const uniqueHeader = []
+    let prevtypeName = ''
+    let flag = 0
+    const newFlag = 0
     return (
       <SafeAreaView style={styles.slide}>
         {/* <ZoopLoader show={this.state.loading}/> */}
-        <View style={{ width: Dimensions.get('window').width,alignItems: 'center',justifyContent: 'center',backgroundColor: '#ffffff'}}>
+        <View style={{ width: Dimensions.get('window').width, alignItems: 'center', justifyContent: 'center', backgroundColor: '#ffffff' }}>
           <View style={{ flexDirection: 'row', width: Dimensions.get('screen').width }}>
             <View style={{ justifyContent: 'flex-start', alignContent: 'flex-start', padding: 20 }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Station')}>
@@ -297,8 +315,8 @@ export default class Menu extends Component {
               value={this.state.vegOnly}
               onValueChange={
                 (vegOnly) => this.setState({ vegOnly })
-               }
-              
+              }
+
             />
           </View>
         </View>
@@ -313,7 +331,7 @@ export default class Menu extends Component {
             {/* go back navigator icon ends here */}
 
             <View style={styles.topContainer}>
-             
+
 
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
@@ -359,51 +377,33 @@ export default class Menu extends Component {
           <View style={{ width: Dimensions.get('window').width }}>
             {/* <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 10 }}>
               <Text style={{ fontSize: 15, fontFamily: 'Poppins-Medium', color: '#000000' }}>Recommended Items</Text>
-             
             </View> */}
+            
             <FlatList
               style={{ width: Dimensions.get('window').width }}
-              onContentSizeChange={() => this.flatListRef.scrollToEnd({animated: true})}
-              onLayout={() => this.flatListRef.scrollToEnd({animated: true})}
+              onContentSizeChange={() => this.flatListRef.scrollToEnd({ animated: true })}
+              onLayout={() => this.flatListRef.scrollToEnd({ animated: true })}
               ref={(ref) => { this.flatListRef = ref; }}
               data={this.state.vegOnly == true ? this.state.onlyVegMenu : this.state.OutletMenuInfo}
               extraData={this.state}
-              renderItem={({ item, index }) =>
+              renderItem={({ item, index }) => 
+              
                 <View>
-                   {/* {
-                     
-                  this.state.OutletMenuInfo.map((item) => {
-
-                    //to avoid duplicate enteries in array
-                    if (uniqueHeader.indexOf(item.typeName) === -1) {
-                      uniqueHeader.push(item.typeName)
-                    }
-
-                  })
-                }
-                   {
-                  uniqueTags.map((item, index) => {
-                     return(
-                        <View  style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10}} key={index}>
-                        <Text style={{ fontSize: 15, fontFamily: 'Poppins-Medium', color: '#000000' }}>{item}</Text>
-                      </View>
-                      )
-                  })
-                } */}
-                {/* <Fade visible={false}>
-                  <View  style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10}}>
                  
-                      <Text style={{ fontSize: 15, fontFamily: 'Poppins-Medium', color: '#000000' }}>{item.typeName}</Text>
-                     
+                  <Fade visible={index == 0 ? true : index > 0 && (item.typeName != this.state.OutletMenuInfo[index - 1].typeName)}>
+                    <View style={{ width: Dimensions.get('window').width - 10, backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 15 }} >
+                      {/* <View style={{ height: 0.5, width: '100%', backgroundColor: '#C8C8C8' }} /> */}
+                      <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>{item.typeName}</Text>
                     </View>
-                    </Fade> */}
+                  </Fade>
+
                   <View style={styles.menuCardContainer}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
 
                       <View style={{ flexDirection: 'column', paddingHorizontal: 5, paddingVertical: 5 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'flex-start', paddingTop: 5, paddingHorizontal: 5 }}>
 
-                          <View style={{ paddingTop: 8}}>
+                          <View style={{ paddingTop: 8 }}>
                             <Image style={{ width: 15, height: 15, }} source={{ uri: item.categoryType == 'Veg' ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
                           </View>
 
@@ -417,7 +417,7 @@ export default class Menu extends Component {
 
                       </View>
                       {/* Incrementor starts here */}
-                      <View style={{ flexDirection: 'column', paddingVertical: 5, justifyContent: 'center', alignItems: 'center', width: 150 }}>
+                      <View style={{ flexDirection: 'column', paddingVertical: 5, justifyContent: 'center', alignItems: 'flex-end', width: 150, paddingRight: 15 }}>
                         {/* <Fade visible={item.image != null}>
                           <Image style={styles.itemImage} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.menu }} />
                         </Fade> */}
@@ -428,20 +428,20 @@ export default class Menu extends Component {
                             style={{ alignItems: 'center', width: 90, borderColor: '#d4d4d4', borderRadius: 6, borderWidth: 1 }} key={index}>
                             <TouchableOpacity onPress={() => { this.addItemToCart(item, index) }} disabled={item.itemCount == 0 ? false : true}>
                               <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center', justifyContent: 'space-around' }}>
-                                <TouchableOpacity onPress={() => { this.removeItemFromCart(item,index) }} disabled={item.itemCount == 0 ? true : false}>
-                                  <View style={[styles.plusminus,{opacity: item.itemCount == 0 ? 0 : 100}]}>
+                                <TouchableOpacity onPress={() => { this.removeItemFromCart(item, index) }} disabled={item.itemCount == 0 ? true : false}>
+                                  <View style={[styles.plusminus, { opacity: item.itemCount == 0 ? 0 : 100 }]}>
                                     <Icon name='minus' size={10} color='#60b246' />
                                   </View>
 
                                 </TouchableOpacity>
 
-                                <Text style={{ fontFamily: 'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5}}>{item.itemCount == 0 ? 'ADD' : item.itemCount}</Text>
+                                <Text style={{ fontFamily: 'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'ADD' : item.itemCount}</Text>
 
 
                                 <TouchableOpacity onPress={() => {
                                   this.addItemToCart(item, index)
                                 }}>
-                                  <View style={[styles.plusminus, { opacity: item.itemCount == 0 ? 0 : 100}]}>
+                                  <View style={[styles.plusminus, { opacity: item.itemCount == 0 ? 0 : 100 }]}>
                                     <Icon name='plus' size={10} color='#60b246' />
                                   </View>
                                 </TouchableOpacity>
@@ -457,6 +457,7 @@ export default class Menu extends Component {
                     </View>
                   </View>
                 </View>
+              
               }
               keyExtractor={(item) => item.itemId.toString()}
             />
@@ -487,7 +488,7 @@ export default class Menu extends Component {
                   uniqueTags.map((item, index) => {
                     return (
                       <View style={styles.modalItemView} key={index}>
-                        <TouchableOpacity onPress={()=>this.scrollToTag(index)}>
+                        <TouchableOpacity onPress={() => this.scrollToTag(index)}>
                           <Text style={styles.headerTextmodal}>{item}</Text>
                         </TouchableOpacity>
                       </View>
@@ -500,64 +501,7 @@ export default class Menu extends Component {
 
           {/* Headerhighlighter ends */}
 
-          {/* MENU ITEM STYLES{LIST} */}
-          {/* <View style={{ width: Dimensions.get('window').width }}>
-            <FlatList
-              style={{ margin: 10 }}
-              ItemSeparatorComponent={this.FlatListItemSeparator}
-              data={this.state.OutletMenuInfo}
-              extraData={this.state}
-              //  Section Header Rendering
-              // renderSectionHeader={({ section }) => (
-              //   <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-              //     <Text style={{ fontSize: 20, fontFamily:'Poppins-Medium', color: '#000000' }}>{section.title}</Text>
-              //     <Image style={{ alignSelf: 'center', height: 15 }} source={require('../images/line.png')} />
-              //   </View>
-              // )}
-              // Section Item rendering
-              renderItem={({ item ,index }) => (
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 10 }}>
-                  <View style={{ width: Dimensions.get('window').width - 200 }}>
-                    <View style={{ flexDirection: 'row' }}>
-                      <Icons name={'carrot'} size={15} color={item.categoryType == 'Veg' ? '#60b246' : '#eb0909'} />
-                      <Text style={{ fontSize: 15, color: '#000000', fontFamily : 'Poppins-Medium'}}>{item.itemName}</Text>
-                    </View>
-                    <Text style={{ fontSize: 15, color: '#000000',fontFamily : 'Poppins-Medium' }}>{ConstantValues.rupee} {item.basePrice}</Text>
-                    <Text style={{ fontSize: 10, color: '#c7c3c3',fontFamily : 'Poppins-Regular' }}>{item.itemDescription}</Text>
-                  </View>
-                  <View>
 
-
-                    <View
-                      style={{ alignItems: 'center', width: 80, borderColor: '#60b246', borderRadius:  100 / 10, borderWidth : 1 }}>
-                      <TouchableOpacity onPress={() => { this.addItemToCart(item,index), this.state.totalPrice = item.basePrice }} disabled={item.itemCount == 0 ? false : true}>
-                        <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}>
-                          <TouchableOpacity onPress={() => { this.removeItemFromCart(item,index) }} disabled={item.itemCount == 0 ? true : false}>
-                            <Icon style={[styles.plusminus,{opacity: item.itemCount == 0 ? 0 : 100}]}} name='minus' size={15} color='#60b246' />
-                          </TouchableOpacity>
-
-                          <Text style={{ fontFamily:'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{item.itemCount == 0 ? 'Add' : item.itemCount}</Text>
-
-
-                          <TouchableOpacity onPress={() => {
-                            this.addItemToCart(item,index)
-                          }}>
-                            <Icon style={[styles.plusminus,{opacity: item.itemCount == 0 ? 0 : 100}]}} name='plus' size={15} color='#60b246' />
-                          </TouchableOpacity>
-
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-
-                  </View>
-
-
-                </View>
-              )}
-
-              keyExtractor={item => item.itemId.toString()}
-            />
-          </View> */}
         </ScrollView>
         {/* Floating FAB starts */}
         {/* <View >
@@ -569,7 +513,7 @@ export default class Menu extends Component {
         {/* Floating FAB ends */}
         {/*  Footer  */}
         <Fade visible={visible}>
-          <TouchableOpacity onPress={() => this.checkCart() }
+          <TouchableOpacity onPress={() => this.checkCart()}
             disabled={false}>
             <View style={[styles.footer]}>
 
@@ -614,8 +558,8 @@ const styles = StyleSheet.create({
   },
   outletName: {
     // paddingTop: 15,
-    textAlign:'center',
-    alignSelf:'center',
+    textAlign: 'center',
+    alignSelf: 'center',
     fontSize: 20,
     color: '#000000',
     fontFamily: 'Poppins-Medium',
@@ -646,10 +590,10 @@ const styles = StyleSheet.create({
   },
   plusminus: {
     width: 30,
-    justifyContent:'center',
-    alignItems:'center',
-    height:30,
-    borderRadius:6
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 30,
+    borderRadius: 6
   },
   offerboard: {
     height: 35,
@@ -708,7 +652,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: '#60b246',
     alignContent: 'center',
-    alignItems:'center'
+    alignItems: 'center'
 
   },
   viewcart: {
@@ -716,7 +660,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginRight: 15,
     alignSelf: 'flex-end'
-  
+
   },
   itemCountShow: {
     flexDirection: 'row',

@@ -144,14 +144,18 @@ class NotificationSection extends Component {
 
 }
 class HeaderIcon extends Component {
-
+  gotoHome() {
+    this.props.navigationProps.navigate('Search')
+  }
   render() {
     return (
+      <TouchableOpacity onPress={this.gotoHome.bind(this)}>
       <View>
         <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
           style={{ width: 50, height: 30 }}
         />
       </View>
+      </TouchableOpacity>
     )
   }
 }
@@ -164,12 +168,15 @@ const CustomDrawerComponent = (props) => (
 
   <SafeAreaView style={{ flex: 1, flexDirection: 'column' }}>
     <ScrollView>
-      <View style={{ backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center', paddingVertical: 20 }}>
-        <Image
-          style={{ width: 150, height: 80 }}
-          source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
-        ></Image>
-      </View>
+      
+        <View style={{ backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center', paddingVertical: 10 }}>
+          <Image
+            style={{ width: 150, height: 80 }}
+            source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
+          ></Image>
+        </View>
+     
+      
 
       <View style={{justifyContent:'center',alignItems:'center'}}></View>
       <DrawerItems {...props} />
@@ -195,9 +202,9 @@ const DrawerNavigator = createDrawerNavigator({
     screen: Search,
     navigationOptions: {
       drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.homeScreen}}/>
-         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.homeScreen}}/>
+         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Home</Text>
          </View>
       </View>
@@ -208,9 +215,9 @@ const DrawerNavigator = createDrawerNavigator({
     screen: Register,
     navigationOptions: {
       drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myProfile}}/>
-         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myProfile}}/>
+         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Profile</Text>
          </View>
       </View>
@@ -220,9 +227,9 @@ const DrawerNavigator = createDrawerNavigator({
     screen: MyOrders,
     navigationOptions: {
       drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myorders}}/>
-         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myorders}}/>
+         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>My Orders</Text>
          </View>
       </View>
@@ -232,9 +239,9 @@ const DrawerNavigator = createDrawerNavigator({
     screen: MyWallet,
     navigationOptions: {
       drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myWallet}}/>
-         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myWallet}}/>
+         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>My Wallet</Text>
          </View>
       </View>
@@ -244,9 +251,9 @@ const DrawerNavigator = createDrawerNavigator({
     screen: Contact,
     navigationOptions: {
       drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.contactus}}/>
-         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.contactus}}/>
+         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Contact Us</Text>
          </View>
       </View>
@@ -256,9 +263,9 @@ const DrawerNavigator = createDrawerNavigator({
     screen: Invite,
     navigationOptions: {
       drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.invite}}/>
-         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.invite}}/>
+         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Invite & Earn</Text>
          </View>
       </View>
@@ -270,9 +277,9 @@ const DrawerNavigator = createDrawerNavigator({
     screen: FAQ,
     navigationOptions: {
       drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.faq}}/>
-         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.faq}}/>
+         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>FAQ</Text>
          </View>
       </View>
@@ -282,10 +289,10 @@ const DrawerNavigator = createDrawerNavigator({
     screen: Feedback,
     navigationOptions: {
       drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
         
-        <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.feedback}}/>
-      <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+        <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.feedback}}/>
+      <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Feedback</Text>
          </View>
       </View>
@@ -296,9 +303,9 @@ const DrawerNavigator = createDrawerNavigator({
 
     navigationOptions: {
       drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.rate}}/>
-         <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.rate}}/>
+         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Rate Us</Text>
          </View>
       </View>
@@ -308,47 +315,18 @@ const DrawerNavigator = createDrawerNavigator({
     screen: TermsActivity,
     navigationOptions: {
       drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.tnc}}/>
-         <View style={{width:120,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
+      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.tnc}}/>
+         <View style={{width:120,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
          <Text style={{fontFamily:'Poppins-Medium',fontSize:13,color:'#000000'}}>Terms & Conditions</Text>
          </View>
       </View>
     }
   },
-  // Login: {
-  //   screen:Welcome,
-  //   navigationOptions: {
-  //    drawerLabel:
-  //    <Fade visible = {ConstantValues.customerId == ''}>
-  //     <View style={{width: Dimensions.get('window').width - 120,justifyContent:'space-evenly',flexDirection:'row',paddingVertical:10,backgroundColor:'#ffffff'}}>
-  //        {/* <Image style={{width:25,height:25,paddingVertical:10}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.tnc}}/> */}
-  //        <Icon
-  //       name='user'
-  //       size={20}
-  //       color={'#612621'}
-  //     />
-  //        <View style={{width:100,height:25,paddingVertical:10,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start'}}>
-  //        <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Login</Text>
-  //        </View>
-  //     </View>
-  //     </Fade>
-  //   }
-  // },
-  // LogOut: {
-  //   screen: LogOut,
-  //   navigationOptions: {
-  //     drawerLabel: 'LogOut',
-  //     drawerIcon: <Icon
-  //       name='user'
-  //       size={20}
-  //     />
-  //   }
-  // },
 
 }, {
   contentComponent: CustomDrawerComponent,
-  drawerWidth: Dimensions.get('window').width - 120,
+  drawerWidth: Dimensions.get('window').width - 140,
 
 
 }
@@ -407,9 +385,9 @@ const AppNavigator = createStackNavigator({
   Search: {
     screen: DrawerNavigator,
     navigationOptions: ({ navigation }) => ({
-      headerTitle: <HeaderIcon />,
+      headerTitle: <HeaderIcon navigationProps={navigation}/>,
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-      headerRight: <NotificationSection navigationProps={navigation} />,
+      // headerRight: <NotificationSection navigationProps={navigation} />,
       headerStyle: {
         backgroundColor: '#ffffff',
       },

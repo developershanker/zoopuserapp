@@ -87,6 +87,7 @@ export default class Welcome extends Component {
 
           <Text style={styles.text1}> Login </Text>
           <View style={styles.inputView}>
+            <Text style={{fontSize: 15,width:40,color: '#000000',fontFamily: 'Poppins-Regular',alignItems: 'center',textAlign:'center',backgroundColor:'#e7e7e7',paddingVertical:15}}>+91</Text>
             <TextInput style={styles.input}
               placeholder="Enter Mobile No."
               keyboardType='number-pad'
@@ -101,6 +102,7 @@ export default class Welcome extends Component {
               title="Submit"
               onPress={
                 () => {
+                  let reg = /^[0-9]+$/;
                   // console.log(this.state.text)
                   console.log(apiLevel)
                   if (this.state.mobile == '') {
@@ -202,6 +204,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   inputView: {
+    flexDirection:'row',
     borderRadius: 5,
     borderColor: '#e7e7e7',
     borderWidth: 1,

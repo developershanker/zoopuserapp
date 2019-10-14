@@ -23,6 +23,9 @@ export default class myOrders extends Component {
     SplashScreen.hide();
     this.checkRegister()
   }
+  // shouldComponentUpdate(){
+  //   this.checkRegister()
+  // }
   constructor(props) {
     super(props);
     this.state = {
