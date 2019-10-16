@@ -171,7 +171,8 @@ export default class passengerDetail extends Component {
             // enterPnr: ConstantValues.pnr,
             stationInfo: response.data.trainRoutes
           })
-         this.getstationData()
+        //  this.getstationData()
+        console.log('ConstantValues.pnr : ' + ConstantValues.pnr + '\n' + 'ConstantValues.searchString :' + ConstantValues.searchString + '\n' + 'ConstantValues.stationId : ' + ConstantValues.stationId + '\n' + 'ConstantValues.outletId : ' + ConstantValues.outletId)
         } else {
           return (
             Alert.alert(
@@ -219,76 +220,76 @@ export default class passengerDetail extends Component {
     }
   }
 
-  getstationData(){
-    this.state.stationInfo.map((item) => {
-      //checking station
-      if (ConstantValues.stationId == item.stationId) {
-        ConstantValues.deliveryDate = item.arrDate
-        ConstantValues.deliveryTime = item.arrival
-        ConstantValues.dateOfOrder = this.state.date
-        ConstantValues.timeOfOrder = this.state.time
+//   getstationData(){
+//     this.state.stationInfo.map((item) => {
+//       //checking station
+//       if (ConstantValues.stationId == item.stationId) {
+//         ConstantValues.deliveryDate = item.arrDate
+//         ConstantValues.deliveryTime = item.arrival
+//         ConstantValues.dateOfOrder = this.state.date
+//         ConstantValues.timeOfOrder = this.state.time
         
-        console.log('ConstantValues.deliveryDate : ' + ConstantValues.deliveryDate + '\n' +
-         'ConstantValues.deliveryTime : ' + ConstantValues.deliveryTime + '\n' + 
-         'ConstantValues.cuttoff : ' + ConstantValues.cuttoff + '\n' + 
-         'ConstantValues.openTime : ' + ConstantValues.openTime  + '\n' +
-         'ConstantValues.closeTime : ' +  ConstantValues.closeTime  + '\n' +
-         'ConstantValues.weeklyOff : ' + ConstantValues.weeklyOff + '\n' +
-         'ConstantValues.dateOfOrder : '+ ConstantValues.dateOfOrder + '\n' +
-         'ConstantValues.timeOfOrder : ' + ConstantValues.timeOfOrder 
-         )
+//         console.log('ConstantValues.deliveryDate : ' + ConstantValues.deliveryDate + '\n' +
+//          'ConstantValues.deliveryTime : ' + ConstantValues.deliveryTime + '\n' + 
+//          'ConstantValues.cuttoff : ' + ConstantValues.cuttoff + '\n' + 
+//          'ConstantValues.openTime : ' + ConstantValues.openTime  + '\n' +
+//          'ConstantValues.closeTime : ' +  ConstantValues.closeTime  + '\n' +
+//          'ConstantValues.weeklyOff : ' + ConstantValues.weeklyOff + '\n' +
+//          'ConstantValues.dateOfOrder : '+ ConstantValues.dateOfOrder + '\n' +
+//          'ConstantValues.timeOfOrder : ' + ConstantValues.timeOfOrder 
+//          )
         
-        //  {item.outlets.map((outlet)=>{
-        //    if (ConstantValues.outletId == outlet.outletId ) {
-        //      ConstantsFormPnr.weeklyOff = outlet.weeklyOff
-        //      ConstantsFormPnr.cuttoff = outlet.cutOffTime
-        //      ConstantsFormPnr.openTime = outlet.openTime
-        //      ConstantsFormPnr.closeTime = outlet.closeTime
-        //      console.log(
-        //       'ConstantsFormPnr.weeklyOff : ' + ConstantsFormPnr.weeklyOff + '\n' +
-        //      'ConstantsFormPnr.weeklyOff : ' + ConstantsFormPnr.weeklyOff + '\n' +
-        //      'ConstantsFormPnr.cuttoff : ' + ConstantsFormPnr.cuttoff + '\n' +
-        //      'ConstantsFormPnr.openTime : ' + ConstantsFormPnr.openTime + '\n' +
-        //      'ConstantsFormPnr.closeTime : ' + ConstantsFormPnr.closeTime )
-        //    }
-        //    else{
-        //     console.log('unmatch outlet')
-        //   }
-        //  })}
-      }else{
-        console.log('unmatch station')
-      }
-    })
-  }
+//         //  {item.outlets.map((outlet)=>{
+//         //    if (ConstantValues.outletId == outlet.outletId ) {
+//         //      ConstantsFormPnr.weeklyOff = outlet.weeklyOff
+//         //      ConstantsFormPnr.cuttoff = outlet.cutOffTime
+//         //      ConstantsFormPnr.openTime = outlet.openTime
+//         //      ConstantsFormPnr.closeTime = outlet.closeTime
+//         //      console.log(
+//         //       'ConstantsFormPnr.weeklyOff : ' + ConstantsFormPnr.weeklyOff + '\n' +
+//         //      'ConstantsFormPnr.weeklyOff : ' + ConstantsFormPnr.weeklyOff + '\n' +
+//         //      'ConstantsFormPnr.cuttoff : ' + ConstantsFormPnr.cuttoff + '\n' +
+//         //      'ConstantsFormPnr.openTime : ' + ConstantsFormPnr.openTime + '\n' +
+//         //      'ConstantsFormPnr.closeTime : ' + ConstantsFormPnr.closeTime )
+//         //    }
+//         //    else{
+//         //     console.log('unmatch outlet')
+//         //   }
+//         //  })}
+//       }else{
+//         console.log('unmatch station')
+//       }
+//     })
+//   }
 
-  checkShortTime(){
-//ConstantValues.weeklyOff == ConstantsFormPnr.weeklyOff
-    let openTime = moment(ConstantValues.openTime,'HH:mm:ss')
-    let closeTime= moment(ConstantValues.closeTime,'HH:mm:ss')
-    let timeOfOrder = moment(ConstantValues.timeOfOrder,'HH:mm:ss')
-    let deliverytime = moment(ConstantValues.deliveryTime,'HH:mm')
+//   checkShortTime(){
+// //ConstantValues.weeklyOff == ConstantsFormPnr.weeklyOff
+//     let openTime = moment(ConstantValues.openTime,'HH:mm:ss')
+//     let closeTime= moment(ConstantValues.closeTime,'HH:mm:ss')
+//     let timeOfOrder = moment(ConstantValues.timeOfOrder,'HH:mm:ss')
+//     let deliverytime = moment(ConstantValues.deliveryTime,'HH:mm')
     
-    console.log(timeOfOrder.isBefore(closeTime))
-    if (timeOfOrder.isAfter(openTime) && timeOfOrder.isBefore(closeTime)) {
-     console.log('Order Booked')
+//     console.log(timeOfOrder.isBefore(closeTime))
+//     if (timeOfOrder.isAfter(openTime) && timeOfOrder.isBefore(closeTime)) {
+//      console.log('Order Booked')
      
       
-    } else {
-      return (
-        Alert.alert(
-          'Alert',
-          'Bookings currently closed for this station. Kindly choose another upcoming station. Thanks',
-          [
-            {
-              text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
-              style: 'cancel'
-            }
-          ],
-          { cancelable: false },
-        )
-      )
-    }
-  }
+//     } else {
+//       return (
+//         Alert.alert(
+//           'Alert',
+//           'Bookings currently closed for this station. Kindly choose another upcoming station. Thanks',
+//           [
+//             {
+//               text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
+//               style: 'cancel'
+//             }
+//           ],
+//           { cancelable: false },
+//         )
+//       )
+//     }
+//   }
 
 
 

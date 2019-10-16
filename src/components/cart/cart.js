@@ -225,39 +225,63 @@ export default class Cart extends Component {
     // this.setState({
     //   walletUsed: !this.state.walletUsed
     // })
-    if(ConstantValues.totalBasePrice >= 150){
-      if (walletUsed == true) {
-
-        ConstantValues.walletBalanceUsed = 0,
-          // ConstantValues.discount = 50,
-          this.setState({
-            discount: 0
-          })
+    if (ConstantValues.walletBalance > 50) {
+      if(ConstantValues.totalBasePrice >= 150){
+        if (walletUsed == true) {
   
-        cartApi.billDetail()
-        // console.log('On this.state.walletUsed == true..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
-      } else {
-  
-        // ConstantValues.discount = 0,
-        ConstantValues.walletBalanceUsed = 50,
-          this.setState({
-            discount: 50
-          })
-  
-        cartApi.billDetail()
-        // console.log('On this.state.walletUsed == false..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
+          ConstantValues.walletBalanceUsed = 0,
+            // ConstantValues.discount = 50,
+            this.setState({
+              discount: 0
+            })
+    
+          cartApi.billDetail()
+          // console.log('On this.state.walletUsed == true..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
+        } else {
+    
+          // ConstantValues.discount = 0,
+          ConstantValues.walletBalanceUsed = 50,
+            this.setState({
+              discount: 50
+            })
+    
+          cartApi.billDetail()
+          // console.log('On this.state.walletUsed == false..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
+        }
       }
-    }
-    else {
+      else {
+        return (
+          // ToastAndroid.show(response.error, ToastAndroid.LONG),
+  
+          Alert.alert(
+            'Wallet Alert!!',
+            'Minimum Order Value to use wallet is Rs. 150. Just add a few more items to use.',
+            [
+              {
+                text: 'OK', onPress: () => this.props.navigation.navigate('Menu'),
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
+        )
+      }
+    } else {
       return (
-        // ToastAndroid.show(response.error, ToastAndroid.LONG),
-
         Alert.alert(
           'Wallet Alert!!',
-          'Minimum Order Value to use wallet is Rs. 150. Just add a few more items to use.',
+          'Wallet amount is low.Enjoy discount with coupons!!',
           [
             {
-              text: 'OK', onPress: () => this.props.navigation.navigate('Menu'),
+              text: 'OK', onPress: () => {
+                ConstantValues.walletBalanceUsed = 0,
+                // ConstantValues.discount = 50,
+                this.setState({
+                  discount: 0
+                })
+        
+              cartApi.billDetail()
+              },
               style: 'cancel'
             },
           ],
@@ -265,6 +289,7 @@ export default class Cart extends Component {
         )
       )
     }
+  
     
   }
 
@@ -582,16 +607,17 @@ export default class Cart extends Component {
                   data={this.state.revisedInCart}
                   extraData={this.state}
                   renderItem={({ item, index }) =>
-                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 5, marginBottom: 5, alignContent: 'flex-start', width: Dimensions.get('window').width }}>
+                    <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5, width: '100%' }}>
                       <View style={{width:30,alignItems:'center'}}>
                       <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryType == 'Veg' ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
                       </View>
                      
-                      <Text style={{ fontSize: 13, fontFamily: 'Poppins-Regular', width: 100 }}>{item.itemName}</Text>
+                      <Text style={{ fontSize: 13, fontFamily: 'Poppins-Regular', width: 130 }}>{item.itemName}</Text>
                       {/* Adding item to cart button */}
                       <View style={{width:200,flexDirection: 'row',justifyContent:'space-around',alignContent:'space-around'}}>
                       <View
-                        style={{ alignItems: 'center', width: 90, height: 31, borderColor: '#898c8b', borderRadius: 6, borderWidth: 1 }} key={index}>
+                        style={{ alignItems: 'center', width: 90, height: 30}} key={index}> 
+                          {/* borderColor: '#898c8b', borderRadius: 6, borderWidth: 1 */}
                         <TouchableOpacity
                           //onPress={() => { this.addItemToCart(item, index) }}
                           disabled={item.itemCount == 0 ? false : true}
@@ -611,7 +637,7 @@ export default class Cart extends Component {
                             </TouchableOpacity>
                             {/* {item.itemCount == 0 ? 'Add' : item.itemCount} */}
 
-                            <Text style={{ fontFamily: 'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5 }}> X {item.itemCount}</Text>
+                            <Text style={{ fontFamily: 'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5 }}> x {item.itemCount}</Text>
 
 
                             <TouchableOpacity

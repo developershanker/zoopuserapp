@@ -17,6 +17,9 @@ export default class myWallet extends Component {
     SplashScreen.hide();
     this.checkRegister()
   }
+  // componentDidUpdate(){
+  //   this.checkRegister()
+  // }
   constructor(props) {
     super(props);
     this.state = {
