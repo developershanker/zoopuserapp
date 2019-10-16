@@ -166,8 +166,8 @@ export default class station extends Component {
       ConstantValues.ata = arrivalTime
       ConstantValues.outletName = outletName,
       ConstantValues.haltTime = momemtHaltTime,
-      ConstantValues.deliveryDate = (ConstantValues.searchString == 10 ? arrDate : this.state.date), //actual date of arraival
-      ConstantValues.deliveryTime = (ConstantValues.searchString == 10 ? arrival : arrivalTime), //expected date of arraival
+      ConstantValues.deliveryDate = (ConstantValues.searchString.length === 10 ? arrDate : this.state.date), //actual date of arraival
+      ConstantValues.deliveryTime = (ConstantValues.searchString.length === 10 ? arrival : arrivalTime), //expected date of arraival
       ConstantValues.outletRating = outletRating,
       ConstantValues.minimumOrderValue = minimumOrderValue
       ConstantValues.cuttoff = cutOffTime

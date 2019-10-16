@@ -510,7 +510,7 @@ export default class Cart extends Component {
       ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst,
       ConstantValues.billDetail = {
         'totalAmount': ConstantValues.totalBasePrice,
-        'deliveryCharge': ConstantValues.deliveryCharge,
+        'deliveryCharge': ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst,
         'discount': ConstantValues.couponValue,
         'couponId': ConstantValues.couponId,
         'couponCode': ConstantValues.couponCode,
@@ -528,8 +528,8 @@ export default class Cart extends Component {
       'berth': ConstantValues.seat,
       'coach': ConstantValues.coach,
       'eta': ConstantValues.eta,
-      'deliveryDate': (ConstantValues.isAgent == 1 ? this.state.date:ConstantValues.deliveryDate),
-      'deliveryTime': (ConstantValues.isAgent == 1 ? this.state.time:ConstantValues.deliveryTime),
+      'deliveryDate': (ConstantValues.isAgent == 1 ? this.state.date : ConstantValues.deliveryDate),
+      'deliveryTime': (ConstantValues.isAgent == 1 ? this.state.time : ConstantValues.deliveryTime),
       'trainId': ConstantValues.trainId,
       //  'orderDate' : ConstantValues.orderDate,
       //  'orderTime' : ConstantValues.orderTime,
@@ -812,6 +812,7 @@ export default class Cart extends Component {
               <ScrollView>
               <FlatList
                 data={this.state.CouponDetail}
+                scrollEnabled={true}
                 renderItem={({ item, index }) =>
 
                   <View style={styles.card}>

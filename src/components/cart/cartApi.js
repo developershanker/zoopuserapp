@@ -106,7 +106,7 @@ export default class cartApi {
         ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.gst + ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst - ConstantValues.couponValue - ConstantValues.walletBalanceUsed
         ConstantValues.billDetail = {
             'totalAmount': ConstantValues.totalBasePrice,
-            'deliveryCharge': ConstantValues.deliveryCharge,
+            'deliveryCharge': ConstantValues.deliveryCharge  + ConstantValues.deliveryChargegst,
             'discount': ConstantValues.couponValue,
             'couponId': ConstantValues.couponId,
             'couponCode': ConstantValues.couponCode,
