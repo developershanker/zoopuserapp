@@ -4,6 +4,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { CustomButton } from '../assests/customButtonLarge.js';
+import { CustomButtonShort } from '../assests/customButtonShort.js';
 // import { TextInput } from '../assests/TextInput.js';
 import ConstantValues from '../constantValues.js';
 import { Fade } from '../assests/fade.js';
@@ -579,12 +580,16 @@ export default class passengerDetail extends Component {
                 value={this.state.enterPnrmodal}
               />
             </View>
-            <View style={{ paddingHorizontal: 20, alignItems: 'center' }}>
-              <CustomButton
+            <View style={{ paddingHorizontal: 20, alignItems: 'center' ,flexDirection:'row',justifyContent:'center'}}>
+              <CustomButtonShort
+                title='Search Again'
+                onPress={() => {this.props.navigation.navigate('Search')}}
+                style={{ backgroundColor: '#9b9b9b', justifyContent: 'center', }}
+              />
+              <CustomButtonShort
                 title="Submit"
                 onPress={
                   () => {
-                    
                     if (this.state.enterPnrmodal != '' && this.state.enterPnrmodal.length == 10) {
                       if (ConstantValues.isAgent == 1) {
                         this.checkPnrForAgent(this.state.enterPnrmodal)
@@ -600,12 +605,7 @@ export default class passengerDetail extends Component {
                     }
                   }
                 }
-
-
-
                 style={{ backgroundColor: '#FF5819', justifyContent: 'center', }}
-
-
               />
             </View>
           </View>

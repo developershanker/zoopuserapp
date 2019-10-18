@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView,WebView } from 'react-native';
 import HTMLView from 'react-native-htmlview';
 import { SafeAreaView } from 'react-navigation';
 
@@ -12,15 +12,18 @@ export default class TermsActivity extends Component {
 
     render() {
         return (
-            <SafeAreaView>
-                <ScrollView>
-                    <HTMLView
-                        value={htmlContent}
-                    // stylesheet={styles}
-                    />
-                </ScrollView>
-            </SafeAreaView>
-            // <WebView source={{ uri: 'https://facebook.github.io/react-native/' }} />
+            // <SafeAreaView>
+            //     <ScrollView>
+            //         <HTMLView
+            //             value={htmlContent}
+            //         // stylesheet={styles}
+            //         />
+            //     </ScrollView>
+            // </SafeAreaView>
+            <WebView
+            originWhitelist={['*']}
+            source={{html: htmlContent}}
+            />
         );
     }
 }

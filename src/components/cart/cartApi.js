@@ -103,10 +103,12 @@ export default class cartApi {
         ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
         ConstantValues.couponValue = ConstantValues.rateDiscount == 0 ? ConstantValues.couponValue : ConstantValues.rateDiscount
        // ConstantValues.deliveryChargegst = (ConstantValues.deliveryCharge/100) * ConstantValues.deliveryChargegstRate,
+       ConstantValues.deliveryChargegst= Math.round(ConstantValues.deliveryChargegst)
+       console.log('deliverygst : ' + ConstantValues.deliveryChargegst)
         ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.gst + ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst - ConstantValues.couponValue - ConstantValues.walletBalanceUsed
         ConstantValues.billDetail = {
             'totalAmount': ConstantValues.totalBasePrice,
-            'deliveryCharge': ConstantValues.deliveryCharge  + ConstantValues.deliveryChargegst,
+            'deliveryCharge': ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst,
             'discount': ConstantValues.couponValue,
             'couponId': ConstantValues.couponId,
             'couponCode': ConstantValues.couponCode,

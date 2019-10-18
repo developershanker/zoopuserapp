@@ -70,13 +70,14 @@ export default class servicesApi {
         }
     }
 
-    static async sendContent(name,description){
+    static async sendContent(name,mobile,description){
         try {
             //url
             const apiUrl = 'contact-us'
             //body
             const body = {}
             body['name'] = name
+            body['mobile'] = mobile
             body['description'] = description
             //calling api for response
             const response = await this.apiCall(apiUrl, 'POST', body, {})
