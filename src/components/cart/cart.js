@@ -506,11 +506,13 @@ export default class Cart extends Component {
   billDetail = () => {
 
     ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
+      ConstantValues.deliveryChargegst = Math.round(ConstantValues.deliveryChargegst) 
+       console.log('deliverygst : ' + ConstantValues.deliveryChargegst)
     // ConstantValues.deliveryChargegst = (ConstantValues.deliveryCharge/100) * ConstantValues.deliveryChargegstRate,
       ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst,
       ConstantValues.billDetail = {
         'totalAmount': ConstantValues.totalBasePrice,
-        'deliveryCharge': ConstantValues.deliveryCharge,
+        'deliveryCharge': ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst,
         'discount': ConstantValues.couponValue,
         'couponId': ConstantValues.couponId,
         'couponCode': ConstantValues.couponCode,
@@ -520,6 +522,7 @@ export default class Cart extends Component {
         'totalPayableAmount': (ConstantValues.totalPayableAmount).toFixed(2)
       }
     console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
+    
   }
 
   savePassengerDetail = () => {
@@ -528,8 +531,8 @@ export default class Cart extends Component {
       'berth': ConstantValues.seat,
       'coach': ConstantValues.coach,
       'eta': ConstantValues.eta,
-      'deliveryDate': (ConstantValues.isAgent == 1 ? this.state.date:ConstantValues.deliveryDate),
-      'deliveryTime': (ConstantValues.isAgent == 1 ? this.state.time:ConstantValues.deliveryTime),
+      'deliveryDate': (ConstantValues.isAgent == 1 ? this.state.date : ConstantValues.deliveryDate),
+      'deliveryTime': (ConstantValues.isAgent == 1 ? this.state.time : ConstantValues.deliveryTime),
       'trainId': ConstantValues.trainId,
       //  'orderDate' : ConstantValues.orderDate,
       //  'orderTime' : ConstantValues.orderTime,
@@ -750,7 +753,7 @@ export default class Cart extends Component {
                     </View>
                     <View style={styles.tile}>
                       <Text style={styles.tiletext}>Add GST 18%</Text>
-                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.deliveryChargegst).toFixed(2)}</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {Math.round(ConstantValues.deliveryChargegst)}</Text>
                     </View>
                     <View style={styles.tile}>
                       <Text style={styles.tiletext}>Discount</Text>
@@ -809,9 +812,10 @@ export default class Cart extends Component {
 
             {/* CouponDetail Card begin Here */}
             <View>
-              <ScrollView>
+              
               <FlatList
                 data={this.state.CouponDetail}
+                scrollEnabled={true}
                 renderItem={({ item, index }) =>
 
                   <View style={styles.card}>
@@ -837,7 +841,7 @@ export default class Cart extends Component {
                 }
                 keyExtractor={item => item.couponId.toString()}
               />
-              </ScrollView>
+            
             </View>
             {/* CouponDetail Card ends Here  */}
           </View>

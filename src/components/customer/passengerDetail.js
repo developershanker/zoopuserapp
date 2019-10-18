@@ -4,6 +4,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { CustomButton } from '../assests/customButtonLarge.js';
+import { CustomButtonShort } from '../assests/customButtonShort.js';
 // import { TextInput } from '../assests/TextInput.js';
 import ConstantValues from '../constantValues.js';
 import { Fade } from '../assests/fade.js';
@@ -65,8 +66,7 @@ export default class passengerDetail extends Component {
       ButtonStateHolder: true,  //on state ture it will disable the button
       backgroundColor: '#9c9595',
       modalRegister: null,
-      stationInfo: [],
-      
+      stationInfo: [],      
     };
   }
 
@@ -151,33 +151,64 @@ export default class passengerDetail extends Component {
     }
   }
 
-  async getdetailpnr(pnr) {
+ 
+
+  async verifyStationData(pnr) {
     try {
-      let response = await searchApi.searchBy(pnr);
+      let response = await searchApi.research(pnr);
       if (response.status == true) {
-        ConstantValues.pnr = pnr
-        ConstantValues.seat = response.data.seatInfo.berth
-        ConstantValues.coach = response.data.seatInfo.coach
-        console.log('ConstantValues.trainNumber : ' + ConstantValues.trainNumber + '\n' + 'response.data.trainDetails.trainNumber : ' + response.data.trainDetails.trainNumber + '\n' + 'ConstantValues.seat : ' + ConstantValues.seat + 'ConstantValues.coach : ' + ConstantValues.coach)
-        //checking train number
-        if (response.data.trainDetails.trainNumber == ConstantValues.trainNumber) {
-          this.setState({
-            isVisible: false,
-            visibleModalLogin: null,
-            enterPnr: this.state.enterPnrmodal,
-            name: ConstantValues.customerName,
-            altMobileNo: ConstantValues.customeralternateMobile,
-            emailId: ConstantValues.customerEmailId,
-            // enterPnr: ConstantValues.pnr,
-            stationInfo: response.data.trainRoutes
+        console.log('data matched.....................')
+        this.setState({
+          stationInfo: response.data.trainRoutes
+        })
+        if (this.state.stationInfo && this.state.stationInfo.length) {
+          console.log('station matched.....................')
+          this.state.stationInfo.map((item)=>{
+            if (item.outlets && item.outlets.length) {
+              ConstantValues.pnr = pnr
+              ConstantValues.seat = response.data.seatInfo.berth
+              ConstantValues.coach = response.data.seatInfo.coach
+              ConstantValues.deliveryDate = item.arrDate
+              ConstantValues.deliveryTime = item.arrival
+              ConstantValues.passengerInfo = response.data.passengerInfo
+              this.setState({
+                isVisible: false,
+                visibleModalLogin: null,
+                enterPnr: this.state.enterPnrmodal,
+                name: ConstantValues.customerName,
+                altMobileNo: ConstantValues.customeralternateMobile,
+                emailId: ConstantValues.customerEmailId,
+                // enterPnr: ConstantValues.pnr,
+              })
+              console.log('outlet matched.....................' + '\n' + ConstantValues.deliveryDate + '\n' + ConstantValues.deliveryTime)
+
+            } else {
+              return (
+                Alert.alert(
+                  'PNR Alert',
+                  'Bookings currently closed for this outlet. Kindly choose another upcoming station.',
+                  [
+                    {
+                      text: 'Search Again',
+                      onPress: () => this.props.navigation.navigate('Search'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Enter PNR Again', onPress: () => { this.setState({ visibleModalLogin: 'bottom' }) },
+                      style: 'cancel'
+                    }
+                  ],
+                  { cancelable: false },
+                )
+              )
+            }
           })
-        //  this.getstationData()
-        console.log('ConstantValues.pnr : ' + ConstantValues.pnr + '\n' + 'ConstantValues.searchString :' + ConstantValues.searchString + '\n' + 'ConstantValues.stationId : ' + ConstantValues.stationId + '\n' + 'ConstantValues.outletId : ' + ConstantValues.outletId)
+           
         } else {
           return (
             Alert.alert(
-              'Train No. and Enter PNR detail Mismatch',
-              'Oops !! This PNR is of a different route. Kindly search restaurants again with PNR.',
+              'PNR Alert!!',
+              'Bookings currently closed for this station. Kindly choose another upcoming station.',
               [
                 {
                   text: 'Search Again',
@@ -185,7 +216,7 @@ export default class passengerDetail extends Component {
                   style: 'cancel',
                 },
                 {
-                  text: 'OK', onPress: () => { this.setState({ visibleModalLogin: 'bottom' }) },
+                  text: 'Enter PNR Again', onPress: () => { this.setState({ visibleModalLogin: 'bottom' }) },
                   style: 'cancel'
                 }
               ],
@@ -193,12 +224,13 @@ export default class passengerDetail extends Component {
             )
           )
         }
+
       } else {
-        console.log('error found in pnr')
+        console.log(response.error)
         return (
           Alert.alert(
             'Invalid PNR',
-            'Oops !! This PNR invalid. Enter correct PNR!!',
+            response.error == '' ? 'Oops !! This PNR invalid. Enter correct PNR!!' : response.error,
             [
               {
                 text: 'Search Again',
@@ -206,90 +238,21 @@ export default class passengerDetail extends Component {
                 style: 'cancel',
               },
               {
-                text: 'OK', onPress: () => { this.setState({ visibleModalLogin: 'bottom' }) },
+                text: 'Enter PNR Again', onPress: () => { this.setState({ visibleModalLogin: 'bottom' }) },
                 style: 'cancel'
               }
             ],
             { cancelable: false },
           )
         )
-      
+
       }
+
     } catch (error) {
-      console.log('Data received in passengerDetail.js catch: ' + error)
+      console.log('Data received in verifyStationData() catch: ' + error)
     }
   }
 
-//   getstationData(){
-//     this.state.stationInfo.map((item) => {
-//       //checking station
-//       if (ConstantValues.stationId == item.stationId) {
-//         ConstantValues.deliveryDate = item.arrDate
-//         ConstantValues.deliveryTime = item.arrival
-//         ConstantValues.dateOfOrder = this.state.date
-//         ConstantValues.timeOfOrder = this.state.time
-        
-//         console.log('ConstantValues.deliveryDate : ' + ConstantValues.deliveryDate + '\n' +
-//          'ConstantValues.deliveryTime : ' + ConstantValues.deliveryTime + '\n' + 
-//          'ConstantValues.cuttoff : ' + ConstantValues.cuttoff + '\n' + 
-//          'ConstantValues.openTime : ' + ConstantValues.openTime  + '\n' +
-//          'ConstantValues.closeTime : ' +  ConstantValues.closeTime  + '\n' +
-//          'ConstantValues.weeklyOff : ' + ConstantValues.weeklyOff + '\n' +
-//          'ConstantValues.dateOfOrder : '+ ConstantValues.dateOfOrder + '\n' +
-//          'ConstantValues.timeOfOrder : ' + ConstantValues.timeOfOrder 
-//          )
-        
-//         //  {item.outlets.map((outlet)=>{
-//         //    if (ConstantValues.outletId == outlet.outletId ) {
-//         //      ConstantsFormPnr.weeklyOff = outlet.weeklyOff
-//         //      ConstantsFormPnr.cuttoff = outlet.cutOffTime
-//         //      ConstantsFormPnr.openTime = outlet.openTime
-//         //      ConstantsFormPnr.closeTime = outlet.closeTime
-//         //      console.log(
-//         //       'ConstantsFormPnr.weeklyOff : ' + ConstantsFormPnr.weeklyOff + '\n' +
-//         //      'ConstantsFormPnr.weeklyOff : ' + ConstantsFormPnr.weeklyOff + '\n' +
-//         //      'ConstantsFormPnr.cuttoff : ' + ConstantsFormPnr.cuttoff + '\n' +
-//         //      'ConstantsFormPnr.openTime : ' + ConstantsFormPnr.openTime + '\n' +
-//         //      'ConstantsFormPnr.closeTime : ' + ConstantsFormPnr.closeTime )
-//         //    }
-//         //    else{
-//         //     console.log('unmatch outlet')
-//         //   }
-//         //  })}
-//       }else{
-//         console.log('unmatch station')
-//       }
-//     })
-//   }
-
-//   checkShortTime(){
-// //ConstantValues.weeklyOff == ConstantsFormPnr.weeklyOff
-//     let openTime = moment(ConstantValues.openTime,'HH:mm:ss')
-//     let closeTime= moment(ConstantValues.closeTime,'HH:mm:ss')
-//     let timeOfOrder = moment(ConstantValues.timeOfOrder,'HH:mm:ss')
-//     let deliverytime = moment(ConstantValues.deliveryTime,'HH:mm')
-    
-//     console.log(timeOfOrder.isBefore(closeTime))
-//     if (timeOfOrder.isAfter(openTime) && timeOfOrder.isBefore(closeTime)) {
-//      console.log('Order Booked')
-     
-      
-//     } else {
-//       return (
-//         Alert.alert(
-//           'Alert',
-//           'Bookings currently closed for this station. Kindly choose another upcoming station. Thanks',
-//           [
-//             {
-//               text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
-//               style: 'cancel'
-//             }
-//           ],
-//           { cancelable: false },
-//         )
-//       )
-//     }
-//   }
 
 
 
@@ -325,6 +288,8 @@ export default class passengerDetail extends Component {
           isVisible: false
         })
       } else {
+        // ConstantValues.orderDate = this.state.date
+        // ConstantValues.orderTime = this.state.time
         this.setState({
           enterPnr: ConstantValues.pnr,
           name: ConstantValues.customerName,
@@ -487,7 +452,8 @@ export default class passengerDetail extends Component {
 
                 </View>
                 <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Station : {ConstantValues.stationName}</Text>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Expected Date & Time of Delivery : {ConstantValues.ata}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Expected Date of Delivery : {ConstantValues.deliveryDate}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Expected Time of Delivery : {ConstantValues.deliveryTime}</Text>
               </View>
               <View style={styles.inputView}>
                 <TextInput
@@ -614,8 +580,13 @@ export default class passengerDetail extends Component {
                 value={this.state.enterPnrmodal}
               />
             </View>
-            <View style={{ paddingHorizontal: 20, alignItems: 'center' }}>
-              <CustomButton
+            <View style={{ paddingHorizontal: 20, alignItems: 'center' ,flexDirection:'row',justifyContent:'center'}}>
+              <CustomButtonShort
+                title='Search Again'
+                onPress={() => {this.props.navigation.navigate('Search')}}
+                style={{ backgroundColor: '#9b9b9b', justifyContent: 'center', }}
+              />
+              <CustomButtonShort
                 title="Submit"
                 onPress={
                   () => {
@@ -623,7 +594,7 @@ export default class passengerDetail extends Component {
                       if (ConstantValues.isAgent == 1) {
                         this.checkPnrForAgent(this.state.enterPnrmodal)
                       } else {
-                          this.getdetailpnr(this.state.enterPnrmodal)
+                          this.verifyStationData(this.state.enterPnrmodal)
                       }
                     }
                     else {
@@ -634,12 +605,7 @@ export default class passengerDetail extends Component {
                     }
                   }
                 }
-
-
-
                 style={{ backgroundColor: '#FF5819', justifyContent: 'center', }}
-
-
               />
             </View>
           </View>

@@ -33,6 +33,7 @@ export default class myOrders extends Component {
       isVisible: true,
     };
   }
+ 
 
   checkRegister() {
     if (ConstantValues.customerId == '') {

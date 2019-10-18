@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TextInput, Linking, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList} from 'react-native';
+import { View, TextInput, Linking, Text,Alert, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList} from 'react-native';
 import servicesApi from './servicesApi';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -24,9 +24,26 @@ export default class feedback extends Component {
         if (email != '') {
           if (message != '') {
             if (response.status == true) {
+            this.setState({
+              name:'',
+              email:'',
+              message:''
+            })
               return (
-                ToastAndroid.show('Thank You for contacting. We will reach you soon', ToastAndroid.CENTER)
+              Alert.alert(
+                'Thank you!!',
+                'Thank You for contacting. We will reach you soon',
+                [
+                  {
+                    text: 'OK', onPress: () => {
+                      this.props.navigation.navigate('Search')
+                    },
+                    style: 'cancel'
+                  },
+                ],
+                { cancelable: false },
               )
+            )
             } else {
               ToastAndroid.show('Something went wrong. Please try after some time', ToastAndroid.LONG)
             }
@@ -79,8 +96,10 @@ export default class feedback extends Component {
               <Text style={styles.textS}>Message</Text>
               <View style={styles.messagebox}>
                <TextInput
-                style={styles.inputS}
+                style={styles.inputD}
                 placeholder=''
+                multiline={true}
+                numberOfLines={3}
                 keyboardType='default'
                 onChangeText={message => this.setState({ message })}
               />
@@ -116,7 +135,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     width: '80%',
     fontSize: 15,
-    marginVertical: 40
   },
   textS: {
     fontFamily: 'Poppins-Regular',
@@ -128,9 +146,9 @@ const styles = StyleSheet.create({
     borderRadius: 100 / 9,
     borderWidth: 1,
     width: '80%',
-    height:300,
-    alignItems: 'center',
-    justifyContent: 'center',
+    height:150,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     backgroundColor: '#ffffff',
   }
 });

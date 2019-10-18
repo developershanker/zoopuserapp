@@ -53,8 +53,8 @@ export default class Invite extends Component {
       ConstantValues.loginCount = response.data.loginCount
       ConstantValues.customerPhoneNo = response.data.mobile
       ConstantValues.customerName = response.data.fullName
-      ConstantValues.customerRefferalCode = response.data.referralCode
-      this.setstate({
+      ConstantValues.customerRefferalCode = response.data.referralCode,
+      this.setState({
         referralCode:response.data.referralCode
       })
       
@@ -77,7 +77,7 @@ export default class Invite extends Component {
 
   async writeToClipboard() {
     //To copy the text to clipboard
-    await Clipboard.setString(ConstantValues.customerRefferalCode);
+    Clipboard.setString(ConstantValues.customerRefferalCode);
     return (
       ToastAndroid.show('Refferal Code Copied!!', ToastAndroid.LONG)
     ),
@@ -90,7 +90,7 @@ export default class Invite extends Component {
     try {
       const result = await Share.share({
         message:
-        'Hi, upgrade your train food experience by using my code ' + '\'' + ConstantValues.customerRefferalCode + '\'' + ' and get benefits worth Rs 150 when you sign-up at ZoopIndia APP. Download: https://play.google.com/store/apps/details?id=com.zoop.zoopindiaservice',
+        'Hi, upgrade your train food experience by using my code ' + '\'' + ConstantValues.customerRefferalCode + '\'' + ' and get benefits worth Rs 150 when you sign-up at ZoopIndia APP. Download: goo.gl/fGC622',
       });
 
       if (result.action === Share.sharedAction) {
@@ -109,7 +109,7 @@ export default class Invite extends Component {
 
   render() {
     const width = Dimensions.get('screen').width
-    const msg = 'Hi, upgrade your train food experience by using my code ' + '\'' + ConstantValues.customerRefferalCode + '\'' + ' and get benefits worth Rs 150 when you sign-up at ZoopIndia APP. Download: https://play.google.com/store/apps/details?id=com.zoop.zoopindiaservice'
+    const msg = 'Hi, upgrade your train food experience by using my code ' + '\'' + ConstantValues.customerRefferalCode + '\'' + ' and get benefits worth Rs 150 when you sign-up at ZoopIndia APP. Download: goo.gl/fGC622'
     return (
       <SafeAreaView>
         <ScrollView>

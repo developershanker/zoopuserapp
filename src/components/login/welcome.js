@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, Button, Text, Icon, Image, TouchableOpacity, StyleSheet, Alert, TextInput, ToastAndroid, ImageBackground, ScrollView } from 'react-native';
+import { View, Dimensions, Button, Text, Icon, Image, TouchableOpacity, StyleSheet, Alert, TextInput, ToastAndroid, ImageBackground, ScrollView,BackHandler} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import CustomTouchableOpacity from '../assests/customTouchableOpacity';
@@ -21,7 +21,14 @@ export default class Welcome extends Component {
       mobile: '',
     };
   }
-
+  componentWillMount(){
+    BackHandler.addEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
+    console.log('Back Pressed')
+}
+componentWillUnmount() {
+  BackHandler.removeEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
+  console.log('Back Pressed Unmount')
+}
 
 
 
