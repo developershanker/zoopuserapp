@@ -90,7 +90,7 @@ export default class Invite extends Component {
     try {
       const result = await Share.share({
         message:
-        'Hi, upgrade your train food experience by using my code ' + '\'' + ConstantValues.customerRefferalCode + '\'' + ' and get benefits worth Rs 150 when you sign-up at ZoopIndia APP. Download: goo.gl/fGC622',
+        'Hi, upgrade your train food experience by using my code ' + '\'' + ConstantValues.customerRefferalCode + '\'' + ' and get benefits worth Rs 150 when you sign-up at Zoop APP. Download: goo.gl/fGC622',
       });
 
       if (result.action === Share.sharedAction) {
@@ -109,7 +109,7 @@ export default class Invite extends Component {
 
   render() {
     const width = Dimensions.get('screen').width
-    const msg = 'Hi, upgrade your train food experience by using my code ' + '\'' + ConstantValues.customerRefferalCode + '\'' + ' and get benefits worth Rs 150 when you sign-up at ZoopIndia APP. Download: goo.gl/fGC622'
+    const msg = 'Hi, upgrade your train food experience by using my code ' + '\'' + ConstantValues.customerRefferalCode + '\'' + ' and get benefits worth Rs 150 when you sign-up at Zoop APP. Download: goo.gl/fGC622'
     return (
       <SafeAreaView>
         <ScrollView>

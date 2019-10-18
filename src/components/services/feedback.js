@@ -8,6 +8,13 @@ import { SafeAreaView } from 'react-navigation';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import ConstantValues from '../constantValues';
 export default class feedback extends Component {
+  componentDidMount(){
+    this.setState({
+      name: '',
+      email: '',
+      message: ''
+    })
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -18,41 +25,47 @@ export default class feedback extends Component {
   }
 
   async sendFeedback(name, email, message) {
+     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     try {
       let response = await servicesApi.sendFeedback(name, email, message);
       if (name != '') {
         if (email != '') {
-          if (message != '') {
-            if (response.status == true) {
-            this.setState({
-              name:'',
-              email:'',
-              message:''
-            })
-              return (
-              Alert.alert(
-                'Thank you!!',
-                'Thank You for contacting. We will reach you soon',
-                [
-                  {
-                    text: 'OK', onPress: () => {
-                      this.props.navigation.navigate('Search')
-                    },
-                    style: 'cancel'
-                  },
-                ],
-                { cancelable: false },
-              )
-            )
-            } else {
-              ToastAndroid.show('Something went wrong. Please try after some time', ToastAndroid.LONG)
+          if (re.test(email)) {
+            if (message != '') {
+              if (response.status == true) {
+                this.setState({
+                  name: '',
+                  email: '',
+                  message: ''
+                })
+                return (
+                  Alert.alert(
+                    'Thank you!!',
+                    'Thank You for contacting Zoop. We will reach you soon.',
+                    [
+                      {
+                        text: 'OK', onPress: () => {
+                          this.props.navigation.navigate('Search')
+                        },
+                        style: 'cancel'
+                      },
+                    ],
+                    { cancelable: false },
+                  )
+                )
+              } else {
+                ToastAndroid.show('Something went wrong. Please try after some time', ToastAndroid.LONG)
+              }
             }
-          }
-          else {
-            ToastAndroid.show('Please enter some message', ToastAndroid.CENTER)
+            else {
+              ToastAndroid.show('Please enter some message', ToastAndroid.CENTER)
+            }
+
+          } else {
+            ToastAndroid.show('Please Enter Valid Email', ToastAndroid.LONG)
           }
         } else {
-          ToastAndroid.show('Please Enter Description', ToastAndroid.LONG)
+          ToastAndroid.show('Please Enter Email', ToastAndroid.LONG)
         }
       } else {
         ToastAndroid.show('Please Enter Name', ToastAndroid.LONG)

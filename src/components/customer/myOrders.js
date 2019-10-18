@@ -43,7 +43,10 @@ export default class myOrders extends Component {
           'Please LOGIN to Proceed.',
           [
             {
-              text: 'OK', onPress: () => this.props.navigation.navigate('Welcome'),
+              text: 'OK', onPress: () => {
+                this.setState({isVisible:false})
+                this.props.navigation.navigate('Welcome')
+              },
               style: 'cancel'
             },
           ],

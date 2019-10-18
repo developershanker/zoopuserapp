@@ -21,6 +21,7 @@ export default class ConstantValues {
   static customeralternateMobile = ''
   static customerPhoneNo = ''
   static customerEmailId = ''
+  static tempCustomerId = ''
   static customerId = ''
   static customerRefferalCode = ''
   static token = ''
