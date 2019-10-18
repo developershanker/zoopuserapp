@@ -45,7 +45,7 @@ componentWillUnmount() {
           console.log('Logged with mobile No. :' + mobile),
           console.log('The status is: ' + response.status),
           console.log('The message is: ' + response.message),
-          ConstantValues.customerId = response.data.customerId,
+          ConstantValues.tempCustomerId = response.data.customerId,
           ToastAndroid.show(response.message, ToastAndroid.LONG),
           this.props.navigation.navigate('OtpVerify', {
             mobile: this.state.mobile,
@@ -99,7 +99,6 @@ componentWillUnmount() {
               placeholder="Enter Mobile No."
               keyboardType='number-pad'
               maxLength={10}
-              textContentType='telephoneNumber'
               onChangeText={mobile => this.setState({ mobile })}
               value={this.state.mobile}
             />
@@ -109,17 +108,25 @@ componentWillUnmount() {
               title="Submit"
               onPress={
                 () => {
-                  let reg = /^[0-9]+$/;
+                  let reg = /^[a-zA-Z0-9]+$/;
                   // console.log(this.state.text)
                   console.log(apiLevel)
-                  if (this.state.mobile == '') {
-                    return (
-                      ToastAndroid.show('Please Enter Mobile No.', ToastAndroid.CENTER),
-                      console.log('mobile number is empty')
-                    )
+                  if (this.state.mobile != '' && this.state.mobile.length === 10) {
+                    if (reg.test(this.state.mobile)) {
+                      //this function sends mobile no. through the otp api
+                      this.sendOtp(this.state.mobile)
+                    } else {
+                      return (
+                        ToastAndroid.show('Please Enter Valid Mobile No. ', ToastAndroid.LONG),
+                        console.log('mobile number has special character')
+                      )
+                    }
                   }
                   else {
-                    this.sendOtp(this.state.mobile) //this function sends mobile no. through the otp api
+                    return (
+                      ToastAndroid.show('Please Enter Mobile No.', ToastAndroid.LONG),
+                      console.log('mobile number is empty')
+                    )
                   }
                 }
               }
