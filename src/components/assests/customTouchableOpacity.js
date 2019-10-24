@@ -7,7 +7,7 @@ class CustomTouchableOpacity extends Component {
 		const { text, onPress,disabled} = this.props;
 		return (
 		  <TouchableOpacity 
-			onPress={() => onPress()}
+			onPress={onPress}
 			disabled={disabled}
 		  >
 			 <Text style={styles.textStyle}>{text}</Text>

@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
-import {Dimensions,Text} from 'react-native'
+import {Dimensions,Text,PixelRatio} from 'react-native'
 import Device from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Spinner from 'react-native-spinkit';
+
+export const deviceWidth = Dimensions.get('window').width
+export const deviceHeight = Dimensions.get('window').height
+export const calcHeight = x => PixelRatio.roundToNearestPixel((deviceHeight * x) / 100)
+export const calcWidth = x => PixelRatio.roundToNearestPixel((deviceWidth * x) / 100)
 export default class ConstantValues {
-  static apiUrl = 'https://appapi.zoopindia.in/'
-  //  static apiUrl = 'http://13.126.232.146:3000/'
+ static apiUrl = 'https://appapi.zoopindia.in/'
+  //static apiUrl = 'http://13.126.232.146:3000/'
   //static apiUrl = 'http://10.5.48.206:3000/'
 
+
+  
   static customer = { name: '', mobileNo: '' }
   static customerName = ''
   static customeralternateMobile = ''
   static customerPhoneNo = ''
   static customerEmailId = ''
+  static tempCustomerId = ''
   static customerId = ''
   static customerRefferalCode = ''
   static token = ''
@@ -82,7 +90,7 @@ export default class ConstantValues {
   static weeklyOff = ''
   static dateOfOrder = ''
   static timeOfOrder = ''
-  static trainId = 0
+  static trainId = ''
   static trainNumber = ''
   static trainName = ''
   static orderDate = ''

@@ -105,4 +105,31 @@ export default class searchApi extends Component {
             return Promise.reject(error)
         }
     }
+
+    static async research(pnr){
+        try {
+            //url
+            const apiUrl = 'research/pnr'
+            //body
+            const body = {}
+            body['searchString'] = pnr
+            body['trainId'] = ConstantValues.trainId
+            body['trainNumber'] = ConstantValues.trainNumber
+            body['stationId'] = ConstantValues.stationId
+            body['stationCode'] = ConstantValues.stationCode
+            body['outletId'] = ConstantValues.outletId
+            body['deliveryDate'] = ConstantValues.deliveryDate
+            //body['orderTime'] = ConstantValues.
+
+            //calling api for response
+            const response = await this.apiCall(apiUrl, 'POST', body, {})
+            // console.log(response)
+
+            return Promise.resolve(response)
+            
+        } catch (error) {
+            console.log('Data received in searchApi catch: ' + error)
+            return Promise.reject(error)
+        }
+    }
 }

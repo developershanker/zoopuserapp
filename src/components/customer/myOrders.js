@@ -23,6 +23,9 @@ export default class myOrders extends Component {
     SplashScreen.hide();
     this.checkRegister()
   }
+  // shouldComponentUpdate(){
+  //   this.checkRegister()
+  // }
   constructor(props) {
     super(props);
     this.state = {
@@ -30,6 +33,7 @@ export default class myOrders extends Component {
       isVisible: true,
     };
   }
+ 
 
   checkRegister() {
     if (ConstantValues.customerId == '') {
@@ -39,7 +43,10 @@ export default class myOrders extends Component {
           'Please LOGIN to Proceed.',
           [
             {
-              text: 'OK', onPress: () => this.props.navigation.navigate('Welcome'),
+              text: 'OK', onPress: () => {
+                this.setState({isVisible:false})
+                this.props.navigation.navigate('Welcome')
+              },
               style: 'cancel'
             },
           ],

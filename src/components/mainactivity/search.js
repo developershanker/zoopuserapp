@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet, Clipboard,Platform,Linking,KeyboardAvoidingView, Button,Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList } from 'react-native';
+import { View, Dimensions, StyleSheet, Clipboard,Platform,Linking,KeyboardAvoidingView,PixelRatio, Button,Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { RadioButton, Text } from 'react-native-paper';
 import { CustomButton } from '../assests/customButtonLarge';
@@ -14,12 +14,16 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import loginApi from '../login/loginApi.js';
 
 const { width } = Dimensions.get('window');
+export const deviceWidth = Dimensions.get('window').width
+export const deviceHeight = Dimensions.get('window').height
+export const calcHeight = x => PixelRatio.roundToNearestPixel((deviceHeight * x) / 100)
+export const calcWidth = x => PixelRatio.roundToNearestPixel((deviceWidth * x) / 100)
 
 export default class Search extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    this.showTrain(),
-      this.onRegister()
+    this.showTrain()
+    this.onRegister()
   }
   constructor(props) {
     super(props);
@@ -361,9 +365,10 @@ const photos = [
 const styles = StyleSheet.create({
   slide: {
     flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-    justifyContent: 'center',
+    width: deviceWidth,
+    height: "100%",
+    alignItems:'stretch',
+    alignContent: 'stretch',
     backgroundColor: '#ffffff',
     flexDirection: 'column',
 
@@ -392,7 +397,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: Dimensions.get('window').width,
-    height: 150,
+    height: 160,
     // flexWrap: 'nowrap',
     resizeMode:'cover'
     // marginLeft: 5

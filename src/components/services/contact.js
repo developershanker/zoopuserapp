@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TextInput, Linking, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList , Image} from 'react-native';
+import { View, TextInput, Linking, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList, Image,Alert } from 'react-native';
 import servicesApi from './servicesApi';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -22,6 +22,7 @@ export default class contact extends Component {
       zoopPhone: '',
       zoopEmail: '',
       name: '',
+      mobile:'',
       description: '',
     };
   }
@@ -51,21 +52,43 @@ export default class contact extends Component {
     Linking.openURL(link);
   }
 
-  async sendContent(name, description) {
+  async sendContent(name,mobile,description) {
     try {
-      let response = await servicesApi.sendContent(name, description);
+      let response = await servicesApi.sendContent(name,mobile,description);
       if (name != '') {
-        if (description != '') {
+        if (mobile != '' && mobile.length === 10) {
+         if (description != '') {
           if (response.status == true) {
+            this.setState({
+              name: '',
+              mobile:'',
+              description: ''
+            })
             return (
-              ToastAndroid.show('Thank You for contacting. We will reach you soon', ToastAndroid.CENTER)
+              Alert.alert(
+                'Thank you!!',
+                'Thank You for contacting. We will reach you soon',
+                [
+                  {
+                    text: 'OK', onPress: () => {
+                      this.props.navigation.navigate('Search')
+                    },
+                    style: 'cancel'
+                  },
+                ],
+                { cancelable: false },
+              )
             )
+           
           } else {
             ToastAndroid.show('Something went wrong. Please try after some time', ToastAndroid.LONG)
           }
         } else {
           ToastAndroid.show('Please Enter Description', ToastAndroid.LONG)
         }
+      } else {
+        ToastAndroid.show('Please Enter Valid Mobile No.', ToastAndroid.LONG)
+      }
       } else {
         ToastAndroid.show('Please Enter Name', ToastAndroid.LONG)
       }
@@ -99,6 +122,14 @@ export default class contact extends Component {
                 onChangeText={name => this.setState({ name })}
               />
               <TextInput
+                style={styles.inputS}
+                underlineColorAndroid={'#000000'}
+                placeholder='Enter Mobile No.'
+                keyboardType='number-pad'
+                maxLength={10}
+                onChangeText={mobile => this.setState({ mobile })}
+              />
+              <TextInput
                 style={styles.inputD}
                 underlineColorAndroid={'#000000'}
                 placeholder='Add Description'
@@ -106,8 +137,8 @@ export default class contact extends Component {
                 onChangeText={description => this.setState({ description })}
               />
               <CustomButton
-                style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, width:300 }}
-                onPress={() => { this.sendContent(this.state.name, this.state.description) }}
+                style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, width: 300 }}
+                onPress={() => { this.sendContent(this.state.name,this.state.mobile, this.state.description) }}
                 title='Submit'
               />
             </View>
@@ -115,15 +146,15 @@ export default class contact extends Component {
             <View>
               <View style={styles.detailview}>
                 <Image style={styles.image} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.location }} />
-                <Text style={styles.detailText}> {this.state.zoopAddress} </Text>
+                <Text style={[styles.detailText, { width: 200, textAlign: 'center' }]}> {this.state.zoopAddress} </Text>
               </View>
               <View style={styles.detailview}>
                 <Image style={styles.image} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.call }} />
-                <Text style={styles.detailText}> {this.state.zoopPhone} </Text>
+                <Text style={[styles.detailText, { width: 200, textAlign: 'center' }]}> {this.state.zoopPhone} </Text>
               </View>
               <View style={styles.detailview}>
                 <Image style={styles.image} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.email }} />
-                <Text style={styles.detailText}> {this.state.zoopEmail} </Text>
+                <Text style={[styles.detailText, { width: 200, textAlign: 'center' }]}> {this.state.zoopEmail} </Text>
               </View>
             </View>
 
@@ -133,19 +164,19 @@ export default class contact extends Component {
 
                 <View style={styles.cardS}>
                   <TouchableOpacity onPress={() => this.gotoLink(ConstantValues.zoopFacebook)}>
-                    <Image style={styles.imageS}  source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.facebook }} />
+                    <Image style={styles.imageS} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.facebook }} />
                   </TouchableOpacity>
                 </View>
 
                 <View style={styles.cardS}>
                   <TouchableOpacity onPress={() => this.gotoLink(ConstantValues.zoopTwitter)}>
-                    <Image style={styles.imageS}  source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.twitter }} />
+                    <Image style={styles.imageS} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.twitter }} />
                   </TouchableOpacity>
                 </View>
 
                 <View style={styles.cardS}>
                   <TouchableOpacity onPress={() => this.gotoLink(ConstantValues.zoopInstagram)}>
-                    <Image style={styles.imageS}  source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.instagram }} />
+                    <Image style={styles.imageS} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.instagram }} />
                   </TouchableOpacity>
                 </View>
 
@@ -182,7 +213,7 @@ const styles = StyleSheet.create({
   },
   cardS: {
     alignItems: 'center',
-    width:60,
+    width: 60,
     justifyContent: 'center',
     backgroundColor: '#ffffff',//can change as we move to various pages
     marginBottom: 10,//can change as we move to various pages
@@ -215,7 +246,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 30,
-    height: 30
+    height: 30,
   },
   imageS: {
     width: 50,
@@ -225,7 +256,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 15,
+    fontSize: 12,
     color: '#000000'
   },
   detailview: {

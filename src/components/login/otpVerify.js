@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, ToastAndroid, Image, ImageBackground, Dimensions, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, ToastAndroid,KeyboardAvoidingView, Alert, Image, ImageBackground, Dimensions, ScrollView } from 'react-native';
 import { CustomButton } from '../assests/customButtonLarge';
+import { CustomButtonShort } from '../assests/customButtonShort';
 import CodeInput from 'react-native-confirmation-code-input';
 import SplashScreen from 'react-native-splash-screen';
 import CustomTouchableOpacity from '../assests/customTouchableOpacity.js';
@@ -62,10 +63,10 @@ export default class otpVerify extends Component {
           ConstantValues.customerId = customerId,     //storing customer id for accessing globally
           ConstantValues.token = response.data.token, //storing customer auth token for accessing globally
           ConstantValues.customer.token = response.data.token,
-         // console.log('Info: ' + JSON.stringify(ConstantValues.customer)),
+          // console.log('Info: ' + JSON.stringify(ConstantValues.customer)),
           console.log('Stored Mobile No. is:' + ConstantValues.customerPhoneNo),
 
-           this.storeData(),
+          this.storeData(),
           // this.props.navigation.navigate('Register', { mobile: mobile }),
           this.props.navigation.navigate('Profile', { mobile: mobile })
         )
@@ -92,7 +93,28 @@ export default class otpVerify extends Component {
     }
   }
 
-  
+
+  handleCancel() {
+    return (
+      Alert.alert(
+        'Alert!!',
+        'Are you sure ?? Pressing the back button would cancel the login process. Press Ok if you wish to cancel.',
+        [
+          {
+            text: 'Ok',
+            onPress: () => this.props.navigation.navigate('Search'),
+            style: 'cancel',
+          },
+          {
+            text: 'cancel', onPress: () => console.log('Waiting for OTP on OTPverify.js...'),
+            style: 'cancel'
+          }
+        ],
+        { cancelable: false },
+      )
+    )
+  }
+
 
   ////setting timer for resending otp
   activateResend = () => {
@@ -127,7 +149,7 @@ export default class otpVerify extends Component {
             />
           </ImageBackground>
           <Text style={styles.heading}>Phone Verification</Text>
-          <View style={{ justifyContent: 'center', alignItems: 'center', marginHorizontal: 15, marginVertical: 30 }} >
+          <View style={{ justifyContent: 'center', alignItems: 'center', marginHorizontal: 15, marginVertical: 15 }} >
             <CodeInput
               // underlineColorAndroid='#000000'
               secureTextEntry={false}
@@ -144,28 +166,37 @@ export default class otpVerify extends Component {
               }}
             />
           </View>
+          <KeyboardAvoidingView enabled>
+            <View style={{ paddingHorizontal: 20 }}>
+              <CustomTouchableOpacity
+                disabled={this.state.disable}
+                text={this.state.text}
+                // onPress={this.activeResendOtp(mobile, customerId) }
+                onPress={() => { ToastAndroid.show('OTP Resend Successful', ToastAndroid.LONG) }}
+              />
+            </View>
 
 
-          <CustomTouchableOpacity
-            disabled={this.state.disable}
-            text={this.state.text}
-            // onPress={() => { this.activeResendOtp(mobile, customerId) }}
-            onPress={() => { ToastAndroid.show('OTP Resend Successful', ToastAndroid.LONG) }}
-          />
+            <View style={{ paddingHorizontal: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
+              <CustomButtonShort
+                style={[styles.button, { backgroundColor: '#9b9b9b' }]}
+                title="Cancel"
+                onPress={() => this.handleCancel()}
+              />
+              <CustomButtonShort
+                style={[styles.button, { backgroundColor: this.state.backgroundColor }]}
+                title="Register"
+                activeOpacity={.5}
+                disabled={this.state.ButtonStateHolder}
+                color="#1abc9c"
+                onPress={() => {
+                  this.verifyOtp(this.state.customerCode, customerId, mobile)
 
-          <View style={{ paddingHorizontal: 20, alignItems: 'center' }}>
-            <CustomButton
-              style={[styles.button, { backgroundColor: this.state.backgroundColor }]}
-              title="Register"
-              activeOpacity={.5}
-              disabled={this.state.ButtonStateHolder}
-              color="#1abc9c"
-              onPress={() => {
-                this.verifyOtp(this.state.customerCode, customerId, mobile)
+                }}
+              />
+            </View>
+          </KeyboardAvoidingView>
 
-              }}
-            />
-          </View>
         </View>
       </ScrollView>
     );
@@ -190,11 +221,11 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     fontSize: 20,
-    backgroundColor:'#d9dedd',
+    backgroundColor: '#d9dedd',
     borderWidth: 1.5,
     color: '#000000',
     alignItems: 'center',
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-Medium',
     justifyContent: 'center',
   },
   button: {
@@ -204,8 +235,8 @@ const styles = StyleSheet.create({
     paddingVertical: 20
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     alignItems: 'center'
   },
 })

@@ -41,7 +41,6 @@
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
 		B9C36F3A56E6461F81AA49A1 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B083925718BA42D48F18345F /* libRNGestureHandler.a */; };
 		510E2E7AC1FE4FCD9FFD1C22 /* libRNGestureHandler-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6EBE7390E1F43BEB3759BBC /* libRNGestureHandler-tvOS.a */; };
-		B7DDF8D091CF43DC96AA77A0 /* libRNAccountKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BE94C378C7E4294AAC3644B /* libRNAccountKit.a */; };
 		626A23EE6B624991A57E2223 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 068B9F9CB76F4ED6BDAC1F45 /* libRNCAsyncStorage.a */; };
 		15F9BEA980684784BE38AEBB /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F8A3C95CCC1A426BA723100E /* AntDesign.ttf */; };
 		2FCA4F8F043A4E44B2E8F9B4 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0706FB01A08A4C04BB67DF18 /* Entypo.ttf */; };
@@ -395,8 +394,6 @@
 		129E97E1349E4842AF7AC500 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; name = "RNGestureHandler.xcodeproj"; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		B083925718BA42D48F18345F /* libRNGestureHandler.a */ = {isa = PBXFileReference; name = "libRNGestureHandler.a"; path = "libRNGestureHandler.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		D6EBE7390E1F43BEB3759BBC /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; name = "libRNGestureHandler-tvOS.a"; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		91CE547293144D54A82082F6 /* RNAccountKit.xcodeproj */ = {isa = PBXFileReference; name = "RNAccountKit.xcodeproj"; path = "../node_modules/react-native-facebook-account-kit/ios/RNAccountKit.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		5BE94C378C7E4294AAC3644B /* libRNAccountKit.a */ = {isa = PBXFileReference; name = "libRNAccountKit.a"; path = "libRNAccountKit.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		D72C725477854FC2A4C3ACAF /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; name = "RNCAsyncStorage.xcodeproj"; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		068B9F9CB76F4ED6BDAC1F45 /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; name = "libRNCAsyncStorage.a"; path = "libRNCAsyncStorage.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		F8A3C95CCC1A426BA723100E /* AntDesign.ttf */ = {isa = PBXFileReference; name = "AntDesign.ttf"; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
@@ -476,7 +473,6 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				B9C36F3A56E6461F81AA49A1 /* libRNGestureHandler.a in Frameworks */,
-				B7DDF8D091CF43DC96AA77A0 /* libRNAccountKit.a in Frameworks */,
 				626A23EE6B624991A57E2223 /* libRNCAsyncStorage.a in Frameworks */,
 				74215C9AB0A94C188472B627 /* libRNVectorIcons.a in Frameworks */,
 				11130AF3A4754142BD8D42C2 /* libSplashScreen.a in Frameworks */,
@@ -679,7 +675,6 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				129E97E1349E4842AF7AC500 /* RNGestureHandler.xcodeproj */,
-				91CE547293144D54A82082F6 /* RNAccountKit.xcodeproj */,
 				D72C725477854FC2A4C3ACAF /* RNCAsyncStorage.xcodeproj */,
 				C771CAD9A4CE43E3BADCC792 /* RNVectorIcons.xcodeproj */,
 				7CCBF8E31B4C4167B6B2BA02 /* SplashScreen.xcodeproj */,

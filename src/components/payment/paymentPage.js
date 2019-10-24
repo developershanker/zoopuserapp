@@ -57,7 +57,21 @@ export default class PaymentPage extends Component {
         }
        
       } else {
-        ToastAndroid.show('Oops!! Something went wrong!!', ToastAndroid.LONG)
+        return (
+          Alert.alert(
+            'Alert!!',
+            'Something went wrong... Please try again later.',
+            [
+              {
+                text: 'OK', onPress: () => {
+                  this.props.navigation.navigate('Search')
+                },
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
+        )
       }
     } catch (error) {
       console.log('Data received in paymentPage.js catch: ' + error)

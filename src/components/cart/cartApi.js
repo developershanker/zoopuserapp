@@ -58,7 +58,7 @@ export default class cartApi {
 
             //calling api for response
             const response = await this.apiCall(apiUrl, 'GET', {}, headers)
-            console.log(response)
+            // console.log(response)
 
             return Promise.resolve(response)
 
@@ -88,7 +88,7 @@ export default class cartApi {
 
             //calling api for response
             const response = await this.apiCall(apiUrl, 'POST', body, headers)
-            console.log(response)
+            //console.log(response)
 
             return Promise.resolve(response)
 
@@ -100,23 +100,27 @@ export default class cartApi {
     }
 
     static billDetail = () => {
-        ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
-        ConstantValues.couponValue = ConstantValues.rateDiscount == 0 ? ConstantValues.couponValue : ConstantValues.rateDiscount
-       // ConstantValues.deliveryChargegst = (ConstantValues.deliveryCharge/100) * ConstantValues.deliveryChargegstRate,
-        ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.gst + ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst - ConstantValues.couponValue - ConstantValues.walletBalanceUsed
-        ConstantValues.billDetail = {
-            'totalAmount': ConstantValues.totalBasePrice,
-            'deliveryCharge': ConstantValues.deliveryCharge,
-            'discount': ConstantValues.couponValue,
-            'couponId': ConstantValues.couponId,
-            'couponCode': ConstantValues.couponCode,
-            'couponValue': ConstantValues.couponValue,
-            'walletAmount': ConstantValues.walletBalanceUsed,
-            'gst': (ConstantValues.gst).toFixed(2),
-            'totalPayableAmount': (ConstantValues.totalPayableAmount).toFixed(2)
-        }
-        console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
-    }
+
+    ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
+    ConstantValues.deliveryCharge = Math.round(ConstantValues.deliveryCharge)
+    console.log('deliveryCharge : ' + ConstantValues.deliveryCharge)
+    ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.discount + ConstantValues.gst,
+      ConstantValues.billDetail = {
+        'totalAmount': ConstantValues.totalBasePrice,
+        'deliveryCharge': ConstantValues.zoopdeliveryCharge,
+        'deliveryChargeGst': ConstantValues.zoopdeliveryChargegst,
+        'deliveryChargeGstRate': ConstantValues.deliveryChargegstRate,
+        'discount': ConstantValues.discount,
+        'couponId': ConstantValues.couponId,
+        'couponCode': ConstantValues.couponCode,
+        'couponValue': ConstantValues.couponValue,
+        'walletAmount': ConstantValues.walletBalanceUsed,
+        'gst': (ConstantValues.gst).toFixed(2),
+        'totalPayableAmount': (ConstantValues.totalPayableAmount).toFixed(2)
+      }
+    console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
+
+  }
     
     static resetCart = () => {
         ConstantValues.inCart = []

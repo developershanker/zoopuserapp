@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, Button, Text, Icon, Image, TouchableOpacity, StyleSheet, Alert, TextInput, ToastAndroid, ImageBackground, ScrollView } from 'react-native';
+import { View, Dimensions, Button, Text, Icon, Image, TouchableOpacity, StyleSheet, Alert, TextInput, ToastAndroid, ImageBackground, ScrollView,BackHandler} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import CustomTouchableOpacity from '../assests/customTouchableOpacity';
@@ -21,7 +21,14 @@ export default class Welcome extends Component {
       mobile: '',
     };
   }
-
+  componentWillMount(){
+    BackHandler.addEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
+    console.log('Back Pressed')
+}
+componentWillUnmount() {
+  BackHandler.removeEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
+  console.log('Back Pressed Unmount')
+}
 
 
 
@@ -38,7 +45,7 @@ export default class Welcome extends Component {
           console.log('Logged with mobile No. :' + mobile),
           console.log('The status is: ' + response.status),
           console.log('The message is: ' + response.message),
-          ConstantValues.customerId = response.data.customerId,
+          ConstantValues.tempCustomerId = response.data.customerId,
           ToastAndroid.show(response.message, ToastAndroid.LONG),
           this.props.navigation.navigate('OtpVerify', {
             mobile: this.state.mobile,
@@ -87,11 +94,11 @@ export default class Welcome extends Component {
 
           <Text style={styles.text1}> Login </Text>
           <View style={styles.inputView}>
+            <Text style={{fontSize: 15,width:40,color: '#000000',fontFamily: 'Poppins-Regular',alignItems: 'center',textAlign:'center',backgroundColor:'#e7e7e7',paddingVertical:15}}>+91</Text>
             <TextInput style={styles.input}
               placeholder="Enter Mobile No."
               keyboardType='number-pad'
               maxLength={10}
-              textContentType='telephoneNumber'
               onChangeText={mobile => this.setState({ mobile })}
               value={this.state.mobile}
             />
@@ -101,16 +108,25 @@ export default class Welcome extends Component {
               title="Submit"
               onPress={
                 () => {
+                  let reg = /^[a-zA-Z0-9]+$/;
                   // console.log(this.state.text)
                   console.log(apiLevel)
-                  if (this.state.mobile == '') {
-                    return (
-                      ToastAndroid.show('Please Enter Mobile No.', ToastAndroid.CENTER),
-                      console.log('mobile number is empty')
-                    )
+                  if (this.state.mobile != '' && this.state.mobile.length === 10) {
+                    if (reg.test(this.state.mobile)) {
+                      //this function sends mobile no. through the otp api
+                      this.sendOtp(this.state.mobile)
+                    } else {
+                      return (
+                        ToastAndroid.show('Please Enter Valid Mobile No. ', ToastAndroid.LONG),
+                        console.log('mobile number has special character')
+                      )
+                    }
                   }
                   else {
-                    this.sendOtp(this.state.mobile) //this function sends mobile no. through the otp api
+                    return (
+                      ToastAndroid.show('Please Enter Mobile No.', ToastAndroid.LONG),
+                      console.log('mobile number is empty')
+                    )
                   }
                 }
               }
@@ -202,6 +218,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   inputView: {
+    flexDirection:'row',
     borderRadius: 5,
     borderColor: '#e7e7e7',
     borderWidth: 1,
