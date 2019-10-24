@@ -172,14 +172,17 @@ export default class station extends Component {
       ConstantValues.minimumOrderValue = minimumOrderValue
       ConstantValues.cuttoff = cutOffTime
       ConstantValues.deliveryCharge = (zoopCustomerDeliveryCharge == null ? 0 : zoopCustomerDeliveryCharge)
+      ConstantValues.zoopdeliveryCharge =(zoopCustomerDeliveryCharge == null ? 0 : zoopCustomerDeliveryCharge)
       ConstantValues.deliveryChargegst = (zoopCustomerDeliveryChargeGst == null ? 0 : zoopCustomerDeliveryChargeGst)
+      ConstantValues.zoopdeliveryChargegst =  (zoopCustomerDeliveryChargeGst == null ? 0 : zoopCustomerDeliveryChargeGst)
       ConstantValues.deliveryChargegstRate = (zoopCustomerDeliveryChargeGstRate == null ? 0 : zoopCustomerDeliveryChargeGstRate)
       ConstantValues.eta = eta
       ConstantValues.openTime = openTime
       ConstantValues.closeTime = closeTime
       ConstantValues.weeklyOff = weeklyOff
-      
-    console.log('ConstantValues.stationId : ' + ConstantValues.stationId),
+      //add delivery charge and delivery charge gst
+     ConstantValues.deliveryCharge = (zoopCustomerDeliveryCharge == null ? 0 : zoopCustomerDeliveryCharge + ConstantValues.deliveryChargegst)
+      console.log('ConstantValues.stationId : ' + ConstantValues.stationId),
       console.log('ConstantValues.outletId : ' + ConstantValues.outletId),
       console.log('ConstantValues.haltTime : ' + ConstantValues.haltTime),
       console.log('ConstantValues.deliveryCharge : ' + ConstantValues.deliveryCharge + '\n' + 'ConstantValues.deliveryChargegst : ' + ConstantValues.deliveryChargegst + '\n' + 'ConstantValues.deliveryChargegstRate : ' + ConstantValues.deliveryChargegstRate )

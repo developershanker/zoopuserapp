@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView,KeyboardAvoidingView, Dimensions, TextInput, Alert, TouchableOpacity, FlatList, Image, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Dimensions,TouchableWithoutFeedback, TextInput, Alert, TouchableOpacity, FlatList, Image, ToastAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import SplashScreen from 'react-native-splash-screen';
@@ -55,20 +55,20 @@ export default class Cart extends Component {
       walletBalance: 0,
       walletUsed: false,
       walletBalanceUsed: 0,
-      totalPayableAmount:0,
+      totalPayableAmount: 0,
       textPromoCode: 'Apply Coupon Code',
       visibleModal: null,
       couponCode: '',
       CouponDetail: [],
-      arrayCoupon:[],
-      itemFromCart:[],
+      arrayCoupon: [],
+      itemFromCart: [],
       OutletMenuInfo: []
     };
   }
   getCartItems = (inCart) => {
     this.setState({
       revisedInCart: inCart,
-      totalPrice:ConstantValues.totalBasePrice,
+      totalPrice: ConstantValues.totalBasePrice,
       station: ConstantValues.stationName,
       outletName: ConstantValues.outletName
     })
@@ -97,7 +97,7 @@ export default class Cart extends Component {
   //   console.log('itemFromCart items are [when added] : ' + JSON.stringify(inCart))
   //   // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
   //   ConstantValues.inCart = inCart
-   
+
   //   // this.cartCalculate(item)
   //   cartApi.billDetail()
 
@@ -189,8 +189,10 @@ export default class Cart extends Component {
     ConstantValues.couponCode = ''
     ConstantValues.couponValue = 0
     ConstantValues.couponType = ''
+    ConstantValues.couponId = 0
     ConstantValues.discount = 0
     ConstantValues.rateDiscount = 0
+    ConstantValues.isCouponApplied = false
     this.setState({
       textPromoCode: 'Apply Coupon Code'
     })
@@ -226,25 +228,27 @@ export default class Cart extends Component {
     //   walletUsed: !this.state.walletUsed
     // })
     if (ConstantValues.walletBalance > 50) {
-      if(ConstantValues.totalBasePrice >= 150){
+      if (ConstantValues.totalBasePrice >= 150) {
         if (walletUsed == true) {
-  
+
           ConstantValues.walletBalanceUsed = 0,
             // ConstantValues.discount = 50,
+            ConstantValues.discount = 0
             this.setState({
               discount: 0
             })
-    
+
           cartApi.billDetail()
           // console.log('On this.state.walletUsed == true..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
         } else {
-    
+
           // ConstantValues.discount = 0,
           ConstantValues.walletBalanceUsed = 50,
+          ConstantValues.discount = 50
             this.setState({
               discount: 50
             })
-    
+
           cartApi.billDetail()
           // console.log('On this.state.walletUsed == false..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
         }
@@ -252,7 +256,7 @@ export default class Cart extends Component {
       else {
         return (
           // ToastAndroid.show(response.error, ToastAndroid.LONG),
-  
+
           Alert.alert(
             'Wallet Alert!!',
             'Minimum Order Value to use wallet is Rs. 150. Just add a few more items to use.',
@@ -275,12 +279,12 @@ export default class Cart extends Component {
             {
               text: 'OK', onPress: () => {
                 ConstantValues.walletBalanceUsed = 0,
-                // ConstantValues.discount = 50,
-                this.setState({
-                  discount: 0
-                })
-        
-              cartApi.billDetail()
+                  // ConstantValues.discount = 50,
+                  this.setState({
+                    discount: 0
+                  })
+
+                cartApi.billDetail()
               },
               style: 'cancel'
             },
@@ -289,8 +293,8 @@ export default class Cart extends Component {
         )
       )
     }
-  
-    
+
+
   }
 
   async getCoupons() {
@@ -312,40 +316,40 @@ export default class Cart extends Component {
 
 
   applyCoupons = (couponDetail) => {
-    if ( ConstantValues.totalPayableAmount >= couponDetail.minimumOrderValue) {
-        if (couponDetail.type == 'RATE') {
-          ConstantValues.rateDiscount = ((ConstantValues.totalBasePrice / 100) * couponDetail.couponValue).toFixed(2)
-          ConstantValues.couponCode = couponDetail.couponCode
-          ConstantValues.couponValue = couponDetail.couponValue
-          ConstantValues.discount = ConstantValues.rateDiscount
-          ConstantValues.couponType = couponDetail.type
-          ConstantValues.couponId = couponDetail.couponId
-          ConstantValues.isCouponApplied = true
-          console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
-          console.log('ConstantValues.rateDiscount : ' + ConstantValues.rateDiscount)
-          cartApi.changeCode(couponDetail.couponCode)
-          cartApi.billDetail()
-          this.setState({ 
-            visibleModal: null ,
-            textPromoCode: couponDetail.couponCode
-          })
-        } else {
-          ConstantValues.couponCode = couponDetail.couponCode
-          ConstantValues.couponValue = couponDetail.couponValue
-          ConstantValues.discount = couponDetail.couponValue
-          ConstantValues.couponType = couponDetail.type
-          ConstantValues.couponId = couponDetail.couponId
-          ConstantValues.isCouponApplied = true
-          console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
-          // Cart.changeCode(ConstantValues.couponCode)
-          cartApi.changeCode(couponDetail.couponCode)
-          cartApi.billDetail()
-          this.setState({ 
-            visibleModal: null ,
-            textPromoCode: couponDetail.couponCode
-          })
-        }
-     } else {
+    if (ConstantValues.totalPayableAmount >= couponDetail.minimumOrderValue) {
+      if (couponDetail.type == 'RATE') {
+        ConstantValues.rateDiscount = ((ConstantValues.totalBasePrice / 100) * couponDetail.couponValue).toFixed(2)
+        ConstantValues.couponCode = couponDetail.couponCode
+        ConstantValues.couponValue = couponDetail.couponValue
+        ConstantValues.discount = ConstantValues.rateDiscount
+        ConstantValues.couponType = couponDetail.type
+        ConstantValues.couponId = couponDetail.couponId
+        ConstantValues.isCouponApplied = true
+        console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
+        console.log('ConstantValues.rateDiscount : ' + ConstantValues.rateDiscount)
+        cartApi.changeCode(couponDetail.couponCode)
+        cartApi.billDetail()
+        this.setState({
+          visibleModal: null,
+          textPromoCode: couponDetail.couponCode
+        })
+      } else {
+        ConstantValues.couponCode = couponDetail.couponCode
+        ConstantValues.couponValue = couponDetail.couponValue
+        ConstantValues.discount = couponDetail.couponValue
+        ConstantValues.couponType = couponDetail.type
+        ConstantValues.couponId = couponDetail.couponId
+        ConstantValues.isCouponApplied = true
+        console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
+        // Cart.changeCode(ConstantValues.couponCode)
+        cartApi.changeCode(couponDetail.couponCode)
+        cartApi.billDetail()
+        this.setState({
+          visibleModal: null,
+          textPromoCode: couponDetail.couponCode
+        })
+      }
+    } else {
       return (
         // ToastAndroid.show(response.error, ToastAndroid.LONG),
 
@@ -367,31 +371,49 @@ export default class Cart extends Component {
 
   applyCouponsFromInput = (couponCode) => {
     if (couponCode != '') {
-      let coupon = this.state.CouponDetail.filter((item)=>{
+      let coupon = this.state.CouponDetail.filter((item) => {
         return item.couponCode == couponCode
       })
       if (coupon.length != 0) {
-        coupon.map((coupon)=>{
-          console.log('coupon matched//////////////////////'+ JSON.stringify(coupon)+'coupon length : '+coupon.length)
+        coupon.map((coupon) => {
+          console.log('coupon matched//////////////////////' + JSON.stringify(coupon) + 'coupon length : ' + coupon.length)
           if (ConstantValues.totalPayableAmount >= coupon.minimumOrderValue) {
-            ConstantValues.couponCode = coupon.couponCode
-            ConstantValues.couponValue = coupon.couponValue
-            ConstantValues.discount = coupon.couponValue
-            ConstantValues.couponType = coupon.type
-            ConstantValues.couponId = coupon.couponId
-            ConstantValues.isCouponApplied = true
-            console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
-            // Cart.changeCode(ConstantValues.couponCode)
-            cartApi.changeCode(coupon.couponCode)
-            cartApi.billDetail()
-            this.setState({ 
-              visibleModal: null ,
-              textPromoCode: coupon.couponCode
-            })
+            if (coupon.type === 'RATE') {
+              ConstantValues.rateDiscount = ((ConstantValues.totalBasePrice / 100) * coupon.couponValue).toFixed(2)
+              ConstantValues.couponCode = coupon.couponCode
+              ConstantValues.couponValue = coupon.couponValue
+              ConstantValues.discount = ConstantValues.rateDiscount
+              ConstantValues.couponType = coupon.type
+              ConstantValues.couponId = coupon.couponId
+              ConstantValues.isCouponApplied = true
+              console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
+              console.log('ConstantValues.rateDiscount : ' + ConstantValues.rateDiscount)
+              cartApi.changeCode(coupon.couponCode)
+              cartApi.billDetail()
+              this.setState({
+                visibleModal: null,
+                textPromoCode: coupon.couponCode
+              })
+            } else {
+              ConstantValues.couponCode = coupon.couponCode
+              ConstantValues.couponValue = coupon.couponValue
+              ConstantValues.discount = coupon.couponValue
+              ConstantValues.couponType = coupon.type
+              ConstantValues.couponId = coupon.couponId
+              ConstantValues.isCouponApplied = true
+              console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
+              // Cart.changeCode(ConstantValues.couponCode)
+              cartApi.changeCode(coupon.couponCode)
+              cartApi.billDetail()
+              this.setState({
+                visibleModal: null,
+                textPromoCode: coupon.couponCode
+              })
+            } 
           } else {
             return (
               // ToastAndroid.show(response.error, ToastAndroid.LONG),
-      
+
               Alert.alert(
                 'Invalid Coupon',
                 'Minimum Order Value for Promo Code Required. Just add a few more items and Save Big.',
@@ -406,9 +428,9 @@ export default class Cart extends Component {
             )
           }
         })
-        
-     
-        
+
+
+
       } else {
         return (
           ToastAndroid.show('Oops !! That\`s an Invalid Code. Please try again.', ToastAndroid.LONG)
@@ -484,8 +506,8 @@ export default class Cart extends Component {
         'itemName': item.itemName,
         'itemDescription': item.itemDescription,
         'categoryId': item.categoryId,
-        'typeId':item.typeId,
-        'cuisineId':item.cuisineId,
+        'typeId': item.typeId,
+        'cuisineId': item.cuisineId,
         //billing details
         'zoopPrice': item.zoopPrice,
         'basePrice': item.basePrice,
@@ -506,14 +528,15 @@ export default class Cart extends Component {
   billDetail = () => {
 
     ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
-      ConstantValues.deliveryChargegst = Math.round(ConstantValues.deliveryChargegst) 
-       console.log('deliverygst : ' + ConstantValues.deliveryChargegst)
-    // ConstantValues.deliveryChargegst = (ConstantValues.deliveryCharge/100) * ConstantValues.deliveryChargegstRate,
-      ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst - ConstantValues.couponValue - ConstantValues.walletBalanceUsed + ConstantValues.gst,
+    ConstantValues.deliveryCharge = Math.round(ConstantValues.deliveryCharge)
+    console.log('deliveryCharge : ' + ConstantValues.deliveryCharge)
+    ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.discount + ConstantValues.gst,
       ConstantValues.billDetail = {
         'totalAmount': ConstantValues.totalBasePrice,
-        'deliveryCharge': ConstantValues.deliveryCharge + ConstantValues.deliveryChargegst,
-        'discount': ConstantValues.couponValue,
+        'deliveryCharge': ConstantValues.zoopdeliveryCharge,
+        'deliveryChargeGst': ConstantValues.zoopdeliveryChargegst,
+        'deliveryChargeGstRate': ConstantValues.deliveryChargegstRate,
+        'discount': ConstantValues.discount,
         'couponId': ConstantValues.couponId,
         'couponCode': ConstantValues.couponCode,
         'couponValue': ConstantValues.couponValue,
@@ -522,7 +545,7 @@ export default class Cart extends Component {
         'totalPayableAmount': (ConstantValues.totalPayableAmount).toFixed(2)
       }
     console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
-    
+
   }
 
   savePassengerDetail = () => {
@@ -543,12 +566,12 @@ export default class Cart extends Component {
       'passengerMobile': ConstantValues.customerPhoneNo,
       'passengeAlternateMobile': ConstantValues.customeralternateMobile,
       'passengerEmail': ConstantValues.customerEmailId,
-      'passengerSeatInfo':ConstantValues.passengerInfo,
+      'passengerSeatInfo': ConstantValues.passengerInfo,
       //'suggestions': ConstantValues.suggestions = this.state.addMessage
     }
   }
 
-  gobackToMenu(){
+  gobackToMenu() {
     ConstantValues.inCart = []
     ConstantValues.finalCart = []
     this.props.navigation.navigate('Menu')
@@ -597,11 +620,11 @@ export default class Cart extends Component {
                     <CustomButton
                       title='Add Items'
                       onPress={() => this.gobackToMenu()
-                      //   {
-                      //   this.props.navigation.navigate('Menu'),
-                      //     cartApi.resetCart()
-                      // }
-                    }
+                        //   {
+                        //   this.props.navigation.navigate('Menu'),
+                        //     cartApi.resetCart()
+                        // }
+                      }
                     />
                   </View>
                 </Fade>
@@ -611,52 +634,52 @@ export default class Cart extends Component {
                   extraData={this.state}
                   renderItem={({ item, index }) =>
                     <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5, width: '100%' }}>
-                      <View style={{width:30,alignItems:'center'}}>
-                      <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryType == 'Veg' ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
+                      <View style={{ width: 30, alignItems: 'center' }}>
+                        <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryType == 'Veg' ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
                       </View>
-                     
+
                       <Text style={{ fontSize: 13, fontFamily: 'Poppins-Regular', width: 130 }}>{item.itemName}</Text>
                       {/* Adding item to cart button */}
-                      <View style={{width:200,flexDirection: 'row',justifyContent:'space-around',alignContent:'space-around'}}>
-                      <View
-                        style={{ alignItems: 'center', width: 90, height: 30}} key={index}> 
+                      <View style={{ width: 200, flexDirection: 'row', justifyContent: 'space-around', alignContent: 'space-around' }}>
+                        <View
+                          style={{ alignItems: 'center', width: 90, height: 30 }} key={index}>
                           {/* borderColor: '#898c8b', borderRadius: 6, borderWidth: 1 */}
-                        <TouchableOpacity
-                          //onPress={() => { this.addItemToCart(item, index) }}
-                          disabled={item.itemCount == 0 ? false : true}
-                        >
+                          <TouchableOpacity
+                            //onPress={() => { this.addItemToCart(item, index) }}
+                            disabled={item.itemCount == 0 ? false : true}
+                          >
 
-                          <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center', justifyContent: 'space-around' }}>
+                            <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center', justifyContent: 'space-around' }}>
 
-                            <TouchableOpacity
-                            // onPress={() => { this.removeItemFromCart(item, index) }} 
-                              disabled={item.itemCount == 0 ? true : false}
-                            >
+                              <TouchableOpacity
+                                // onPress={() => { this.removeItemFromCart(item, index) }} 
+                                disabled={item.itemCount == 0 ? true : false}
+                              >
                                 {/* 0 */}
-                              <View style={[styles.plusminus, { opacity: 0}]}>
-                                <Icon name='minus' size={10} color='#60b246' />
-                              </View>
+                                <View style={[styles.plusminus, { opacity: 0 }]}>
+                                  <Icon name='minus' size={10} color='#60b246' />
+                                </View>
 
-                            </TouchableOpacity>
-                            {/* {item.itemCount == 0 ? 'Add' : item.itemCount} */}
+                              </TouchableOpacity>
+                              {/* {item.itemCount == 0 ? 'Add' : item.itemCount} */}
 
-                            <Text style={{ fontFamily: 'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5 }}> x {item.itemCount}</Text>
+                              <Text style={{ fontFamily: 'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5 }}> x {item.itemCount}</Text>
 
 
-                            <TouchableOpacity
-                          //onPress={() => {this.addItemToCart(item, index)}}
-                            >
-                              <View style={[styles.plusminus, { opacity: 0 }]}>
-                                <Icon name='plus' size={10} color='#60b246' />
-                              </View>
-                            </TouchableOpacity>
+                              <TouchableOpacity
+                              //onPress={() => {this.addItemToCart(item, index)}}
+                              >
+                                <View style={[styles.plusminus, { opacity: 0 }]}>
+                                  <Icon name='plus' size={10} color='#60b246' />
+                                </View>
+                              </TouchableOpacity>
 
-                          </View>
-                        </TouchableOpacity>
-                      </View>
+                            </View>
+                          </TouchableOpacity>
+                        </View>
 
-                      {/* Adding item to cart button ends here */}
-                      <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Regular', }}>{ConstantValues.rupee} {item.basePrice}</Text>
+                        {/* Adding item to cart button ends here */}
+                        <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Regular', }}>{ConstantValues.rupee} {item.basePrice}</Text>
                       </View>
                     </View>
                   }
@@ -669,7 +692,7 @@ export default class Cart extends Component {
                 <Fade visible={ConstantValues.customerId == '' ? true : false}>
                   <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 15 }}>Enjoy Offers</Text>
-                    <TouchableOpacity onPress={() =>this.props.navigation.navigate('Welcome')}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Welcome')}>
                       <Text style={styles.removetext}>Click here to login</Text>
                     </TouchableOpacity>
                   </View>
@@ -699,11 +722,11 @@ export default class Cart extends Component {
                     </View>
 
 
-                    <Text style={{alignSelf:'center',fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000'}}>OR</Text>
+                    <Text style={{ alignSelf: 'center', fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>OR</Text>
 
 
 
-                    <View style={{justifyContent:'center',alignContent:'center',alignItems:'center'}}>
+                    <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                       <TouchableOpacity onPress={() => { this.changeCode(ConstantValues.couponCode) }} disabled={this.state.walletUsed == true ? true : false}>
                         <Text style={[styles.coupontext, { color: this.state.walletUsed == true ? '#636666' : '#149db5' }]}>
                           {ConstantValues.appliedCode}
@@ -720,10 +743,10 @@ export default class Cart extends Component {
 
                       </Fade>
                     </View>
-                   
 
 
-                   
+
+
                   </View>
                 </Fade>
               </View>
@@ -744,32 +767,36 @@ export default class Cart extends Component {
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.totalBasePrice}</Text>
                     </View>
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Add GST 5%</Text>
+                      <Text style={styles.tiletext}>(+) GST on food</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.gst).toFixed(2)}</Text>
                     </View>
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Delivery Charges</Text>
+                      <Text style={styles.tiletext}>(+) Delivery Charge (Inc. GST)</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.deliveryCharge}</Text>
                     </View>
-                    <View style={styles.tile}>
+                    {/* <View style={styles.tile}>
                       <Text style={styles.tiletext}>Add GST 18%</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {Math.round(ConstantValues.deliveryChargegst)}</Text>
-                    </View>
-                    <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Discount</Text>
+                    </View> */}
+                    {/* <View style={styles.tile}>
+                      <Text style={styles.tiletext}>(-) Discounts  </Text>
                       <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {ConstantValues.couponValue}</Text>
-                    </View>
+                    </View> */}
                     <View style={styles.tile}>
+                      <Text style={styles.tiletext}>(-) Discounts  </Text>
+                      <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {ConstantValues.discount}</Text>
+                    </View>
+                    {/* <View style={styles.tile}>
                       <Text style={styles.tiletext}>Wallet Balance Used</Text>
                       <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {ConstantValues.walletBalanceUsed}</Text>
-                    </View>
-                   
+                    </View> */}
+
 
                     <View style={styles.tile}>
-                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:16}]}>Order Total</Text>
-                      <View style={{flexDirection:'row'}}>
-                      <Icon name={'rupee'} size={20} color={'#000000'}/>
-                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:16}]}> {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
+                      <Text style={[styles.tiletext, { fontFamily: 'Poppins-Medium', fontSize: 16 }]}>Order Total</Text>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Icon name={'rupee'} size={20} color={'#000000'} />
+                        <Text style={[styles.tiletext, { fontFamily: 'Poppins-Medium', fontSize: 16 }]}> {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
                       </View>
                     </View>
 
@@ -782,71 +809,73 @@ export default class Cart extends Component {
           </View>
         </ScrollView>
         <KeyboardAvoidingView enabled>
-        <Modal
-          isVisible={this.state.visibleModal === 'bottom'}
-          onBackButtonPress={() => this.setState({ visibleModal: null })}
-          onSwipeComplete={() => this.setState({ visibleModal: null })}
-          swipeDirection={['left', 'right', 'down']}
-          style={styles.bottomModal}
-        >
+          <Modal
+            isVisible={this.state.visibleModal === 'bottom'}
+            onBackButtonPress={() => this.setState({ visibleModal: null })}
+            // onSwipeComplete={() => this.setState({ visibleModal: null })}
+            // swipeDirection={['left', 'right']}
+            style={styles.bottomModal}
+          >
 
-          <View style={styles.modalView}>
-            <View style={styles.promocodeInput}>
-              <TextInput
-                style={{ fontSize: 15, textTransform: 'uppercase', fontFamily: 'Poppins-Medium', width: 200 }}
-                placeholder='Enter Promo Code'
-                // keyboardType='default'
-                autoCapitalize='characters'
-                onChangeText={couponCode => this.setState({ couponCode })}
-              />
-              <TouchableOpacity onPress={() => { this.applyCouponsFromInput(this.state.couponCode, this.state.CouponDetail) }}>
-                <Text style={{ color: '#60b246', fontSize: 15, fontFamily: 'Poppins-Medium', }}>APPLY</Text>
-              </TouchableOpacity>
-            </View>
+            <View style={styles.modalView}>
+              <View style={styles.promocodeInput}>
+                <TextInput
+                  style={{ fontSize: 15, textTransform: 'uppercase', fontFamily: 'Poppins-Medium', width: 200 }}
+                  placeholder='Enter Promo Code'
+                  // keyboardType='default'
+                  autoCapitalize='characters'
+                  onChangeText={couponCode => this.setState({ couponCode })}
+                />
+                <TouchableOpacity onPress={() => { this.applyCouponsFromInput(this.state.couponCode, this.state.CouponDetail) }}>
+                  <Text style={{ color: '#60b246', fontSize: 15, fontFamily: 'Poppins-Medium', }}>APPLY</Text>
+                </TouchableOpacity>
+              </View>
 
-            <View style={{ width: Dimensions.get('window').width - 10, flexDirection: 'row', paddingTop: 10 }}>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Medium', paddingHorizontal: 10 }}>Available Coupons</Text>
-              {/* <Image style={{ height: 10, alignSelf: 'center' }} source={require('../images/line.png')} /> */}
-            </View>
+              <View style={{ width: Dimensions.get('window').width - 10, flexDirection: 'row', paddingTop: 10 }}>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Medium', paddingHorizontal: 10 }}>Available Coupons</Text>
+                {/* <Image style={{ height: 10, alignSelf: 'center' }} source={require('../images/line.png')} /> */}
+              </View>
 
 
-            {/* CouponDetail Card begin Here */}
-            <View>
-              
-              <FlatList
-                data={this.state.CouponDetail}
-                scrollEnabled={true}
-                renderItem={({ item, index }) =>
+              {/* CouponDetail Card begin Here */}
+             
 
-                  <View style={styles.card}>
+                <FlatList
+                  data={this.state.CouponDetail}
+                  renderItem={({ item, index }) =>
+
                     <View>
-                      <CouponCodeView
-                        onPress={()=>{this.applyCoupons(item)}}
-                        title={item.couponCode}
-                      />
-                      <Text style={{ paddingTop: 5, color: '#000000', fontFamily: 'Poppins-Regular', }}>{item.discription}</Text>
-                      <Text style={{ paddingTop: 5, fontFamily: 'Poppins-Regular', }}>Validity of this coupon is: {moment(item.validityEndDate).format('DD-MM-YYYY HH:mm A')}</Text>
+                      <View style={styles.card}>
+                        <View>
+                          <TouchableWithoutFeedback  onPress={() => { this.applyCoupons(item) }}>
+                            <View style={styles.codeView}>
+                              <Text style={styles.text}>{item.couponCode}</Text>
+                            </View>
+                          </TouchableWithoutFeedback>
+                         
+                          <Text style={{ paddingTop: 5, color: '#000000', fontFamily: 'Poppins-Regular', }}>{item.discription}</Text>
+                          <Text style={{ paddingTop: 5, fontFamily: 'Poppins-Regular', }}>Validity of this coupon is: {moment(item.validityEndDate).format('DD-MM-YYYY HH:mm A')}</Text>
+                        </View>
+
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.applyCoupons(item)
+                          }}
+                        >
+                          <Text style={{ color: '#60b246', fontSize: 15, fontFamily: 'Poppins-Medium', alignSelf: 'flex-end', marginRight: 25 }}>APPLY</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
 
-                    <TouchableOpacity
-                      onPress={() => {
-                        this.applyCoupons(item)
-                      }}
-                    >
-                      <Text style={{ color: '#60b246', fontSize: 15, fontFamily: 'Poppins-Medium', alignSelf: 'flex-end', marginRight: 25 }}>APPLY</Text>
-                    </TouchableOpacity>
+                  }
+                  keyExtractor={item => item.couponId.toString()}
+                />
 
-                  </View>
-
-                }
-                keyExtractor={item => item.couponId.toString()}
-              />
+              </View>
+              {/* CouponDetail Card ends Here  */}
             
-            </View>
-            {/* CouponDetail Card ends Here  */}
-          </View>
 
-        </Modal>
+          </Modal>
         </KeyboardAvoidingView>
 
         <CustomButton
@@ -867,7 +896,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   card: {
-    // backgroundColor: '#ffffff',//can change as we move to various pages
+    //backgroundColor: '#9b9b9b',//can change as we move to various pages
     // marginBottom: 10,//can change as we move to various pages
     // marginLeft: '2%', //can change as we move to various pages
     // width: '96%', //can change as we move to various pages
@@ -951,7 +980,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: Dimensions.get('screen').width,
-    height:400,
+    height: 400,
     backgroundColor: '#ffffff',
     // flexDirection: 'column',
     // justifyContent: 'center',
@@ -961,5 +990,23 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 100 / 5,
     borderTopEndRadius: 100 / 5
   },
-
+  text: {
+    fontSize: 20,
+    width:'auto',
+    textTransform: 'uppercase',
+    color: '#f59120',
+    fontFamily:'Poppins-Medium',
+    justifyContent:'center'
+},
+codeView: {
+  justifyContent:'flex-start',
+  width:150,
+  alignItems: 'center',
+  paddingVertical:5,
+  backgroundColor: '#ffffff',
+  borderColor: '#f59120',
+  borderRadius: 100 / 8,
+  borderWidth:1,
+  borderStyle:'dashed'
+},
 });

@@ -34,31 +34,36 @@ class billDetailCard extends Component {
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.totalBasePrice}</Text>
                     </View>
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Add GST 5%</Text>
+                      <Text style={styles.tiletext}>(+) GST on food</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.gst).toFixed(2)}</Text>
                     </View>
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Delivery Charges</Text>
+                      <Text style={styles.tiletext}>(+) Delivery Charge (Inc. GST)</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.deliveryCharge}</Text>
                     </View>
-                    <View style={styles.tile}>
+                    {/* <View style={styles.tile}>
                       <Text style={styles.tiletext}>Add GST 18%</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {Math.round(ConstantValues.deliveryChargegst)}</Text>
-                    </View>
+                    </View> */}
+                    {/* <View style={styles.tile}>
+                      <Text style={styles.tiletext}>(-) Discounts  </Text>
+                      <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {ConstantValues.couponValue}</Text>
+                    </View> */}
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Discount</Text>
-                      <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {ConstantValues.couponValue}</Text>
+                      <Text style={styles.tiletext}>(-) Discounts  </Text>
+                      <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {ConstantValues.discount}</Text>
                     </View>
-                    <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Used Wallet Balance</Text>
-                      <Text style={[styles.tiletext, { color: '#60b246' }]}>{ConstantValues.rupee} {ConstantValues.walletBalanceUsed}</Text>
-                    </View>
+                    {/* <View style={styles.tile}>
+                      <Text style={styles.tiletext}>Wallet Balance Used</Text>
+                      <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {ConstantValues.walletBalanceUsed}</Text>
+                    </View> */}
+
 
                     <View style={styles.tile}>
-                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:16}]}>Order Total</Text>
-                      <View style={{flexDirection:'row'}}>
-                      <Icon name={'rupee'} size={20} />
-                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:16}]}> {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
+                      <Text style={[styles.tiletext, { fontFamily: 'Poppins-Medium', fontSize: 16 }]}>Order Total</Text>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Icon name={'rupee'} size={20} color={'#000000'} />
+                        <Text style={[styles.tiletext, { fontFamily: 'Poppins-Medium', fontSize: 16 }]}> {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
                       </View>
                     </View>
 
@@ -80,8 +85,8 @@ const styles = StyleSheet.create({
   billcard: {
     backgroundColor: '#ffffff',//can change as we move to various pages
     marginBottom: 10,//can change as we move to various pages
-    marginLeft: '2%', //can change as we move to various pages
-    width: '96%', //can change as we move to various pages
+    // marginLeft: '2%', //can change as we move to various pages
+    width: '100%', //can change as we move to various pages
     borderColor: '#e4e4e4',
     borderRadius: 100 / 9,
     borderWidth: 1,
