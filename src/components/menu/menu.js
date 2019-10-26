@@ -39,6 +39,7 @@ export default class Menu extends Component {
       show: 'Add',
       visibleModal: null,
       totalPrice: 0,
+      zoopPrice:0,
       RecommendedMenuInfo: [],
       OutletMenuInfo: [],
       inCart: [],
@@ -84,6 +85,8 @@ export default class Menu extends Component {
     // this.state.totalCartCount += item.itemCount 
     this.state.totalPrice += item.basePrice  //price adding calculation
     ConstantValues.totalBasePrice = this.state.totalPrice
+    this.state.zoopPrice += item.zoopPrice    //zoopprice adding calculation 
+    ConstantValues.totalZoopPrice = this.state.zoopPrice
     let idx = this.state.inCart.findIndex(i => { return i.itemId == item.itemId })
     console.log('idx items are  : ' + idx)
     if (idx > -1) {
@@ -113,6 +116,8 @@ export default class Menu extends Component {
 
     this.state.totalPrice -= item.basePrice //price calculation
     ConstantValues.totalBasePrice = this.state.totalPrice
+    this.state.zoopPrice -= item.zoopPrice    //zoopprice calculation 
+    ConstantValues.totalZoopPrice = this.state.zoopPrice
     let idx = this.state.inCart.findIndex(i => { return i.itemId == item.itemId })
     console.log('idx items are  : ' + idx)
     if (idx > -1) {
