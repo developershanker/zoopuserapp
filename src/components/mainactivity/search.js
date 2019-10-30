@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
   slide: {
     flex: 1,
     width: deviceWidth,
-    height: "100%",
+    height: deviceHeight,
     alignItems:'stretch',
     alignContent: 'stretch',
     backgroundColor: '#ffffff',

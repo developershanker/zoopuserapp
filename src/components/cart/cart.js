@@ -510,6 +510,7 @@ export default class Cart extends Component {
         'cuisineId': item.cuisineId,
         //billing details
         'zoopPrice': item.zoopPrice,
+        //'zoopPrice': item.zoopPrice * item.itemCount,
         'basePrice': item.basePrice,
         'basePriceGstRate': item.basePriceGstRate,
         'basePriceGst': item.basePriceGst,
@@ -533,6 +534,7 @@ export default class Cart extends Component {
     ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.discount + ConstantValues.gst,
       ConstantValues.billDetail = {
         'totalAmount': ConstantValues.totalBasePrice,
+        'totalZoopPrice':ConstantValues.totalZoopPrice,
         'deliveryCharge': ConstantValues.zoopdeliveryCharge,
         'deliveryChargeGst': ConstantValues.zoopdeliveryChargegst,
         'deliveryChargeGstRate': ConstantValues.deliveryChargegstRate,

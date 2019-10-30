@@ -159,6 +159,7 @@ static MID = 'FIjIdu58691666399235'
   static isCouponApplied = false
   static totalBasePrice = 0
   static totalBasePrice = 0
+  static totalZoopPrice = 0
   static minimumPriceRequired = 0
   static couponId = 0
   static discount = 0
