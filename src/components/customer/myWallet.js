@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Alert,CheckBox, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList } from 'react-native';
+import { View, Alert,CheckBox, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import SplashScreen from 'react-native-splash-screen';
@@ -11,6 +11,7 @@ import { Fade } from '../assests/fade.js';
 import walletApi from '../customer/walletApi.js'
 import { Overlay } from 'react-native-elements';
 import loginApi from '../login/loginApi.js';
+import moment from 'moment';
 
 export default class myWallet extends Component {
   componentDidMount() {
@@ -24,6 +25,7 @@ export default class myWallet extends Component {
     super(props);
     this.state = {
       walletBalance: null,
+      refreshing:false,
       data: [],
       
     };
@@ -84,12 +86,33 @@ export default class myWallet extends Component {
       console.log('Data received in mywallet.js catch: ' + error)
     }
   }
+  async handleWalletRefresh(){
+    try {
+      let response = await walletApi.getWalletInfo();
+      console.log('data received in mywallet.js : ' + JSON.stringify(response))
+      if (response.status == true) {
+        ConstantValues.walletBalance = response.data.balance
+        this.setState({
+          walletBalance: ConstantValues.walletBalance,
+          data: response.data.histories,
+        })
+        // console.log('data array is : '+ JSON.stringify(this.state.data))
+      } else {
+        return (
+
+          ToastAndroid.show('Profile Updated Successfully', ToastAndroid.LONG)
+
+        )
+      }
+    } catch (error) {
+      console.log('Data received in mywallet.js catch: ' + error)
+    }
+  }
 
   render() {
-
     return (
-      <SafeAreaView>
-        <ScrollView style={styles.slide}>
+      <SafeAreaView style={styles.slide}>
+      
           <View>
             {/* header view */}
             <View style={{ flexDirection: 'row' }}>
@@ -106,23 +129,27 @@ export default class myWallet extends Component {
               <Text style={{ color: '#60b246', fontFamily: 'Poppins-Regular', fontSize: 15 }}>{ConstantValues.rupee} {this.state.walletBalance}</Text>
             </View>
 
-            <View style={{ flexDirection: 'row', height: 50, backgroundColor: '#e4e4e4', justifyContent: 'space-around', alignItems: 'center', alignContent: 'center' }}>
-              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 }}>Date</Text>
-              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 }}>Particular</Text>
-              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 }}>Amount</Text>
+            <View style={{ flexDirection: 'row', height: '15%', backgroundColor: '#e4e4e4', justifyContent: 'space-around', alignItems: 'center' }}>
+              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 10 ,textAlign:'left'}}>Date</Text>
+              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 10 ,textAlign:'right'}}>Amount</Text>
+              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 10 ,textAlign:'left'}}>Particular</Text>
+              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 10 ,textAlign:'right' }}>Balance</Text>
             </View>
             {/* Wallet summary Card  */}
             <View>
               <FlatList
                 data={this.state.data}
+                // refreshing={this.state.refreshing}
+                // onRefresh={this.handleWalletRefresh()}
                 extraData={this.state}
                 renderItem={({ item }) =>
                   <View>
                     <View style={styles.card}>
                       <View style={{ flexDirection: 'row', paddingVertical: 10, paddingHorizontal: 20 , justifyContent: 'space-between', alignItems: 'center',}}>
-                        <Text style={{ color: item.transactionType == 'CREDIT' ? '#60b246' : '#b32120', fontFamily: 'Poppins-Regular', fontSize: 15 }}>{ConstantValues.rupee} {item.amount}</Text>
-                        <Text style={{ width: 150,color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 }}>{item.particulars}</Text>
-                        <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 15 }}> {ConstantValues.rupee} {item.balance}</Text>
+                      <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 ,textAlign:'left'}}>{moment(item.created).format('DD-MM-YYYY')}</Text>
+                        <Text style={{ color: item.transactionType == 'CREDIT' ? '#60b246' : '#b32120', fontFamily: 'Poppins-Regular', fontSize: 15,textAlign:'right' }}>{ConstantValues.rupee} {item.amount}</Text>
+                        <Text style={{ width: 150,color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12,textAlign:'left' }}>{item.particulars}</Text>
+                        <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 15 ,textAlign:'right'}}> {ConstantValues.rupee} {item.balance}</Text>
                       </View>
 
                     </View>
@@ -134,7 +161,7 @@ export default class myWallet extends Component {
                
 
           </View>
-        </ScrollView>
+       
       </SafeAreaView>
     );
   }
@@ -142,7 +169,10 @@ export default class myWallet extends Component {
 
 const styles = StyleSheet.create({
   slide: {
-    width: Dimensions.get('window').width,
+    flex:1,
+    width: Dimensions.get('screen').width,
+    height:Dimensions.get('screen').height,
+    backgroundColor:'#fff'
   },
   card: {
     width: Dimensions.get('window').width - 5,
