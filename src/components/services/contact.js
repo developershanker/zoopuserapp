@@ -54,10 +54,12 @@ export default class contact extends Component {
 
   async sendContent(name,mobile,description) {
     try {
-      let response = await servicesApi.sendContent(name,mobile,description);
+      // let response = await servicesApi.sendContent(name,mobile,description);
       if (name != '') {
+        console.log("mobile.length is:" + mobile.length)
         if (mobile != '' && mobile.length === 10) {
          if (description != '') {
+          let response = await servicesApi.sendContent(name,mobile,description);
           if (response.status == true) {
             this.setState({
               name: '',

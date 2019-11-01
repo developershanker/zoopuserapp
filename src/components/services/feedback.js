@@ -27,11 +27,12 @@ export default class feedback extends Component {
   async sendFeedback(name, email, message) {
      let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     try {
-      let response = await servicesApi.sendFeedback(name, email, message);
+      // let response = await servicesApi.sendFeedback(name, email, message);
       if (name != '') {
         if (email != '') {
           if (re.test(email)) {
             if (message != '') {
+              let response = await servicesApi.sendFeedback(name, email, message);
               if (response.status == true) {
                 this.setState({
                   name: '',

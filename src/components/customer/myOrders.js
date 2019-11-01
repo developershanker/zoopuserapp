@@ -195,7 +195,7 @@ export default class myOrders extends Component {
                         </View>
                         <View style={styles.tile}>
                         <View style={{width:100,alignItems:'flex-end'}}>
-                          <Text style={styles.tiletext}>Total Amount :</Text>
+                          <Text style={styles.tiletext}>Total Amt :</Text>
                           </View>
                           
                           <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>

@@ -44,12 +44,12 @@ export default class PaymentPage extends Component {
       if (response.status == true) {
         ConstantValues.zoopOrderId = response.data.orderId
         ConstantValues.zooptransactionId = response.data.transactionId
-        if (paymentType == 'Prepaid') {
+        if (paymentType == 2) {
           return (
            ToastAndroid.show('Requesting payment, please wait...', ToastAndroid.LONG),
             this.props.navigation.navigate('PaymentPaytm')
           )
-        } else if(paymentType == 'COD'){
+        } else if(paymentType == 1){
           return (
             ToastAndroid.show('Requesting IRCTC , please wait...', ToastAndroid.LONG),
             this.props.navigation.navigate('IrctcConfirmationCod')
@@ -97,62 +97,6 @@ export default class PaymentPage extends Component {
 
 
   setPaymentInfo = (item,index) => {
-    // if (ConstantValues.isAgent == 0) {
-    //   if (ConstantValues.discount != 0 || ConstantValues.walletBalanceUsed != 0) {
-    //     if (item.paymentTypeName == 'COD') {
-    //       return(
-    //         Alert.alert(
-    //           'Confirm!!',
-    //           'Are you sure you want to proceed? All discounts will be removed.',
-    //           [
-    //             {
-    //               text: 'NO',
-    //               onPress: () => console.log('Cancel Pressed'),
-    //               style: 'cancel',
-    //             },
-    //             {
-    //               text: 'YES', onPress: () => {
-    //                 this.setState({
-    //                   paymentTypeName: item.paymentTypeName,
-    //                   paymentTypeId: item.paymentTypeId,
-    //                   // paymentBorderColor:'#f15926'
-    //                   indexChecked:item.paymentTypeId.toString()
-    //                 })
-    //                 ConstantValues.discount = 0
-    //                 ConstantValues.walletBalanceUsed = 0
-    //                 cartApi.billDetail()
-    //              },
-    //              style:'cancel'
-    //             },
-    //           ],
-    //           { cancelable: false },
-    //         )
-    //       )
-    //     } else {
-    //       this.setState({
-    //         paymentTypeName: item.paymentTypeName,
-    //         paymentTypeId: item.paymentTypeId,
-    //         // paymentBorderColor:'#f15926'
-    //         indexChecked:item.paymentTypeId.toString()
-    //       })
-    //     }
-    //   } else {
-    //     this.setState({
-    //       paymentTypeName: item.paymentTypeName,
-    //       paymentTypeId: item.paymentTypeId,
-    //       // paymentBorderColor:'#f15926'
-    //       indexChecked:item.paymentTypeId.toString()
-    //     })
-    //   }
-    // } else {
-    //   this.setState({
-    //     paymentTypeName: item.paymentTypeName,
-    //     paymentTypeId: item.paymentTypeId,
-    //     // paymentBorderColor:'#f15926'
-    //     indexChecked:item.paymentTypeId.toString()
-    //   })
-      
-    // }
    
     this.setState({
       paymentTypeName: item.paymentTypeName,
@@ -170,7 +114,7 @@ export default class PaymentPage extends Component {
 
   paymentDetails = () => {
     if (this.state.checked == true) {
-      if(this.state.paymentTypeName == 'COD' || this.state.paymentTypeName == 'Prepaid'){
+      if(this.state.paymentTypeId == 1 || this.state.paymentTypeId == 2){
         ConstantValues.paymentType = this.state.paymentTypeName,
         ConstantValues.paymentTypeId = this.state.paymentTypeId,
         ConstantValues.refNo = '',
@@ -179,7 +123,7 @@ export default class PaymentPage extends Component {
           'paymentType': ConstantValues.paymentType,
           'paymentTypeId': ConstantValues.paymentTypeId
         },
-        this.orderBooking(ConstantValues.paymentType)
+        this.orderBooking(ConstantValues.paymentTypeId)
       }else{
         return(
           ToastAndroid.show('Please select any payment method!!' ,ToastAndroid.LONG)
@@ -229,31 +173,36 @@ export default class PaymentPage extends Component {
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.totalBasePrice}</Text>
                     </View>
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Add GST 5%</Text>
+                      <Text style={styles.tiletext}>(+) GST on food</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.gst).toFixed(2)}</Text>
                     </View>
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Delivery Charges</Text>
+                      <Text style={styles.tiletext}>(+) Delivery Charge (Inc. GST)</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.deliveryCharge}</Text>
                     </View>
-                    <View style={styles.tile}>
+                    {/* <View style={styles.tile}>
                       <Text style={styles.tiletext}>Add GST 18%</Text>
-                      <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.deliveryChargegst.toFixed(2))}</Text>
-                    </View>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {Math.round(ConstantValues.deliveryChargegst)}</Text>
+                    </View> */}
+                    {/* <View style={styles.tile}>
+                      <Text style={styles.tiletext}>(-) Discounts  </Text>
+                      <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {ConstantValues.couponValue}</Text>
+                    </View> */}
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Discount</Text>
-                      <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {ConstantValues.couponValue}</Text>
+                      <Text style={styles.tiletext}>(-) Discounts  </Text>
+                      <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {ConstantValues.discount}</Text>
                     </View>
-                    <View style={styles.tile}>
-                      <Text style={styles.tiletext}>Used Wallet Balance</Text>
-                      <Text style={[styles.tiletext, { color: '#60b246' }]}>{ConstantValues.rupee} {ConstantValues.walletBalanceUsed}</Text>
-                    </View>
+                    {/* <View style={styles.tile}>
+                      <Text style={styles.tiletext}>Wallet Balance Used</Text>
+                      <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {ConstantValues.walletBalanceUsed}</Text>
+                    </View> */}
+
 
                     <View style={styles.tile}>
-                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:16}]}>Order Total</Text>
-                      <View style={{flexDirection:'row'}}>
-                      <Icon name={'rupee'} size={20} />
-                      <Text style={[styles.tiletext,{fontFamily:'Poppins-Medium',fontSize:16}]}> {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
+                      <Text style={[styles.tiletext, { fontFamily: 'Poppins-Medium', fontSize: 16 }]}>Order Total</Text>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Icon name={'rupee'} size={20} color={'#000000'} />
+                        <Text style={[styles.tiletext, { fontFamily: 'Poppins-Medium', fontSize: 16 }]}> {(ConstantValues.totalPayableAmount).toFixed(2)}</Text>
                       </View>
                     </View>
 
@@ -295,7 +244,7 @@ export default class PaymentPage extends Component {
                       <Icons name={this.state.indexChecked === item.paymentTypeId.toString() ? 'check-square' : 'square'} size={20} color={'#000000'} style={{width:50,alignSelf:'center'}}/>
                       {/* <Text style={{ color: this.state.paymentBorderColor, fontSize: 15, fontFamily: 'Poppins-Regular' }}>{item.paymentTypeName == 'Prepaid' ? 'Pay through Paytm' : 'Cash On Delivery'}</Text> */}
                       {
-                        item.paymentTypeName == 'Prepaid' ? <Image source={require('../images/paytmnew.png')} /> : <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Regular',textAlign:'center' }}>Cash On Delivery</Text>
+                        item.paymentTypeId == 2 ? <Image source={require('../images/paytmnew.png')} /> : <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Regular',textAlign:'center' }}>Cash On Delivery</Text>
                       }
                       
                     </View>

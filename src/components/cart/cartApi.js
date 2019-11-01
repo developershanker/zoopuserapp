@@ -107,6 +107,7 @@ export default class cartApi {
     ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.discount + ConstantValues.gst,
       ConstantValues.billDetail = {
         'totalAmount': ConstantValues.totalBasePrice,
+        'totalZoopPrice':ConstantValues.totalZoopPrice,
         'deliveryCharge': ConstantValues.zoopdeliveryCharge,
         'deliveryChargeGst': ConstantValues.zoopdeliveryChargegst,
         'deliveryChargeGstRate': ConstantValues.deliveryChargegstRate,

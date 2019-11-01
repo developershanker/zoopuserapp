@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet, Clipboard,Platform,Linking,KeyboardAvoidingView,PixelRatio, Button,Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList } from 'react-native';
+import { View, Dimensions, StyleSheet, Clipboard, Platform, Linking, KeyboardAvoidingView, PixelRatio, Button, Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { RadioButton, Text } from 'react-native-paper';
 import { CustomButton } from '../assests/customButtonLarge';
@@ -34,7 +34,7 @@ export default class Search extends Component {
       email: '',
       query: '',
       trains: [],
-      
+
     };
   }
   scrollX = new Animated.Value(0)
@@ -106,39 +106,39 @@ export default class Search extends Component {
       const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
 
       return (
-        // <View style={styles.inputViewD}>
-          <Autocomplete
-            autoCapitalize="none"
-            autoCorrect={false}
-            clearButtonMode={'always'}
-            enablesReturnKeyAutomatically={true}
-            data={trains.length === 1 && comp(query, trains[0].trainNumberAndName) ? [] : trains}
-            defaultValue={query}
-            inputContainerStyle = {styles.inputViewD}
-            // listContainerStyle={styles.autocompleteContainer}
-            style={{fontSize:15,fontFamily:'Poppins-Regular',color: '#635c5a',}}
-            onChangeText={text => this.setState({ query: text })}
-            placeholder="Enter Train Name/No."
-            renderItem={({ item }) => (
-              <View>
-                <ScrollView contentContainerStyle={styles.dropdown}>
-                  <TouchableOpacity onPress={() => this.setState({
-                    query: item.trainNumberAndName,
-                    text: item.trainNumber
-                  })}>
-                    <View style={{width:Dimensions.get('window').width - 20,paddingHorizontal:10,paddingVertical:10,justifyContent:'center'}}>
+        <View style={styles.mainD}>
+        <Autocomplete
+          autoCapitalize="none"
+          autoCorrect={false}
+          clearButtonMode={'always'}
+          enablesReturnKeyAutomatically={true}
+          data={trains.length === 1 && comp(query, trains[0].trainNumberAndName) ? [] : trains}
+          defaultValue={query}
+          inputContainerStyle={styles.inputViewD}
+          // listContainerStyle={styles.autocompleteContainer}
+          style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#635c5a', }}
+          onChangeText={text => this.setState({ query: text })}
+          placeholder="Enter Train Name/No."
+          renderItem={({ item }) => (
+            <View>
+              <ScrollView contentContainerStyle={styles.dropdown}>
+                <TouchableOpacity onPress={() => this.setState({
+                  query: item.trainNumberAndName,
+                  text: item.trainNumber
+                })}>
+                  <View style={{ width: Dimensions.get('window').width - 20, paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'center' }}>
                     <Text style={styles.itemText}>
                       {item.trainNumberAndName}
                     </Text>
-                    </View>
-                    
-                  </TouchableOpacity>
-                </ScrollView>
-              </View>
-            )}
-            keyExtractor={(item) => item.trainId.toString()}
-          />
-        // </View>
+                  </View>
+
+                </TouchableOpacity>
+              </ScrollView>
+            </View>
+          )}
+          keyExtractor={(item) => item.trainId.toString()}
+        />
+        </View>
       )
     }
   }
@@ -200,24 +200,24 @@ export default class Search extends Component {
 
     Linking.openURL(phoneNumber);
   };
-  
+
   render() {
     let position = Animated.divide(this.scrollX, width);
     return (
-      <SafeAreaView style={styles.slide} >
-        <ScrollView keyboardShouldPersistTaps = 'handled'>
-          <KeyboardAvoidingView enabled>
-          <View>
+      <SafeAreaView >
+        <ScrollView keyboardShouldPersistTaps='handled'>
+          <KeyboardAvoidingView enabled style={styles.slide}>
 
-            <View>
+
+            <View style={{ width: deviceWidth, height: '20%' }}>
               <Image style={styles.imageTop} source={require('../images/Home.jpg')} />
             </View>
-            <View style={{ alignItems: 'center' }}>
-              <Text style={{ fontFamily: 'Poppins-Medium', paddingHorizontal: 15, paddingVertical: 5, fontSize: 18, }}>Search By</Text>
+            <View style={{ alignItems: 'center', width: deviceWidth, height: '5%', justifyContent: 'center' }}>
+              <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 18, }}>Search By</Text>
             </View>
 
             <RadioButton.Group
-              onValueChange={value => this.setState({ value,text:'',query:'' })}
+              onValueChange={value => this.setState({ value, text: '', query: '' })}
               value={this.state.value}
             >
               <View style={styles.radioButton}>
@@ -248,33 +248,36 @@ export default class Search extends Component {
             <View style={styles.main}>
               {this.trainList(this.state.value)}
             </View>
-            <CustomButton
-            style={{alignSelf: 'center'}}
+            <View style={{ justifyContent: 'center', alignContent: 'center', width: deviceWidth, height: '10%' }}>
+              <CustomButton
+                style={{ alignSelf: 'center' }}
                 onPress={() => {
-                  
+
                   this.searchBy(this.state.text)
                 }}
                 title='Search Restaurants'
               />
+            </View>
+
             {/* extra services view starts */}
             <View style={styles.gridContainer}>
               <View>
-                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('BulkOrder')}>
+                <TouchableOpacity style={styles.GridViewContainer} onPress={() => this.props.navigation.navigate('BulkOrder')}>
                   <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.bulkOrder }} />
                   <Text style={styles.GridViewTextLayout}>BULK ORDER</Text>
                 </TouchableOpacity>
               </View>
 
               <View>
-                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.props.navigation.navigate('CoachSequence')} disabled={true}>
-                  <Text style={{color:'#8c0d0d',fontSize: 8,fontFamily:'Poppins-Regular',justifyContent: 'center',alignItems:'center',}}>Coming Soon...</Text>
-                  <Image style={{opacity:0.2,width:50,height:50}} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.coachSequence }} />
-                  <Text style={[styles.GridViewTextLayout,{opacity:0.2}]}>COACH SEQUENCE</Text>
+                <TouchableOpacity style={styles.GridViewContainer} onPress={() => this.props.navigation.navigate('CoachSequence')} disabled={true}>
+                  <Text style={{ color: '#8c0d0d', fontSize: 8, fontFamily: 'Poppins-Regular', justifyContent: 'center', alignItems: 'center', }}>Coming Soon...</Text>
+                  <Image style={{ opacity: 0.2, width: 50, height: 50 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.coachSequence }} />
+                  <Text style={[styles.GridViewTextLayout, { opacity: 0.2 }]}>COACH SEQUENCE</Text>
                 </TouchableOpacity>
               </View>
 
               <View>
-                <TouchableOpacity style={styles.GridViewContainer} onPress={()=>this.dialCall()}>
+                <TouchableOpacity style={styles.GridViewContainer} onPress={() => this.dialCall()}>
                   <Image style={styles.iconImg} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.helpline }} />
                   <Text style={styles.GridViewTextLayout}>HELPLINE</Text>
                 </TouchableOpacity>
@@ -310,13 +313,13 @@ export default class Search extends Component {
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
-                pagingEnabled = {true}
+                pagingEnabled={true}
                 contentContainerStyle={styles.contentContainer}
                 onScroll={Animated.event( // Animated.event returns a function that takes an array where the first element...
                   [{ nativeEvent: { contentOffset: { x: this.scrollX } } }] // ... is an object that maps any nativeEvent prop to a variable
                 )} // in this case we are mapping the value of nativeEvent.contentOffset.x to this.scrollX
                 scrollEventThrottle={16} // this will ensure that this ScrollView's onScroll prop is called no faster than 16ms between each function call
-              >     
+              >
                 {photos.map((source, i) => { // for every object in the photos array...
                   return ( // ... we will return a square Image with the corresponding object as the source
                     <Image
@@ -325,11 +328,11 @@ export default class Search extends Component {
                       source={source}
                     />
                   );
-                })}        
+                })}
               </ScrollView>
             </View>
             <View
-              style={{ flexDirection: 'row',justifyContent:'center',alignItems:'center' }} // this will layout our dots horizontally (row) instead of vertically (column)
+              style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }} // this will layout our dots horizontally (row) instead of vertically (column)
             >
               {photos.map((_, i) => { // the _ just means we won't use that parameter
                 let opacity = position.interpolate({
@@ -347,7 +350,7 @@ export default class Search extends Component {
                 );
               })}
             </View>
-          </View>
+
           </KeyboardAvoidingView>
         </ScrollView>
         {/* <DeliveryMark/> */}
@@ -366,51 +369,61 @@ const styles = StyleSheet.create({
   slide: {
     flex: 1,
     width: deviceWidth,
-    height: "100%",
-    alignItems:'stretch',
+    height:deviceHeight-50,
+    alignItems: 'stretch',
     alignContent: 'stretch',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#fff',
     flexDirection: 'column',
 
   },
   main: {
     alignItems: 'center',
     justifyContent: 'center',
-
+    height: '15%',
+   
+  },
+  mainD:{
+    paddingTop:25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent:'center'
   },
   scroll: {
-    flex:1,
-    alignItems: 'stretch',
+    flex: 1,
+    alignItems: 'center',
+    alignContent:'center',
     justifyContent: 'center',
-    marginLeft: 10
+    marginLeft: 10,
+    paddingVertical:10,
+    backgroundColor:'#fff',
+    height:'35%',
   },
   img: {
     width: Dimensions.get('window').width,
     height: 120,
     marginLeft: 5,
-    // flexWrap: 'wrap'
-    borderRadius:6,
+    borderRadius: 6,
     borderWidth: 1,
-    borderColor:'#e1e1e1',
-    justifyContent:'center',
-    alignItems:'center',
+    borderColor: '#e1e1e1',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
     width: Dimensions.get('window').width,
     height: 160,
     // flexWrap: 'nowrap',
-    resizeMode:'cover'
+    resizeMode: 'cover'
     // marginLeft: 5
   },
   contentContainer: {
-    paddingVertical: 25,
     justifyContent: 'space-around',
+    // height:120
   },
   radioButton: {
     alignItems: 'center',
     flexDirection: 'row',
-    // alignContent: 'center',
-    // marginLeft: 25 ,
+    width: deviceWidth,
+    height: '5%',
     justifyContent: 'space-around',
   },
   radioView: {
@@ -440,7 +453,7 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 15,
     fontFamily: 'Poppins-Regular',
-   textAlign:'center'
+    textAlign: 'center'
   },
   input: {
     fontSize: 15,
@@ -480,19 +493,20 @@ const styles = StyleSheet.create({
     top: 0,
     zIndex: 1
   },
-  gridContainer:{
-    width:Dimensions.get('screen').width,
-    flexDirection:'row',
-    justifyContent:'space-around',
-    alignContent:'center',
-    alignItems:'center',
-    paddingVertical:5
+  gridContainer: {
+    width: Dimensions.get('screen').width,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 5,
+    height: '20%'
   },
   GridViewContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center', 
-    alignSelf:'center',
+    alignItems: 'center',
+    alignSelf: 'center',
     width: 100,
     height: 90,
     // shadowOffset: { width: 3, height: 0 },
@@ -500,25 +514,25 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     // shadowOpacity: 0.4,
     borderBottomWidth: 2,
-    borderBottomColor:'#cfc7c4',
+    borderBottomColor: '#cfc7c4',
     borderColor: '#ebe9e8',
     borderWidth: 1,
     backgroundColor: '#ffffff'
   },
   GridViewTextLayout: {
     fontSize: 8,
-    fontFamily:'Poppins-Regular',
+    fontFamily: 'Poppins-Regular',
     justifyContent: 'center',
-    alignItems:'center',
+    alignItems: 'center',
     color: '#000',
     padding: 5,
   },
-  iconImg:{
-    width:64,
-    height:64
+  iconImg: {
+    width: 64,
+    height: 64
   },
-  imageTop:{
+  imageTop: {
     width: Dimensions.get('screen').width,
-    height:100,
+    height: 120,
   }
 })
