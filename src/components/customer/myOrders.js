@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, Alert, StyleSheet, ScrollView, Dimensions, TouchableOpacity, FlatList, Image, ToastAndroid, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Alert, KeyboardAvoidingView, StyleSheet, ScrollView, Dimensions, TouchableOpacity, FlatList, Image, ToastAndroid, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SplashScreen from 'react-native-splash-screen';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import { SafeAreaView } from 'react-navigation';
 import ConstantValues from '../constantValues.js';
 import BillCardDetail from '../cart/billDetailCard.js';
-import { CustomButton } from '../assests/customButtonLarge.js';
+import { CustomButtonShort } from '../assests/customButtonShort';
 import { Fade } from '../assests/fade.js';
 import walletApi from '../customer/walletApi.js';
 import { CheckBox } from 'react-native-elements';
@@ -15,6 +15,8 @@ import { ZoopLoader } from '../assests/zoopLoader.js';
 import { Overlay } from 'react-native-elements';
 import moment from "moment";
 import loginApi from '../customer/walletApi.js';
+import Modal from 'react-native-modal';
+import OrderDetailConstants from '../orderDetailConstants.js';
 
 
 
@@ -31,9 +33,11 @@ export default class myOrders extends Component {
     this.state = {
       orderHistory: [],
       isVisible: true,
+      detailViewModal: null,
+      detailItem:[]
     };
   }
- 
+
 
   checkRegister() {
     if (ConstantValues.customerId == '') {
@@ -44,7 +48,7 @@ export default class myOrders extends Component {
           [
             {
               text: 'OK', onPress: () => {
-                this.setState({isVisible:false})
+                this.setState({ isVisible: false })
                 this.props.navigation.navigate('Welcome')
               },
               style: 'cancel'
@@ -96,7 +100,7 @@ export default class myOrders extends Component {
   showStatus(orderStatus) {
     if (orderStatus == '') {
       return (
-        <Text> - </Text>
+        <Text style={{ fontFamily: 'Poppins-Medium', color: '#000' }}> - </Text>
       )
     }
     else if (orderStatus == 'Payment Failed') {
@@ -140,7 +144,22 @@ export default class myOrders extends Component {
   //     console.log('ConstantValues.orderedItems : ' + ConstantValues.orderedItems)
   //   })
   // }
-
+  renderOrderDetail = (item) => {
+    OrderDetailConstants.zoopOrderId = item.orderId
+    OrderDetailConstants.irctcOrderId = item.irctcOrderId
+    OrderDetailConstants.totalPayableAmount = item.totalPayableAmount
+    OrderDetailConstants.couponValue = item.couponValue
+    OrderDetailConstants.walletAmount = item.walletAmount
+    OrderDetailConstants.paidAmount = item.paidAmount
+    OrderDetailConstants.eta = item.eta
+    OrderDetailConstants.orderStatus = item.orderStatus
+    OrderDetailConstants.items = item.items
+    console.log('OrderDetailConstants.items : ' + JSON.stringify(OrderDetailConstants.items)  + '\n' + 'item.items' + JSON.stringify(item.items))
+    this.setState({
+      detailItem: item.items, 
+      detailViewModal: 'bottom' 
+    })
+  }
   render() {
     let temp = ''
     return (
@@ -164,22 +183,22 @@ export default class myOrders extends Component {
                 extraData={this.state}
                 renderItem={({ item }) =>
                   <View>
-                    <TouchableWithoutFeedback>
+                    <View onPress={() => this.renderOrderDetail(item)}>
                       <View style={styles.card}>
                         <View style={styles.tile}>
-                          <View style={{width:100,alignItems:'flex-end'}}>
-                          <Text style={styles.tiletext}>Ordered On :</Text>
+                          <View style={{ width: 100, alignItems: 'flex-end' }}>
+                            <Text style={styles.tiletext}>Ordered On :</Text>
                           </View>
-                          
-                          
+
+
                           <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.bookingDate).format('DD-MM-YYYY HH:mm')}</Text>
                         </View>
 
 
                         <View>
                           <View style={styles.tile}>
-                          <View style={{width:100,alignItems:'flex-end'}}>
-                            <Text style={styles.tiletext}>Item :</Text>
+                            <View style={{ width: 100, alignItems: 'flex-end' }}>
+                              <Text style={styles.tiletext}>Item :</Text>
                             </View>
                             {item.items.map((items, index) => {
                               // const itemName = items.itemName.join()
@@ -188,21 +207,21 @@ export default class myOrders extends Component {
                             )
                             }
                             <View style={{ width: 150, alignItems: 'flex-end' }}>
-                              
+
                               <Text style={styles.tiletextitem}>{temp.slice(0, -2)}</Text>
                             </View>
                           </View>
                         </View>
                         <View style={styles.tile}>
-                        <View style={{width:100,alignItems:'flex-end'}}>
-                          <Text style={styles.tiletext}>Total Amt :</Text>
+                          <View style={{ width: 100, alignItems: 'flex-end' }}>
+                            <Text style={styles.tiletext}>Total Amt :</Text>
                           </View>
-                          
+
                           <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
                         </View>
                         <View style={styles.tile}>
-                        <View style={{width:100,alignItems:'flex-end'}}>
-                          <Text style={[styles.tiletext, { color: '#000000' }]}>Status :</Text>
+                          <View style={{ width: 100, alignItems: 'flex-end' }}>
+                            <Text style={[styles.tiletext, { color: '#000000' }]}>Status :</Text>
                           </View>
                           {/* <Text style={[styles.tiletext, { color: orderStatus == 'Delivered' ? '#000000' : '#60b246' }]}>{orderStatus}</Text> */}
                           <View>
@@ -214,9 +233,15 @@ export default class myOrders extends Component {
 
                           {/* <Text style={[styles.tiletext, { color: '#f15926' }]}>Repeat Order</Text> */}
                         </View>
+                        <CustomButtonShort
+                          onPress={() => this.renderOrderDetail(item)}
+                          title='View Details'
+                          style={{ alignSelf: 'center', backgroundColor: '#fff' }}
+                          textStyle={{ color: '#F15926' }}
+                        />
                       </View>
-                      
-                    </TouchableWithoutFeedback>
+
+                    </View>
                   </View>
                 }
                 keyExtractor={(item) => item.orderId.toString()}
@@ -224,6 +249,38 @@ export default class myOrders extends Component {
             </View>
           </View>
         </ScrollView>
+        {/* Order Details Modal */}
+        <KeyboardAvoidingView enabled>
+          <Modal
+            isVisible={this.state.detailViewModal === 'bottom'}
+            onBackButtonPress={() => this.setState({ detailViewModal: null })}
+            onSwipeComplete={() => this.setState({ detailViewModal: null })}
+            swipeDirection={['left', 'right']}
+            style={styles.bottomModal}
+          >
+            <View style={styles.modalView}>
+              <Text style={{ fontSize: 20 }}>{OrderDetailConstants.zoopOrderId}</Text>
+              <View
+                style={styles.card}>
+              <FlatList
+                data={this.state.detailItem}
+                extraData={this.state}
+                renderItem={({item}) => 
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 10 }}>
+                    <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', fontSize: 15 }}>{item.itemName}</Text>
+                    <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', fontSize: 15 }}>Qty:{item.quantity}</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                      <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', fontSize: 15 }}>{ConstantValues.rupee} {item.basePrice}</Text>
+                    </View>
+                  </View>
+                }
+                keyExtractor={(item) => item.itemId.toString()}
+              />
+              </View>
+            </View>
+
+          </Modal>
+        </KeyboardAvoidingView>
         <Overlay
           isVisible={this.state.isVisible}
           width="auto"
@@ -246,6 +303,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#ffffff',
   },
+  bottomModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  modalView: {
+    width: Dimensions.get('screen').width,
+    height: 400,
+    backgroundColor: '#fff',
+    // flexDirection: 'column',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderTopStartRadius: 100 / 5,
+    borderTopEndRadius: 100 / 5
+  },
   card: {
     backgroundColor: '#ffffff',//can change as we move to various pages
     marginBottom: 10,//can change as we move to various pages
@@ -253,6 +326,27 @@ const styles = StyleSheet.create({
     width: '96%', //can change as we move to various pages
     borderColor: '#e4e4e4',
     borderRadius: 100 / 9,
+    borderWidth: 1,
+    shadowOpacity: 0.4,
+    borderBottomColor: '#e4e4e4',
+    borderBottomWidth: 2,
+  },
+  cardDetail: {
+    width: Dimensions.get('window').width,
+    borderRadius: 5,
+    marginLeft: 5,
+    marginRight: 10,
+    marginTop: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingVertical:5,
+    paddingHorizontal:5,
+    backgroundColor: '#ffffff',//can change as we move to various pages
+    marginBottom: 10,//can change as we move to various pages
+    // marginLeft: '2%', //can change as we move to various pages
+    // width: '96%', //can change as we move to various pages
+    borderColor: '#e4e4e4',
+    // borderRadius: 100 / 9,
     borderWidth: 1,
     shadowOpacity: 0.4,
     borderBottomColor: '#e4e4e4',
