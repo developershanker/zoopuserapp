@@ -49,6 +49,7 @@ export default class station extends Component {
       OutletList: [],
       FilteredOutletList: [],
       StationList: [],
+      FilteredStationList: [],
       CuisinesList: [],
       checked: [],
       isVisible: true
@@ -100,14 +101,46 @@ export default class station extends Component {
         ConstantValues.trainId = response.data.trainDetails.trainId
         ConstantValues.trainNumber = response.data.trainDetails.trainNumber
         ConstantValues.trainName = response.data.trainDetails.trainName
+        if (ConstantValues.searchString.length == 10) {
+          ConstantValues.seat = response.data.seatInfo.berth
+          ConstantValues.coach = response.data.seatInfo.coach
+          ConstantValues.passengerInfo = response.data.passengerInfo
+        } else {
+          ConstantValues.seat = ''
+          ConstantValues.coach = ''
+        }
         this.setState({
           StationList: response.data.trainRoutes,
         })
         //console.log('Stations are : ' + JSON.stringify(this.state.StationList) + '\n' + 'Station length is : ' + this.state.StationList.length)
         if (this.state.StationList && this.state.StationList.length) {
           this.setState({
-            StationList: response.data.trainRoutes,
+            // StationList: response.data.trainRoutes,
+            FilteredStationList: this.state.StationList.filter((item) => {
+              return item.isVisible && item.outlets.length > 0
+            })
           })
+          if (this.state.FilteredStationList && this.state.FilteredStationList.length) {
+            this.setState({
+              isVisible:false
+            })
+            return this.state.FilteredStationList
+            
+          } else {
+            return (
+              Alert.alert(
+                'Alert!!',
+                'No Stations to display!!',
+                [
+                  {
+                    text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
+                    style: 'cancel'
+                  },
+                ],
+                { cancelable: false },
+              )
+            )
+          }
         } else {
           return (
             Alert.alert(
@@ -123,18 +156,7 @@ export default class station extends Component {
             )
           )
         }
-
-        if (ConstantValues.searchString.length == 10) {
-          ConstantValues.seat = response.data.seatInfo.berth
-          ConstantValues.coach = response.data.seatInfo.coach
-          ConstantValues.passengerInfo = response.data.passengerInfo
-        } else {
-          ConstantValues.seat = ''
-          ConstantValues.coach = ''
-        }
-          this.setState({
-            isVisible: false
-          })
+       
       } else {
         return (
           Alert.alert(
@@ -277,11 +299,11 @@ export default class station extends Component {
               alwaysBounceHorizontal={true}
               contentContainerStyle={styles.contentContainer}>
               <FlatList
-                data={this.state.StationList}
+                data={this.state.FilteredStationList}
                 // data={this.state.data}
                 horizontal={true}
                 renderItem={({ item, index }) =>
-                  <Fade visible={item.isVisible && item.outlets.length != 0}>
+                  // <Fade visible={item.isVisible && item.outlets.length != 0}>
                     <View style={styles.stationView}>
                       {/* activeOpacity = {this.state.scrollBegin == true ? 1 : 0.5 } */}
                       <TouchableOpacity>
@@ -292,7 +314,7 @@ export default class station extends Component {
                         </View>
                       </TouchableOpacity>
                     </View>
-                  </Fade>
+                  // </Fade>
                 }
                 keyExtractor={(item) => item.stationId.toString()}
               />
@@ -305,10 +327,10 @@ export default class station extends Component {
             {/* Station Header */}
             {/* <StationHeader /> */}
             <FlatList
-              data={this.state.StationList}
+              data={this.state.FilteredStationList}
               // ItemSeparatorComponent={this.FlatListItemSeparator}
               renderItem={({ item, index }) =>
-                <Fade visible={item.isVisible && item.outlets.length != 0}>
+                // <Fade visible={item.isVisible && item.outlets.length != 0}>
                   <View style={{ borderRadius: 5, borderColor: '#e7e7e7', borderWidth: 1, marginVertical: 10, marginHorizontal: 10 }}>
                     <Text style={styles.textheader}>{item.stationName}</Text>
                     <View style={styles.stextview}>
@@ -407,7 +429,7 @@ export default class station extends Component {
                       )
                     }
                   </View>
-                </Fade>
+                // </Fade>
               }
               keyExtractor={(item, index) => item.stationId.toString()}
             />
