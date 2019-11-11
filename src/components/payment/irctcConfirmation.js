@@ -83,15 +83,15 @@ export default class irctcConfirmation extends Component {
         {/* header view */}
         <View style={{ flexDirection: "row", paddingBottom: 10 }}>
           <View style={{ flexDirection: "column", justifyContent: "center", width: Dimensions.get("window").width, alignItems: "center" }}>
-            <Image style={{ width: 150, height: 150 ,alignSelf:'center'}} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }} />
+            <Image style={{ width: 150, height: 150, alignSelf: 'center' }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }} />
             <Spinner size={100} type={'FadingCircleAlt'} color={'#FF5819'} isVisible={this.state.processingirctc} />
             <Fade visible={this.state.processingirctc == false}>
               <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                 <Image style={styles.image} source={require('../images/placed.png')} />
               </View>
             </Fade>
-            <View style={{alignItems:'center',justifyContent:'center',width:Dimensions.get('screen').width}}>
-            <Text style={{ fontSize: 18, color: '#000000', fontFamily: 'Poppins-Medium', paddingVertical: 20, alignSelf:'center' }}>{this.state.overallStatus}</Text>
+            <View style={{ alignItems: 'center', justifyContent: 'center', width: Dimensions.get('screen').width }}>
+              <Text style={{ fontSize: 18, color: '#000000', fontFamily: 'Poppins-Medium', paddingVertical: 20, alignSelf: 'center' }}>{this.state.overallStatus}</Text>
             </View>
           </View>
         </View>
@@ -124,8 +124,15 @@ export default class irctcConfirmation extends Component {
         <Fade visible={this.state.processingirctc == false}>
           <CustomButton
             style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
-            onPress={()=>{this.props.navigation.navigate('OrderDetail')}}
+            onPress={() => { this.props.navigation.navigate('OrderDetail') }}
             title='View Details'
+          />
+
+          <CustomButton
+            style={{ backgroundColor: '#fff', alignSelf: 'center', marginBottom: 20, }}
+            onPress={() => { this.props.navigation.navigate('Search') }}
+            textStyle = {{color:'#9b9b9b'}}
+            title='Go To Home'
           />
         </Fade>
       </View>

@@ -14,6 +14,7 @@ export default class Invite extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.checkRegister()
+    this.onRegister()
   }
 
   constructor(props) {

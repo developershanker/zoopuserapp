@@ -130,7 +130,7 @@ export default class station extends Component {
             return (
               Alert.alert(
                 'Alert!!',
-                'No Stations to display!!',
+                'Sorry! Bookings closed currently for this route.',
                 [
                   {
                     text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
@@ -145,7 +145,7 @@ export default class station extends Component {
           return (
             Alert.alert(
               'Alert!!',
-              'No Stations to display!!',
+              'Sorry! Bookings closed currently for this route.',
               [
                 {
                   text: 'OK', onPress: () => this.props.navigation.navigate('Search'),

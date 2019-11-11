@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, ActivityIndicator, StyleSheet, Dimensions, ToastAndroid, Image } from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet, Dimensions, ToastAndroid, Image ,BackHandler} from "react-native";
 import SplashScreen from "react-native-splash-screen";
 import { SafeAreaView } from "react-navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -14,6 +14,14 @@ export default class irctcConfirmationCod extends Component {
     componentDidMount() {
         SplashScreen.hide();
         this.getIrctcId()
+    }
+    componentWillMount() {
+      BackHandler.addEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
+      console.log('Back Pressed')
+    }
+    componentWillUnmount() {
+      BackHandler.removeEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
+      console.log('Back Pressed Unmount')
     }
   constructor(props) {
     super(props);
@@ -103,6 +111,12 @@ export default class irctcConfirmationCod extends Component {
             style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
             onPress={()=>{this.props.navigation.navigate('OrderDetail')}}
             title='View Details'
+          />
+           <CustomButton
+            style={{ backgroundColor: '#fff', alignSelf: 'center', marginBottom: 20, }}
+            onPress={() => { this.props.navigation.navigate('Search') }}
+            textStyle = {{color:'#9b9b9b'}}
+            title='Go To Home'
           />
         </Fade>
       </View>

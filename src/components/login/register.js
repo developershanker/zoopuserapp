@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Picker, View,Text, StyleSheet, TextInput, ToastAndroid , PermissionsAndroid ,Alert,TouchableOpacity } from 'react-native';
+import { Picker, View, Text, StyleSheet, TextInput, ToastAndroid, PermissionsAndroid, Alert, TouchableOpacity } from 'react-native';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -15,8 +15,7 @@ export default class Register extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.checkLogin()
-    
-    this.requestGetAccountPermission()
+    //this.requestGetAccountPermission()
   }
   constructor(props) {
     super(props);
@@ -26,21 +25,21 @@ export default class Register extends Component {
       referredBy: '',
       altmobile: '',
       loginCount: null,
-      visibleModal:'center'
+      visibleModal: 'center'
     };
   }
 
 
-  checkLogin(){
+  checkLogin() {
     if (ConstantValues.customerId == '') {
-      return(
+      return (
         Alert.alert(
           'Need Login!!',
           'Please Login',
           [
             {
               text: 'OK', onPress: () => this.props.navigation.navigate('Welcome'),
-              style:'cancel'
+              style: 'cancel'
             },
           ],
           { cancelable: false },
@@ -53,21 +52,38 @@ export default class Register extends Component {
   ///checking Input Validation
   async isEmpty(name, emailId, altMobile, referredBy) {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let reg = /^[0-9]+$/;
     try {
       if (name != '') {
         if (emailId != '') {
           if (re.test(emailId)) {
-            this.editUserInfo(name, emailId, altMobile, referredBy)
-          // this.onRegister()
-          }else{
+            if (reg.test(altMobile)) {
+              this.editUserInfo(name, emailId, altMobile, referredBy)
+              this.onRegister()
+            } else {
+              return (
+                Alert.alert(
+                  'Invalid Input!!',
+                  'Incorrect Alternate No. format!!' + '\n' + 'Please enter correct Alternate No.',
+                  [
+                    {
+                      text: 'OK', onPress: () => console.log('Invalid alternate no.'),
+                      style: 'cancel'
+                    },
+                  ],
+                  { cancelable: false },
+                )
+              )
+            }
+          } else {
             return (
               Alert.alert(
                 'Invalid Input!!',
-                'Incorrect Email format!!'+ '\n'+'Please enter correct Email Id!!',
+                'Incorrect Email format!!' + '\n' + 'Please enter correct Email Id!!',
                 [
                   {
                     text: 'OK', onPress: () => console.log('Invalid email id'),
-                    style:'cancel'
+                    style: 'cancel'
                   },
                 ],
                 { cancelable: false },
@@ -83,7 +99,7 @@ export default class Register extends Component {
               [
                 {
                   text: 'OK', onPress: () => console.log('Invalid email id'),
-                  style:'cancel'
+                  style: 'cancel'
                 },
               ],
               { cancelable: false },
@@ -99,7 +115,7 @@ export default class Register extends Component {
             [
               {
                 text: 'OK', onPress: () => console.log('Invalid name'),
-                style:'cancel'
+                style: 'cancel'
               },
             ],
             { cancelable: false },
@@ -196,29 +212,29 @@ export default class Register extends Component {
     return (
       <View style={styles.slide}>
         <Text style={styles.heading}> My Profile </Text>
-        <View style = {styles.card}>
-        <TextInput style={styles.input}
-          placeholder='Full Name'
-          maxLength={25}
-          value={this.state.name}
-         // keyboardType='default'
-          onChangeText={name => this.setState({ name })}
-          autoCapitalize='words'
-        />
-        <TextInput style={styles.input}
-          placeholder='Email id'
-          value={this.state.emailId}
-          keyboardType='email-address'
-          onChangeText={emailId => this.setState({ emailId })}
-        />
-        <TextInput style={styles.input}
-          placeholder='Alternate Mobile No.'
-          value={this.state.altmobile}
-          maxLength={10}
-          keyboardType='number-pad'
-          onChangeText={altmobile => this.setState({ altmobile })}
-        />
-        {/* <Fade visible={visible} >
+        <View style={styles.card}>
+          <TextInput style={styles.input}
+            placeholder='Full Name'
+            maxLength={25}
+            value={this.state.name}
+            // keyboardType='default'
+            onChangeText={name => this.setState({ name })}
+            autoCapitalize='words'
+          />
+          <TextInput style={styles.input}
+            placeholder='Email id'
+            value={this.state.emailId}
+            keyboardType='email-address'
+            onChangeText={emailId => this.setState({ emailId })}
+          />
+          <TextInput style={styles.input}
+            placeholder='Alternate Mobile No.'
+            value={this.state.altmobile}
+            maxLength={10}
+            keyboardType='number-pad'
+            onChangeText={altmobile => this.setState({ altmobile })}
+          />
+          {/* <Fade visible={visible} >
           <TextInput style={styles.input}
             placeholder='Referral Code (if any)'
             keyboardType='default'
@@ -230,23 +246,23 @@ export default class Register extends Component {
         </View>
         <CustomButton
           title="Submit"
-          disabled={ this.state.name == '' ? true : false}
-          style={{ backgroundColor:'#60b246', alignSelf: 'center', marginBottom: 20, }}
+          disabled={this.state.name == '' ? true : false}
+          style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
           onPress={() => {
             this.isEmpty(this.state.name, this.state.emailId, this.state.altmobile, this.state.referredBy)
             // this.props.navigation.navigate('Search')
           }}
         />
-         <Fade visible={ConstantValues.customerId != ''}>
-         <CustomTouchableOpacity
-        onPress={()=>this.props.navigation.navigate('LogOut')}
-        text="LOGOUT"
-        
-        />
-         </Fade>
-       
-        
-       
+        <Fade visible={ConstantValues.customerId != ''}>
+          <CustomTouchableOpacity
+            onPress={() => this.props.navigation.navigate('LogOut')}
+            text="LOGOUT"
+
+          />
+        </Fade>
+
+
+
       </View>
     );
   }
@@ -276,7 +292,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 5,
     fontSize: 15,
-    paddingHorizontal:10,
+    paddingHorizontal: 10,
     fontFamily: 'Poppins-Regular'
   },
   card: {

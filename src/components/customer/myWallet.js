@@ -17,6 +17,7 @@ export default class myWallet extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.checkRegister()
+    this.onRegister()
   }
   // componentDidUpdate(){
   //   this.checkRegister()
@@ -44,7 +45,10 @@ export default class myWallet extends Component {
           ],
           { cancelable: false },
         )
-      )
+      ),
+      this.setState({
+        refreshing: false
+      })
     } else {
       this.onRegister()
     }

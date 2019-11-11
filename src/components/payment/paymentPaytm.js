@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, WebView, ActivityIndicator, StyleSheet, Dimensions, ToastAndroid } from 'react-native';
+import { View, Text, WebView, ActivityIndicator, StyleSheet, Dimensions, ToastAndroid ,BackHandler} from 'react-native';
 import ConstantValues from '../constantValues.js';
 
 export default class paymentPaytm extends Component {
@@ -20,6 +20,7 @@ export default class paymentPaytm extends Component {
   //   this.state = {
   //   };
   // }
+  
   handleResponse = async (data) => {
 
     try {

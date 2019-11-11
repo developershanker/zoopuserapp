@@ -16,7 +16,7 @@ export default class Profile extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.onRegister();
-    this.requestGetAccountPermission()
+    //this.requestGetAccountPermission()
   }
   constructor(props) {
     super(props);
@@ -32,21 +32,38 @@ export default class Profile extends Component {
   ///checking Input Validation
   async isEmpty(name, emailId, altMobile, referredBy) {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let reg = /^[0-9]+$/;
     try {
       if (name != '') {
         if (emailId != '') {
           if (re.test(emailId)) {
-            this.editUserInfo(name, emailId, altMobile, referredBy)
-          // this.onRegister()
-          }else{
+            if (reg.test(altMobile)) {
+              this.editUserInfo(name, emailId, altMobile, referredBy)
+              this.onRegister()
+            } else {
+              return (
+                Alert.alert(
+                  'Invalid Input!!',
+                  'Incorrect Alternate No. format!!' + '\n' + 'Please enter correct Alternate No.',
+                  [
+                    {
+                      text: 'OK', onPress: () => console.log('Invalid alternate no.'),
+                      style: 'cancel'
+                    },
+                  ],
+                  { cancelable: false },
+                )
+              )
+            }
+          } else {
             return (
               Alert.alert(
                 'Invalid Input!!',
-                'Incorrect Email format!!'+ '\n'+'Please enter correct Email Id!!',
+                'Incorrect Email format!!' + '\n' + 'Please enter correct Email Id!!',
                 [
                   {
                     text: 'OK', onPress: () => console.log('Invalid email id'),
-                    style:'cancel'
+                    style: 'cancel'
                   },
                 ],
                 { cancelable: false },
@@ -62,7 +79,7 @@ export default class Profile extends Component {
               [
                 {
                   text: 'OK', onPress: () => console.log('Invalid email id'),
-                  style:'cancel'
+                  style: 'cancel'
                 },
               ],
               { cancelable: false },
@@ -78,7 +95,7 @@ export default class Profile extends Component {
             [
               {
                 text: 'OK', onPress: () => console.log('Invalid name'),
-                style:'cancel'
+                style: 'cancel'
               },
             ],
             { cancelable: false },

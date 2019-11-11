@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet, Clipboard, Platform, Linking, KeyboardAvoidingView, PixelRatio, Button, Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList } from 'react-native';
+import { View, Dimensions, StyleSheet, Clipboard, Platform, Linking,Alert, KeyboardAvoidingView, PixelRatio, Button, Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { RadioButton, Text } from 'react-native-paper';
 import { CustomButton } from '../assests/customButtonLarge';
@@ -115,7 +115,7 @@ export default class Search extends Component {
           data={trains.length === 1 && comp(query, trains[0].trainNumberAndName) ? [] : trains}
           defaultValue={query}
           inputContainerStyle={styles.inputViewD}
-          // listContainerStyle={styles.autocompleteContainer}
+          //listContainerStyle={styles.autocompleteContainer}
           style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#635c5a', }}
           onChangeText={text => this.setState({ query: text })}
           placeholder="Enter Train Name/No."
@@ -126,7 +126,7 @@ export default class Search extends Component {
                   query: item.trainNumberAndName,
                   text: item.trainNumber
                 })}>
-                  <View style={{ width: Dimensions.get('window').width - 20, paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'center' }}>
+                  <View style={{ width: Dimensions.get('window').width - 20,paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'center' }}>
                     <Text style={styles.itemText}>
                       {item.trainNumberAndName}
                     </Text>
@@ -170,20 +170,41 @@ export default class Search extends Component {
 
   }
 
-  searchBy(text) {
+  searchBy(text,query) {
     if (text != '') {
       if (text.length == 10 || text.length == 5) {
-        ConstantValues.searchString = text,
-          console.log('ConstantValues.searchString is ....' + ConstantValues.searchString)
-        this.props.navigation.navigate('Station')
+        console.log('query.length : ' + query.length + '\n' + 'query : ' + query)
+          ConstantValues.searchString = text,
+            console.log('ConstantValues.searchString is ....' + ConstantValues.searchString)
+          this.props.navigation.navigate('Station')
       } else {
         return (
-          ToastAndroid.show('Incorrect Input length', ToastAndroid.LONG)
+          Alert.alert(
+            'Alert!!',
+            'Incorrect Input length!!',
+            [
+              {
+                text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
         )
       }
     } else {
       return (
-        ToastAndroid.show('Invalid Input', ToastAndroid.LONG)
+        Alert.alert(
+          'Alert!!',
+          'Invalid Input!!',
+          [
+            {
+              text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
+              style: 'cancel'
+            },
+          ],
+          { cancelable: false },
+        )
       )
     }
   }
@@ -253,7 +274,7 @@ export default class Search extends Component {
                 style={{ alignSelf: 'center' }}
                 onPress={() => {
 
-                  this.searchBy(this.state.text)
+                  this.searchBy(this.state.text , this.state.query)
                 }}
                 title='Search Restaurants'
               />
@@ -485,12 +506,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000000'
   },
   autocompleteContainer: {
-    flex: 1,
-    left: 0,
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    zIndex: 1
+    width: Dimensions.get('window').width - 20,
+    height:'20%'
   },
   gridContainer: {
     width: Dimensions.get('screen').width,
