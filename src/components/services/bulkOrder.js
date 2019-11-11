@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity,Alert, Dimensions, TextInput ,ToastAndroid} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Dimensions, TextInput, ToastAndroid } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { CustomButton } from '../assests/customButtonLarge';
 import DatePicker from 'react-native-datepicker';
 import servicesApi from './servicesApi';
+import moment from 'moment';
 
 export default class bulkOrder extends Component {
   constructor(props) {
@@ -30,8 +31,8 @@ export default class bulkOrder extends Component {
           if (re.test(email)) {
             if (totalPassenger != '') {
               if (journeyDate != '') {
-                console.log('fullName : ' + fullName +'\n' + 'mobile: ' + mobile + '\n' + 'email : ' + email+ '\n'+ 'totalPassenger : ' + totalPassenger + '\n' + 'journeyDate : ' + journeyDate + '\n' + 'pnr : ' + pnr + '\n' + 'comment : ' + comment)
-                  this.sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment)
+                console.log('fullName : ' + fullName + '\n' + 'mobile: ' + mobile + '\n' + 'email : ' + email + '\n' + 'totalPassenger : ' + totalPassenger + '\n' + 'journeyDate : ' + journeyDate + '\n' + 'pnr : ' + pnr + '\n' + 'comment : ' + comment)
+                this.sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment)
 
               } else {
                 return (
@@ -68,7 +69,7 @@ export default class bulkOrder extends Component {
   }
 
 
-  async sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment){
+  async sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment) {
     try {
       let response = await servicesApi.sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment)
       if (response.status == true) {
@@ -85,18 +86,18 @@ export default class bulkOrder extends Component {
             { cancelable: false },
           )
         ),
-        this.setState({
-          fullName: '',
-          mobile: '',
-          email: '',
-          totalPassenger: '',
-          journeyDate: '',
-          pnr: '',
-          comment: '',
-        })
+          this.setState({
+            fullName: '',
+            mobile: '',
+            email: '',
+            totalPassenger: '',
+            journeyDate: '',
+            pnr: '',
+            comment: '',
+          })
       } else {
         return (
-         ToastAndroid.show('Something went wrong!! Try again later!!',ToastAndroid.LONG)
+          ToastAndroid.show('Something went wrong!! Try again later!!', ToastAndroid.LONG)
         )
       }
     } catch (error) {
@@ -105,7 +106,7 @@ export default class bulkOrder extends Component {
   }
 
 
-  
+
   render() {
     return (
       <SafeAreaView style={styles.slide}>
@@ -192,8 +193,8 @@ export default class bulkOrder extends Component {
                 mode="date" //The enum of date, datetime and time
                 placeholder="Choose your journey date"
                 format="DD-MM-YYYY"
-                minDate="01-01-2016"
-                maxDate="01-01-2030"
+                minDate={moment().toDate()}
+                maxDate={moment().add(120, 'days').format("DD-MM-YYYY")}         //"01-01-2030"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 customStyles={{
@@ -268,7 +269,7 @@ export default class bulkOrder extends Component {
         </ScrollView>
         <CustomButton
           style={{ alignSelf: 'center', marginBottom: 10, }}
-          onPress={()=>this.onSubmitBulkOrder(this.state.fullName,this.state.mobile,this.state.email,this.state.totalPassenger,this.state.journeyDate,this.state.pnr,this.state.comment)}
+          onPress={() => this.onSubmitBulkOrder(this.state.fullName, this.state.mobile, this.state.email, this.state.totalPassenger, this.state.journeyDate, this.state.pnr, this.state.comment)}
           title='Submit'
         />
       </SafeAreaView>

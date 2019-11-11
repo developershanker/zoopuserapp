@@ -374,7 +374,6 @@ const styles = StyleSheet.create({
     alignContent: 'stretch',
     backgroundColor: '#fff',
     flexDirection: 'column',
-
   },
   main: {
     alignItems: 'center',

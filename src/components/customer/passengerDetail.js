@@ -646,7 +646,7 @@ export default class passengerDetail extends Component {
                 mode="date" //The enum of date, datetime and time
                 placeholder="Choose your journey date"
                 format="DD-MM-YYYY"
-                minDate="01-01-2016"
+                minDate={moment().toDate()}
                 maxDate="01-01-2030"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
