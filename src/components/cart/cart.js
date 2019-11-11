@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Dimensions,TouchableWithoutFeedback, TextInput, Alert, TouchableOpacity, FlatList, Image, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Dimensions, TouchableWithoutFeedback, TextInput, Alert, TouchableOpacity, FlatList, Image, ToastAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import SplashScreen from 'react-native-splash-screen';
@@ -227,29 +227,29 @@ export default class Cart extends Component {
     // this.setState({
     //   walletUsed: !this.state.walletUsed
     // })
-    if (ConstantValues.walletBalance > 50) {
+    if (ConstantValues.walletBalance >= 50) {
       if (ConstantValues.totalBasePrice >= 150) {
         if (walletUsed == true) {
 
           ConstantValues.walletBalanceUsed = 0,
             // ConstantValues.discount = 50,
             ConstantValues.discount = 0
-            this.setState({
-              discount: 0
-            })
-
-          cartApi.billDetail()
+          this.setState({
+            discount: 0
+          })
+          this.getWalletInfo(),
+            cartApi.billDetail()
           // console.log('On this.state.walletUsed == true..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
         } else {
 
           // ConstantValues.discount = 0,
           ConstantValues.walletBalanceUsed = 50,
-          ConstantValues.discount = 50
-            this.setState({
-              discount: 50
-            })
-
-          cartApi.billDetail()
+            ConstantValues.discount = 50
+          this.setState({
+            discount: 50
+          })
+          this.getWalletInfo(),
+            cartApi.billDetail()
           // console.log('On this.state.walletUsed == false..... this.state.discount : ' + this.state.discount + 'ConstantValues.discount : ' +ConstantValues.discount+ "this.state.walletUsed : "+this.state.walletUsed)
         }
       }
@@ -279,12 +279,13 @@ export default class Cart extends Component {
             {
               text: 'OK', onPress: () => {
                 ConstantValues.walletBalanceUsed = 0,
-                  // ConstantValues.discount = 50,
+                  ConstantValues.discount = 0,
                   this.setState({
-                    discount: 0
+                    discount: 0,
+                    walletUsed: false
                   })
-
-                cartApi.billDetail()
+                this.getWalletInfo(),
+                  cartApi.billDetail()
               },
               style: 'cancel'
             },
@@ -409,7 +410,7 @@ export default class Cart extends Component {
                 visibleModal: null,
                 textPromoCode: coupon.couponCode
               })
-            } 
+            }
           } else {
             return (
               // ToastAndroid.show(response.error, ToastAndroid.LONG),
@@ -529,12 +530,12 @@ export default class Cart extends Component {
   billDetail = () => {
 
     ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
-    ConstantValues.deliveryCharge = Math.round(ConstantValues.deliveryCharge)
+      ConstantValues.deliveryCharge = Math.round(ConstantValues.deliveryCharge)
     console.log('deliveryCharge : ' + ConstantValues.deliveryCharge)
     ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.discount + ConstantValues.gst,
       ConstantValues.billDetail = {
         'totalAmount': ConstantValues.totalBasePrice,
-        'totalZoopPrice':ConstantValues.totalZoopPrice,
+        'totalZoopPrice': ConstantValues.totalZoopPrice,
         'deliveryCharge': ConstantValues.zoopdeliveryCharge,
         'deliveryChargeGst': ConstantValues.zoopdeliveryChargegst,
         'deliveryChargeGstRate': ConstantValues.deliveryChargegstRate,
@@ -600,7 +601,7 @@ export default class Cart extends Component {
         <ScrollView>
           <View>
             {/* header view */}
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', width: ConstantValues.deviceWidth, height: '10%' }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Menu')}>
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
@@ -609,12 +610,12 @@ export default class Cart extends Component {
               </View>
             </View>
             {/* header view ends */}
-            <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width, alignItems: 'center', marginVertical: 5 }}>
+            <View style={{ flexDirection: 'column', width: ConstantValues.deviceWidth, height: '10%', justifyContent: 'center', width: Dimensions.get('window').width, alignItems: 'center', marginVertical: 5 }}>
               <Text style={{ alignSelf: 'center', fontSize: 20, color: '#000000', fontFamily: 'Poppins-Medium', }}>{this.state.outletName}</Text>
               <Text style={{ alignSelf: 'center', fontSize: 15, color: '#000000', fontFamily: 'Poppins-Medium', }}>{this.state.station}</Text>
             </View>
             {/* Selected Items list */}
-            <View>
+            <View style={{ width: ConstantValues.deviceWidth, height: '80%' }}>
               <View style={styles.card}>
                 <Fade visible={this.state.revisedInCart.length == 0 ? true : false}>
                   <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -722,7 +723,7 @@ export default class Cart extends Component {
                         <Text style={{ fontSize: 20, fontFamily: 'Poppins-Regular', color: '#000000' }}>{ConstantValues.rupee} {this.state.walletUsed == true ? ConstantValues.walletBalance - 50 : ConstantValues.walletBalance}</Text>
                       </View>
                     </View>
-
+                    {/* {ConstantValues.rupee} {this.state.walletUsed == true ? ConstantValues.walletBalance - 50 : ConstantValues.walletBalance} */}
 
                     <Text style={{ alignSelf: 'center', fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>OR</Text>
 
@@ -840,42 +841,42 @@ export default class Cart extends Component {
 
 
               {/* CouponDetail Card begin Here */}
-             
 
-                <FlatList
-                  data={this.state.CouponDetail}
-                  renderItem={({ item, index }) =>
 
-                    <View>
-                      <View style={styles.card}>
-                        <View>
-                          <TouchableWithoutFeedback  onPress={() => { this.applyCoupons(item) }}>
-                            <View style={styles.codeView}>
-                              <Text style={styles.text}>{item.couponCode}</Text>
-                            </View>
-                          </TouchableWithoutFeedback>
-                         
-                          <Text style={{ paddingTop: 5, color: '#000000', fontFamily: 'Poppins-Regular', }}>{item.discription}</Text>
-                          <Text style={{ paddingTop: 5, fontFamily: 'Poppins-Regular', }}>Validity of this coupon is: {moment(item.validityEndDate).format('DD-MM-YYYY HH:mm A')}</Text>
-                        </View>
+              <FlatList
+                data={this.state.CouponDetail}
+                renderItem={({ item, index }) =>
 
-                        <TouchableOpacity
-                          onPress={() => {
-                            this.applyCoupons(item)
-                          }}
-                        >
-                          <Text style={{ color: '#60b246', fontSize: 15, fontFamily: 'Poppins-Medium', alignSelf: 'flex-end', marginRight: 25 }}>APPLY</Text>
-                        </TouchableOpacity>
+                  <View>
+                    <View style={styles.card}>
+                      <View>
+                        <TouchableWithoutFeedback onPress={() => { this.applyCoupons(item) }}>
+                          <View style={styles.codeView}>
+                            <Text style={styles.text}>{item.couponCode}</Text>
+                          </View>
+                        </TouchableWithoutFeedback>
+
+                        <Text style={{ paddingTop: 5, color: '#000000', fontFamily: 'Poppins-Regular', }}>{item.discription}</Text>
+                        <Text style={{ paddingTop: 5, fontFamily: 'Poppins-Regular', }}>Validity of this coupon is: {moment(item.validityEndDate).format('DD-MM-YYYY HH:mm A')}</Text>
                       </View>
+
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.applyCoupons(item)
+                        }}
+                      >
+                        <Text style={{ color: '#60b246', fontSize: 15, fontFamily: 'Poppins-Medium', alignSelf: 'flex-end', marginRight: 25 }}>APPLY</Text>
+                      </TouchableOpacity>
                     </View>
+                  </View>
 
-                  }
-                  keyExtractor={item => item.couponId.toString()}
-                />
+                }
+                keyExtractor={item => item.couponId.toString()}
+              />
 
-              </View>
-              {/* CouponDetail Card ends Here  */}
-            
+            </View>
+            {/* CouponDetail Card ends Here  */}
+
 
           </Modal>
         </KeyboardAvoidingView>
@@ -895,7 +896,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Dimensions.get('window').width,
     justifyContent: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#fff',
   },
   card: {
     //backgroundColor: '#9b9b9b',//can change as we move to various pages
@@ -994,21 +995,21 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    width:'auto',
+    width: 'auto',
     textTransform: 'uppercase',
     color: '#f59120',
-    fontFamily:'Poppins-Medium',
-    justifyContent:'center'
-},
-codeView: {
-  justifyContent:'flex-start',
-  width:150,
-  alignItems: 'center',
-  paddingVertical:5,
-  backgroundColor: '#ffffff',
-  borderColor: '#f59120',
-  borderRadius: 100 / 8,
-  borderWidth:1,
-  borderStyle:'dashed'
-},
+    fontFamily: 'Poppins-Medium',
+    justifyContent: 'center'
+  },
+  codeView: {
+    justifyContent: 'flex-start',
+    width: 150,
+    alignItems: 'center',
+    paddingVertical: 5,
+    backgroundColor: '#ffffff',
+    borderColor: '#f59120',
+    borderRadius: 100 / 8,
+    borderWidth: 1,
+    borderStyle: 'dashed'
+  },
 });
