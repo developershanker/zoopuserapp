@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Picker, View,Text, StyleSheet, TextInput, ToastAndroid , PermissionsAndroid ,Alert } from 'react-native';
+import { Picker, View, Text, StyleSheet, TextInput, ToastAndroid, PermissionsAndroid, Alert } from 'react-native';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -26,7 +26,7 @@ export default class Profile extends Component {
       referredBy: '',
       altmobile: '',
       loginCount: null,
-      visibleModal:'center'
+      visibleModal: 'center'
     };
   }
   ///checking Input Validation
@@ -37,23 +37,43 @@ export default class Profile extends Component {
       if (name != '') {
         if (emailId != '') {
           if (re.test(emailId)) {
-            if (reg.test(altMobile)) {
-              this.editUserInfo(name, emailId, altMobile, referredBy)
-              this.onRegister()
-            } else {
-              return (
-                Alert.alert(
-                  'Invalid Input!!',
-                  'Incorrect Alternate No. format!!' + '\n' + 'Please enter correct Alternate No.',
-                  [
-                    {
-                      text: 'OK', onPress: () => console.log('Invalid alternate no.'),
-                      style: 'cancel'
-                    },
-                  ],
-                  { cancelable: false },
+            if (altMobile.length > 0) {
+              if (altMobile.length === 10) {
+                if (reg.test(altMobile)) {
+                  this.editUserInfo(name, emailId, altMobile, referredBy)
+                  this.onRegister()
+                } else {
+                  return (
+                    Alert.alert(
+                      'Invalid Input!!',
+                      'Incorrect Alternate No. format!!' + '\n' + 'Please enter correct Alternate No.',
+                      [
+                        {
+                          text: 'OK', onPress: () => console.log('Invalid alternate no.'),
+                          style: 'cancel'
+                        },
+                      ],
+                      { cancelable: false },
+                    )
+                  )
+                }
+              } else {
+                return (
+                  Alert.alert(
+                    'Invalid Input!!',
+                    'Incorrect Alternate No. format!!' + '\n' + 'Please enter correct Alternate No.',
+                    [
+                      {
+                        text: 'OK', onPress: () => console.log('Invalid alternate no.'),
+                        style: 'cancel'
+                      },
+                    ],
+                    { cancelable: false },
+                  )
                 )
-              )
+              }
+            } else {
+              this.editUserInfo(name, emailId, altMobile, referredBy)
             }
           } else {
             return (
@@ -192,29 +212,29 @@ export default class Profile extends Component {
     return (
       <View style={styles.slide}>
         <Text style={styles.heading}> My Profile </Text>
-        <View style = {styles.card}>
-        <TextInput style={styles.input}
-          placeholder='Full Name'
-          maxLength={25}
-          value={this.state.name}
-         // keyboardType='default'
-          onChangeText={name => this.setState({ name })}
-          autoCapitalize='words'
-        />
-        <TextInput style={styles.input}
-          placeholder='Email id'
-          value={this.state.emailId}
-          keyboardType='email-address'
-          onChangeText={emailId => this.setState({ emailId })}
-        />
-        <TextInput style={styles.input}
-          placeholder='Alternate Mobile No.'
-          value={this.state.altmobile}
-          maxLength={10}
-          keyboardType='number-pad'
-          onChangeText={altmobile => this.setState({ altmobile })}
-        />
-        {/* <Fade visible={visible} >
+        <View style={styles.card}>
+          <TextInput style={styles.input}
+            placeholder='Full Name'
+            maxLength={25}
+            value={this.state.name}
+            // keyboardType='default'
+            onChangeText={name => this.setState({ name })}
+            autoCapitalize='words'
+          />
+          <TextInput style={styles.input}
+            placeholder='Email id'
+            value={this.state.emailId}
+            keyboardType='email-address'
+            onChangeText={emailId => this.setState({ emailId })}
+          />
+          <TextInput style={styles.input}
+            placeholder='Alternate Mobile No.'
+            value={this.state.altmobile}
+            maxLength={10}
+            keyboardType='number-pad'
+            onChangeText={altmobile => this.setState({ altmobile })}
+          />
+          {/* <Fade visible={visible} >
           <TextInput style={styles.input}
             placeholder='Referral Code (if any)'
             keyboardType='default'
@@ -226,14 +246,14 @@ export default class Profile extends Component {
         </View>
         <CustomButton
           title="Submit"
-          disabled={ this.state.name == '' ? true : false}
-          style={{ backgroundColor:'#60b246', alignSelf: 'center', marginBottom: 20, }}
+          disabled={this.state.name == '' ? true : false}
+          style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
           onPress={() => {
             this.isEmpty(this.state.name, this.state.emailId, this.state.altmobile, this.state.referredBy)
             // this.props.navigation.navigate('Search')
           }}
         />
-       
+
       </View>
     );
   }
@@ -263,7 +283,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 5,
     fontSize: 15,
-    paddingHorizontal:10,
+    paddingHorizontal: 10,
     fontFamily: 'Poppins-Regular'
   },
   card: {

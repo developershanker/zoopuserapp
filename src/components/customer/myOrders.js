@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, Alert, KeyboardAvoidingView, StyleSheet, ScrollView, Dimensions, TouchableOpacity, FlatList, Image, ToastAndroid, TouchableWithoutFeedback , BackHandler} from 'react-native';
+import { View, Text, Alert, KeyboardAvoidingView, StyleSheet, ScrollView, Dimensions, TouchableOpacity, FlatList, Image, ToastAndroid, TouchableWithoutFeedback, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import { SafeAreaView } from 'react-navigation';
@@ -23,8 +24,9 @@ import OrderDetailConstants from '../orderDetailConstants.js';
 export default class myOrders extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    this.checkRegister()
-    this.orderHistory()
+    // this.checkRegister()
+    this.tokenAsync()
+    // this.orderHistory()
   }
   // shouldComponentUpdate(){
   //   this.checkRegister()
@@ -39,9 +41,42 @@ export default class myOrders extends Component {
     };
   }
 
+  // Fetch the token from storage then navigate to our appropriate place
+  tokenAsync = async () => {
+    try {
+      const storedValues = await AsyncStorage.getItem('userInfo')
+      // console.log('JSON.stringify(storedValues) : ' + JSON.stringify(storedValues))
+      console.log('storedValues : ' + storedValues)
+      //  storedValues : {"userToken":"pbkdf2_sha256$55000$UxLacxq6kwQ=$GqbBXFV+Kircxzvwf14je+wWpWa8+fxNnvcTaItB2xY=","customerId":2}
+      let userInfo = JSON.parse(storedValues)
+      let userToken = userInfo.userToken
+      let customerId = userInfo.customerId
+      console.log('Getting token from localstorage : ' + userToken)
+      console.log('Getting CustomerId from localstorage : ' + customerId)
+      if (userToken != '') {
+        this.orderHistory(userToken, customerId)
+      } else {
+        return (
+          Alert.alert(
+            'Need Login!!',
+            'Please LOGIN to Proceed.',
+            [
+              {
+                text: 'OK', onPress: () => {
+                  this.setState({ isVisible: false })
+                  this.props.navigation.navigate('Welcome')
+                },
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
+        )
+      }
 
-  checkRegister() {
-    if (ConstantValues.customerId == '') {
+    } catch (error) {
+      // this.props.navigation.navigate('App')
+      console.log('Error in getting stored value from asyncstorage: ' + error)
       return (
         Alert.alert(
           'Need Login!!',
@@ -58,15 +93,38 @@ export default class myOrders extends Component {
           { cancelable: false },
         )
       )
-    } else {
-      this.orderHistory()
     }
-  }
+
+  };
 
 
-  async orderHistory() {
+  // checkRegister() {
+  //   if (ConstantValues.customerId == '') {
+  //     return (
+  //       Alert.alert(
+  //         'Need Login!!',
+  //         'Please LOGIN to Proceed.',
+  //         [
+  //           {
+  //             text: 'OK', onPress: () => {
+  //               this.setState({ isVisible: false })
+  //               this.props.navigation.navigate('Welcome')
+  //             },
+  //             style: 'cancel'
+  //           },
+  //         ],
+  //         { cancelable: false },
+  //       )
+  //     )
+  //   } else {
+  //     this.orderHistory()
+  //   }
+  // }
+
+
+  async orderHistory(userToken, customerId) {
     try {
-      let response = await orderApi.orderHistory();
+      let response = await orderApi.orderHistory(userToken, customerId);
       if (response.status == true) {
         this.setState({
           orderHistory: response.data,
@@ -91,9 +149,9 @@ export default class myOrders extends Component {
               { cancelable: false },
             )
           ),
-          this.setState({
-            isVisible: false
-          })
+            this.setState({
+              isVisible: false
+            })
         }
       }
     } catch (error) {
@@ -112,10 +170,16 @@ export default class myOrders extends Component {
   renderOrderDetail = (item) => {
     OrderDetailConstants.zoopOrderId = item.orderId
     OrderDetailConstants.irctcOrderId = item.irctcOrderId
+    //order bill
     OrderDetailConstants.totalPayableAmount = item.totalPayableAmount
     OrderDetailConstants.couponValue = item.couponValue
     OrderDetailConstants.walletAmount = item.walletAmount
     OrderDetailConstants.paidAmount = item.paidAmount
+    OrderDetailConstants.totalAmount = item.totalAmount
+    OrderDetailConstants.deliveryCharge = item.deliveryCharge
+    OrderDetailConstants.gst = item.gst
+    OrderDetailConstants.discount = item.couponValue === 0 && item.walletAmount === 0 ? 0 : item.couponValue + item.walletAmount
+
     OrderDetailConstants.eta = item.eta
     OrderDetailConstants.status = item.status
     OrderDetailConstants.orderStatus = item.orderStatus
@@ -151,33 +215,37 @@ export default class myOrders extends Component {
                   <View>
                     <View onPress={() => this.renderOrderDetail(item)}>
                       <View style={styles.card}>
+
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
+                          <View style={{ width: 100, alignItems: 'flex-end' }}>
+                            <Text style={styles.tiletext}>Station :</Text>
+                          </View>
+                          <Text style={styles.tiletext}>(NZM) H NIZAMUDDIN</Text>
+                        </View>
+
+                        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
                           <View style={{ width: 100, alignItems: 'flex-end' }}>
                             <Text style={styles.tiletext}>Ordered On :</Text>
                           </View>
-
-
                           <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.bookingDate).format('DD-MM-YYYY HH:mm')}</Text>
+                        </View> */}
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
+                          <View style={{ width: 100, alignItems: 'flex-end' }}>
+                            <Text style={styles.tiletext}>Delivery Date :</Text>
+                          </View>
+                          <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.eta).format('DD-MM-YYYY')}</Text>
+                        </View>
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
+                          <View style={{ width: 102, alignItems: 'flex-end' }}>
+                            <Text style={styles.tiletext}>Delivery Time :</Text>
+                          </View>
+                          <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.eta).format('HH:mm')}</Text>
                         </View>
 
 
-                        <View>
-                          {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
-                            <View style={{ width: 100, alignItems: 'flex-end' }}>
-                              <Text style={styles.tiletext}>Item :</Text>
-                            </View>
-                            {item.items.map((items, index) => {
-                              // const itemName = items.itemName.join()
-                              temp = items.itemName + ', '
-                            }
-                            )
-                            }
-                            <View style={{ width: 150, alignItems: 'flex-end' }}>
 
-                              <Text style={styles.tiletextitem}>{temp.slice(0, -2)}</Text>
-                            </View>
-                          </View> */}
-                        </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
                           <View style={{ width: 100, alignItems: 'flex-end' }}>
                             <Text style={styles.tiletext}>Total Amt :</Text>
@@ -190,7 +258,7 @@ export default class myOrders extends Component {
                             <Text style={[styles.tiletext, { color: '#000000' }]}>Status :</Text>
                           </View>
                           {/* <Text style={[styles.tiletext, { color: orderStatus == 'Delivered' ? '#000000' : '#60b246' }]}>{orderStatus}</Text> */}
-                          <View> 
+                          <View>
                             <Text style={{ fontFamily: 'Poppins-Medium', color: ConstantValues.orderStatus[item.status] }}>{item.orderStatus}</Text>
                           </View>
 
@@ -228,63 +296,36 @@ export default class myOrders extends Component {
             <View style={styles.modalView}>
               <ScrollView>
                 {/* orderId's details */}
-                <View style={{ height: '10%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                <View style={{ height: '20%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                  <Image style={{ width: 60, height: 40 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }} />
                   <Text style={styles.tiletextH}>Order Detail</Text>
                 </View>
 
                 <View style={styles.card}>
 
-                  <View style={styles.tileM}>
-                    <View style={{ width: 110, alignItems: 'flex-end', paddingVertical: 5 }}>
-                      <Text style={styles.tiletext}>IRCTC Order Id :</Text>
-                    </View>
-                    <View style={{ width: 100, alignItems: 'flex-start', paddingVertical: 5 }}>
-                      <Text style={styles.tiletext}>{OrderDetailConstants.irctcOrderId}</Text>
-                    </View>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
+                    <Text style={styles.tiletext}>IRCTC Order Id</Text>
+                    <Text style={styles.tiletext}>{OrderDetailConstants.irctcOrderId}</Text>
                   </View>
 
-                  <View style={styles.tileM}>
-                    <View style={{ width: 110, alignItems: 'flex-end', paddingVertical: 5 }}>
-                      <Text style={styles.tiletext}>ZOOP Order Id :</Text>
-                    </View>
-                    <View style={{ width: 100, alignItems: 'flex-start', paddingVertical: 5 }}>
-                      <Text style={styles.tiletext}>{OrderDetailConstants.zoopOrderId}</Text>
-                    </View>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
+                    <Text style={styles.tiletext}>ZOOP Order Id</Text>
+                    <Text style={styles.tiletext}>{OrderDetailConstants.zoopOrderId}</Text>
                   </View>
 
-                  <View style={styles.tileM}>
-                    <View style={{ width: 110, alignItems: 'flex-end', paddingVertical: 5 }}>
-                      <Text style={styles.tiletext}>Status :</Text>
-                    </View>
-
-                    {/* <Text style={styles.tiletext}>{OrderDetailConstants.irctcOrderId}</Text> */}
-                    <View style={{ width: 100, alignItems: 'flex-start', paddingVertical: 5 }}>
-                       <Text style={{ fontFamily: 'Poppins-Medium', color: ConstantValues.orderStatus[OrderDetailConstants.status] }}>{OrderDetailConstants.orderStatus}</Text>
-                    </View>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
+                    <Text style={styles.tiletext}>Status</Text>
+                    <Text style={{ fontFamily: 'Poppins-Medium', color: ConstantValues.orderStatus[OrderDetailConstants.status] }}>{OrderDetailConstants.orderStatus}</Text>
                   </View>
 
                 </View>
-                {/* Bill Details */}
-                <View style={{ width: ConstantValues.deviceWidth - 20, height: '25%', marginTop: 10, marginBottom: 5, alignContent: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                  <View style={styles.card}>
-
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
-                      <Text style={styles.tiletext}>Order Total</Text>
-                      <Text style={styles.tiletext}>{ConstantValues.rupee} {OrderDetailConstants.totalPayableAmount}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
-                      <Text style={styles.tiletext}>Coupon Discount</Text>
-                      <Text style={styles.tiletext}>{ConstantValues.rupee} {OrderDetailConstants.couponValue}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
-                      <Text style={styles.tiletext}>Wallet Amount Used</Text>
-                      <Text style={styles.tiletext}>{ConstantValues.rupee} {OrderDetailConstants.walletAmount}</Text>
-                    </View>
-
-                  </View>
-                </View>
+                
                 {/* Item List starts */}
-                <View style={{ width: ConstantValues.deviceWidth - 20,marginBottom:10,marginTop:5, alignContent: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                {/* <View style={{ height: '10%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                  <Text style={styles.tiletextH}>Item Details</Text>
+                </View> */}
+
+                <View style={{ width: ConstantValues.deviceWidth - 20, marginBottom: 5, marginTop: 5, alignContent: 'center', justifyContent: 'center', alignItems: 'center' }}>
                   <View style={styles.card}>
                     <FlatList
                       data={this.state.detailItem}
@@ -294,8 +335,9 @@ export default class myOrders extends Component {
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
                           <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', fontSize: 15 }}>{item.itemName}</Text>
                           <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', fontSize: 15 }}>Qty : {item.quantity} | </Text>
-                            <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', fontSize: 15 }}>{OrderDetailConstants.rupee} {item.basePrice}</Text>
+                            <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', fontSize: 15 }}>Qty : </Text>
+                            <Text style={{ fontFamily: 'Poppins-Bold', color: '#6dcc5a', fontSize: 15 }}>{item.quantity}</Text>
+                            <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', fontSize: 15 }}>  | {OrderDetailConstants.rupee} {item.basePrice}</Text>
                           </View>
                         </View>
                       }
@@ -303,8 +345,41 @@ export default class myOrders extends Component {
                     />
                   </View>
                 </View>
+
+                {/* Bill Details */}
+                {/* <View style={{ height: '10%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                  <Text style={styles.tiletextH}>Bill Details</Text>
+                </View> */}
+                <View style={{ width: ConstantValues.deviceWidth - 20, height: '40%', marginTop: 5, marginBottom: 5, alignContent: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                  <View style={styles.card}>
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
+                      <Text style={styles.tiletext}>Item Total</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {OrderDetailConstants.totalAmount}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
+                      <Text style={styles.tiletext}>(+) GST on food</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {OrderDetailConstants.gst}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
+                      <Text style={styles.tiletext}>(+) Delivery Charge (Inc. GST)</Text>
+                      <Text style={styles.tiletext}>{ConstantValues.rupee} {OrderDetailConstants.deliveryCharge}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
+                      <Text style={styles.tiletext}>(-) Discounts  </Text>
+                      <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {OrderDetailConstants.discount}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 5 }}>
+                      <Text style={styles.tiletext}>Order Total </Text>
+                      <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {OrderDetailConstants.totalPayableAmount}</Text>
+                    </View>
+
+                  </View>
+                  
+                </View>
+                
               </ScrollView>
-              <View style={{ width: ConstantValues.deviceWidth - 20, height: '12%', alignSelf: 'center' }}>
+              <View style={{ width: ConstantValues.deviceWidth - 20, height: '10%', alignSelf: 'center' }}>
                 <CustomButtonShort
                   onPress={() => this.setState({ detailViewModal: null })}
                   title='Close'
@@ -312,6 +387,8 @@ export default class myOrders extends Component {
                   textStyle={{ color: '#fff' }}
                 />
               </View>
+
+              
             </View>
           </Modal>
         </KeyboardAvoidingView>
@@ -343,7 +420,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: Dimensions.get('screen').width,
-    height: Dimensions.get('screen').height / 2,
+    // height: Dimensions.get('screen').height - 100,
     backgroundColor: '#fff',
     // flexDirection: 'column',
     // justifyContent: 'center',

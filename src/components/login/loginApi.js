@@ -119,6 +119,24 @@ export default class loginApi {
             return Promise.reject(error)
         }
     }
+    static async getUserRegisterParams(userToken,customerId) {
+        try {
+            //url
+            const apiUrl = 'customers/' + customerId
+            //headers
+            const headers = {}
+            headers['x-auth-token'] = userToken
+            //calling api for response
+            const response = await this.apiCall(apiUrl, 'GET', {}, headers)
+            console.log(response)
+
+            return Promise.resolve(response)
+
+        } catch (error) {
+            console.log('Data received in loginApi catch: ' + error)
+            return Promise.reject(error)
+        }
+    }
 
     static async editUserInfo(name, emailId, alternateMobile ,  referredBy) {
         try {
@@ -145,6 +163,19 @@ export default class loginApi {
             return Promise.reject(error)
         }
     }
+
+    static async onRegister() {
+        try {
+          let response = await loginApi.getUserRegister();
+          console.log('data received in register.js : ' + JSON.stringify(response))
+          ConstantValues.loginCount = response.data.loginCount
+          ConstantValues.customerPhoneNo = response.data.mobile
+          ConstantValues.customerName = response.data.fullName
+          ConstantValues.customerRefferalCode = response.data.referralCode
+        } catch (error) {
+          console.log('Data received in register.js catch: ' + error)
+        }
+      }
 }
 
 

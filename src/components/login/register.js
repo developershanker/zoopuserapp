@@ -57,23 +57,43 @@ export default class Register extends Component {
       if (name != '') {
         if (emailId != '') {
           if (re.test(emailId)) {
-            if (reg.test(altMobile)) {
-              this.editUserInfo(name, emailId, altMobile, referredBy)
-              this.onRegister()
-            } else {
-              return (
-                Alert.alert(
-                  'Invalid Input!!',
-                  'Incorrect Alternate No. format!!' + '\n' + 'Please enter correct Alternate No.',
-                  [
-                    {
-                      text: 'OK', onPress: () => console.log('Invalid alternate no.'),
-                      style: 'cancel'
-                    },
-                  ],
-                  { cancelable: false },
+            if (altMobile.length > 0) {
+              if (altMobile.length === 10) {
+                if (reg.test(altMobile)) {
+                  this.editUserInfo(name, emailId, altMobile, referredBy)
+                  this.onRegister()
+                } else {
+                  return (
+                    Alert.alert(
+                      'Invalid Input!!',
+                      'Incorrect Alternate No. format!!' + '\n' + 'Please enter correct Alternate No.',
+                      [
+                        {
+                          text: 'OK', onPress: () => console.log('Invalid alternate no.'),
+                          style: 'cancel'
+                        },
+                      ],
+                      { cancelable: false },
+                    )
+                  )
+                }
+              } else {
+                return (
+                  Alert.alert(
+                    'Invalid Input!!',
+                    'Incorrect Alternate No. format!!' + '\n' + 'Please enter correct Alternate No.',
+                    [
+                      {
+                        text: 'OK', onPress: () => console.log('Invalid alternate no.'),
+                        style: 'cancel'
+                      },
+                    ],
+                    { cancelable: false },
+                  )
                 )
-              )
+              }
+            } else {
+              this.editUserInfo(name, emailId, altMobile, referredBy)
             }
           } else {
             return (
