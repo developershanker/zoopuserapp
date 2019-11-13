@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Alert,CheckBox, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-community/async-storage';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
@@ -16,7 +17,9 @@ import moment from 'moment';
 export default class myWallet extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    this.checkRegister()
+    // this.checkRegister()
+    // this.onRegister()
+    this.tokenAsync()
   }
   // componentDidUpdate(){
   //   this.checkRegister()
@@ -30,43 +33,101 @@ export default class myWallet extends Component {
       
     };
   }
-  checkRegister(){
-    if ( ConstantValues.customerId == '') {
-      return(
-        Alert.alert(
-          'Need Login!!',
-          'Please LOGIN to Proceed.',
-          [
-            {
-              text: 'OK', onPress: () => this.props.navigation.navigate('Welcome'),
-              style: 'cancel'
-            },
-          ],
-          { cancelable: false },
-        )
-      )
-    } else {
-      this.onRegister()
-    }
-  }
-  async onRegister() {
+  tokenAsync = async () => {
     try {
-      let response = await loginApi.getUserRegister();
-      console.log('data received in register.js : ' + JSON.stringify(response))
-      ConstantValues.loginCount = response.data.loginCount
-      ConstantValues.customerPhoneNo = response.data.mobile
-      ConstantValues.customerName = response.data.fullName
-      ConstantValues.customerRefferalCode = response.data.referralCode
+        const storedValues = await AsyncStorage.getItem('userInfo')
+        // console.log('JSON.stringify(storedValues) : ' + JSON.stringify(storedValues))
+        console.log('storedValues : ' + storedValues)
+        //  storedValues : {"userToken":"pbkdf2_sha256$55000$UxLacxq6kwQ=$GqbBXFV+Kircxzvwf14je+wWpWa8+fxNnvcTaItB2xY=","customerId":2}
+        let userInfo = JSON.parse(storedValues)
+        let userToken = userInfo.userToken
+        let customerId = userInfo.customerId
+        console.log('Getting token from localstorage : ' + userToken)
+        console.log('Getting CustomerId from localstorage : ' + customerId)
+        if (userToken != '') {
+          this.getWalletInfo(userToken,customerId)
+        } else {
+          return (
+            Alert.alert(
+              'Need Login!!',
+              'Please LOGIN to Proceed.',
+              [
+                {
+                  text: 'OK', onPress: () => {
+                    this.setState({ isVisible: false })
+                    this.props.navigation.navigate('Welcome')
+                  },
+                  style: 'cancel'
+                },
+              ],
+              { cancelable: false },
+            )
+          )
+        }
+
+    } catch (error) {
+        // this.props.navigation.navigate('App')
+        console.log('Error in getting stored value from asyncstorage: ' + error)
+        return (
+          Alert.alert(
+            'Need Login!!',
+            'Please LOGIN to Proceed.',
+            [
+              {
+                text: 'OK', onPress: () => {
+                  this.setState({ isVisible: false })
+                  this.props.navigation.navigate('Welcome')
+                },
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
+        )
+    }
+
+};
+
+  // checkRegister(){
+  //   if ( ConstantValues.customerId == '') {
+  //     return(
+  //       Alert.alert(
+  //         'Need Login!!',
+  //         'Please LOGIN to Proceed.',
+  //         [
+  //           {
+  //             text: 'OK', onPress: () => this.props.navigation.navigate('Welcome'),
+  //             style: 'cancel'
+  //           },
+  //         ],
+  //         { cancelable: false },
+  //       )
+  //     ),
+  //     this.setState({
+  //       refreshing: false
+  //     })
+  //   } else {
+  //     this.onRegister()
+  //   }
+  // }
+  // async onRegister() {
+  //   try {
+  //     let response = await loginApi.getUserRegister();
+  //     console.log('data received in register.js : ' + JSON.stringify(response))
+  //     ConstantValues.loginCount = response.data.loginCount
+  //     ConstantValues.customerPhoneNo = response.data.mobile
+  //     ConstantValues.customerName = response.data.fullName
+  //     ConstantValues.customerRefferalCode = response.data.referralCode
     
-      this.getWalletInfo();
-    } catch (error) {
-      console.log('Data received in register.js catch: ' + error)
-    }
-  }
+  //     this.getWalletInfo();
+  //   } catch (error) {
+  //     console.log('Data received in register.js catch: ' + error)
+  //   }
+  // }
 
-  async getWalletInfo() {
+  async getWalletInfo(userToken,customerId) {
     try {
-      let response = await walletApi.getWalletInfo();
+      let response = await walletApi.myWalletInfo(userToken,customerId)
       console.log('data received in mywallet.js : ' + JSON.stringify(response))
       if (response.status == true) {
         ConstantValues.walletBalance = response.data.balance
@@ -86,28 +147,28 @@ export default class myWallet extends Component {
       console.log('Data received in mywallet.js catch: ' + error)
     }
   }
-  async handleWalletRefresh(){
-    try {
-      let response = await walletApi.getWalletInfo();
-      console.log('data received in mywallet.js : ' + JSON.stringify(response))
-      if (response.status == true) {
-        ConstantValues.walletBalance = response.data.balance
-        this.setState({
-          walletBalance: ConstantValues.walletBalance,
-          data: response.data.histories,
-        })
-        // console.log('data array is : '+ JSON.stringify(this.state.data))
-      } else {
-        return (
+  // async handleWalletRefresh(){
+  //   try {
+  //     let response = await walletApi.getWalletInfo();
+  //     console.log('data received in mywallet.js : ' + JSON.stringify(response))
+  //     if (response.status == true) {
+  //       ConstantValues.walletBalance = response.data.balance
+  //       this.setState({
+  //         walletBalance: ConstantValues.walletBalance,
+  //         data: response.data.histories,
+  //       })
+  //       // console.log('data array is : '+ JSON.stringify(this.state.data))
+  //     } else {
+  //       return (
 
-          ToastAndroid.show('Profile Updated Successfully', ToastAndroid.LONG)
+  //         ToastAndroid.show('Profile Updated Successfully', ToastAndroid.LONG)
 
-        )
-      }
-    } catch (error) {
-      console.log('Data received in mywallet.js catch: ' + error)
-    }
-  }
+  //       )
+  //     }
+  //   } catch (error) {
+  //     console.log('Data received in mywallet.js catch: ' + error)
+  //   }
+  // }
 
   render() {
     return (

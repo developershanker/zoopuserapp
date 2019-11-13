@@ -40,7 +40,7 @@ export default class menuApi {
 
             const response = await fetch(uri, option)
             const json = await response.json();
-            console.log(json)
+            // console.log(json)
             return Promise.resolve(json)
         }
         catch (error) {
@@ -56,10 +56,11 @@ export default class menuApi {
             //body
             const body = {}
             body['stationId'] = ConstantValues.stationId
+            body['arrivalTime'] = ConstantValues.ata
 
             //calling api for response
             const response = await this.apiCall(apiUrl, 'GET', body, {})
-            console.log(response)
+             console.log(response)
 
             return Promise.resolve(response)
 

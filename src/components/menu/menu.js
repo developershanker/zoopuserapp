@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, SectionList, ScrollView, Image, TouchableOpacity, ActivityIndicator, BackHandler, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, SectionList, ScrollView, Image, TouchableOpacity, ActivityIndicator, BackHandler, Alert,ToastAndroid } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -196,7 +196,7 @@ export default class Menu extends Component {
 
             Alert.alert(
               'Alert!!',
-              'No Items to display.Select another station',
+              'No Items to display.Select another outlet',
               [
                 {
                   text: 'OK', onPress: () => this.props.navigation.navigate('Station'),
@@ -224,6 +224,7 @@ export default class Menu extends Component {
   checkCart() {
     if (this.state.totalPrice >= ConstantValues.minimumOrderValue) {
       if (ConstantValues.customerId != '') {
+        cartApi.removeCoupon()
         ConstantValues.walletBalanceUsed = 0
         ConstantValues.couponValue = 0
         this.props.navigation.navigate('Cart')
