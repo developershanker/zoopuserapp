@@ -101,46 +101,58 @@ export default class cartApi {
 
     static billDetail = () => {
 
-    ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
-    ConstantValues.deliveryCharge = Math.round(ConstantValues.deliveryCharge)
-    console.log('deliveryCharge : ' + ConstantValues.deliveryCharge)
-    ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.discount + ConstantValues.gst,
-      ConstantValues.billDetail = {
-        'totalAmount': ConstantValues.totalBasePrice,
-        'totalZoopPrice':ConstantValues.totalZoopPrice,
-        'deliveryCharge': ConstantValues.zoopdeliveryCharge,
-        'deliveryChargeGst': ConstantValues.zoopdeliveryChargegst,
-        'deliveryChargeGstRate': ConstantValues.deliveryChargegstRate,
-        'discount': ConstantValues.discount,
-        'couponId': ConstantValues.couponId,
-        'couponCode': ConstantValues.couponCode,
-        'couponValue': ConstantValues.couponValue,
-        'walletAmount': ConstantValues.walletBalanceUsed,
-        'gst': (ConstantValues.gst).toFixed(2),
-        'totalPayableAmount': (ConstantValues.totalPayableAmount).toFixed(2)
-      }
-    console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
+        ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
+            ConstantValues.deliveryCharge = Math.round(ConstantValues.deliveryCharge)
+        console.log('deliveryCharge : ' + ConstantValues.deliveryCharge)
+        ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.discount + ConstantValues.gst,
+            ConstantValues.billDetail = {
+                'totalAmount': ConstantValues.totalBasePrice,
+                'totalZoopPrice': ConstantValues.totalZoopPrice,
+                'deliveryCharge': ConstantValues.zoopdeliveryCharge,
+                'deliveryChargeGst': ConstantValues.zoopdeliveryChargegst,
+                'deliveryChargeGstRate': ConstantValues.deliveryChargegstRate,
+                'discount': ConstantValues.discount,
+                'couponId': ConstantValues.couponId,
+                'couponCode': ConstantValues.couponCode,
+                'couponValue': ConstantValues.couponValue,
+                'walletAmount': ConstantValues.walletBalanceUsed,
+                'gst': (ConstantValues.gst).toFixed(2),
+                'totalPayableAmount': (ConstantValues.totalPayableAmount).toFixed(2)
+            }
+        console.log('ConstantValues.billDetail : ' + JSON.stringify(ConstantValues.billDetail))
 
-  }
-    
+    }
+
     static resetCart = () => {
         ConstantValues.inCart = []
         ConstantValues.finalCart = []
     }
     static changeCode = (couponCode) => {
         if (couponCode == '') {
-        //   this.setState({
-        //     textPromoCode: 'Apply Coupon Code'
-        //   })
-          ConstantValues.appliedCode = 'Apply Coupon Code'
-          console.log('couponCode is : ' + couponCode + '\n' + 'ConstantValues.appliedCode : ' + ConstantValues.appliedCode)
-        //   this.props.navigation.navigate('Cart')
+            //   this.setState({
+            //     textPromoCode: 'Apply Coupon Code'
+            //   })
+            ConstantValues.appliedCode = 'Apply Coupon Code'
+            console.log('couponCode is : ' + couponCode + '\n' + 'ConstantValues.appliedCode : ' + ConstantValues.appliedCode)
+            //   this.props.navigation.navigate('Cart')
         } else {
-        //   this.setState({
-        //     textPromoCode: couponCode
-        //   })
-          ConstantValues.appliedCode = couponCode
-          console.log('couponCode is : ' + couponCode+ '\n' + 'ConstantValues.appliedCode : ' + ConstantValues.appliedCode)
+            //   this.setState({
+            //     textPromoCode: couponCode
+            //   })
+            ConstantValues.appliedCode = couponCode
+            console.log('couponCode is : ' + couponCode + '\n' + 'ConstantValues.appliedCode : ' + ConstantValues.appliedCode)
         }
-      }
+    }
+
+    static removeCoupon = () => {
+        ConstantValues.couponCode = ''
+        ConstantValues.couponValue = 0
+        ConstantValues.couponType = ''
+        ConstantValues.couponId = 0
+        ConstantValues.discount = 0
+        ConstantValues.rateDiscount = 0
+        ConstantValues.isCouponApplied = false
+        ConstantValues.appliedCode = 'Apply Coupon Code'
+        cartApi.billDetail()
+    }
 }

@@ -185,7 +185,7 @@ export default class passengerDetail extends Component {
               return (
                 Alert.alert(
                   'PNR Alert',
-                  'Bookings currently closed for this outlet. Kindly choose another upcoming station.',
+                  'Bookings currently closed for this outlet. Kindly choose another outlet.',
                   [
                     {
                       text: 'Search Again',

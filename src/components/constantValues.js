@@ -11,8 +11,9 @@ export const calcHeight = x => PixelRatio.roundToNearestPixel((deviceHeight * x)
 export const calcWidth = x => PixelRatio.roundToNearestPixel((deviceWidth * x) / 100)
 export default class ConstantValues {
 static apiUrl = 'https://appapi.zoopindia.in/'
-  //static apiUrl = 'http://13.126.232.146:3000/'
-//static apiUrl = 'http://192.168.1.6:3000/'
+//static apiUrl = 'http://10.5.51.106:3000/'
+//static apiUrl = 'http://192.168.1.7:3000/'
+
 
 
   
@@ -66,18 +67,7 @@ static apiUrl = 'https://appapi.zoopindia.in/'
   static minimumOrderValue = null
   static suggestions = ''
 
-  //order tracking css
-  static paymentFailed = <Text style={{fontFamily: 'Poppins-Medium',color:'#cc1b1b'}}>Payment Failed</Text> 
-  static paymentPending = <Text style={{fontFamily: 'Poppins-Medium',color:'#f52a2a'}}>Payment Pending</Text> 
-  static booked = <Text style={{fontFamily: 'Poppins-Medium',color:'#e95225'}}>Booked</Text> 
-  static sentToOutlet = <Text style={{fontFamily: 'Poppins-Medium',color:'#71e3e3'}}>Send To Outlet</Text> 
-  static underPreparation =<Text style={{fontFamily: 'Poppins-Medium',color:'#e0e643'}}>Under Preparation</Text>  
-  static outForDelivery =<Text style={{fontFamily: 'Poppins-Medium',color:'#27cfbb'}}>Out for Delivery</Text> 
-  static delivered =<Text style={{fontFamily: 'Poppins-Medium',color:'#43d12a'}}>Deliverd</Text> 
-  static notDelivered =<Text style={{fontFamily: 'Poppins-Medium',color:'#393e59'}}>Not Delivered</Text> 
-  static badDelivery =<Text style={{fontFamily: 'Poppins-Medium',color:'#4f4e4e'}}>Bad Delivery</Text> 
-  static cancelled =<Text style={{fontFamily: 'Poppins-Medium',color:'#252629'}}>Cancelled</Text> 
-
+  static orderStatus = ['#e95225','#cc1b1b','#f52a2a','#e95225','#71e3e3','#f52a2a','#e0e643','#27cfbb','#43d12a','#393e59','#4f4e4e','#252629','#6c7293'];
 
   //passenger detail
   static pnr = ''

@@ -39,7 +39,6 @@ export default class loginApi {
             return Promise.reject(error)
         }
     }
-
     static async getWalletInfo() {
         try {
             //url
@@ -48,6 +47,28 @@ export default class loginApi {
             //headers
             const headers = {}
             headers['x-auth-token'] = ConstantValues.token
+
+            //calling api for response
+            const response = await this.apiCall(apiUrl, 'GET', {}, headers)
+            console.log(response)
+
+            return Promise.resolve(response)
+
+        } catch (error) {
+            console.log('Data received in WalletApi catch: ' + error)
+            return Promise.reject(error)
+
+        }
+    }
+
+    static async myWalletInfo(userToken,customerId) {
+        try {
+            //url
+            const apiUrl = 'customers/wallet-history/' + customerId
+
+            //headers
+            const headers = {}
+            headers['x-auth-token'] = userToken
 
             //calling api for response
             const response = await this.apiCall(apiUrl, 'GET', {}, headers)

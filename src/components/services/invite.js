@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Clipboard, ScrollView, Platform, Dimensions, Al
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-community/async-storage';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import ConstantValues from '../constantValues';
 import { CustomButton } from '../assests/customButtonLarge.js';
@@ -13,7 +14,9 @@ import loginApi from '../login/loginApi';
 export default class Invite extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    this.checkRegister()
+    // this.checkRegister()
+    // this.onRegister()
+    this.tokenAsync()
   }
 
   constructor(props) {
@@ -27,28 +30,83 @@ export default class Invite extends Component {
   }
 
 
-  checkRegister(){
-    if ( ConstantValues.customerId == '') {
-      return(
-        Alert.alert(
-          'Need Login!!',
-          'Please LOGIN to Proceed.',
-          [
-            {
-              text: 'OK', onPress: () => this.props.navigation.navigate('Welcome'),
-              style: 'cancel'
-            },
-          ],
-          { cancelable: false },
-        )
-      )
-    } else {
-      this.onRegister()
-    }
-  }
-  async onRegister() {
+  tokenAsync = async () => {
     try {
-      let response = await loginApi.getUserRegister();
+        const storedValues = await AsyncStorage.getItem('userInfo')
+        // console.log('JSON.stringify(storedValues) : ' + JSON.stringify(storedValues))
+        console.log('storedValues : ' + storedValues)
+        //  storedValues : {"userToken":"pbkdf2_sha256$55000$UxLacxq6kwQ=$GqbBXFV+Kircxzvwf14je+wWpWa8+fxNnvcTaItB2xY=","customerId":2}
+        let userInfo = JSON.parse(storedValues)
+        let userToken = userInfo.userToken
+        let customerId = userInfo.customerId
+        console.log('Getting token from localstorage : ' + userToken)
+        console.log('Getting CustomerId from localstorage : ' + customerId)
+        if (userToken != '') {
+          this.onRegister(userToken,customerId)
+        } else {
+          return (
+            Alert.alert(
+              'Need Login!!',
+              'Please LOGIN to Proceed.',
+              [
+                {
+                  text: 'OK', onPress: () => {
+                    this.setState({ isVisible: false })
+                    this.props.navigation.navigate('Welcome')
+                  },
+                  style: 'cancel'
+                },
+              ],
+              { cancelable: false },
+            )
+          )
+        }
+
+    } catch (error) {
+        // this.props.navigation.navigate('App')
+        console.log('Error in getting stored value from asyncstorage: ' + error)
+        return (
+          Alert.alert(
+            'Need Login!!',
+            'Please LOGIN to Proceed.',
+            [
+              {
+                text: 'OK', onPress: () => {
+                  this.setState({ isVisible: false })
+                  this.props.navigation.navigate('Welcome')
+                },
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
+        )
+    }
+
+};
+
+  // checkRegister(){
+  //   if ( ConstantValues.customerId == '') {
+  //     return(
+  //       Alert.alert(
+  //         'Need Login!!',
+  //         'Please LOGIN to Proceed.',
+  //         [
+  //           {
+  //             text: 'OK', onPress: () => this.props.navigation.navigate('Welcome'),
+  //             style: 'cancel'
+  //           },
+  //         ],
+  //         { cancelable: false },
+  //       )
+  //     )
+  //   } else {
+  //     this.onRegister()
+  //   }
+  // }
+  async onRegister(userToken,customerId) {
+    try {
+      let response = await loginApi.getUserRegisterParams(userToken,customerId);
       console.log('data received in register.js : ' + JSON.stringify(response))
       ConstantValues.loginCount = response.data.loginCount
       ConstantValues.customerPhoneNo = response.data.mobile

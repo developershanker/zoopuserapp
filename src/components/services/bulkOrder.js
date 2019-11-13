@@ -25,11 +25,12 @@ export default class bulkOrder extends Component {
 
   onSubmitBulkOrder = (fullName, mobile, email, totalPassenger, journeyDate, pnr, comment) => {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let reg = /^[0-9]+$/;
     if (fullName != '') {
       if (mobile != '' && mobile.length == 10) {
         if (email != '') {
           if (re.test(email)) {
-            if (totalPassenger != '') {
+            if (totalPassenger != '' && reg.test(totalPassenger) ) {
               if (journeyDate != '') {
                 console.log('fullName : ' + fullName + '\n' + 'mobile: ' + mobile + '\n' + 'email : ' + email + '\n' + 'totalPassenger : ' + totalPassenger + '\n' + 'journeyDate : ' + journeyDate + '\n' + 'pnr : ' + pnr + '\n' + 'comment : ' + comment)
                 this.sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment)
@@ -168,7 +169,7 @@ export default class bulkOrder extends Component {
                   style={styles.input}
                   placeholder='Enter the number of passengers.'
                   editable={true}
-                  keyboardType='number-pad'
+                  keyboardType='numeric'
                   value={this.state.totalPassenger}
                   maxLength={4}
                   onChangeText={totalPassenger => this.setState({ totalPassenger })}

@@ -21,14 +21,14 @@ export default class Welcome extends Component {
       mobile: '',
     };
   }
-  componentWillMount(){
+  componentWillMount() {
     BackHandler.addEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
     console.log('Back Pressed')
-}
-componentWillUnmount() {
-  BackHandler.removeEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
-  console.log('Back Pressed Unmount')
-}
+  }
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
+    console.log('Back Pressed Unmount')
+  }
 
 
 
@@ -108,7 +108,7 @@ componentWillUnmount() {
               title="Submit"
               onPress={
                 () => {
-                  let reg = /^[a-zA-Z0-9]+$/;
+                  let reg = /^[0-9]+$/;
                   // console.log(this.state.text)
                   console.log(apiLevel)
                   if (this.state.mobile != '' && this.state.mobile.length === 10) {

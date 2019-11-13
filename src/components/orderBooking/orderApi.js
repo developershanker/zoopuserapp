@@ -87,14 +87,14 @@ export default class orderApi extends Component {
         }
     }
 
-    static async orderHistory() {
+    static async orderHistory(usertoken,customerId) {
         try {
             //url
-            const apiUrl = 'orders/history/' + ConstantValues.customerId
+            const apiUrl = 'orders/history/' + customerId
 
             //headers
             const headers = {}
-            headers['x-auth-token'] = ConstantValues.token
+            headers['x-auth-token'] = usertoken
 
             //calling api for response
             const response = await this.apiCall(apiUrl, 'GET', {}, headers)
