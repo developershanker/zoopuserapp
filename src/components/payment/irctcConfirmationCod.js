@@ -55,6 +55,14 @@ export default class irctcConfirmationCod extends Component {
           irctc_result_icon: 'exclamation'
         })
         console.log(response.error)
+      } else  {
+        this.setState({
+          processingirctc: false,
+          irctc_text: 'Processing for IRCTC Id',
+          overallStatus: 'Processing for IRCTC Id',
+          irctc_result_icon: 'exclamation'
+        })
+        console.log(response.error)
       }
     } catch (error) {
       console.log('Data received in paymentPaytm.js catch: ' + error)

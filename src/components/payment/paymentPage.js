@@ -43,7 +43,7 @@ export default class PaymentPage extends Component {
       let response = await orderApi.orderBooking();
       if (response.status == true) {
         ConstantValues.zoopOrderId = response.data.orderId
-        ConstantValues.zooptransactionId = response.data.transactionId
+        ConstantValues.zooptransactionId = response.data.zoopTransactionNo
         if (paymentType == 2) {
           return (
            ToastAndroid.show('Requesting payment, please wait...', ToastAndroid.LONG),
