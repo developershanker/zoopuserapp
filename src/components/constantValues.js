@@ -10,9 +10,9 @@ export const deviceHeight = Dimensions.get('window').height
 export const calcHeight = x => PixelRatio.roundToNearestPixel((deviceHeight * x) / 100)
 export const calcWidth = x => PixelRatio.roundToNearestPixel((deviceWidth * x) / 100)
 export default class ConstantValues {
-//static apiUrl = 'https://appapi.zoopindia.in/'
+static apiUrl = 'https://appapi.zoopindia.in/'
 //static apiUrl = 'http://10.5.51.106:3000/'
-static apiUrl = 'http://192.168.1.7:3000/'
+//static apiUrl = 'http://192.168.1.7:3000/'
 
 
 
