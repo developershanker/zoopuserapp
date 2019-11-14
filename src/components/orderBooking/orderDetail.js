@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, Image, ScrollView, TouchableOpacity,TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, Image, ScrollView, TouchableOpacity,TouchableWithoutFeedback,BackHandler } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -10,6 +10,14 @@ export default class OrderDetail extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.getOrderDetails()
+  }
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
+    console.log('Back Pressed')
+  }
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
+    console.log('Back Pressed Unmount')
   }
   constructor(props) {
     super(props);

@@ -190,7 +190,7 @@ export default class myWallet extends Component {
               <Text style={{ color: '#60b246', fontFamily: 'Poppins-Regular', fontSize: 15 }}>{ConstantValues.rupee} {this.state.walletBalance}</Text>
             </View>
 
-            <View style={{ flexDirection: 'row', height: '15%', backgroundColor: '#e4e4e4', justifyContent: 'space-around', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', height: 50, backgroundColor: '#e4e4e4', justifyContent: 'space-around', alignItems: 'center' }}>
               <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 10 ,textAlign:'left'}}>Date</Text>
               <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 10 ,textAlign:'right'}}>Amount</Text>
               <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 10 ,textAlign:'left'}}>Particular</Text>
@@ -204,13 +204,13 @@ export default class myWallet extends Component {
                 // onRefresh={this.handleWalletRefresh()}
                 extraData={this.state}
                 renderItem={({ item }) =>
-                  <View>
+                  <View style={{justifyContent:'center',alignContent:'center',alignItems:'center'}}>
                     <View style={styles.card}>
-                      <View style={{ flexDirection: 'row', paddingVertical: 10, paddingHorizontal: 20 , justifyContent: 'space-between', alignItems: 'center',}}>
-                      <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 ,textAlign:'left'}}>{moment(item.created).format('DD-MM-YYYY')}</Text>
-                        <Text style={{ color: item.transactionType == 'CREDIT' ? '#60b246' : '#b32120', fontFamily: 'Poppins-Regular', fontSize: 15,textAlign:'right' }}>{ConstantValues.rupee} {item.amount}</Text>
-                        <Text style={{ width: 150,color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12,textAlign:'left' }}>{item.particulars}</Text>
-                        <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 15 ,textAlign:'right'}}> {ConstantValues.rupee} {item.balance}</Text>
+                      <View style={{ flexDirection: 'row', paddingVertical: 5, paddingHorizontal: 20, justifyContent: 'space-between', alignItems: 'center', }}>
+                        <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12, textAlign: 'left' }}>{moment(item.created).format('DD-MM-YYYY')}</Text>
+                        <Text style={{ color: item.transactionType == 'CREDIT' ? '#60b246' : '#b32120', fontFamily: 'Poppins-Regular', fontSize: 12, textAlign: 'right' }}>{ConstantValues.rupee} {item.amount}</Text>
+                        <Text style={{ width: 150, color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12, textAlign: 'left' }}>{item.particulars}</Text>
+                        <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12, textAlign: 'right' }}> {ConstantValues.rupee} {item.balance}</Text>
                       </View>
 
                     </View>
@@ -236,14 +236,14 @@ const styles = StyleSheet.create({
     backgroundColor:'#fff'
   },
   card: {
-    width: Dimensions.get('window').width - 5,
+    width: Dimensions.get('window').width - 10,
     borderRadius: 100 / 9,
     backgroundColor: '#ffffff',//can change as we move to various pages
-    marginVertical:10,
+    marginVertical:5,
     borderColor: '#e4e4e4',
     borderWidth: 1,
     shadowOpacity: 0.4,
     borderBottomColor: '#e4e4e4',
-    borderBottomWidth: 4,
+    borderBottomWidth: 2,
   },
 })

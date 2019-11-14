@@ -52,8 +52,6 @@ export default class myOrderDetail extends Component {
         } else {
             OrderDetailConstants.balanceToPay = OrderDetailConstants.totalPayableAmount - (OrderDetailConstants.paidAmount ? OrderDetailConstants.paidAmount : 0);
         }
-
-
     }
 
     render() {
@@ -197,7 +195,7 @@ export default class myOrderDetail extends Component {
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                             <Text style={styles.tiletext}>(-) Paid Online </Text>
-                            <Text style={styles.tiletext}>  {ConstantValues.rupee} {OrderDetailConstants.paidAmount}</Text>
+                            <Text style={styles.tiletext}>  {ConstantValues.rupee} {OrderDetailConstants.paymentTypeId == 2 ? OrderDetailConstants.totalPayableAmount : OrderDetailConstants.paidAmount}</Text>
                         </View>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>

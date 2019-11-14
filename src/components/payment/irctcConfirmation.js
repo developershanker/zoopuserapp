@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, ActivityIndicator, StyleSheet, Dimensions, ToastAndroid, Image } from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet, Dimensions, ToastAndroid, Image,BackHandler } from "react-native";
 import SplashScreen from "react-native-splash-screen";
 import { SafeAreaView } from "react-navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -14,6 +14,14 @@ export default class irctcConfirmation extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.sendPaymentConfirmation()
+  }
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
+    console.log('Back Pressed')
+  }
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
+    console.log('Back Pressed Unmount')
   }
   constructor(props) {
     super(props);

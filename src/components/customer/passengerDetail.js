@@ -516,7 +516,6 @@ export default class passengerDetail extends Component {
                     //keyboardType='default'
                     numberOfLines={4}
                     multiline={true}
-                    maxLength={200}
                     autoCapitalize='sentences'
                     onChangeText={addMessage => this.setState({ addMessage })}
                   />
