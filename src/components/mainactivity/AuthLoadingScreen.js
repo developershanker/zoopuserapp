@@ -186,13 +186,17 @@ class AuthLoadingScreen extends Component {
             let userInfo = JSON.parse(storedValues)
             let userToken = userInfo.userToken
             let customerId = userInfo.customerId
+            let isAgent = userInfo.isAgent
             console.log('Getting token from localstorage : ' + userToken)
             console.log('Getting CustomerId from localstorage : ' + customerId)
+            console.log('Getting isAgent from localstorage : ' + isAgent)
             if (userToken != '') {
                 ConstantValues.token = userToken
                 ConstantValues.customerId = customerId
+                ConstantValues.isAgent = isAgent
                 console.log('ConstantValues.token : ' + ConstantValues.token)
                 console.log('ConstantValues.customerId : ' + ConstantValues.customerId)
+                console.log('ConstantValues.isAgent : ' + ConstantValues.isAgent)
                 this.props.navigation.navigate(userToken ? 'App' : 'App');
             } else {
                 return (

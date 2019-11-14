@@ -71,6 +71,14 @@ export default class irctcConfirmation extends Component {
           irctc_result_icon: 'exclamation'
         })
         console.log(response.error)
+      } else {
+        this.setState({
+          processingirctc: false,
+          irctc_text: 'Processing for IRCTC Id',
+          overallStatus: 'Processing for IRCTC Id',
+          irctc_result_icon: 'exclamation'
+        })
+        console.log(response.error)
       }
     } catch (error) {
       console.log('Data received in paymentPaytm.js catch: ' + error)
@@ -131,7 +139,7 @@ export default class irctcConfirmation extends Component {
           <CustomButton
             style={{ backgroundColor: '#fff', alignSelf: 'center', marginBottom: 20, }}
             onPress={() => { this.props.navigation.navigate('Search') }}
-            textStyle = {{color:'#9b9b9b'}}
+            textStyle={{ color: '#9b9b9b' }}
             title='Go To Home'
           />
         </Fade>

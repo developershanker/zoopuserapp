@@ -36,6 +36,7 @@ import Contact from '../services/contact';
 import FAQ from '../services/faq';
 import Feedback from '../services/feedback';
 import MyOrders from '../customer/myOrders';
+import MyOrderDetail from '../customer/myOrderDetail';
 import Invite from '../services/invite.js';
 import MyWallet from '../customer/myWallet';
 import Profile from '../customer/profile';
@@ -453,6 +454,12 @@ const AppNavigator = createStackNavigator({
   },
   OrderConfirm: {
     screen: OrderConfirm,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  MyOrderDetail: {
+    screen: MyOrderDetail,
     navigationOptions: {
       header: null,
     }
