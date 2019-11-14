@@ -86,6 +86,7 @@ export default class otpVerify extends Component {
       let storedObject = {};
       storedObject.userToken = ConstantValues.token;
       storedObject.customerId = ConstantValues.customerId;
+      storedObject.isAgent = ConstantValues.isAgent;
       await AsyncStorage.setItem('userInfo', JSON.stringify(storedObject));
       console.log('Storing this in local storage' + JSON.stringify(storedObject))
     } catch (error) {
