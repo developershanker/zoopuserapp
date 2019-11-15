@@ -81,7 +81,6 @@ export default class Search extends Component {
 
   trainList = (value) => {
 
-
     if (value == 'Enter PNR') {
       return (
         <View style={styles.inputView}>
@@ -171,7 +170,8 @@ export default class Search extends Component {
   }
 
   searchBy(text,query) {
-    if (text != '') {
+    let reg = /^[0-9]+$/;
+    if (text != '' && reg.test(text)) {
       if (text.length == 10 || text.length == 5) {
         console.log('query.length : ' + query.length + '\n' + 'query : ' + query)
           ConstantValues.searchString = text,

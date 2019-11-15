@@ -15,6 +15,7 @@ import Modal from "react-native-modal";
 import searchApi from '../mainactivity/searchApi.js';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
+import { CustomAlert } from '../assests/customAlert.js';
 
 export default class passengerDetail extends Component {
   componentDidMount() {
@@ -310,7 +311,18 @@ export default class passengerDetail extends Component {
     if (ConstantValues.isAgent == 1) {
       if (this.state.name.length == 0 || this.state.customerPhoneNo.length == 0) {
         return(
-          ToastAndroid.show('Please fill name & contact',ToastAndroid.LONG)
+          //ToastAndroid.show('Please fill name & contact',ToastAndroid.LONG)
+          Alert.alert(
+            'Mandatory Field Alert!!',
+            'Please fill name & contact.',
+            [
+              {
+                text: 'OK', onPress: () => console.log('Mandatory'),
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
         )
       } else {
         this.agentAction()
@@ -323,7 +335,18 @@ export default class passengerDetail extends Component {
     } else {
       if (this.state.name.length == 0) {
         return(
-          ToastAndroid.show('Please fill name',ToastAndroid.LONG)
+          // ToastAndroid.show('Please fill name',ToastAndroid.LONG)
+          Alert.alert(
+            'Mandatory Field Alert!!',
+            'Please fill name.',
+            [
+              {
+                text: 'OK', onPress: () => console.log('Mandatory'),
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
         )
       } else {
         this.agentAction()
@@ -361,6 +384,32 @@ export default class passengerDetail extends Component {
     }
   }
 
+  // parameterCheck = () => {
+  //   let reg = /^[0-9]+$/;
+  //   // console.log("ConstantValues.passengerDetail : " + JSON.stringify(ConstantValues.passengerDetail))
+
+  //   if (ConstantValues.pnr.length === 10 && reg.test(ConstantValues.pnr)) {
+  //     if (ConstantValues.seat.length != 0 && ConstantValues.coach.length != 0) {
+  //       if (ConstantValues.deliveryDate.length != 0 || ConstantValues.deliveryDate != 'Invalid date') {
+  //         console.log("ConstantValues.passengerDetail : " + JSON.stringify(ConstantValues.passengerDetail))
+  //       } else {
+  //         return (
+  //           <CustomAlert alert={'Delivery Date Incorrect'} />
+  //         )
+  //       }
+  //     } else {
+  //       return (
+  //         <CustomAlert alert={'Seat Info Incorrect'} />
+  //       )
+  //     }
+  //   } else {
+  //     return (
+  //       <CustomAlert alert={'PNR Incorrect'} />
+  //     )
+  //   }
+
+  // }
+
   savePassengerDetail = () => {
     ConstantValues.orderDate = this.state.date
     ConstantValues.orderTime = this.state.time
@@ -393,6 +442,7 @@ export default class passengerDetail extends Component {
       'passengerSeatInfo': ConstantValues.passengerInfo,
       'suggestions': ConstantValues.suggestions = this.state.addMessage
     }
+   // this.parameterCheck()
   }
   EnableButtonFunction = () => {
     this.setState({
@@ -457,7 +507,7 @@ export default class passengerDetail extends Component {
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.input}
-                  placeholder='Passenger name'
+                  placeholder='Passenger name *'
                   editable={true}
                   keyboardType='default'
                   value={this.state.name}
@@ -470,7 +520,7 @@ export default class passengerDetail extends Component {
                 <View style={styles.inputView}>
                 <TextInput
                   style={styles.input}
-                  placeholder='Passenger Contact No.'
+                  placeholder='Passenger Contact No. *'
                   editable={ConstantValues.isAgent == 1 ? true : false}
                   keyboardType='number-pad'
                   maxLength={10}

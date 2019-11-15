@@ -91,6 +91,16 @@ export default class myOrderDetail extends Component {
                             <Text style={[styles.tiletext], { fontFamily: 'Poppins-Bold', color: '#000' }}>{OrderDetailConstants.orderType}</Text>
                         </View>
 
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                            <Text style={styles.tiletext}>Booking Date</Text>
+                            <Text style={styles.tiletext}>{OrderDetailConstants.bookingDate}</Text>
+                        </View>
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                            <Text style={styles.tiletext}>Booking Time</Text>
+                            <Text style={styles.tiletext}>{OrderDetailConstants.bookingTime}</Text>
+                        </View>
+
                     </View>
 
                     <View style={styles.card}>
@@ -113,7 +123,7 @@ export default class myOrderDetail extends Component {
                         <Fade visible={OrderDetailConstants.suggestions !== ''}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>Suggestions</Text>
-                                <Text style={styles.tiletext}>{OrderDetailConstants.suggestions}</Text>
+                                <Text style={{ width: 100, fontFamily: 'Poppins-Regular', color: '#000000', textAlign: 'right' }}>"{OrderDetailConstants.suggestions}"</Text>
                             </View>
                         </Fade>
 
@@ -160,7 +170,7 @@ export default class myOrderDetail extends Component {
                                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: 100, alignContent: 'center', }}>
                                         <Text style={{ fontFamily: 'Poppins-Regular', color: '#6dcc5a', width: 40, textAlign: 'right' }}> {item.quantity} </Text>
                                         <Text style={{ fontFamily: 'Poppins-Regular', color: '#000', fontSize: 10, }}> X </Text>
-                                        <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', width: 60, textAlign: 'right' }}> {OrderDetailConstants.rupee} {item.basePrice}</Text>
+                                        <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', width: 50, textAlign: 'right' }}> {OrderDetailConstants.rupee} {item.basePrice}</Text>
                                     </View>
                                 </View>
                             }

@@ -601,7 +601,7 @@ export default class Cart extends Component {
         <ScrollView>
           <View>
             {/* header view */}
-            <View style={{ flexDirection: 'row', width: ConstantValues.deviceWidth, height: '10%' }}>
+            <View style={{ flexDirection: 'row', width: ConstantValues.deviceWidth, }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Menu')}>
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
@@ -610,12 +610,12 @@ export default class Cart extends Component {
               </View>
             </View>
             {/* header view ends */}
-            <View style={{ flexDirection: 'column', width: ConstantValues.deviceWidth, height: '10%', justifyContent: 'center', width: Dimensions.get('window').width, alignItems: 'center', marginVertical: 5 }}>
+            <View style={{ flexDirection: 'column', width: ConstantValues.deviceWidth, justifyContent: 'center', width: Dimensions.get('window').width, alignItems: 'center', marginVertical: 5 }}>
               <Text style={{ alignSelf: 'center', fontSize: 20, color: '#000000', fontFamily: 'Poppins-Medium', }}>{this.state.outletName}</Text>
               <Text style={{ alignSelf: 'center', fontSize: 15, color: '#000000', fontFamily: 'Poppins-Medium', }}>{this.state.station}</Text>
             </View>
             {/* Selected Items list */}
-            <View style={{ width: ConstantValues.deviceWidth, height: '80%' }}>
+            <View style={{ width: ConstantValues.deviceWidth, }}>
               <View style={styles.card}>
                 <Fade visible={this.state.revisedInCart.length == 0 ? true : false}>
                   <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -632,11 +632,11 @@ export default class Cart extends Component {
                   </View>
                 </Fade>
                 <FlatList
-                  style={{ width: Dimensions.get('window').width }}
+                  style={{  width: ConstantValues.deviceWidth - 20,paddingVertical:5 }}
                   data={this.state.revisedInCart}
                   extraData={this.state}
                   renderItem={({ item, index }) =>
-                    <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5, width: '100%' }}>
+                    <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5,}}>
                       <View style={{ width: 30, alignItems: 'center' }}>
                         <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryType == 'Veg' ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
                       </View>
@@ -896,7 +896,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Dimensions.get('window').width,
     justifyContent: 'center',
-    backgroundColor: '#fff',
   },
   card: {
     //backgroundColor: '#9b9b9b',//can change as we move to various pages

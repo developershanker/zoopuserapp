@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Picker, ToastAndroid, Text, Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity,Alert, CheckBox, FlatList ,TouchableWithoutFeedback} from 'react-native';
+import { View, Picker, ToastAndroid, Text, Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Alert, CheckBox, FlatList, TouchableWithoutFeedback } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -29,11 +29,12 @@ export default class PaymentPage extends Component {
       value: 0,
       codActive: false,
       checked: true,
+      clicked: false,
       paymentTypes: [],
       paymentTypeName: '',
       paymentTypeId: '',
-      paymentBorderColor:'#000000',
-      isVisible:true,
+      paymentBorderColor: '#000000',
+      isVisible: true,
       indexChecked: '0'
       // backgroundColor : ''
     };
@@ -46,16 +47,16 @@ export default class PaymentPage extends Component {
         ConstantValues.zooptransactionId = response.data.zoopTransactionNo
         if (paymentType == 2) {
           return (
-           ToastAndroid.show('Requesting payment, please wait...', ToastAndroid.LONG),
+            ToastAndroid.show('Requesting payment, please wait...', ToastAndroid.LONG),
             this.props.navigation.navigate('PaymentPaytm')
           )
-        } else if(paymentType == 1){
+        } else if (paymentType == 1) {
           return (
             ToastAndroid.show('Requesting IRCTC , please wait...', ToastAndroid.LONG),
             this.props.navigation.navigate('IrctcConfirmationCod')
           )
         }
-       
+
       } else {
         return (
           Alert.alert(
@@ -84,7 +85,7 @@ export default class PaymentPage extends Component {
       if (response.status == true) {
         this.setState({
           paymentTypes: response.data,
-          isVisible : false
+          isVisible: false
         })
         console.log('Data received in paymentPage.js response: ' + JSON.stringify(this.state.paymentTypes))
       } else {
@@ -96,43 +97,44 @@ export default class PaymentPage extends Component {
   }
 
 
-  setPaymentInfo = (item,index) => {
-   
+  setPaymentInfo = (item, index) => {
+
     this.setState({
       paymentTypeName: item.paymentTypeName,
       paymentTypeId: item.paymentTypeId,
       // paymentBorderColor:'#f15926'
-      indexChecked:item.paymentTypeId.toString()
+      indexChecked: item.paymentTypeId.toString()
     })
     // return(
     //   ToastAndroid.show('You selected method : ' + item.paymentTypeName ,ToastAndroid.LONG)
     // ),
     console.log('paymentTypeName : ' + this.state.paymentTypeName + '\n' + 'paymentTypeId :' + this.state.paymentTypeId),
-    console.log('item.paymentTypeName : ' + item.paymentTypeName + '\n' + 'item.paymentTypeId :' + item.paymentTypeId)
+      console.log('item.paymentTypeName : ' + item.paymentTypeName + '\n' + 'item.paymentTypeId :' + item.paymentTypeId)
   }
 
 
   paymentDetails = () => {
+    this.setState({ clicked: true })
     if (this.state.checked == true) {
-      if(this.state.paymentTypeId == 1 || this.state.paymentTypeId == 2){
+      if (this.state.paymentTypeId == 1 || this.state.paymentTypeId == 2) {
         ConstantValues.paymentType = this.state.paymentTypeName,
-        ConstantValues.paymentTypeId = this.state.paymentTypeId,
-        ConstantValues.refNo = '',
-        ConstantValues.paymentDetails = {
-          'referenceNo': ConstantValues.refNo,
-          'paymentType': ConstantValues.paymentType,
-          'paymentTypeId': ConstantValues.paymentTypeId
-        },
-        this.orderBooking(ConstantValues.paymentTypeId)
-      }else{
-        return(
-          ToastAndroid.show('Please select any payment method!!' ,ToastAndroid.LONG)
+          ConstantValues.paymentTypeId = this.state.paymentTypeId,
+          ConstantValues.refNo = '',
+          ConstantValues.paymentDetails = {
+            'referenceNo': ConstantValues.refNo,
+            'paymentType': ConstantValues.paymentType,
+            'paymentTypeId': ConstantValues.paymentTypeId
+          },
+          this.orderBooking(ConstantValues.paymentTypeId)
+      } else {
+        return (
+          ToastAndroid.show('Please select any payment method!!', ToastAndroid.LONG)
         ),
-        console.log('paymentTypeName : ' + this.state.paymentTypeName + '\n' + 'paymentTypeId :' + this.state.paymentTypeId)
+          console.log('paymentTypeName : ' + this.state.paymentTypeName + '\n' + 'paymentTypeId :' + this.state.paymentTypeId)
       }
     } else {
-      return(
-        ToastAndroid.show('Please accept Terms & Conditions to proceed',ToastAndroid.SHORT)
+      return (
+        ToastAndroid.show('Please accept Terms & Conditions to proceed', ToastAndroid.SHORT)
       )
     }
   }
@@ -148,7 +150,7 @@ export default class PaymentPage extends Component {
         <ScrollView>
           <View>
             {/* header view */}
-            <View style={{ flexDirection: 'row', paddingBottom:5 }}>
+            <View style={{ flexDirection: 'row', paddingBottom: 5 }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('PassengerDetail')}>
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
@@ -158,12 +160,12 @@ export default class PaymentPage extends Component {
             </View>
             {/* header view ends */}
             <View>
-            <View>
-          <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-            <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>Bill Details</Text>
-            {/* <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} /> */}
-          </View>
-          <View
+              <View>
+                <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
+                  <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>Bill Details</Text>
+                  {/* <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} /> */}
+                </View>
+                <View
                   style={styles.billcard}
                 >
                   <View>
@@ -208,7 +210,7 @@ export default class PaymentPage extends Component {
 
                   </View>
                 </View>
-        </View>
+              </View>
             </View>
             {/* passengerDetail view begin here */}
             <View style={{ width: Dimensions.get('window').width - 10, flexDirection: 'row', }}>
@@ -217,11 +219,11 @@ export default class PaymentPage extends Component {
             </View>
             <View style={styles.billcard}>
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' ,  paddingHorizontal: 10, paddingVertical: 5}}>Coach no. {ConstantValues.coach}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Coach no. {ConstantValues.coach}</Text>
                 <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Seat no. {ConstantValues.seat}</Text>
-                
+
               </View>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' , paddingHorizontal: 10, paddingVertical: 5}}>Name : {ConstantValues.customerName}</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Name : {ConstantValues.customerName}</Text>
               <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
               <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Alternate No. - {ConstantValues.customeralternateMobile}</Text>
             </View>
@@ -237,26 +239,26 @@ export default class PaymentPage extends Component {
               <FlatList
                 data={this.state.paymentTypes}
                 extraData={this.state}
-                renderItem={({ item,index }) =>
-                <TouchableWithoutFeedback onPress={() => {this.setPaymentInfo(item,index)}}>
-                  <View style={{ flexDirection: 'column', alignItems: 'center', paddingVertical: 10,paddingHorizontal: 10 }}>
-                    <View style={styles.paytmView}>
-                      <Icons name={this.state.indexChecked === item.paymentTypeId.toString() ? 'check-square' : 'square'} size={20} color={'#000000'} style={{width:50,alignSelf:'center'}}/>
-                      {/* <Text style={{ color: this.state.paymentBorderColor, fontSize: 15, fontFamily: 'Poppins-Regular' }}>{item.paymentTypeName == 'Prepaid' ? 'Pay through Paytm' : 'Cash On Delivery'}</Text> */}
-                      {
-                        item.paymentTypeId == 2 ? <Image source={require('../images/paytmnew.png')} /> : <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Regular',textAlign:'center' }}>Cash On Delivery</Text>
-                      }
-                      
+                renderItem={({ item, index }) =>
+                  <TouchableWithoutFeedback onPress={() => { this.setPaymentInfo(item, index) }}>
+                    <View style={{ flexDirection: 'column', alignItems: 'center', paddingVertical: 10, paddingHorizontal: 10 }}>
+                      <View style={styles.paytmView}>
+                        <Icons name={this.state.indexChecked === item.paymentTypeId.toString() ? 'check-square' : 'square'} size={20} color={'#000000'} style={{ width: 50, alignSelf: 'center' }} />
+                        {/* <Text style={{ color: this.state.paymentBorderColor, fontSize: 15, fontFamily: 'Poppins-Regular' }}>{item.paymentTypeName == 'Prepaid' ? 'Pay through Paytm' : 'Cash On Delivery'}</Text> */}
+                        {
+                          item.paymentTypeId == 2 ? <Image source={require('../images/paytmnew.png')} /> : <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Regular', textAlign: 'center' }}>Cash On Delivery</Text>
+                        }
+
+                      </View>
                     </View>
-                  </View>
                   </TouchableWithoutFeedback>
 
                 }
                 keyExtractor={(item) => item.paymentTypeId.toString()}
               />
 
-           
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center',paddingVertical: 20,paddingHorizontal: 20  }}>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', paddingVertical: 20, paddingHorizontal: 20 }}>
                 <CheckBox
                   value={this.state.checked}
                   disabled={false}
@@ -272,10 +274,10 @@ export default class PaymentPage extends Component {
 
           </View>
           <CustomButton
-            // disabled={this.state.checked == false ? true : false}
-            style={{ backgroundColor: this.state.checked == false ? '#9ce884' : '#60b246', alignSelf: 'center', }}
+            disabled={this.state.clicked}
+            style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : '#60b246', alignSelf: 'center', }}
             onPress={() => this.paymentDetails()}
-            title='Proceed To Pay'
+            title={this.state.clicked === false ? 'Proceed To Pay' : 'Please wait...'}
           />
         </ScrollView>
         <Overlay
@@ -308,20 +310,20 @@ const styles = StyleSheet.create({
     marginLeft: 25 // justifyContent: 'space-between',
   },
   paytmView: {
-    width:300,
+    width: 300,
     // borderWidth:1,
     // borderRadius: 5,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    
+
     // alignItems: 'center',
     backgroundColor: '#ffffff',
     // paddingVertical: 10,
     // paddingHorizontal: 5
   },
   iconChecked: {
-		marginRight: 20
-	},
+    marginRight: 20
+  },
   billcard: {
     backgroundColor: '#ffffff',//can change as we move to various pages
     marginBottom: 10,//can change as we move to various pages

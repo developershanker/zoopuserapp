@@ -324,7 +324,7 @@ export default class Menu extends Component {
             <ToggleSwitch
               isOn={this.state.vegOnly}
               onColor="green"
-              offColor="red"
+              offColor="grey"
               label="Veg. Only"
               labelStyle={{ fontFamily: 'Poppins-Regular' }}
               size="medium"
