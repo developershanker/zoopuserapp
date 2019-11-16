@@ -31,6 +31,7 @@ export default class PaymentPage extends Component {
       checked: true,
       clicked: false,
       paymentTypes: [],
+      revisedPaymentTypes:[],
       paymentTypeName: '',
       paymentTypeId: '',
       paymentBorderColor: '#000000',
@@ -40,6 +41,7 @@ export default class PaymentPage extends Component {
     };
   }
   async orderBooking(paymentType) {
+    this.setState({ clicked: true })
     try {
       let response = await orderApi.orderBooking();
       if (response.status == true) {
@@ -79,14 +81,20 @@ export default class PaymentPage extends Component {
     }
   }
   async getPaymentInfo() {
-
     try {
       let response = await paymentApi.paymentTypes();
       if (response.status == true) {
         this.setState({
           paymentTypes: response.data,
-          isVisible: false
         })
+        if (ConstantValues.isAgent === 0) {
+          this.limitCod(response.data)
+        } else {
+          this.setState({
+            paymentTypes: response.data,
+            isVisible: false
+          })
+        }
         console.log('Data received in paymentPage.js response: ' + JSON.stringify(this.state.paymentTypes))
       } else {
         ToastAndroid.show('Oops!! Something went wrong!!', ToastAndroid.LONG)
@@ -96,6 +104,26 @@ export default class PaymentPage extends Component {
     }
   }
 
+  limitCod(response){
+    if (ConstantValues.totalPayableAmount <= 1000) {
+      //eliminating COD
+      this.setState({
+        revisedPaymentTypes : this.state.paymentTypes.filter((item)=>{
+          return item.paymentTypeId != 1
+        })
+      })
+      this.setState({
+        paymentTypes:this.state.revisedPaymentTypes,
+        isVisible: false
+      })
+    } else {
+      //all payment Shown
+      this.setState({
+        paymentTypes: response,
+        isVisible: false
+      })
+    }
+  }
 
   setPaymentInfo = (item, index) => {
 
@@ -112,9 +140,31 @@ export default class PaymentPage extends Component {
       console.log('item.paymentTypeName : ' + item.paymentTypeName + '\n' + 'item.paymentTypeId :' + item.paymentTypeId)
   }
 
-
+  removeOffer() {
+    ConstantValues.walletBalanceUsed = 0
+    ConstantValues.couponCode = ''
+    ConstantValues.couponValue = 0
+    ConstantValues.couponType = ''
+    ConstantValues.couponId = 0
+    ConstantValues.discount = 0
+    ConstantValues.rateDiscount = 0
+    ConstantValues.isCouponApplied = false
+    ConstantValues.appliedCode = 'Apply Coupon Code'
+    cartApi.billDetail()
+    console.log('offer removed')
+    console.log(
+      ConstantValues.walletBalanceUsed, + '\n' + 
+      ConstantValues.couponCode ,+ '\n' + 
+      ConstantValues.couponValue ,+ '\n' + 
+      ConstantValues.couponType,+ '\n' + 
+      ConstantValues.couponId ,+ '\n' + 
+      ConstantValues.discount ,+ '\n' + 
+      ConstantValues.rateDiscount ,+ '\n' + 
+      ConstantValues.isCouponApplied ,+ '\n' + 
+      ConstantValues.appliedCode ,)
+  }
   paymentDetails = () => {
-    this.setState({ clicked: true })
+    //this.setState({ clicked: true })
     if (this.state.checked == true) {
       if (this.state.paymentTypeId == 1 || this.state.paymentTypeId == 2) {
         ConstantValues.paymentType = this.state.paymentTypeName,
