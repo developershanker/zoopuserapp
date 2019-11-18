@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TextInput, Linking, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList, Image,Alert } from 'react-native';
+import { View, TextInput, Linking, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
 import servicesApi from './servicesApi';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -22,7 +22,8 @@ export default class contact extends Component {
       zoopPhone: '',
       zoopEmail: '',
       name: '',
-      mobile:'',
+      mobile: '',
+      clicked: false,
       description: '',
     };
   }
@@ -52,45 +53,52 @@ export default class contact extends Component {
     Linking.openURL(link);
   }
 
-  async sendContent(name,mobile,description) {
+  async sendContent(name, mobile, description) {
+    let regexName = /^[a-zA-Z ]*$/;
+    let regexMobile = /^[0-9]+$/;
     try {
       // let response = await servicesApi.sendContent(name,mobile,description);
-      if (name != '') {
-        console.log("mobile.length is:" + mobile.length)
+      if (name != '' && regexName.test(name)) {
+        //console.log("mobile.length is:" + mobile.length)
         if (mobile != '' && mobile.length === 10) {
-         if (description != '') {
-          let response = await servicesApi.sendContent(name,mobile,description);
-          if (response.status == true) {
-            this.setState({
-              name: '',
-              mobile:'',
-              description: ''
-            })
-            return (
-              Alert.alert(
-                'Thank you!!',
-                'Thank You for contacting. We will reach you soon',
-                [
-                  {
-                    text: 'OK', onPress: () => {
-                      this.props.navigation.navigate('Search')
-                    },
-                    style: 'cancel'
-                  },
-                ],
-                { cancelable: false },
-              )
-            )
-           
+          if (regexMobile.test(mobile)) {
+            if (description != '') {
+              let response = await servicesApi.sendContent(name, mobile, description);
+              if (response.status == true) {
+                this.setState({
+                  name: '',
+                  mobile: '',
+                  description: '',
+                  clicked: true
+                })
+                return (
+                  Alert.alert(
+                    'Thank you!!',
+                    'Thank You for contacting. We will reach you soon',
+                    [
+                      {
+                        text: 'OK', onPress: () => {
+                          this.props.navigation.navigate('Search')
+                        },
+                        style: 'cancel'
+                      },
+                    ],
+                    { cancelable: false },
+                  )
+                )
+
+              } else {
+                ToastAndroid.show('Something went wrong. Please try after some time', ToastAndroid.LONG)
+              }
+            } else {
+              ToastAndroid.show('Please Enter Description', ToastAndroid.LONG)
+            }
           } else {
-            ToastAndroid.show('Something went wrong. Please try after some time', ToastAndroid.LONG)
+            ToastAndroid.show('Please Enter Valid Mobile No.', ToastAndroid.LONG)
           }
         } else {
-          ToastAndroid.show('Please Enter Description', ToastAndroid.LONG)
+          ToastAndroid.show('Please Enter Valid Mobile No.', ToastAndroid.LONG)
         }
-      } else {
-        ToastAndroid.show('Please Enter Valid Mobile No.', ToastAndroid.LONG)
-      }
       } else {
         ToastAndroid.show('Please Enter Name', ToastAndroid.LONG)
       }
@@ -139,9 +147,10 @@ export default class contact extends Component {
                 onChangeText={description => this.setState({ description })}
               />
               <CustomButton
-                style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, width: 300 }}
-                onPress={() => { this.sendContent(this.state.name,this.state.mobile, this.state.description) }}
-                title='Submit'
+                disable={this.state.clicked}
+                style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : '#60b246', alignSelf: 'center', marginBottom: 20, width: 300 }}
+                onPress={() => { this.sendContent(this.state.name, this.state.mobile, this.state.description) }}
+                title={this.state.clicked === false ? 'Submit' : 'Message Sent'}
               />
             </View>
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Linking, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Linking, TouchableOpacity, StyleSheet, Dimensions, Image } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import ConstantValues from '../constantValues';
 import Modal from 'react-native-modal';
@@ -10,7 +10,7 @@ import { CustomButtonShort } from '../assests/customButtonShort';
 export default class rateUs extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    this.appearDialog()
+    // this.appearDialog()
 
   }
   constructor(props) {
@@ -25,22 +25,42 @@ export default class rateUs extends Component {
     let link = 'https://play.google.com/store/apps/details?id=com.zoop.zoopindiaservice'
     Linking.openURL(link);
   }
-  appearDialog() {
-    this.setState({ showVersionUpdateModal: 'center' })
-  }
+  // appearDialog() {
+  //   this.setState({ showVersionUpdateModal: 'center' })
+  // }
   dismiss() {
-    this.setState({ showVersionUpdateModal: null })
+    // this.setState({ showVersionUpdateModal: null })
     this.props.navigation.navigate('Search')
   }
   backHandler() {
-    this.setState({ showVersionUpdateModal: null })
+    // this.setState({ showVersionUpdateModal: null })
     this.props.navigation.navigate('Search')
   }
 
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-        <Modal
+      <View style={{  justifyContent: 'center', alignContent: 'flex-start', alignItems: 'center' ,}}>
+        <View style={{ width: ConstantValues.deviceWidth - 20, height: '30%' ,justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+          <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
+            style={{ width: 150, height: 100 }}
+          />
+        </View>
+
+        <Text style={{ fontSize: 20, color: '#F15926', fontFamily: 'Poppins-Medium', }}>Enjoying Zoop?</Text>
+        <Text style={{ fontSize: 15, color: '#696b6a', fontFamily: 'Poppins-Regular', textAlign: 'center', alignSelf: 'center' }}>Please rate us if you like our services it will help us to serve better.</Text>
+        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+          <CustomButtonShort
+            style={{ backgroundColor: '#60b246' }}
+            title='Rate Us'
+            onPress={() => this.gotoLink()}
+          />
+          <CustomButtonShort
+            style={{ backgroundColor: '#696b6a' }}
+            title='Not Now'
+            onPress={() => this.dismiss()}
+          />
+        </View>
+        {/* <Modal
           isVisible={this.state.showVersionUpdateModal === 'center'}
           onBackButtonPress={() => this.backHandler()}
           // onSwipeComplete={() => this.setState({ visibleModal: null })}
@@ -63,7 +83,7 @@ export default class rateUs extends Component {
               />
             </View>
           </View>
-        </Modal>
+        </Modal> */}
       </View>
     );
   }

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, SectionList, ScrollView, Image, TouchableOpacity, ActivityIndicator, BackHandler, Alert,ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, SectionList, ScrollView, Image, TouchableOpacity, ActivityIndicator, BackHandler, Alert, ToastAndroid } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import CustomMenuFAB from '../assests/customMenuFAB.js';
+import ToggleSwitch from 'toggle-switch-react-native'
 import { Fade } from '../assests/fade.js';
 import Modal from "react-native-modal";
 import menuApi from './menuApi.js';
@@ -39,13 +40,14 @@ export default class Menu extends Component {
       show: 'Add',
       visibleModal: null,
       totalPrice: 0,
-      zoopPrice:0,
+      zoopPrice: 0,
       RecommendedMenuInfo: [],
       OutletMenuInfo: [],
       inCart: [],
       totalCartCount: 0,
       isVisible: true,
-      onlyVegMenu: []
+      onlyVegMenu: [],
+      allMenu: [],
     };
   }
   // handleBackPress = () => {
@@ -100,9 +102,6 @@ export default class Menu extends Component {
     this.cartCalculate(item)
     // console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
   }
-
-
-
 
   removeItemFromCart = (item, index) => {
     let itemId = item.itemId
@@ -172,6 +171,7 @@ export default class Menu extends Component {
           offer: response.data.offer,
           RecommendedMenuInfo: response.data.recommendedItems,
           OutletMenuInfo: response.data.items,
+          allMenu: response.data.items,
           isVisible: false
         })
         if (this.state.OutletMenuInfo && this.state.OutletMenuInfo.length) {
@@ -181,6 +181,7 @@ export default class Menu extends Component {
             offer: response.data.offer,
             RecommendedMenuInfo: response.data.recommendedItems,
             OutletMenuInfo: response.data.items,
+            allMenu: response.data.items,
             isVisible: false
           })
           this.setState({
@@ -316,14 +317,39 @@ export default class Menu extends Component {
           </View>
 
           <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
-            <Text style={{ fontFamily: 'Poppins-Regular' }}>Veg. Only</Text>
-            <Switch
+            {/* <Text style={{ fontFamily: 'Poppins-Regular' }}>Veg. Only</Text> */}
+            <ToggleSwitch
+              isOn={this.state.vegOnly}
+              onColor="green"
+              offColor="grey"
+              label="Veg. Only"
+              labelStyle={{ fontFamily: 'Poppins-Regular' }}
+              size="medium"
+              onToggle={
+                vegOnly => {
+                  this.setState({ vegOnly })
+                  if (vegOnly === true) {
+                    this.setState({
+                      OutletMenuInfo: this.state.onlyVegMenu
+                    })
+                    console.log("vegOnly === true : ", vegOnly)
+                  } else {
+                    this.setState({
+                      OutletMenuInfo: this.state.allMenu
+                    })
+                    console.log("else : ", vegOnly)
+                  }
+                  console.log("normal", vegOnly)
+                }
+              }
+            />
+            {/* <Switch
               value={this.state.vegOnly}
               onValueChange={
                 (vegOnly) => this.setState({ vegOnly })
               }
 
-            />
+            /> */}
           </View>
         </View>
         <ScrollView>
@@ -384,18 +410,19 @@ export default class Menu extends Component {
             {/* <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 10 }}>
               <Text style={{ fontSize: 15, fontFamily: 'Poppins-Medium', color: '#000000' }}>Recommended Items</Text>
             </View> */}
-            
+
             <FlatList
               style={{ width: Dimensions.get('window').width }}
               onContentSizeChange={() => this.flatListRef.scrollToEnd({ animated: true })}
               onLayout={() => this.flatListRef.scrollToEnd({ animated: true })}
               ref={(ref) => { this.flatListRef = ref; }}
-              data={this.state.vegOnly == true ? this.state.onlyVegMenu : this.state.OutletMenuInfo}
+              data={this.state.OutletMenuInfo}
+              // this.state.vegOnly == true ? this.state.onlyVegMenu : this.state.OutletMenuInfo
               extraData={this.state}
-              renderItem={({ item, index }) => 
-              
+              renderItem={({ item, index }) =>
+
                 <View>
-                 
+
                   <Fade visible={index == 0 ? true : index > 0 && (item.typeName != this.state.OutletMenuInfo[index - 1].typeName)}>
                     <View style={{ width: Dimensions.get('window').width - 10, backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 15 }} >
                       {/* <View style={{ height: 0.5, width: '100%', backgroundColor: '#C8C8C8' }} /> */}
@@ -463,7 +490,7 @@ export default class Menu extends Component {
                     </View>
                   </View>
                 </View>
-              
+
               }
               keyExtractor={(item) => item.itemId.toString()}
             />
