@@ -1,10 +1,61 @@
 import React, { Component } from 'react';
-import { View, Text, WebView, ActivityIndicator, StyleSheet, Dimensions, ToastAndroid ,BackHandler} from 'react-native';
+import { View, Text, WebView, ActivityIndicator, StyleSheet, Dimensions, ToastAndroid, BackHandler, Alert } from 'react-native';
 import ConstantValues from '../constantValues.js';
+import { Overlay } from 'react-native-elements';
+import Spinner from 'react-native-spinkit';
 
 export default class paymentPaytm extends Component {
+  // componentWillMount() {
+  //   BackHandler.addEventListener('hardwareBackPress', () => {
+  //     return (
+  //       Alert.alert(
+  //         'Alert!!',
+  //         'Are you sure ?? Pressing the back button would cancel the payment process. Press "Ok" if you wish to cancel.',
+  //         [
+  //           {
+  //             text: 'Ok',
+  //             onPress: () => this.props.navigation.navigate('Search'),
+  //             style: 'cancel',
+  //           },
+  //           {
+  //             text: 'cancel', onPress: () => console.log('Waiting for Payment to Proceed.......'),
+  //             style: 'cancel'
+  //           }
+  //         ],
+  //         { cancelable: false },
+  //       )
+  //     )
+  //   }
+  //   );
+  //   console.log('Back Pressed')
+  // }
+  // componentWillUnmount() {
+  //   BackHandler.removeEventListener('hardwareBackPress', () => {
+  //     return (
+  //       Alert.alert(
+  //         'Alert!!',
+  //         'Are you sure ?? Pressing the back button would cancel the payment process. Press Ok if you wish to cancel.',
+  //         [
+  //           {
+  //             text: 'Ok',
+  //             onPress: () => this.props.navigation.navigate('Search'),
+  //             style: 'cancel',
+  //           },
+  //           {
+  //             text: 'cancel', onPress: () => console.log('Waiting for Payment to Proceed.......'),
+  //             style: 'cancel'
+  //           }
+  //         ],
+  //         { cancelable: false },
+  //       )
+  //     )
+  //   });
+  //   console.log('Back Pressed Unmount')
+  // }
   state = {
-
+    isVisible: true,
+    loadingHeader: '',
+    loadingContent: '',
     TXN_AMOUNT: ConstantValues.totalPayableAmount.toString(),
     ORDER_ID: ConstantValues.zooptransactionId,
     // INDUSTRY_TYPE_ID: 'Retail',
@@ -20,7 +71,27 @@ export default class paymentPaytm extends Component {
   //   this.state = {
   //   };
   // }
-  
+  // renderOpening(){
+  //   let { isVisible } = this.state;
+  //   return(
+  //     <Overlay
+  //       isVisible={isVisible}
+  //       width="auto"
+  //       height="auto"
+  //     // windowBackgroundColor='rgba(255, 255, 255, .5)'
+  //     // overlayBackgroundColor='#ffffff'
+  //     // onBackdropPress={() => this.setState({ isVisible: false })}
+  //     >
+  //       <View style={{ flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+  //         <Spinner size={50} type={'FadingCircleAlt'} color={'#FF5819'} isVisible={isVisible} />
+  //         <Text style={styles.textP}>Requesting payment, please wait...</Text>
+  //         <Text style={styles.text}>Please do not press back.. Transaction is being processed</Text>
+  //       </View>
+
+
+  //     </Overlay>
+  //   )
+  // }
   handleResponse = async (data) => {
 
     try {
@@ -43,10 +114,22 @@ export default class paymentPaytm extends Component {
           // console.log('response.RESPCODE : ' + response.RESPCODE)
         }
       }
-      console.log('ConstantValues.txnId :'+ ConstantValues.txnId + '\n' + 'ConstantValues.paymentOrderId : ' + ConstantValues.paymentOrderId + '\n' + 'ConstantValues.paymentStatus: ' + ConstantValues.paymentStatus + '\n'  + 'ConstantValues.gatewayResponse : ' + ConstantValues.gatewayResponse)
+      console.log('ConstantValues.txnId :' + ConstantValues.txnId + '\n' + 'ConstantValues.paymentOrderId : ' + ConstantValues.paymentOrderId + '\n' + 'ConstantValues.paymentStatus: ' + ConstantValues.paymentStatus + '\n' + 'ConstantValues.gatewayResponse : ' + ConstantValues.gatewayResponse)
       this.gotoIrctc()
     } catch (error) {
       console.log('result : ' + JSON.stringify(data))
+      if (data.title === "Document") {
+        this.setState({
+          isVisible: true,
+          loadingHeader: 'Requesting payment, please wait...',
+          loadingContent: 'Please do not press back.. Payment is under process'
+
+        })
+      } else {
+        this.setState({
+          isVisible: false
+        })
+      }
     }
   }
 
@@ -59,10 +142,26 @@ export default class paymentPaytm extends Component {
 
   render() {
     //let { ORDER_ID, CUST_ID, TXN_AMOUNT, INDUSTRY_TYPE_ID, CHANNEL_ID, WEBSITE, MID, PAYTM_MERCHANT_KEY ,processing,payment_text} = this.state;
-    let { ORDER_ID, CUST_ID, TXN_AMOUNT, processing, payment_text } = this.state;
+    let { ORDER_ID, CUST_ID, TXN_AMOUNT, processing, payment_text, isVisible, loadingContent, loadingHeader } = this.state;
 
     return (
       <View style={styles.slide}>
+        <Overlay
+          isVisible={isVisible}
+          width={ConstantValues.deviceWidth - 40}
+          height="auto"
+        // windowBackgroundColor='rgba(255, 255, 255, .5)'
+        // overlayBackgroundColor='#ffffff'
+        // onBackdropPress={() => this.setState({ isVisible: false })}
+        >
+          <View style={{ flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+            <Spinner size={50} type={'FadingCircleAlt'} color={'#FF5819'} isVisible={isVisible} />
+            <Text style={styles.textP}>{loadingHeader}</Text>
+            <Text style={styles.text}>{loadingContent}</Text>
+          </View>
+
+
+        </Overlay>
 
         <WebView
           // source={{ uri: 'http://13.126.232.146:3001/api/paytm/response' }}
@@ -90,10 +189,18 @@ const styles = StyleSheet.create({
   },
   text: {
     alignSelf: "center",
-    fontSize: 20,
-    fontFamily: "Poppins-Bold",
-    color: "#FF5819",
-    paddingVertical: 10,
+    fontSize: 12,
+    fontFamily: "Poppins-Regular",
+    color: "#000",
+    paddingVertical: 5,
+    textAlign: 'center'
+  },
+  textP: {
+    alignSelf: 'center',
+    fontSize: 15,
+    fontFamily: 'Poppins-Medium',
+    color: '#FF5819',
+    paddingVertical: 5
   }
 });
 

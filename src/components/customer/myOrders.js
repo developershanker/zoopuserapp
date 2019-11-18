@@ -167,8 +167,11 @@ export default class myOrders extends Component {
 
     OrderDetailConstants.data = item
     OrderDetailConstants.zoopTransactionNo = item.zoopTransactionNo
-    OrderDetailConstants.irctcOrderId = item.irctcOrderId
+    OrderDetailConstants.irctcOrderId = (item.irctcOrderId === null ? 'N/A' : item.irctcOrderId)
     OrderDetailConstants.orderType = item.paymentTypeName
+    OrderDetailConstants.bookingDate = (item.bookingDate === null ? 'Date not available' : moment(item.bookingDate).format('DD-MM-YYYY'))
+    OrderDetailConstants.bookingTime = (item.bookingDate === null ? 'Time not available' : moment(item.bookingDate).format('HH:mm')) 
+
     //passenger detail
     OrderDetailConstants.passengerName = item.passengerName
     OrderDetailConstants.passengerMobile = item.passengerMobile
@@ -253,7 +256,7 @@ export default class myOrders extends Component {
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                             <Text style={styles.tiletext}>Delivery Time </Text>
-                          <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.eta).format('HH:mm')}</Text>
+                          <Text style={styles.tiletext}>{item.bookingDate == null ? 'Time not available' : moment(item.eta).format('HH:mm')}</Text>
                         </View>
 
 

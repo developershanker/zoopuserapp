@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Picker, ToastAndroid, Text, Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity,Alert, CheckBox, FlatList ,TouchableWithoutFeedback} from 'react-native';
+import { View, Picker, ToastAndroid, Text, Image, StyleSheet, ScrollView, Dimensions, KeyboardAvoidingView, TouchableOpacity, Alert, CheckBox, FlatList, TouchableWithoutFeedback } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -16,6 +16,8 @@ import paymentApi from '../payment/paymentApi.js';
 import { Overlay } from 'react-native-elements';
 import { ZoopLoader } from '../assests/zoopLoader.js';
 import cartApi from '../cart/cartApi.js';
+import Modal from "react-native-modal";
+import { CustomButtonShort } from '../assests/customButtonShort.js';
 
 export default class PaymentPage extends Component {
   componentDidMount() {
@@ -29,16 +31,20 @@ export default class PaymentPage extends Component {
       value: 0,
       codActive: false,
       checked: true,
+      clicked: false,
       paymentTypes: [],
+      revisedPaymentTypes: [],
+      visibleModal: null,
       paymentTypeName: '',
       paymentTypeId: '',
-      paymentBorderColor:'#000000',
-      isVisible:true,
+      paymentBorderColor: '#000000',
+      isVisible: true,
       indexChecked: '0'
       // backgroundColor : ''
     };
   }
   async orderBooking(paymentType) {
+    this.setState({ clicked: true })
     try {
       let response = await orderApi.orderBooking();
       if (response.status == true) {
@@ -46,16 +52,16 @@ export default class PaymentPage extends Component {
         ConstantValues.zooptransactionId = response.data.zoopTransactionNo
         if (paymentType == 2) {
           return (
-           ToastAndroid.show('Requesting payment, please wait...', ToastAndroid.LONG),
+            ToastAndroid.show('Requesting payment, please wait...', ToastAndroid.LONG),
             this.props.navigation.navigate('PaymentPaytm')
           )
-        } else if(paymentType == 1){
+        } else if (paymentType == 1) {
           return (
             ToastAndroid.show('Requesting IRCTC , please wait...', ToastAndroid.LONG),
             this.props.navigation.navigate('IrctcConfirmationCod')
           )
         }
-       
+
       } else {
         return (
           Alert.alert(
@@ -78,14 +84,20 @@ export default class PaymentPage extends Component {
     }
   }
   async getPaymentInfo() {
-
     try {
       let response = await paymentApi.paymentTypes();
       if (response.status == true) {
         this.setState({
           paymentTypes: response.data,
-          isVisible : false
         })
+        if (ConstantValues.isAgent === 0) {
+          this.limitCod(response.data)
+        } else {
+          this.setState({
+            paymentTypes: response.data,
+            isVisible: false
+          })
+        }
         console.log('Data received in paymentPage.js response: ' + JSON.stringify(this.state.paymentTypes))
       } else {
         ToastAndroid.show('Oops!! Something went wrong!!', ToastAndroid.LONG)
@@ -95,48 +107,110 @@ export default class PaymentPage extends Component {
     }
   }
 
+  limitCod(response) {
+    if (ConstantValues.totalPayableAmount >= 1000) {
+      //eliminating COD
+      this.setState({
+        revisedPaymentTypes: this.state.paymentTypes.filter((item) => {
+          return item.paymentTypeId != 1
+        })
+      })
+      this.setState({
+        paymentTypes: this.state.revisedPaymentTypes,
+        isVisible: false
+      })
+    } else {
+      //all payment Shown
+      this.setState({
+        paymentTypes: response,
+        isVisible: false
+      })
+    }
+  }
 
-  setPaymentInfo = (item,index) => {
-   
+  setPaymentInfo = (item, index) => {
+
     this.setState({
       paymentTypeName: item.paymentTypeName,
       paymentTypeId: item.paymentTypeId,
       // paymentBorderColor:'#f15926'
-      indexChecked:item.paymentTypeId.toString()
+      indexChecked: item.paymentTypeId.toString()
     })
+    //removing discounts
+    if (ConstantValues.isAgent === 0) {
+      console.log('this.state.paymentTypeId : ' + item.paymentTypeId)
+      // this.codActions()
+      if (item.paymentTypeId === 1 && ConstantValues.discount !== 0) {
+        console.log('this.state.paymentTypeId [in codAction] : ' + item.paymentTypeId)
+        this.setState({ visibleModal: 'center' })
+      } else {
+        console.log('running from else.....')
+      }
+    } else {
+      console.log('running from else..........')
+    }
     // return(
     //   ToastAndroid.show('You selected method : ' + item.paymentTypeName ,ToastAndroid.LONG)
     // ),
     console.log('paymentTypeName : ' + this.state.paymentTypeName + '\n' + 'paymentTypeId :' + this.state.paymentTypeId),
-    console.log('item.paymentTypeName : ' + item.paymentTypeName + '\n' + 'item.paymentTypeId :' + item.paymentTypeId)
+      console.log('item.paymentTypeName : ' + item.paymentTypeName + '\n' + 'item.paymentTypeId :' + item.paymentTypeId)
   }
 
+  removeOffer = () => {
+    ConstantValues.walletBalanceUsed = 0
+    ConstantValues.couponCode = ''
+    ConstantValues.couponValue = 0
+    ConstantValues.couponType = ''
+    ConstantValues.couponId = 0
+    ConstantValues.discount = 0
+    ConstantValues.rateDiscount = 0
+    ConstantValues.isCouponApplied = false
+    ConstantValues.appliedCode = 'Apply Coupon Code'
+    cartApi.billDetail()
+    console.log('offer removed')
+    this.setState({ visibleModal: null })
+  }
 
   paymentDetails = () => {
+    //this.setState({ clicked: true })
     if (this.state.checked == true) {
-      if(this.state.paymentTypeId == 1 || this.state.paymentTypeId == 2){
+      if (this.state.paymentTypeId == 1 || this.state.paymentTypeId == 2) {
         ConstantValues.paymentType = this.state.paymentTypeName,
-        ConstantValues.paymentTypeId = this.state.paymentTypeId,
-        ConstantValues.refNo = '',
-        ConstantValues.paymentDetails = {
-          'referenceNo': ConstantValues.refNo,
-          'paymentType': ConstantValues.paymentType,
-          'paymentTypeId': ConstantValues.paymentTypeId
-        },
-        this.orderBooking(ConstantValues.paymentTypeId)
-      }else{
-        return(
-          ToastAndroid.show('Please select any payment method!!' ,ToastAndroid.LONG)
+          ConstantValues.paymentTypeId = this.state.paymentTypeId,
+          ConstantValues.refNo = '',
+          ConstantValues.paymentDetails = {
+            'referenceNo': ConstantValues.refNo,
+            'paymentType': ConstantValues.paymentType,
+            'paymentTypeId': ConstantValues.paymentTypeId
+          },
+           this.orderBooking(ConstantValues.paymentTypeId)
+          //console.log('//////////////Order Booked/////////////////')
+      } else {
+        return (
+          ToastAndroid.show('Please select any payment method!!', ToastAndroid.LONG)
         ),
-        console.log('paymentTypeName : ' + this.state.paymentTypeName + '\n' + 'paymentTypeId :' + this.state.paymentTypeId)
+          console.log('paymentTypeName : ' + this.state.paymentTypeName + '\n' + 'paymentTypeId :' + this.state.paymentTypeId)
       }
     } else {
-      return(
-        ToastAndroid.show('Please accept Terms & Conditions to proceed',ToastAndroid.SHORT)
+      return (
+        ToastAndroid.show('Please accept Terms & Conditions to proceed', ToastAndroid.SHORT)
       )
     }
   }
 
+  checkValidation = () => {
+    if (ConstantValues.isAgent === 0) { //user/agent validation
+      console.log('this.state.paymentTypeId : ' + this.state.paymentTypeId)
+      if (this.state.paymentTypeId === 1 && ConstantValues.discount !== 0) { //COD && discount value validation
+        console.log('this.state.paymentTypeId [in codAction] : ' + this.state.paymentTypeId)
+        this.setState({ visibleModal: 'center' })
+      } else {
+        this.paymentDetails()
+      }
+    } else {
+      this.paymentDetails()
+    }
+  }
 
 
   render() {
@@ -148,7 +222,7 @@ export default class PaymentPage extends Component {
         <ScrollView>
           <View>
             {/* header view */}
-            <View style={{ flexDirection: 'row', paddingBottom:5 }}>
+            <View style={{ flexDirection: 'row', paddingBottom: 5 }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('PassengerDetail')}>
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
@@ -158,12 +232,12 @@ export default class PaymentPage extends Component {
             </View>
             {/* header view ends */}
             <View>
-            <View>
-          <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-            <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>Bill Details</Text>
-            {/* <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} /> */}
-          </View>
-          <View
+              <View>
+                <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
+                  <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>Bill Details</Text>
+                  {/* <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} /> */}
+                </View>
+                <View
                   style={styles.billcard}
                 >
                   <View>
@@ -208,7 +282,7 @@ export default class PaymentPage extends Component {
 
                   </View>
                 </View>
-        </View>
+              </View>
             </View>
             {/* passengerDetail view begin here */}
             <View style={{ width: Dimensions.get('window').width - 10, flexDirection: 'row', }}>
@@ -217,11 +291,11 @@ export default class PaymentPage extends Component {
             </View>
             <View style={styles.billcard}>
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' ,  paddingHorizontal: 10, paddingVertical: 5}}>Coach no. {ConstantValues.coach}</Text>
+                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Coach no. {ConstantValues.coach}</Text>
                 <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Seat no. {ConstantValues.seat}</Text>
-                
+
               </View>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' , paddingHorizontal: 10, paddingVertical: 5}}>Name : {ConstantValues.customerName}</Text>
+              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Name : {ConstantValues.customerName}</Text>
               <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
               <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Alternate No. - {ConstantValues.customeralternateMobile}</Text>
             </View>
@@ -237,26 +311,26 @@ export default class PaymentPage extends Component {
               <FlatList
                 data={this.state.paymentTypes}
                 extraData={this.state}
-                renderItem={({ item,index }) =>
-                <TouchableWithoutFeedback onPress={() => {this.setPaymentInfo(item,index)}}>
-                  <View style={{ flexDirection: 'column', alignItems: 'center', paddingVertical: 10,paddingHorizontal: 10 }}>
-                    <View style={styles.paytmView}>
-                      <Icons name={this.state.indexChecked === item.paymentTypeId.toString() ? 'check-square' : 'square'} size={20} color={'#000000'} style={{width:50,alignSelf:'center'}}/>
-                      {/* <Text style={{ color: this.state.paymentBorderColor, fontSize: 15, fontFamily: 'Poppins-Regular' }}>{item.paymentTypeName == 'Prepaid' ? 'Pay through Paytm' : 'Cash On Delivery'}</Text> */}
-                      {
-                        item.paymentTypeId == 2 ? <Image source={require('../images/paytmnew.png')} /> : <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Regular',textAlign:'center' }}>Cash On Delivery</Text>
-                      }
-                      
+                renderItem={({ item, index }) =>
+                  <TouchableWithoutFeedback onPress={() => { this.setPaymentInfo(item, index) }}>
+                    <View style={{ flexDirection: 'column', alignItems: 'center', paddingVertical: 10, paddingHorizontal: 10 }}>
+                      <View style={styles.paytmView}>
+                        <Icons name={this.state.indexChecked === item.paymentTypeId.toString() ? 'check-square' : 'square'} size={20} color={'#000000'} style={{ width: 50, alignSelf: 'center' }} />
+                        {/* <Text style={{ color: this.state.paymentBorderColor, fontSize: 15, fontFamily: 'Poppins-Regular' }}>{item.paymentTypeName == 'Prepaid' ? 'Pay through Paytm' : 'Cash On Delivery'}</Text> */}
+                        {
+                          item.paymentTypeId == 2 ? <Image source={require('../images/paytmnew.png')} /> : <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Regular', textAlign: 'center' }}>Cash On Delivery</Text>
+                        }
+
+                      </View>
                     </View>
-                  </View>
                   </TouchableWithoutFeedback>
 
                 }
                 keyExtractor={(item) => item.paymentTypeId.toString()}
               />
 
-           
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center',paddingVertical: 20,paddingHorizontal: 20  }}>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', paddingVertical: 20, paddingHorizontal: 20 }}>
                 <CheckBox
                   value={this.state.checked}
                   disabled={false}
@@ -272,12 +346,45 @@ export default class PaymentPage extends Component {
 
           </View>
           <CustomButton
-            // disabled={this.state.checked == false ? true : false}
-            style={{ backgroundColor: this.state.checked == false ? '#9ce884' : '#60b246', alignSelf: 'center', }}
-            onPress={() => this.paymentDetails()}
-            title='Proceed To Pay'
+            disabled={this.state.clicked}
+            style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : '#60b246', alignSelf: 'center', }}
+            onPress={() => this.checkValidation()}
+            title={this.state.clicked === false ? 'Proceed To Pay' : 'Please wait...'}
           />
         </ScrollView>
+        {/* cod action view modal */}
+        <KeyboardAvoidingView enabled>
+          <Modal
+            isVisible={this.state.visibleModal === 'center'}
+            onBackButtonPress={() => this.setState({ visibleModal: null })}
+            // onSwipeComplete={() => this.setState({ visibleModal: null })}
+            // swipeDirection={['left', 'right']}
+            style={styles.centerModal}
+          >
+            <View style={styles.modalView}>
+              <View style={{ flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                <Text style={styles.tiletextH}>Confirm!!</Text>
+                <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', paddingVertical: 5, textAlign: 'center' }}>No discount will be applicable on Cash On Delivery.Press "Ok" to proceed.</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <CustomButtonShort
+                  onPress={() => { this.setState({ visibleModal: null }), console.log('Cancel Pressed...') }}
+                  title='Cancel'
+                  style={{ alignSelf: 'center', backgroundColor: '#fff' }}
+                  textStyle={{ color: '#9b9b9b' }} />
+                <CustomButtonShort
+                  onPress={() => this.removeOffer()}
+                  title='OK'
+                  style={{ alignSelf: 'center', backgroundColor: '#fff' }}
+                  textStyle={{ color: '#F15926' }} />
+              </View>
+            </View>
+
+          </Modal>
+        </KeyboardAvoidingView>
+
+
         <Overlay
           isVisible={this.state.isVisible}
           width="auto"
@@ -308,20 +415,25 @@ const styles = StyleSheet.create({
     marginLeft: 25 // justifyContent: 'space-between',
   },
   paytmView: {
-    width:300,
+    width: 300,
     // borderWidth:1,
     // borderRadius: 5,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    
     // alignItems: 'center',
     backgroundColor: '#ffffff',
     // paddingVertical: 10,
     // paddingHorizontal: 5
   },
+  centerModal: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    margin: 0,
+  },
   iconChecked: {
-		marginRight: 20
-	},
+    marginRight: 20
+  },
   billcard: {
     backgroundColor: '#ffffff',//can change as we move to various pages
     marginBottom: 10,//can change as we move to various pages
@@ -344,5 +456,24 @@ const styles = StyleSheet.create({
   tiletext: {
     fontFamily: 'Poppins-Regular',
     color: '#000000'
-  }
+  },
+  modalView: {
+    width: Dimensions.get('screen').width - 20,
+    height: 150,
+    backgroundColor: '#ffffff',
+    // flexDirection: 'column',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderTopStartRadius: 100 / 5,
+    borderTopEndRadius: 100 / 5,
+    borderBottomStartRadius: 100 / 5,
+    borderBottomEndRadius: 100 / 5
+  },
+  tiletextH: {
+    fontFamily: 'Poppins-Medium',
+    color: '#000000',
+    fontSize: 18
+  },
 });

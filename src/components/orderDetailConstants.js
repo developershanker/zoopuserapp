@@ -11,6 +11,8 @@ export default class OrderDetailConstants {
     static status = ''
     static orderStatus = ''
     static orderType = ''
+    static bookingDate = ''
+    static bookingTime = ''
     //passenger journey info
     static eta = ''
     static pnr = ''
