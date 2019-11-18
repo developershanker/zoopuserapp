@@ -103,9 +103,6 @@ export default class Menu extends Component {
     // console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
   }
 
-
-
-
   removeItemFromCart = (item, index) => {
     let itemId = item.itemId
     let inCart = this.state.inCart

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Picker, ToastAndroid, Text, Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Alert, CheckBox, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { View, Picker, ToastAndroid, Text, Image, StyleSheet, ScrollView, Dimensions, KeyboardAvoidingView, TouchableOpacity, Alert, CheckBox, FlatList, TouchableWithoutFeedback } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -16,6 +16,8 @@ import paymentApi from '../payment/paymentApi.js';
 import { Overlay } from 'react-native-elements';
 import { ZoopLoader } from '../assests/zoopLoader.js';
 import cartApi from '../cart/cartApi.js';
+import Modal from "react-native-modal";
+import { CustomButtonShort } from '../assests/customButtonShort.js';
 
 export default class PaymentPage extends Component {
   componentDidMount() {
@@ -31,7 +33,8 @@ export default class PaymentPage extends Component {
       checked: true,
       clicked: false,
       paymentTypes: [],
-      revisedPaymentTypes:[],
+      revisedPaymentTypes: [],
+      visibleModal: null,
       paymentTypeName: '',
       paymentTypeId: '',
       paymentBorderColor: '#000000',
@@ -104,16 +107,16 @@ export default class PaymentPage extends Component {
     }
   }
 
-  limitCod(response){
-    if (ConstantValues.totalPayableAmount <= 1000) {
+  limitCod(response) {
+    if (ConstantValues.totalPayableAmount >= 1000) {
       //eliminating COD
       this.setState({
-        revisedPaymentTypes : this.state.paymentTypes.filter((item)=>{
+        revisedPaymentTypes: this.state.paymentTypes.filter((item) => {
           return item.paymentTypeId != 1
         })
       })
       this.setState({
-        paymentTypes:this.state.revisedPaymentTypes,
+        paymentTypes: this.state.revisedPaymentTypes,
         isVisible: false
       })
     } else {
@@ -133,6 +136,19 @@ export default class PaymentPage extends Component {
       // paymentBorderColor:'#f15926'
       indexChecked: item.paymentTypeId.toString()
     })
+    //removing discounts
+    if (ConstantValues.isAgent === 0) {
+      console.log('this.state.paymentTypeId : ' + item.paymentTypeId)
+      // this.codActions()
+      if (item.paymentTypeId === 1 && ConstantValues.discount !== 0) {
+        console.log('this.state.paymentTypeId [in codAction] : ' + item.paymentTypeId)
+        this.setState({ visibleModal: 'center' })
+      } else {
+        console.log('running from else.....')
+      }
+    } else {
+      console.log('running from else..........')
+    }
     // return(
     //   ToastAndroid.show('You selected method : ' + item.paymentTypeName ,ToastAndroid.LONG)
     // ),
@@ -140,7 +156,7 @@ export default class PaymentPage extends Component {
       console.log('item.paymentTypeName : ' + item.paymentTypeName + '\n' + 'item.paymentTypeId :' + item.paymentTypeId)
   }
 
-  removeOffer() {
+  removeOffer = () => {
     ConstantValues.walletBalanceUsed = 0
     ConstantValues.couponCode = ''
     ConstantValues.couponValue = 0
@@ -152,17 +168,9 @@ export default class PaymentPage extends Component {
     ConstantValues.appliedCode = 'Apply Coupon Code'
     cartApi.billDetail()
     console.log('offer removed')
-    console.log(
-      ConstantValues.walletBalanceUsed, + '\n' + 
-      ConstantValues.couponCode ,+ '\n' + 
-      ConstantValues.couponValue ,+ '\n' + 
-      ConstantValues.couponType,+ '\n' + 
-      ConstantValues.couponId ,+ '\n' + 
-      ConstantValues.discount ,+ '\n' + 
-      ConstantValues.rateDiscount ,+ '\n' + 
-      ConstantValues.isCouponApplied ,+ '\n' + 
-      ConstantValues.appliedCode ,)
+    this.setState({ visibleModal: null })
   }
+
   paymentDetails = () => {
     //this.setState({ clicked: true })
     if (this.state.checked == true) {
@@ -175,7 +183,8 @@ export default class PaymentPage extends Component {
             'paymentType': ConstantValues.paymentType,
             'paymentTypeId': ConstantValues.paymentTypeId
           },
-          this.orderBooking(ConstantValues.paymentTypeId)
+           this.orderBooking(ConstantValues.paymentTypeId)
+          //console.log('//////////////Order Booked/////////////////')
       } else {
         return (
           ToastAndroid.show('Please select any payment method!!', ToastAndroid.LONG)
@@ -189,6 +198,19 @@ export default class PaymentPage extends Component {
     }
   }
 
+  checkValidation = () => {
+    if (ConstantValues.isAgent === 0) { //user/agent validation
+      console.log('this.state.paymentTypeId : ' + this.state.paymentTypeId)
+      if (this.state.paymentTypeId === 1 && ConstantValues.discount !== 0) { //COD && discount value validation
+        console.log('this.state.paymentTypeId [in codAction] : ' + this.state.paymentTypeId)
+        this.setState({ visibleModal: 'center' })
+      } else {
+        this.paymentDetails()
+      }
+    } else {
+      this.paymentDetails()
+    }
+  }
 
 
   render() {
@@ -326,10 +348,43 @@ export default class PaymentPage extends Component {
           <CustomButton
             disabled={this.state.clicked}
             style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : '#60b246', alignSelf: 'center', }}
-            onPress={() => this.paymentDetails()}
+            onPress={() => this.checkValidation()}
             title={this.state.clicked === false ? 'Proceed To Pay' : 'Please wait...'}
           />
         </ScrollView>
+        {/* cod action view modal */}
+        <KeyboardAvoidingView enabled>
+          <Modal
+            isVisible={this.state.visibleModal === 'center'}
+            onBackButtonPress={() => this.setState({ visibleModal: null })}
+            // onSwipeComplete={() => this.setState({ visibleModal: null })}
+            // swipeDirection={['left', 'right']}
+            style={styles.centerModal}
+          >
+            <View style={styles.modalView}>
+              <View style={{ flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                <Text style={styles.tiletextH}>Confirm!!</Text>
+                <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', paddingVertical: 5, textAlign: 'center' }}>No discount will be applicable on Cash On Delivery.Press "Ok" to proceed.</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <CustomButtonShort
+                  onPress={() => { this.setState({ visibleModal: null }), console.log('Cancel Pressed...') }}
+                  title='Cancel'
+                  style={{ alignSelf: 'center', backgroundColor: '#fff' }}
+                  textStyle={{ color: '#9b9b9b' }} />
+                <CustomButtonShort
+                  onPress={() => this.removeOffer()}
+                  title='OK'
+                  style={{ alignSelf: 'center', backgroundColor: '#fff' }}
+                  textStyle={{ color: '#F15926' }} />
+              </View>
+            </View>
+
+          </Modal>
+        </KeyboardAvoidingView>
+
+
         <Overlay
           isVisible={this.state.isVisible}
           width="auto"
@@ -365,11 +420,16 @@ const styles = StyleSheet.create({
     // borderRadius: 5,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-
     // alignItems: 'center',
     backgroundColor: '#ffffff',
     // paddingVertical: 10,
     // paddingHorizontal: 5
+  },
+  centerModal: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    margin: 0,
   },
   iconChecked: {
     marginRight: 20
@@ -396,5 +456,24 @@ const styles = StyleSheet.create({
   tiletext: {
     fontFamily: 'Poppins-Regular',
     color: '#000000'
-  }
+  },
+  modalView: {
+    width: Dimensions.get('screen').width - 20,
+    height: 150,
+    backgroundColor: '#ffffff',
+    // flexDirection: 'column',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderTopStartRadius: 100 / 5,
+    borderTopEndRadius: 100 / 5,
+    borderBottomStartRadius: 100 / 5,
+    borderBottomEndRadius: 100 / 5
+  },
+  tiletextH: {
+    fontFamily: 'Poppins-Medium',
+    color: '#000000',
+    fontSize: 18
+  },
 });

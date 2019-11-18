@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, View, Text, TouchableOpacity, StyleSheet,Alert } from 'react-native';
+import { ActivityIndicator, View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import Modal from 'react-native-modal'
 
 // export const ZoopLoader = (props) => {
 //     const { animating,size={} } = props;
@@ -7,24 +8,24 @@ import { ActivityIndicator, View, Text, TouchableOpacity, StyleSheet,Alert } fro
 
 
 export const CustomAlert = (props) => {
-  const { isvisible,alertHeading,alert } = props;
+  const { isvisible, alertHeading, alert } = props;
 
+  return (
+    Alert.alert(
+      'Alert!!',
+      alert,
+      [
+        {
+          text: 'OK', onPress: () => console.log(alert),
+          style: 'cancel'
+        },
+      ],
+      { cancelable: false },
+    )
 
-    return (
-        Alert.alert(
-            'Alert!!',
-            alert,
-            [
-              {
-                text: 'OK', onPress: () => console.log(alert),
-                style: 'cancel'
-              },
-            ],
-            { cancelable: false },
-          )
-       
-    );
+  );
   
+
 };
 
 
