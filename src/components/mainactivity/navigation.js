@@ -55,6 +55,11 @@ import PlatformLocator from '../services/platformLocator';
 import Helpline from '../services/helpline.js';
 import BulkOrder from '../services/bulkOrder.js';
 
+/////-----------Redux Imports-----------///////////
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import store from '../../store'
+
 
 import { createStackNavigator, createAppContainer, createDrawerNavigator, createSwitchNavigator } from "react-navigation";
 import { Footer } from 'native-base';
@@ -70,7 +75,6 @@ export class App extends Component {
   }
   render() {
     return (
-
       <AppNavigator />
 
     )
@@ -547,6 +551,7 @@ const styles = StyleSheet.create({
 // export default createAppContainer(DrawerNavigator);
 export default createAppContainer(
   createSwitchNavigator(
+    
     {
       AuthLoading: AuthLoadingScreen,
       App: AppNavigator,

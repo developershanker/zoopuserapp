@@ -14,14 +14,23 @@ import cartApi from '../cart/cartApi.js';
 import { ZoopLoader } from '../assests/zoopLoader.js';
 import { Overlay } from 'react-native-elements';
 import { Switch } from 'react-native-paper';
+import { connect } from 'react-redux';
+import { addToCart } from '../../actions/actions';
+
+
+/////-----------Redux Imports-----------///////////
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import store from '../../store'
 
 
 
 
-export default class Menu extends Component {
+export class Menu extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    this.getMenu()
+    this.getMenu();
+    //this.props.addToCart()
     // this.refreshCart()
     //this.enableOnlyVeg()
     //this.backHandler = BackHandler.addEventListener('hardwareBackPress',this.handleBackPress);    
@@ -576,6 +585,8 @@ export default class Menu extends Component {
   }
 }
 
+export default connect(null, { addToCart })(Menu);
+
 const styles = StyleSheet.create({
   slide: {
     flex: 1,
@@ -736,3 +747,4 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e4e4e4',
   }
 });
+
