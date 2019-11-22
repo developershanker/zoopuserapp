@@ -18,6 +18,7 @@ export default class bulkOrder extends Component {
       journeyDate: '',
       pnr: '',
       comment: '',
+      clicked: false,
     };
   }
 
@@ -26,35 +27,42 @@ export default class bulkOrder extends Component {
   onSubmitBulkOrder = (fullName, mobile, email, totalPassenger, journeyDate, pnr, comment) => {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let reg = /^[0-9]+$/;
-    if (fullName != '') {
+    let regexName = /^[a-zA-Z ]*$/;
+    if (fullName != '' && regexName.test(fullName)) {
       if (mobile != '' && mobile.length == 10) {
-        if (email != '') {
-          if (re.test(email)) {
-            if (totalPassenger != '' && reg.test(totalPassenger) ) {
-              if (journeyDate != '') {
-                console.log('fullName : ' + fullName + '\n' + 'mobile: ' + mobile + '\n' + 'email : ' + email + '\n' + 'totalPassenger : ' + totalPassenger + '\n' + 'journeyDate : ' + journeyDate + '\n' + 'pnr : ' + pnr + '\n' + 'comment : ' + comment)
-                this.sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment)
+        if (reg.test(mobile)) {
+          if (email != '') {
+            if (re.test(email)) {
+              if (totalPassenger != '' && reg.test(totalPassenger)) {
+                if (journeyDate != '') {
+                  console.log('fullName : ' + fullName + '\n' + 'mobile: ' + mobile + '\n' + 'email : ' + email + '\n' + 'totalPassenger : ' + totalPassenger + '\n' + 'journeyDate : ' + journeyDate + '\n' + 'pnr : ' + pnr + '\n' + 'comment : ' + comment)
+                  this.sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment)
 
+                } else {
+                  return (
+                    ToastAndroid.show('Enter date of journey!', ToastAndroid.LONG)
+                  )
+                }
               } else {
                 return (
-                  ToastAndroid.show('Enter date of journey!', ToastAndroid.LONG)
+                  ToastAndroid.show('Enter number of passenger!', ToastAndroid.LONG)
                 )
               }
+
             } else {
               return (
-                ToastAndroid.show('Enter number of passenger!', ToastAndroid.LONG)
+                ToastAndroid.show('Enter valid email Id!', ToastAndroid.LONG)
               )
             }
 
           } else {
             return (
-              ToastAndroid.show('Enter valid email Id!', ToastAndroid.LONG)
+              ToastAndroid.show('Enter email Id!', ToastAndroid.LONG)
             )
           }
-
         } else {
           return (
-            ToastAndroid.show('Enter email Id!', ToastAndroid.LONG)
+            ToastAndroid.show('Enter valid mobile no.!', ToastAndroid.LONG)
           )
         }
       } else {
@@ -70,6 +78,22 @@ export default class bulkOrder extends Component {
   }
 
 
+  handleSuccess(){
+    this.setState({
+      fullName: '',
+      mobile: '',
+      email: '',
+      totalPassenger: '',
+      journeyDate: '',
+      pnr: '',
+      comment: '',
+      clicked: true,
+    })
+    this.props.navigation.navigate('Search')
+  }
+
+
+
   async sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment) {
     try {
       let response = await servicesApi.sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment)
@@ -80,22 +104,13 @@ export default class bulkOrder extends Component {
             'Thanks for sharing your information.' + '\n' + ' We will work on your request and contact you in next 48 hours.',
             [
               {
-                text: 'OK', onPress: () => console.log('Request Submitted'),
+                text: 'OK', onPress: () => this.handleSuccess(),
                 style: 'cancel'
               },
             ],
             { cancelable: false },
           )
-        ),
-          this.setState({
-            fullName: '',
-            mobile: '',
-            email: '',
-            totalPassenger: '',
-            journeyDate: '',
-            pnr: '',
-            comment: '',
-          })
+        )
       } else {
         return (
           ToastAndroid.show('Something went wrong!! Try again later!!', ToastAndroid.LONG)
@@ -269,9 +284,10 @@ export default class bulkOrder extends Component {
           </View>
         </ScrollView>
         <CustomButton
-          style={{ alignSelf: 'center', marginBottom: 10, }}
+          disable={this.state.clicked}
+          style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : '#60b246', alignSelf: 'center', marginBottom: 10, }}
           onPress={() => this.onSubmitBulkOrder(this.state.fullName, this.state.mobile, this.state.email, this.state.totalPassenger, this.state.journeyDate, this.state.pnr, this.state.comment)}
-          title='Submit'
+          title={this.state.clicked === false ? 'Submit' : 'Request Sent'}
         />
       </SafeAreaView>
 

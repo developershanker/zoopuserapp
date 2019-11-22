@@ -26,6 +26,18 @@ export default class feedback extends Component {
     };
   }
 
+  handleSuccess(){
+    this.setState({
+      name: '',
+      email: '',
+      message: '',
+      clicked:true,
+    })
+    
+     this.props.navigation.navigate('Search')
+    
+  }
+
   async sendFeedback(name, email, message) {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let regexName = /^[a-zA-Z ]*$/;
@@ -52,9 +64,7 @@ export default class feedback extends Component {
                     'Thank You for contacting Zoop. We will reach you soon.',
                     [
                       {
-                        text: 'OK', onPress: () => {
-                          this.props.navigation.navigate('Search')
-                        },
+                        text: 'OK', onPress: () => this.handleSuccess(),
                         style: 'cancel'
                       },
                     ],
@@ -119,7 +129,6 @@ export default class feedback extends Component {
                 <View style={styles.messagebox}>
                   <TextInput
                     style={styles.inputD}
-                    placeholder='Type Something...'
                     multiline={true}
                     numberOfLines={3}
                     keyboardType='default'
