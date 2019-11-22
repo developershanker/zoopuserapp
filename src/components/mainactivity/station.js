@@ -181,18 +181,19 @@ export default class station extends Component {
 
   gotoMenu = (stationId, outletId, stationName, stationCode, arrivalTime, schArrivalTime, haltTime, arrDate, arrival, outletName, outletRating, minimumOrderValue, cutOffTime, zoopCustomerDeliveryCharge, zoopCustomerDeliveryChargeGstRate, zoopCustomerDeliveryChargeGst, eta, openTime, closeTime, weeklyOff) => {
     const momemtHaltTime = moment(haltTime, 'HHmmss').format('mm')
+    const checkedArrival = ((arrival === '--' ||arrival === null) ? schArrivalTime : arrival)
     ConstantValues.stationId = stationId,
-      ConstantValues.outletId = outletId,
-      ConstantValues.stationName = stationName,
-      ConstantValues.stationCode = stationCode
+    ConstantValues.outletId = outletId,
+    ConstantValues.stationName = stationName,
+    ConstantValues.stationCode = stationCode
     // ConstantValues.ata = '07:50'
     ConstantValues.ata = (schArrivalTime === null ? arrivalTime : schArrivalTime)
     ConstantValues.outletName = outletName,
-      ConstantValues.haltTime = momemtHaltTime,
-      ConstantValues.deliveryDate = (ConstantValues.searchString.length === 10 ? arrDate : this.state.date), //actual date of arraival
-      ConstantValues.deliveryTime = (ConstantValues.searchString.length === 10 ? arrival : arrivalTime), //expected date of arraival
-      ConstantValues.outletRating = outletRating,
-      ConstantValues.minimumOrderValue = minimumOrderValue
+    ConstantValues.haltTime = momemtHaltTime,
+    ConstantValues.deliveryDate = (ConstantValues.searchString.length === 10 ? arrDate : this.state.date), //actual date of arraival
+    ConstantValues.deliveryTime = (ConstantValues.searchString.length === 10 ? checkedArrival : arrivalTime), //expected date of arraival
+    ConstantValues.outletRating = outletRating,
+    ConstantValues.minimumOrderValue = minimumOrderValue
     ConstantValues.cuttoff = cutOffTime
     ConstantValues.deliveryCharge = (zoopCustomerDeliveryCharge == null ? 0 : zoopCustomerDeliveryCharge)
     ConstantValues.zoopdeliveryCharge = (zoopCustomerDeliveryCharge == null ? 0 : zoopCustomerDeliveryCharge)

@@ -169,7 +169,7 @@ export default class passengerDetail extends Component {
               ConstantValues.seat = response.data.seatInfo.berth
               ConstantValues.coach = response.data.seatInfo.coach
               ConstantValues.deliveryDate = item.arrDate
-              ConstantValues.deliveryTime = item.arrival
+              ConstantValues.deliveryTime = ((item.arrival === '--' || item.arrival === null) ? item.schArrivalTime : item.arrival)
               ConstantValues.passengerInfo = response.data.passengerInfo
               this.setState({
                 isVisible: false,
