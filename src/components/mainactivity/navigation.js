@@ -76,7 +76,6 @@ export class App extends Component {
   render() {
     return (
       <AppNavigator />
-
     )
   }
 }
@@ -305,7 +304,6 @@ const DrawerNavigator = createDrawerNavigator({
   },
   RateUs: {
     screen: RateUs,
-
     navigationOptions: {
       drawerLabel:
       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
@@ -332,8 +330,6 @@ const DrawerNavigator = createDrawerNavigator({
 }, {
   contentComponent: CustomDrawerComponent,
   drawerWidth: Dimensions.get('window').width - 140,
-
-
 }
 );
 const AppNavigator = createStackNavigator({

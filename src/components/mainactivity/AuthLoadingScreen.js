@@ -145,6 +145,7 @@ class AuthLoadingScreen extends Component {
                console.log('App Version data is :' + response.data)
                if (response.data == true) {
                 console.log('Status of App Version data is :' + response.data + 'App version matched!!!')
+                    this.getRecentItem()
                     this.tokenAsync()
                } else if(response.data == false) {
                    this.setState({
@@ -174,7 +175,24 @@ class AuthLoadingScreen extends Component {
     //  ---------------------fetchingusertoken for zoop app------------------
 
 
+    getRecentItem = async () => {
+        try {
+            const recentSearch = await AsyncStorage.getItem('recentSearch')
+            let getRecentSearch = new Array()
+            getRecentSearch = JSON.parse(recentSearch)
+            console.log('getRecentSearch::: without filter : ' + JSON.stringify(getRecentSearch))
+            var myData = getRecentSearch;
+            getRecentSearch = Array.from(new Set(myData.map(JSON.stringify))).map(JSON.parse);
+            console.log(getRecentSearch)
+            console.log('getRecentSearch::: with filter : ' + JSON.stringify(getRecentSearch))
+            ConstantValues.getRecentSearch = getRecentSearch
+            console.log('ConstantValues.getRecentSearch : ' + JSON.stringify(ConstantValues.getRecentSearch))  
+        } catch (error) {
+            console.log('Error in fetching asyncstorage:::::getRecentItem : ' + error)
+        }
+    }
 
+    
 
     // Fetch the token from storage then navigate to our appropriate place
     tokenAsync = async () => {
@@ -291,5 +309,6 @@ const styles = StyleSheet.create({
       }
 
 })
+
 
 export default AuthLoadingScreen;

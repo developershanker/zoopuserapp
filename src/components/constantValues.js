@@ -101,6 +101,14 @@ static apiUrl = 'https://appapi.zoopindia.in/'
   static paymentDetails = []
   static zooptransactionId = ''
 
+  //recentSearch
+  static searchTrainId = ''
+  static searchTrainNumber = ''
+  static searchTrainName = ''
+  static searchTrainNumberAndName = ''
+  static recentSearch = []
+  static getRecentSearch = []
+
   //agent cred
   static agentAction = []
   static skipSms = 0
@@ -178,7 +186,7 @@ static MID = 'FIjIdu58691666399235'
   //paytm credentials
   static merchant_key = 'klbGlV59135347348753'
   //Icon set in app
-  // https://zoop.s3.ap-south-1.amazonaws.com/app-Icon-set/AC+Coach.png
+  // https://zoop-dev-local.s3.ap-south-1.amazonaws.com/app-Icon-set/AC+Coach.png
   static bucket = 'zoop-dev-local'
   static region = 's3.ap-south-1'
   static url = 'amazonaws.com/'

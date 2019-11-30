@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet, Clipboard, Platform, Linking,Alert, KeyboardAvoidingView, PixelRatio, Button, Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList } from 'react-native';
+import { View, Dimensions, StyleSheet, Clipboard, Platform, TouchableNativeFeedback, Linking, Alert, KeyboardAvoidingView, PixelRatio, Button, Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { RadioButton, Text } from 'react-native-paper';
+import Modal from "react-native-modal";
 import { CustomButton } from '../assests/customButtonLarge';
 import { CustomGridIcon } from '../assests/customGridIcon';
 import { SafeAreaView } from 'react-navigation';
 import searchApi from './searchApi';
 import DeliveryMark from '../postOrderActivity/deliveryMark';
 import ConstantValues from '../constantValues';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Fade } from '../assests/fade';
 import Autocomplete from 'react-native-autocomplete-input';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import loginApi from '../login/loginApi.js';
+import otpVerify from '../login/otpVerify';
+import trainData from './trainData';
+import styles from '../assests/css';
+
 
 const { width } = Dimensions.get('window');
 export const deviceWidth = Dimensions.get('window').width
@@ -22,6 +28,8 @@ export const calcWidth = x => PixelRatio.roundToNearestPixel((deviceWidth * x) /
 export default class Search extends Component {
   componentDidMount() {
     SplashScreen.hide();
+    console.log(' I am in search.js componentdidmount')
+    // this.getRecentItem()
     this.showTrain()
     this.onRegister()
   }
@@ -33,6 +41,9 @@ export default class Search extends Component {
       placeholder: '',
       email: '',
       query: '',
+      isVisible:false,
+      visibleModal: null,
+      recentSearchArray: [],
       trains: [],
 
     };
@@ -105,39 +116,51 @@ export default class Search extends Component {
       const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
 
       return (
-        <View style={styles.mainD}>
-        <Autocomplete
-          autoCapitalize="none"
-          autoCorrect={false}
-          clearButtonMode={'always'}
-          enablesReturnKeyAutomatically={true}
-          data={trains.length === 1 && comp(query, trains[0].trainNumberAndName) ? [] : trains}
-          defaultValue={query}
-          inputContainerStyle={styles.inputViewD}
-          //listContainerStyle={styles.autocompleteContainer}
-          style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#635c5a', }}
-          onChangeText={text => this.setState({ query: text })}
-          placeholder="Enter Train Name/No."
-          renderItem={({ item }) => (
-            <View>
-              <ScrollView contentContainerStyle={styles.dropdown}>
-                <TouchableOpacity onPress={() => this.setState({
-                  query: item.trainNumberAndName,
-                  text: item.trainNumber
-                })}>
-                  <View style={{ width: Dimensions.get('window').width - 20,paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'center' }}>
-                    <Text style={styles.itemText}>
-                      {item.trainNumberAndName}
-                    </Text>
-                  </View>
-
-                </TouchableOpacity>
-              </ScrollView>
-            </View>
-          )}
-          keyExtractor={(item) => item.trainId.toString()}
-        />
+        <View style={styles.inputView}>
+          <TextInput
+            // ref={component => this._textInput = component}
+            style={styles.input}
+            clearButtonMode={'always'}
+            // onTouchStart={() => this.handleModalOpen(ConstantValues.getRecentSearch) }
+            onTouchStart={() => this.setState({ visibleModal: 'bottom' })}
+            enablesReturnKeyAutomatically={true}
+            placeholder="Enter Train Name/No."
+            onChangeText={text => this.setState({ query: text })}
+          />
         </View>
+        // <View style={styles.mainD}>
+        // <Autocomplete
+        //   autoCapitalize="none"
+        //   autoCorrect={false}
+        //   clearButtonMode={'always'}
+        //   enablesReturnKeyAutomatically={true}
+        //   data={trains.length === 1 && comp(query, trains[0].trainNumberAndName) ? [] : trains}
+        //   defaultValue={query}
+        //   inputContainerStyle={styles.inputViewD}
+        //   //listContainerStyle={styles.autocompleteContainer}
+        //   style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#635c5a', }}
+        //   onChangeText={text => this.setState({ query: text })}
+        //   placeholder="Enter Train Name/No."
+        //   renderItem={({ item }) => (
+        //     <View>
+        //       <ScrollView contentContainerStyle={styles.dropdown}>
+        //         <TouchableOpacity onPress={() => this.setState({
+        //           query: item.trainNumberAndName,
+        //           text: item.trainNumber
+        //         })}>
+        //           <View style={{ width: Dimensions.get('window').width - 20,paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'center' }}>
+        //             <Text style={styles.itemText}>
+        //               {item.trainNumberAndName}
+        //             </Text>
+        //           </View>
+
+        //         </TouchableOpacity>
+        //       </ScrollView>
+        //     </View>
+        //   )}
+        //   keyExtractor={(item) => item.trainId.toString()}
+        // />
+        // </View>
       )
     }
   }
@@ -152,11 +175,14 @@ export default class Search extends Component {
       if (response.status == true) {
         // console.log('data : ' + JSON.stringify(response.data))
         this.setState({
-          trains: response.data
+          trains: response.data,
+          recentSearchArray: ConstantValues.getRecentSearch
         })
+        console.log('data in ::::Show Train : ' + this.state.recentSearchArray)
         // return (
         //   ToastAndroid.show(response.message, ToastAndroid.LONG)
         // )
+        //  this.getRecentItem()
       } else {
         return (
           ToastAndroid.show(response.error, ToastAndroid.LONG),
@@ -169,14 +195,20 @@ export default class Search extends Component {
 
   }
 
-  searchBy(text,query) {
+
+
+
+  searchBy(text, query) {
     let reg = /^[0-9]+$/;
     if (text != '' && reg.test(text)) {
       if (text.length == 10 || text.length == 5) {
         console.log('query.length : ' + query.length + '\n' + 'query : ' + query)
-          ConstantValues.searchString = text,
-            console.log('ConstantValues.searchString is ....' + ConstantValues.searchString)
-          this.props.navigation.navigate('Station')
+        ConstantValues.searchString = text
+        if (text.length === 5) {
+          this.pushingItem(text, query)
+        }
+        console.log('ConstantValues.searchString is ....' + ConstantValues.searchString)
+        this.props.navigation.navigate('Station')
       } else {
         return (
           Alert.alert(
@@ -208,6 +240,37 @@ export default class Search extends Component {
       )
     }
   }
+
+  handleModalOpen(getRecentSearch) {
+    console.log('ConstantValues.getRecentSearch ::::handleModalOpen : ' + ConstantValues.getRecentSearch)
+    this.setState({
+      recentSearchArray: getRecentSearch,
+      visibleModal: 'bottom'
+    })
+    console.log('recentSearchArray ::::handleModalOpen : ' + JSON.stringify(this.state.recentSearchArray))
+  }
+
+  pushingItem = async (text, query) => {
+    try {
+      // ConstantValues.recentSearch.unshift({
+      //   'trainNumber': text,
+      //   'trainNumberAndName': query
+      // })
+      let rec = {
+        'trainNumber': text,
+        'trainNumberAndName': query
+      }
+      // const recentSearch = new Array()
+      // recentSearch = await AsyncStorage.getItem('recentSearch') || '[]'
+      // recentSearch = JSON.parse(recentSearch)
+      ConstantValues.recentSearch.unshift(rec);
+      await AsyncStorage.setItem('recentSearch', JSON.stringify(ConstantValues.recentSearch));
+      console.log('Storing this in local storage recentSearch : ' + JSON.stringify(ConstantValues.recentSearch))
+    } catch (error) {
+      console.log('Error in storing asyncstorage: ' + error)
+    }
+  }
+
   dialCall = () => {
 
     let phoneNumber = '';
@@ -224,15 +287,21 @@ export default class Search extends Component {
 
   render() {
     let position = Animated.divide(this.scrollX, width);
+    let { query } = this.state;
+    let trains = this.findTrain(query);
+    // let getRecentSearch = ConstantValues.getRecentSearch
+    // // let recentSearch = ConstantValues.getRecentSearch
+    // console.log('getRecentSearch ::::: in render : ' + getRecentSearch)
+    let comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
     return (
       <SafeAreaView >
         <ScrollView keyboardShouldPersistTaps='handled'>
           <KeyboardAvoidingView enabled style={styles.slide}>
 
-
             <View style={{ width: deviceWidth, height: '20%' }}>
-              <Image style={styles.imageTop} source={require('../images/Home.jpg')} />
+                <Image style={styles.imageTop} source={require('../images/Home.jpg')} />
             </View>
+
             <View style={{ alignItems: 'center', width: deviceWidth, height: '5%', justifyContent: 'center' }}>
               <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 18, }}>Search By</Text>
             </View>
@@ -274,7 +343,7 @@ export default class Search extends Component {
                 style={{ alignSelf: 'center' }}
                 onPress={() => {
 
-                  this.searchBy(this.state.text , this.state.query)
+                  this.searchBy(this.state.text, this.state.query)
                 }}
                 title='Search Restaurants'
               />
@@ -374,6 +443,117 @@ export default class Search extends Component {
 
           </KeyboardAvoidingView>
         </ScrollView>
+        <KeyboardAvoidingView>
+          <Modal
+            isVisible={this.state.visibleModal === 'bottom'}
+            onBackButtonPress={() => this.setState({ visibleModal: null })}
+            // onSwipeComplete={() => this.setState({ visibleModal: null })}
+            // swipeDirection={['left', 'right']}
+            style={styles.bottomModal}
+          >
+            <View style={styles.modalView}>
+
+              <View style={{ alignItems: 'center', width: deviceWidth, height: '5%', justifyContent: 'center', alignContent: 'center' }}>
+                <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 18, }}>Search By</Text>
+              </View>
+
+              <View style={styles.autocompleteContainer}>
+                <Autocomplete
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  clearButtonMode={'always'}
+                  enablesReturnKeyAutomatically={true}
+                  listContainerStyle={{ height: '80%' }}
+                  data={trains.length === 1 && comp(query, trains[0].trainNumberAndName) ? [] : trains}
+                  defaultValue={query}
+                  style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#635c5a', }}
+                  onChangeText={text => this.setState({ query: text })}
+                  placeholder="Enter Train Name/No."
+                  renderItem={({ item }) => (
+                    <View>
+                      <ScrollView contentContainerStyle={styles.dropdown}>
+                        <TouchableOpacity onPress={() => this.setState({
+                          query: item.trainNumberAndName,
+                          text: item.trainNumber
+                        })
+                        }>
+                          <View style={{ width: Dimensions.get('window').width - 20, paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'center' }}>
+                            <Text style={styles.itemText}>
+                              {item.trainNumberAndName}
+                            </Text>
+                          </View>
+
+                        </TouchableOpacity>
+                      </ScrollView>
+                    </View>
+                  )}
+                  keyExtractor={(item) => item.trainNumber.toString()}
+                />
+              </View>
+              <Fade style={{ alignItems: 'flex-start', width: deviceWidth - 10, height: '60%', justifyContent: 'flex-start' }} visible={this.state.query === ''}>
+                {/* <View style={{ alignItems: 'center', width: deviceWidth - 10, height: '20%', justifyContent: 'center' }}> */}
+                <View style={{ alignItems: 'center', width: deviceWidth - 10, height: '5%', justifyContent: 'center', marginVertical: 5 }}>
+                  <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 15, }}>Recent Searches</Text>
+                </View>
+
+
+                <View style={{ flexDirection: 'column', alignItems: 'flex-start', width: deviceWidth - 10, justifyContent: 'flex-start' }}>
+                  <ScrollView
+                    horizontal={false}
+                    showsHorizontalScrollIndicator={false}
+                    pagingEnabled={true}
+                    contentContainerStyle={{ width: deviceWidth - 10 }}
+                  >
+                    <FlatList
+                      data={this.state.recentSearchArray}
+                      extraData={this.state}
+                      renderItem={({ item , i }) => (
+                        <View>
+                          <TouchableNativeFeedback key={i} onPress={() => this.setState({
+                            query: item.trainNumberAndName,
+                            text: item.trainNumber
+                          })
+                          }>
+                            <View style={styles.box}>
+                              <Text style={{ color: '#9b9b9b', fontFamily: 'Poppins-Regular', fontSize: 15, textAlign: 'center' }}> {item.trainNumberAndName} </Text>
+                            </View>
+                          </TouchableNativeFeedback>
+                        </View>
+
+                      )}
+                      keyExtractor={(item, index) => index.toString()}
+                    />
+                    {/* {
+                      this.state.recentSearchArray.map((traininfo, i) => {
+                        return (
+                          <TouchableNativeFeedback key={i} onPress={() => this.setState({
+                            query: traininfo.trainNumberAndName,
+                            text: traininfo.trainNumber
+                          })}>
+                            <View style={styles.box}>
+                              <Text style={{ color: '#9b9b9b', fontFamily: 'Poppins-Regular', fontSize: 15, textAlign: 'center' }}> {traininfo.trainNumberAndName} </Text>
+                            </View>
+                          </TouchableNativeFeedback>
+                        )
+                      })} */}
+                  </ScrollView>
+                </View>
+                {/* </View> */}
+              </Fade>
+
+              <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', width: deviceWidth - 20, height: '10%' }}>
+                <CustomButton
+                  style={{ alignSelf: 'center' }}
+                  onPress={() => {
+                    this.setState({ visibleModal: null })
+                    this.searchBy(this.state.text, this.state.query)
+                  }}
+                  title='Search Restaurants'
+                />
+              </View>
+            </View>
+          </Modal>
+        </KeyboardAvoidingView>
         {/* <DeliveryMark/> */}
       </SafeAreaView>
     );
@@ -386,169 +566,3 @@ const photos = [
   { uri: ConstantValues.IconUrl + ConstantValues.imgurl.banner2 },
   { uri: ConstantValues.IconUrl + ConstantValues.imgurl.banner1 },
 ]
-const styles = StyleSheet.create({
-  slide: {
-    flex: 1,
-    width: deviceWidth,
-    height:deviceHeight-50,
-    alignItems: 'stretch',
-    alignContent: 'stretch',
-    backgroundColor: '#fff',
-    flexDirection: 'column',
-  },
-  main: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '15%',
-   
-  },
-  mainD:{
-    paddingTop:25,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignContent:'center'
-  },
-  scroll: {
-    flex: 1,
-    alignItems: 'center',
-    alignContent:'center',
-    justifyContent: 'center',
-    marginLeft: 10,
-    paddingVertical:10,
-    backgroundColor:'#fff',
-    height:'35%',
-  },
-  img: {
-    width: Dimensions.get('window').width,
-    height: 120,
-    marginLeft: 5,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#e1e1e1',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
-    width: Dimensions.get('window').width,
-    height: 160,
-    // flexWrap: 'nowrap',
-    resizeMode: 'cover'
-    // marginLeft: 5
-  },
-  contentContainer: {
-    justifyContent: 'space-around',
-    // height:120
-  },
-  radioButton: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    width: deviceWidth,
-    height: '5%',
-    justifyContent: 'space-around',
-  },
-  radioView: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  text: {
-    fontFamily: 'Poppins-Regular',
-    fontSize: 15,
-  },
-  inputView: {
-    width: Dimensions.get('window').width - 20,
-    marginLeft: 5,
-    borderRadius: 10,
-    borderColor: '#cfc7c4',
-    borderWidth: 1,
-    // paddingVertical: 5
-  },
-  inputViewD: {
-    marginLeft: 5,
-    borderRadius: 10,
-    borderColor: '#cfc7c4',
-    borderWidth: 1,
-    // paddingVertical: 5,
-    width: Dimensions.get('window').width - 20,
-  },
-  itemText: {
-    fontSize: 15,
-    fontFamily: 'Poppins-Regular',
-    textAlign: 'center'
-  },
-  input: {
-    fontSize: 15,
-    color: '#635c5a',
-    width: Dimensions.get('window').width - 20,
-    fontFamily: 'Poppins-Regular',
-  },
-  inputAuto: {
-    // width:Dimensions.get('window').width - 50,
-    flex: 1,
-    left: 0,
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    // zIndex: 1
-  },
-  heading: {
-    color: 'black',
-    fontFamily: 'Poppins-Bold',
-    fontSize: 20,
-  },
-  dropdown: {
-    height: 40,
-    justifyContent: 'center',
-    fontSize: 20,
-    color: '#000000',
-    width: Dimensions.get('window').width - 50,
-    fontFamily: 'Poppins-Regular',
-    alignItems: 'center',
-    borderBottomColor: '#000000'
-  },
-  autocompleteContainer: {
-    width: Dimensions.get('window').width - 20,
-    height:'20%'
-  },
-  gridContainer: {
-    width: Dimensions.get('screen').width,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 5,
-    height: '20%'
-  },
-  GridViewContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    width: 100,
-    height: 90,
-    // shadowOffset: { width: 3, height: 0 },
-    // shadowRadius: 6,
-    borderRadius: 5,
-    // shadowOpacity: 0.4,
-    borderBottomWidth: 2,
-    borderBottomColor: '#cfc7c4',
-    borderColor: '#ebe9e8',
-    borderWidth: 1,
-    backgroundColor: '#ffffff'
-  },
-  GridViewTextLayout: {
-    fontSize: 8,
-    fontFamily: 'Poppins-Regular',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: '#000',
-    padding: 5,
-  },
-  iconImg: {
-    width: 64,
-    height: 64
-  },
-  imageTop: {
-    width: Dimensions.get('screen').width,
-    height: 120,
-  }
-})

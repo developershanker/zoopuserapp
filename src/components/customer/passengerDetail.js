@@ -15,7 +15,6 @@ import Modal from "react-native-modal";
 import searchApi from '../mainactivity/searchApi.js';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
-import { CustomAlert } from '../assests/customAlert.js';
 
 export default class passengerDetail extends Component {
   componentDidMount() {
