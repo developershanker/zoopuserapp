@@ -22,6 +22,15 @@ import Modal from 'react-native-modal';
 import Device from 'react-native-device-info';
 import servicesApi from '../services/servicesApi';
 import { CustomButtonShort } from '../assests/customButtonShort';
+import {
+    Placeholder,
+    PlaceholderMedia,
+    PlaceholderLine,
+    Fade,
+    Loader,
+    Shine
+  } from "rn-placeholder";
+import { StationLoader } from './stationLoader';
 
 class AuthLoadingScreen extends Component {
    async componentDidMount() {
@@ -236,11 +245,30 @@ class AuthLoadingScreen extends Component {
     render() {
         return (
             <View style={styles.slide}>
-                {/* <ActivityIndicator
-                    color={'#FF5819'}
-                    size={40}
-                    animating={true} /> */}
-                <Spinner size={100} type={'FadingCircleAlt'} color={'#898c8b'} isVisible={this.state.loader} />
+                <Placeholder
+                    style={styles.slideIn}
+                    Animation={Shine}
+                >
+                    <PlaceholderMedia style={{ width: 60, height: 30, marginTop: 30, margin: 10 }} />
+                    <PlaceholderMedia style={{ width: ConstantValues.deviceWidth - 20, height: '15%', marginTop: 30, margin: 10 }} />
+                    <PlaceholderLine width={0} />
+                    <PlaceholderLine width={80} style={{ margin: 10 }} />
+                    <PlaceholderLine />
+                    <PlaceholderLine width={30} />
+                    <PlaceholderLine width={80} style={{ margin: 10 }} />
+                    <PlaceholderLine />
+                    <PlaceholderLine width={30} />
+                    <PlaceholderLine width={80} style={{ margin: 10 }} />
+                    <PlaceholderLine /><PlaceholderLine width={30} />
+                    <PlaceholderLine width={80} style={{ margin: 10 }} />
+                    <PlaceholderLine />
+
+                    <PlaceholderMedia style={{ width: ConstantValues.deviceWidth-20, height: '20%',marginTop:20,margin:10 }} />
+                </Placeholder>
+                {/* <StationLoader/> */}
+                
+               
+                {/* <Spinner size={100} type={'FadingCircleAlt'} color={'#898c8b'} isVisible={this.state.loader} /> */}
                 {/* <Text style={styles.text}>Loading...</Text> */}
                 {/* <StatusBar barStyle="default" /> */}
                
@@ -282,6 +310,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         flexDirection: 'column',
     },
+    slideIn: {
+        flex: 1,
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height - 50,
+        alignItems: 'stretch',
+        alignContent: 'stretch',
+        backgroundColor: '#fff',
+        flexDirection: 'column',
+      },
     text: {
         alignSelf: 'center',
         fontSize: 20,
@@ -306,7 +343,33 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 10,
         
-      }
+      },
+      gridContainer: {
+        width: Dimensions.get('screen').width,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 5,
+        height: '20%'
+      },
+      GridViewContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        width: 100,
+        height: 90,
+        // shadowOffset: { width: 3, height: 0 },
+        // shadowRadius: 6,
+        borderRadius: 5,
+        // shadowOpacity: 0.4,
+        // borderBottomWidth: 2,
+        // borderBottomColor: '#cfc7c4',
+        // borderColor: '#ebe9e8',
+        // borderWidth: 1,
+        // backgroundColor: '#ffffff'
+      },
 
 })
 

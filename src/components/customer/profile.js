@@ -26,6 +26,9 @@ export default class Profile extends Component {
       referredBy: '',
       altmobile: '',
       loginCount: null,
+      clicked:false,
+      buttonColor:'#9b9b9b',
+      buttonText:'Submit',
       visibleModal: 'center'
     };
   }
@@ -156,10 +159,12 @@ export default class Profile extends Component {
   }
   //submitting edited profile info
   async editUserInfo(name, emailId, altMobile, referredBy) {
+    this.setState({buttonText: 'Submitting..', clicked: true ,buttonColor:'#9b9b9b'})
     try {
       let response = await loginApi.editUserInfo(name, emailId, altMobile, referredBy)
       console.log('data received in profile.js : ' + JSON.stringify(response))
       if (response.status == true) {
+        this.setState({buttonText: 'Profile Updated Successfully', clicked: true ,buttonColor:'#9b9b9b'})
         // this.setState({
         //   name:ConstantValues.customerName,
         //   altmobile:ConstantValues.customeralternateMobile,
@@ -174,12 +179,14 @@ export default class Profile extends Component {
         )
       }
       else {
+        this.setState({buttonText: 'Submit', clicked: false ,buttonColor:'#60b246'})
         return (
           ToastAndroid.show(response.error, ToastAndroid.LONG)
         )
       }
 
     } catch (error) {
+      this.setState({buttonText: 'Submit', clicked: false ,buttonColor:'#60b246'})
       console.log('Data received in profile.js catch: ' + error)
     }
   }
@@ -225,7 +232,7 @@ export default class Profile extends Component {
             placeholder='Email id'
             value={this.state.emailId}
             keyboardType='email-address'
-            onChangeText={emailId => this.setState({ emailId })}
+            onChangeText={emailId => this.setState({ emailId , buttonColor:'#60b246'})}
           />
           <TextInput style={styles.input}
             placeholder='Alternate Mobile No.'
@@ -245,9 +252,9 @@ export default class Profile extends Component {
 
         </View>
         <CustomButton
-          title="Submit"
-          disabled={this.state.name == '' ? true : false}
-          style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
+          title={this.state.buttonText}
+          disabled={this.state.clicked}
+          style={{ backgroundColor: this.state.buttonColor, alignSelf: 'center', marginBottom: 20, }}
           onPress={() => {
             this.isEmpty(this.state.name, this.state.emailId, this.state.altmobile, this.state.referredBy)
             // this.props.navigation.navigate('Search')

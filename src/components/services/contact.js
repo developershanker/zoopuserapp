@@ -147,7 +147,7 @@ export default class contact extends Component {
                 onChangeText={description => this.setState({ description })}
               />
               <CustomButton
-                disable={this.state.clicked}
+                disabled={this.state.clicked}
                 style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : '#60b246', alignSelf: 'center', marginBottom: 20, width: 300 }}
                 onPress={() => { this.sendContent(this.state.name, this.state.mobile, this.state.description) }}
                 title={this.state.clicked === false ? 'Submit' : 'Message Sent'}
