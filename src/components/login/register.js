@@ -25,6 +25,9 @@ export default class Register extends Component {
       referredBy: '',
       altmobile: '',
       loginCount: null,
+      clicked:false,
+      buttonColor:'#9b9b9b',
+      buttonText:'Submit',
       visibleModal: 'center'
     };
   }
@@ -176,10 +179,12 @@ export default class Register extends Component {
   }
   //submitting edited profile info
   async editUserInfo(name, emailId, altMobile, referredBy) {
+    this.setState({buttonText: 'Submitting..', clicked: true ,buttonColor:'#9b9b9b'})
     try {
       let response = await loginApi.editUserInfo(name, emailId, altMobile, referredBy)
       console.log('data received in profile.js : ' + JSON.stringify(response))
       if (response.status == true) {
+        this.setState({buttonText: 'Profile Updated Successfully', clicked: true ,buttonColor:'#9b9b9b'})
         // this.setState({
         //   name:ConstantValues.customerName,
         //   altmobile:ConstantValues.customeralternateMobile,
@@ -194,12 +199,14 @@ export default class Register extends Component {
         )
       }
       else {
+        this.setState({buttonText: 'Submit', clicked: false ,buttonColor:'#60b246'})
         return (
           ToastAndroid.show(response.error, ToastAndroid.LONG)
         )
       }
 
     } catch (error) {
+      this.setState({buttonText: 'Submit', clicked: false ,buttonColor:'#60b246'})
       console.log('Data received in profile.js catch: ' + error)
     }
   }
