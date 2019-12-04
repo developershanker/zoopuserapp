@@ -18,7 +18,9 @@ export default class bulkOrder extends Component {
       journeyDate: '',
       pnr: '',
       comment: '',
+      buttonColor:'#9b9b9b',
       clicked: false,
+      buttonText:'Submit'
     };
   }
 
@@ -78,33 +80,33 @@ export default class bulkOrder extends Component {
   }
 
 
-  handleSuccess(){
-    this.setState({
-      fullName: '',
-      mobile: '',
-      email: '',
-      totalPassenger: '',
-      journeyDate: '',
-      pnr: '',
-      comment: '',
-      clicked: true,
-    })
-    this.props.navigation.navigate('Search')
-  }
+
 
 
 
   async sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment) {
+    this.setState({ clicked: true, buttonColor: '#9b9b9b' ,buttonText:'Sending Request...'})
     try {
       let response = await servicesApi.sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment)
       if (response.status == true) {
+        this.setState({ clicked: true, buttonColor: '#9b9b9b' ,buttonText:'Request Sent'})
         return (
           Alert.alert(
             'Request Submitted Successfully',
             'Thanks for sharing your information.' + '\n' + ' We will work on your request and contact you in next 48 hours.',
             [
               {
-                text: 'OK', onPress: () => this.handleSuccess(),
+                text: 'OK', onPress: () => {this.setState({
+                  fullName: '',
+                  mobile: '',
+                  email: '',
+                  totalPassenger: '',
+                  journeyDate: '',
+                  pnr: '',
+                  comment: '',
+                  clicked: true,
+                })
+                this.props.navigation.navigate('Search')},
                 style: 'cancel'
               },
             ],
@@ -112,11 +114,13 @@ export default class bulkOrder extends Component {
           )
         )
       } else {
+        this.setState({ clicked: false, buttonColor: '#60b246' ,buttonText:'Submit'})
         return (
           ToastAndroid.show('Something went wrong!! Try again later!!', ToastAndroid.LONG)
         )
       }
     } catch (error) {
+      this.setState({ clicked: false, buttonColor: '#60b246' ,buttonText:'Submit'})
       console.log('Data received in bulkOrder.js catch: ' + error)
     }
   }
@@ -142,7 +146,7 @@ export default class bulkOrder extends Component {
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.input}
-                  placeholder='Enter your name'
+                  placeholder='Enter your name*'
                   editable={true}
                   value={this.state.fullName}
                   autoCapitalize='words'
@@ -155,7 +159,7 @@ export default class bulkOrder extends Component {
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.input}
-                  placeholder='Enter your mobile number'
+                  placeholder='Enter your mobile number*'
                   editable={true}
                   keyboardType='number-pad'
                   value={this.state.mobile}
@@ -169,7 +173,7 @@ export default class bulkOrder extends Component {
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.input}
-                  placeholder='Enter your email address'
+                  placeholder='Enter your email address*'
                   editable={true}
                   keyboardType='email-address'
                   value={this.state.email}
@@ -182,7 +186,7 @@ export default class bulkOrder extends Component {
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.input}
-                  placeholder='Enter the number of passengers.'
+                  placeholder='Enter the number of passengers.*'
                   editable={true}
                   keyboardType='numeric'
                   value={this.state.totalPassenger}
@@ -207,7 +211,7 @@ export default class bulkOrder extends Component {
                 style={{ width: Dimensions.get('window').width - 10 }}
                 date={this.state.journeyDate} //initial date from state
                 mode="date" //The enum of date, datetime and time
-                placeholder="Choose your journey date"
+                placeholder="Choose your journey date*"
                 format="DD-MM-YYYY"
                 minDate={moment().toDate()}
                 maxDate={moment().add(120, 'days').format("DD-MM-YYYY")}         //"01-01-2030"
@@ -242,7 +246,7 @@ export default class bulkOrder extends Component {
                     fontFamily: 'Poppins-Regular',
                   }
                 }}
-                onDateChange={(journeyDate) => { this.setState({ journeyDate: journeyDate }) }}
+                onDateChange={(journeyDate) => { this.setState({ journeyDate: journeyDate , buttonColor: '#60b246'}) }}
               />
               {/* </View> */}
             </View>
@@ -284,10 +288,10 @@ export default class bulkOrder extends Component {
           </View>
         </ScrollView>
         <CustomButton
-          disable={this.state.clicked}
-          style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : '#60b246', alignSelf: 'center', marginBottom: 10, }}
+          disabled={this.state.clicked}
+          style={{ backgroundColor: this.state.buttonColor , alignSelf: 'center', marginBottom: 10, }}
           onPress={() => this.onSubmitBulkOrder(this.state.fullName, this.state.mobile, this.state.email, this.state.totalPassenger, this.state.journeyDate, this.state.pnr, this.state.comment)}
-          title={this.state.clicked === false ? 'Submit' : 'Request Sent'}
+          title={this.state.buttonText}
         />
       </SafeAreaView>
 

@@ -15,7 +15,6 @@ import Modal from "react-native-modal";
 import searchApi from '../mainactivity/searchApi.js';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
-import { CustomAlert } from '../assests/customAlert.js';
 
 export default class passengerDetail extends Component {
   componentDidMount() {
@@ -309,7 +308,7 @@ export default class passengerDetail extends Component {
     // ConstantValues.customerEmailId = this.state.emailId,
     // ConstantValues.customerPhoneNo = this.state.customerPhoneNo
     if (ConstantValues.isAgent == 1) {
-      if (this.state.name.length == 0 || this.state.customerPhoneNo.length == 0) {
+      if (this.state.name.length == 0 || this.state.customerPhoneNo.length !== 10) {
         return(
           //ToastAndroid.show('Please fill name & contact',ToastAndroid.LONG)
           Alert.alert(

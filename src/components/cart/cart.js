@@ -638,7 +638,7 @@ export default class Cart extends Component {
                   renderItem={({ item, index }) =>
                     <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5,}}>
                       <View style={{ width: 30, alignItems: 'center' }}>
-                        <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryType == 'Veg' ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
+                        <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryId === 1 ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
                       </View>
 
                       <Text style={{ fontSize: 13, fontFamily: 'Poppins-Regular', width: 130 }}>{item.itemName}</Text>
