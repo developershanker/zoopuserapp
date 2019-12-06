@@ -116,18 +116,24 @@ export default class Search extends Component {
       const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
 
       return (
-        <View style={styles.inputView}>
-          <TextInput
-            // ref={component => this._textInput = component}
-            style={styles.input}
-            clearButtonMode={'always'}
-            // onTouchStart={() => this.handleModalOpen(ConstantValues.getRecentSearch) }
-            onTouchStart={() => this.setState({ visibleModal: 'bottom' })}
-            enablesReturnKeyAutomatically={true}
-            placeholder="Enter Train Name/No."
-            onChangeText={text => this.setState({ query: text })}
-          />
-        </View>
+        <TouchableNativeFeedback onPress={() => this.setState({ visibleModal: 'bottom' })}>
+          <View style={{ width: Dimensions.get('window').width - 20, marginLeft: 5, borderRadius: 10, borderColor: '#cfc7c4', borderWidth: 1, paddingVertical: 5 }}>
+            <Text style={{margin: 5,fontSize: 15,color: '#9b9b9b', width: Dimensions.get('window').width - 20,fontFamily: 'Poppins-Regular',}}>Enter Train Name/No.</Text>
+          </View>
+        </TouchableNativeFeedback>
+        
+          // {/* <TextInput
+          //   // ref={component => this._textInput = component}
+          //   style={styles.input}
+          //   clearButtonMode={'always'}
+          //   // onTouchStart={() => this.handleModalOpen(ConstantValues.getRecentSearch) }
+          //   onTouchStart={() => this.setState({ visibleModal: 'bottom' })}
+          //   enablesReturnKeyAutomatically={true}
+          //   placeholder="Enter Train Name/No."
+          //   onChangeText={text => this.setState({ query: text })}
+          // /> */}
+          
+        // </View>
         // <View style={styles.mainD}>
         // <Autocomplete
         //   autoCapitalize="none"
