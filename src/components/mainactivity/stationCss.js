@@ -5,9 +5,9 @@ import {
 const styles = StyleSheet.create({
     slide: {
       flex: 1,
-      alignItems: 'stretch',
-      justifyContent: 'flex-start',
-      backgroundColor: '#ffffff',
+      // alignContent:'flex-start',
+      // justifyContent: 'flex-start',
+      backgroundColor: '#fff',
     },
     topContainer: {
       flexDirection: 'row',

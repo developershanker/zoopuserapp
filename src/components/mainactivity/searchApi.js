@@ -109,7 +109,7 @@ export default class searchApi extends Component {
     static async research(pnr){
         try {
             //url
-            const apiUrl = 'research/pnr'
+            const apiUrl = 'validate-search/pnr'
             //body
             const body = {}
             body['searchString'] = pnr

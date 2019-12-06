@@ -181,7 +181,7 @@ export default class station extends Component {
     }
   }
 
-  gotoMenu = (stationId, outletId, stationName, stationCode, arrivalTime, schArrivalTime, haltTime, arrDate, arrival, outletName, outletRating, minimumOrderValue, cutOffTime, zoopCustomerDeliveryCharge, zoopCustomerDeliveryChargeGstRate, zoopCustomerDeliveryChargeGst, eta, openTime, closeTime, weeklyOff) => {
+  gotoMenu = (stationId, outletId, stationName, stationCode, arrivalTime, schArrivalTime, haltTime, arrDate, arrival, outletName, outletRating, minimumOrderValue, cutOffTime, zoopCustomerDeliveryCharge, zoopCustomerDeliveryChargeGstRate, zoopCustomerDeliveryChargeGst, eta, openTime, closeTime, weeklyOff,gstin,fssaiNo,offer,items) => {
     const momemtHaltTime = moment(haltTime, 'HHmmss').format('mm')
     const checkedArrival = ((arrival === '--' ||arrival === null) ? schArrivalTime : arrival)
     ConstantValues.stationId = stationId,
@@ -206,6 +206,11 @@ export default class station extends Component {
     ConstantValues.openTime = openTime
     ConstantValues.closeTime = closeTime
     ConstantValues.weeklyOff = weeklyOff
+    //getting items
+    ConstantValues.gstIn = gstin
+    ConstantValues.fssaiNo = fssaiNo
+    ConstantValues.offer = offer
+    ConstantValues.OutletMenuInfo = items
     //add delivery charge and delivery charge gst
     ConstantValues.deliveryCharge = (zoopCustomerDeliveryCharge == null ? 0 : zoopCustomerDeliveryCharge + ConstantValues.deliveryChargegst)
     console.log('ConstantValues.stationId : ' + ConstantValues.stationId),
@@ -246,7 +251,7 @@ export default class station extends Component {
           {/* Searchbar ends */}
         </View>
         {/* FilterModal begins */}
-        <View style={{ flex: 1 }}>
+        {/* <View style={{ flex: 1 }}>
           <Modal
             isVisible={this.state.visibleModal === 'bottom'}
             onBackButtonPress={() => this.setState({ visibleModal: null })}
@@ -287,7 +292,7 @@ export default class station extends Component {
               />
             </View>
           </Modal>
-        </View>
+        </View> */}
         {/* FilterModal ends */}
 
 
@@ -326,7 +331,7 @@ export default class station extends Component {
         </View>
         {/* OutletView starts */}
         <ScrollView>
-          <View style={styles.slide}>
+          <View>
             {/* Station Header */}
             {/* <StationHeader /> */}
             <FlatList
@@ -334,12 +339,15 @@ export default class station extends Component {
               // ItemSeparatorComponent={this.FlatListItemSeparator}
               renderItem={({ item, index }) =>
                 // <Fade visible={item.isVisible && item.outlets.length != 0}>
-                <View style={{ borderRadius: 5, borderColor: '#e7e7e7', borderWidth: 1, marginVertical: 10, marginHorizontal: 10 }}>
+                <View style={{ borderRadius: 5, borderColor: '#e7e7e7', borderWidth: 1, marginVertical: 5, marginHorizontal: 10 }}>
                   <Text style={styles.textheader}>{item.stationName}</Text>
                   <View style={styles.stextview}>
-                    <Text style={styles.stext}>Halt : {moment(item.haltTime, 'HHmmss').format('mm')} mins | </Text>
+                    {/* <Text style={styles.stext}>Halt : {moment(item.haltTime, 'HHmmss').format('mm')} mins | </Text>
                     <Text style={styles.stext}> S.T.A : {moment(item.arrivalTime, 'HHmmss').format('hh:mm A')} | </Text>
-                    <Text style={styles.stext}> E.T.A : {moment(item.expectedTime, 'HHmmss').format('hh:mm A')}</Text>
+                    <Text style={styles.stext}> E.T.A : {moment(item.expectedTime, 'HHmmss').format('hh:mm A')}</Text> */}
+                    <Text style={styles.stext}>Halt : {item.halt === null ? moment(item.haltTime, 'HH:mm:ss').format('mm') : moment(item.halt, 'mm:ss').format('mm')} mins | </Text>
+                    <Text style={styles.stext}> S.T.A : {item.schArrivalTime === null || item.arrival === '--' ?  moment(item.expectedTime, 'HHmmss').format('hh:mm A') : item.schArrivalTime}  | </Text>
+                    <Text style={styles.stext}> E.T.A : {item.arrival === null || item.arrival === '--' ?  moment(item.arrivalTime, 'HHmmss').format('hh:mm A') : item.arrival}</Text>
                   </View>
 
                   {/* OutletView starts */}
@@ -376,7 +384,11 @@ export default class station extends Component {
                                 item.expectedTime,
                                 outlets.openTime,
                                 outlets.closeTime,
-                                outlets.weeklyOff
+                                outlets.weeklyOff,
+                                outlets.gstin,
+                                outlets.fssaiNo,
+                                outlets.offer,
+                                outlets.items,
                               )
                             }}>
                             <View style={styles.card}>
