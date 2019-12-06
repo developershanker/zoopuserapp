@@ -168,57 +168,63 @@ export class Menu extends Component {
   // };
 
   //getting menudetails
-  async getMenu() {
+   getMenu() {
     this.setState({
       loading: true
     })
     try {
-      let response = await menuApi.getMenu();
-      // console.log('data received in menu.js : ' + JSON.stringify(response))
-      if (response.status == true) {
+      // let response = await menuApi.getMenu();
+      console.log('ConstantValues.OutletMenuInfo : ' + ConstantValues.OutletMenuInfo)
+      if (ConstantValues.OutletMenuInfo && ConstantValues.OutletMenuInfo.length) {
         this.setState({
-          gstin: response.data.outlet.gstin,
-          fssaiNo: response.data.outlet.fssaiNo,
-          offer: response.data.offer,
-          RecommendedMenuInfo: response.data.recommendedItems,
-          OutletMenuInfo: response.data.items,
-          allMenu: response.data.items,
+          gstin: ConstantValues.gstIn,
+          fssaiNo: ConstantValues.fssaiNo,
+          offer: ConstantValues.offer,
+          RecommendedMenuInfo: ConstantValues.RecommendedMenuInfo,
+          OutletMenuInfo: ConstantValues.OutletMenuInfo,
+          allMenu: ConstantValues.OutletMenuInfo,
           isVisible: false
         })
-        if (this.state.OutletMenuInfo && this.state.OutletMenuInfo.length) {
-          this.setState({
-            gstin: response.data.outlet.gstin,
-            fssaiNo: response.data.outlet.fssaiNo,
-            offer: response.data.offer,
-            RecommendedMenuInfo: response.data.recommendedItems,
-            OutletMenuInfo: response.data.items,
-            allMenu: response.data.items,
-            isVisible: false
+        this.setState({
+          onlyVegMenu: ConstantValues.OutletMenuInfo.filter((item) => {
+            // console.log('item`s categoryId are:   ' + item.categoryId)
+            return item.categoryId === 1
           })
-          this.setState({
-            onlyVegMenu: this.state.OutletMenuInfo.filter((item) => {
-              //console.log('item`s categoryId are:   ' + item.categoryId)
-              return item.categoryId === 1
-            })
-          })
-          // console.log('Veg Items are:' + JSON.stringify(this.state.onlyVegMenu))
+        })
+        // if (this.state.OutletMenuInfo && this.state.OutletMenuInfo.length) {
+        //   this.setState({
+        //     gstin: ConstantValues.gstIn,
+        //     fssaiNo: ConstantValues.fssaiNo,
+        //     offer: ConstantValues.offer,
+        //     RecommendedMenuInfo: ConstantValues.RecommendedMenuInfo,
+        //     OutletMenuInfo: ConstantValues.OutletMenuInfo,
+        //     allMenu: ConstantValues.OutletMenuInfo,
+        //     isVisible: false
+        //   })
+        //   this.setState({
+        //     onlyVegMenu: this.state.OutletMenuInfo.filter((item) => {
+        //       //console.log('item`s categoryId are:   ' + item.categoryId)
+        //       return item.categoryId === 1
+        //     })
+        //   })
+        //   // console.log('Veg Items are:' + JSON.stringify(this.state.onlyVegMenu))
 
-        } else {
-          return (
+        // } else {
+        //   return (
 
-            Alert.alert(
-              'Alert!!',
-              'No Items to display.Select another outlet',
-              [
-                {
-                  text: 'OK', onPress: () => this.props.navigation.navigate('Station'),
-                  style: 'cancel'
-                },
-              ],
-              { cancelable: false },
-            )
-          )
-        }
+        //     Alert.alert(
+        //       'Alert!!',
+        //       'No Items to display.Select another outlet',
+        //       [
+        //         {
+        //           text: 'OK', onPress: () => this.props.navigation.navigate('Station'),
+        //           style: 'cancel'
+        //         },
+        //       ],
+        //       { cancelable: false },
+        //     )
+        //   )
+        // }
 
 
       } else {
