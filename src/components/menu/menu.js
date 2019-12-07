@@ -174,7 +174,7 @@ export class Menu extends Component {
     })
     try {
       // let response = await menuApi.getMenu();
-      console.log('ConstantValues.OutletMenuInfo : ' + ConstantValues.OutletMenuInfo)
+      // console.log('ConstantValues.OutletMenuInfo : ' + ConstantValues.OutletMenuInfo)
       if (ConstantValues.OutletMenuInfo && ConstantValues.OutletMenuInfo.length) {
         this.setState({
           gstin: ConstantValues.gstIn,
@@ -229,8 +229,17 @@ export class Menu extends Component {
 
       } else {
         return (
-          ToastAndroid.show(response.error, ToastAndroid.LONG),
-          console.log(response.error)
+          Alert.alert(
+            'Alert!!',
+            'No Items to display.Select another outlet',
+            [
+              {
+                text: 'OK', onPress: () => this.props.navigation.navigate('Station'),
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
         )
       }
 
