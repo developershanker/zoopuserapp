@@ -172,8 +172,8 @@ export default class otpVerify extends Component {
               <CustomTouchableOpacity
                 disabled={this.state.disable}
                 text={this.state.text}
-                // onPress={this.activeResendOtp(mobile, customerId) }
-                onPress={() => { ToastAndroid.show('OTP Resend Successful', ToastAndroid.LONG) }}
+                onPress={() => this.activateResendOtp(mobile, customerId) }
+                // onPress={() => { ToastAndroid.show('OTP Resend Successful', ToastAndroid.LONG) }}
               />
             </View>
 

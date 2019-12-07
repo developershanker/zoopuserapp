@@ -28,7 +28,6 @@ export const calcWidth = x => PixelRatio.roundToNearestPixel((deviceWidth * x) /
 export default class Search extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    console.log(' I am in search.js componentdidmount')
     // this.getRecentItem()
     this.showTrain()
     this.onRegister()

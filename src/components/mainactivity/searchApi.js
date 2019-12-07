@@ -79,7 +79,7 @@ export default class searchApi extends Component {
             body['searchString'] = searchString
             //calling api for response
             const response = await this.apiCall(apiUrl, 'POST', body, {})
-            console.log(response)
+            // console.log(response)
 
             return Promise.resolve(response)
         } catch (error) {

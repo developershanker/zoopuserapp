@@ -216,8 +216,25 @@ export default class station extends Component {
     console.log('ConstantValues.stationId : ' + ConstantValues.stationId),
       console.log('ConstantValues.outletId : ' + ConstantValues.outletId),
     console.log('ConstantValues.deliveryCharge : ' + ConstantValues.deliveryCharge + '\n' + 'ConstantValues.deliveryChargegst : ' + ConstantValues.deliveryChargegst + '\n' + 'ConstantValues.deliveryChargegstRate : ' + ConstantValues.deliveryChargegstRate)
-    this.props.navigation.navigate('Menu')
+    if (ConstantValues.OutletMenuInfo && ConstantValues.OutletMenuInfo.length) {
+      this.props.navigation.navigate('Menu')
+    } else {
+      return (
+        Alert.alert(
+          'Alert!!',
+          'No Items to display.Select another outlet',
+          [
+            {
+              text: 'OK', onPress: () => console.log('no items'),
+              style: 'cancel'
+            },
+          ],
+          { cancelable: false },
+        )
+      )
+    }
   }
+  
   selectedStation = (item, index) => {
     this.setState({
       stationOpacity: 1
