@@ -34,7 +34,7 @@ export default class passengerDetail extends Component {
       //  date : date + '/' + month + '/' + year,
       date: year + '-' + month + '-' + date,
       time: hours + ':' + min + ':' + sec,
-      journeyTime:moment(ConstantValues.ata, 'HHmmss').format('HH:mm')
+      journeyTime: moment(ConstantValues.ata, 'HHmmss').format('HH:mm')
     })
   }
   constructor(props) {
@@ -45,7 +45,7 @@ export default class passengerDetail extends Component {
       altMobileNo: '',
       name: '',
       emailId: 'care@zoopindia.com',
-      customerPhoneNo:'',
+      customerPhoneNo: '',
       addMessage: '',
       skipSms: false,
       skipIrctc: false,
@@ -55,8 +55,8 @@ export default class passengerDetail extends Component {
       isVisible: true,
       visibleModalLogin: null,
       enterSeatInfo: null,
-      journeyDate:'',
-      journeyTime:'',
+      journeyDate: '',
+      journeyTime: '',
       seatNo: '',
       coach: '',
       enterPnrmodal: '',
@@ -65,7 +65,7 @@ export default class passengerDetail extends Component {
       ButtonStateHolder: true,  //on state ture it will disable the button
       backgroundColor: '#9c9595',
       modalRegister: null,
-      stationInfo: [],      
+      stationInfo: [],
     };
   }
 
@@ -73,7 +73,7 @@ export default class passengerDetail extends Component {
     this.setState({
       skipSms: !this.state.skipSms
     })
-   
+
   }
   skipIrctc = () => {
     this.setState({
@@ -86,20 +86,20 @@ export default class passengerDetail extends Component {
     })
   }
 
-  async checkPnrForAgent(pnr){
+  async checkPnrForAgent(pnr) {
     try {
       let response = await searchApi.searchBy(pnr);
       if (response.status == true) {
         ConstantValues.pnr = pnr
         ConstantValues.seat = response.data.seatInfo.berth
-        ConstantValues.coach = response.data.seatInfo.coach  
+        ConstantValues.coach = response.data.seatInfo.coach
         if (response.data.trainDetails.trainNumber == ConstantValues.trainNumber) {
           this.setState({
             isVisible: false,
             visibleModalLogin: null,
             enterPnr: this.state.enterPnrmodal,
           })
-        }else{
+        } else {
           return (
             Alert.alert(
               'Train No. and Enter PNR detail Mismatch',
@@ -115,15 +115,15 @@ export default class passengerDetail extends Component {
           )
         }
 
-              
+
       } else {
         console.log('Invalid Pnr')
         this.setState({ visibleModalLogin: null })
-        return(
+        return (
           Alert.alert(
             'Wrong PNR',
             'Do you want to continue to fill the details?',
-          
+
             [
               {
                 text: 'NO',
@@ -135,7 +135,7 @@ export default class passengerDetail extends Component {
                   this.setState({
                     isVisible: false,
                     visibleModalLogin: null,
-                    enterSeatInfo :'bottom'
+                    enterSeatInfo: 'bottom'
                   })
                   ConstantValues.pnr = this.state.enterPnr
                 }
@@ -150,7 +150,7 @@ export default class passengerDetail extends Component {
     }
   }
 
- 
+
 
   async verifyStationData(pnr) {
     try {
@@ -162,7 +162,7 @@ export default class passengerDetail extends Component {
         })
         if (this.state.stationInfo && this.state.stationInfo.length) {
           console.log('station matched.....................')
-          this.state.stationInfo.map((item)=>{
+          this.state.stationInfo.map((item) => {
             if (item.outlets && item.outlets.length) {
               ConstantValues.pnr = pnr
               ConstantValues.seat = response.data.seatInfo.berth
@@ -202,7 +202,7 @@ export default class passengerDetail extends Component {
               )
             }
           })
-           
+
         } else {
           return (
             Alert.alert(
@@ -283,7 +283,7 @@ export default class passengerDetail extends Component {
           name: this.state.name,
           altMobileNo: this.state.altMobileNo,
           emailId: this.state.emailId,
-          customerPhoneNo:this.state.customerPhoneNo,
+          customerPhoneNo: this.state.customerPhoneNo,
           isVisible: false
         })
       } else {
@@ -294,11 +294,11 @@ export default class passengerDetail extends Component {
           name: ConstantValues.customerName,
           altMobileNo: ConstantValues.customeralternateMobile,
           emailId: ConstantValues.customerEmailId,
-          customerPhoneNo:ConstantValues.customerPhoneNo,
+          customerPhoneNo: ConstantValues.customerPhoneNo,
           isVisible: false
         })
       }
-     
+
 
     }
   }
@@ -309,7 +309,7 @@ export default class passengerDetail extends Component {
     // ConstantValues.customerPhoneNo = this.state.customerPhoneNo
     if (ConstantValues.isAgent == 1) {
       if (this.state.name.length == 0 || this.state.customerPhoneNo.length !== 10) {
-        return(
+        return (
           //ToastAndroid.show('Please fill name & contact',ToastAndroid.LONG)
           Alert.alert(
             'Mandatory Field Alert!!',
@@ -333,7 +333,7 @@ export default class passengerDetail extends Component {
       }
     } else {
       if (this.state.name.length == 0) {
-        return(
+        return (
           // ToastAndroid.show('Please fill name',ToastAndroid.LONG)
           Alert.alert(
             'Mandatory Field Alert!!',
@@ -349,17 +349,17 @@ export default class passengerDetail extends Component {
         )
       } else {
         this.agentAction()
-      this.savePassengerDetail()
-      {
-        this.props.navigation.navigate('PaymentPage'),
-          { altMobileNo: this.state.altMobileNo }
+        this.savePassengerDetail()
+        {
+          this.props.navigation.navigate('PaymentPage'),
+            { altMobileNo: this.state.altMobileNo }
+        }
       }
-      }
-      
+
     }
-    
-   
-   
+
+
+
   }
 
   agentAction = () => {
@@ -371,15 +371,15 @@ export default class passengerDetail extends Component {
       if (this.state.skipIrctc == true) {
         ConstantValues.skipIrctc = 1
       }
-      if(this.state.skipPnr == true){
+      if (this.state.skipPnr == true) {
         ConstantValues.skipPnr = 1
       }
-      
+
     }
     ConstantValues.agentAction = {
-      'skipSms' : ConstantValues.skipSms,
-      'skipIrctc' : ConstantValues.skipIrctc,
-      'skipPnr' : ConstantValues.skipPnr
+      'skipSms': ConstantValues.skipSms,
+      'skipIrctc': ConstantValues.skipIrctc,
+      'skipPnr': ConstantValues.skipPnr
     }
   }
 
@@ -415,12 +415,12 @@ export default class passengerDetail extends Component {
 
     ConstantValues.pnr = this.state.enterPnr
     ConstantValues.customerName = this.state.name,
-    ConstantValues.customeralternateMobile = this.state.altMobileNo,
-    ConstantValues.customerEmailId = this.state.emailId
+      ConstantValues.customeralternateMobile = this.state.altMobileNo,
+      ConstantValues.customerEmailId = this.state.emailId
     if (ConstantValues.isAgent == 1) {
       ConstantValues.customerPhoneNo = this.state.customerPhoneNo
     }
-    
+
     ConstantValues.passengerDetail = {
       'pnr': ConstantValues.pnr,
       'berth': ConstantValues.seat,
@@ -441,7 +441,7 @@ export default class passengerDetail extends Component {
       'passengerSeatInfo': ConstantValues.passengerInfo,
       'suggestions': ConstantValues.suggestions = this.state.addMessage
     }
-   // this.parameterCheck()
+    // this.parameterCheck()
   }
   EnableButtonFunction = () => {
     this.setState({
@@ -483,13 +483,13 @@ export default class passengerDetail extends Component {
               </View>
 
               <Fade visible={ConstantValues.isAgent == 1}>
-                
-                  <TouchableOpacity onPress={()=>this.setState({ enterSeatInfo : 'bottom'}) }>
-                  <View style={[styles.inputView,{marginTop: 10}]}>
-                    <Text style={{fontSize: 15, fontFamily: 'Poppins-Regular', color: '#F15926',textAlign:'center', paddingHorizontal: 10, paddingVertical: 5 }}>Change Coach and Seat Information</Text>
+
+                <TouchableOpacity onPress={() => this.setState({ enterSeatInfo: 'bottom' })}>
+                  <View style={[styles.inputView, { marginTop: 10 }]}>
+                    <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#F15926', textAlign: 'center', paddingHorizontal: 10, paddingVertical: 5 }}>Change Coach and Seat Information</Text>
                   </View>
-                  </TouchableOpacity>
-               
+                </TouchableOpacity>
+
               </Fade>
 
 
@@ -517,17 +517,17 @@ export default class passengerDetail extends Component {
               <View style={{ paddingVertical: 10 }}>
                 {/* <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Contact No - {ConstantValues.customerPhoneNo}</Text> */}
                 <View style={styles.inputView}>
-                <TextInput
-                  style={styles.input}
-                  placeholder='Passenger Contact No. *'
-                  editable={ConstantValues.isAgent == 1 ? true : false}
-                  keyboardType='number-pad'
-                  maxLength={10}
-                  value={ConstantValues.isAgent == 1 ? this.state.customerPhoneNo : ConstantValues.customerPhoneNo }
-                  
-                  onChangeText={customerPhoneNo => this.setState({ customerPhoneNo })}
-                />
-              </View>
+                  <TextInput
+                    style={styles.input}
+                    placeholder='Passenger Contact No. *'
+                    editable={ConstantValues.isAgent == 1 ? true : false}
+                    keyboardType='number-pad'
+                    maxLength={10}
+                    value={ConstantValues.isAgent == 1 ? this.state.customerPhoneNo : ConstantValues.customerPhoneNo}
+
+                    onChangeText={customerPhoneNo => this.setState({ customerPhoneNo })}
+                  />
+                </View>
               </View>
               <View style={{ paddingVertical: 10 }}>
                 <View style={styles.inputView}>
@@ -550,7 +550,7 @@ export default class passengerDetail extends Component {
                     placeholder='Passenger Email Id.'
                     editable={ConstantValues.isAgent == 1 ? true : false}
                     keyboardType='email-address'
-                    value={ConstantValues.isAgent == 1 ? this.state.emailId : ConstantValues.customerEmailId }
+                    value={ConstantValues.isAgent == 1 ? this.state.emailId : ConstantValues.customerEmailId}
                     autoCapitalize='none'
                     onChangeText={emailId => this.setState({ emailId })}
                   />
@@ -579,7 +579,7 @@ export default class passengerDetail extends Component {
                   // onPress={() => {
                   //   this.skipSms()
                   // }}
-                  onPress={() => this.setState({skipSms: !this.state.skipSms})}
+                  onPress={() => this.setState({ skipSms: !this.state.skipSms })}
                 />
                 <CheckBox
                   title='Skip IRCTC'
@@ -587,15 +587,15 @@ export default class passengerDetail extends Component {
                   // onPress={() => {
                   //   this.skipIrctc()
                   // }}
-                  onPress={() => this.setState({skipIrctc: !this.state.skipIrctc})}
+                  onPress={() => this.setState({ skipIrctc: !this.state.skipIrctc })}
                 />
                 <CheckBox
                   title='Skip PNR'
                   checked={this.state.skipPnr}
-                  onPress={() => this.setState({skipPnr: !this.state.skipPnr})}
-                  // onPress={() => {
-                  //   this.skipPnr()
-                  // }}
+                  onPress={() => this.setState({ skipPnr: !this.state.skipPnr })}
+                // onPress={() => {
+                //   this.skipPnr()
+                // }}
                 />
               </Fade>
             </View>
@@ -603,7 +603,7 @@ export default class passengerDetail extends Component {
         </ScrollView>
         <CustomButton
           style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
-          onPress={() => this.proceedToPay() }  //this.proceedToPay()
+          onPress={() => this.proceedToPay()}  //this.proceedToPay()
           title='Proceed To Pay'
         />
 
@@ -627,10 +627,10 @@ export default class passengerDetail extends Component {
                 value={this.state.enterPnrmodal}
               />
             </View>
-            <View style={{ paddingHorizontal: 20, alignItems: 'center' ,flexDirection:'row',justifyContent:'center'}}>
+            <View style={{ paddingHorizontal: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
               <CustomButtonShort
                 title='Search Again'
-                onPress={() => {this.props.navigation.navigate('Search')}}
+                onPress={() => { this.props.navigation.navigate('Search') }}
                 style={{ backgroundColor: '#9b9b9b', justifyContent: 'center', }}
               />
               <CustomButtonShort
@@ -641,7 +641,7 @@ export default class passengerDetail extends Component {
                       if (ConstantValues.isAgent == 1) {
                         this.checkPnrForAgent(this.state.enterPnrmodal)
                       } else {
-                          this.verifyStationData(this.state.enterPnrmodal)
+                        this.verifyStationData(this.state.enterPnrmodal)
                       }
                     }
                     else {
@@ -662,7 +662,7 @@ export default class passengerDetail extends Component {
 
         <Modal
           isVisible={this.state.enterSeatInfo === 'bottom'}
-          onBackButtonPress={() =>this.state.visibleModalLogin === 'bottom'}
+          onBackButtonPress={() => this.state.visibleModalLogin === 'bottom'}
           //  onSwipeComplete={() => this.setState({ visibleModal: null })}
           //  swipeDirection={['left', 'right', 'down']}
           style={styles.bottomModal}
@@ -689,121 +689,136 @@ export default class passengerDetail extends Component {
             </View>
 
             <DatePicker
-                style={{ width: Dimensions.get('window').width - 10 }}
-                date={this.state.journeyDate} //initial date from state
-                mode="date" //The enum of date, datetime and time
-                placeholder="Choose your journey date"
-                format="DD-MM-YYYY"
-                minDate={moment().toDate()}
-                maxDate="01-01-2030"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateIcon: {
-                    position: 'absolute',
-                    left: 0,
-                    top: 4,
-                    marginLeft: 10
-                  },
-                  dateInput: {
-                    marginLeft: 65,
-                    width: Dimensions.get('window').width - 10,
-                    borderRadius: 5,
-                    borderColor: '#e7e7e7',
-                    borderWidth: 1,
-                  },
-                  dateText: {
-                    fontSize: 15,
-                    textAlign: 'center',
-                    color: '#000000',
+              style={{ width: Dimensions.get('window').width - 10 }}
+              date={this.state.journeyDate} //initial date from state
+              mode="date" //The enum of date, datetime and time
+              placeholder="Choose your journey date"
+              format="DD-MM-YYYY"
+              minDate={moment().toDate()}
+              maxDate="01-01-2030"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 10
+                },
+                dateInput: {
+                  marginLeft: 65,
+                  width: Dimensions.get('window').width - 10,
+                  borderRadius: 5,
+                  borderColor: '#e7e7e7',
+                  borderWidth: 1,
+                },
+                dateText: {
+                  fontSize: 15,
+                  textAlign: 'center',
+                  color: '#000000',
 
-                    fontFamily: 'Poppins-Regular',
-                  },
-                  placeholderText: {
-                    textAlign: 'center',
-                    fontSize: 15,
-                    color: '#',
-                    color: '#989c9a',
-                    fontFamily: 'Poppins-Regular',
-                  }
-                }}
-                onDateChange={(journeyDate) => { this.setState({ journeyDate: journeyDate }) }}
+                  fontFamily: 'Poppins-Regular',
+                },
+                placeholderText: {
+                  textAlign: 'center',
+                  fontSize: 15,
+                  color: '#',
+                  color: '#989c9a',
+                  fontFamily: 'Poppins-Regular',
+                }
+              }}
+              onDateChange={(journeyDate) => { this.setState({ journeyDate: journeyDate }) }}
+            />
+            <DatePicker
+              style={{ width: Dimensions.get('window').width - 10 }}
+              date={this.state.journeyTime} //initial date from state
+              mode="time" //The enum of date, datetime and time
+              placeholder="Choose your journey time"
+              // format="DD-MM-YYYY"
+              // minDate="01-01-2016"
+              // maxDate="01-01-2030"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 10
+                },
+                dateInput: {
+                  marginLeft: 65,
+                  width: Dimensions.get('window').width - 10,
+                  borderRadius: 5,
+                  borderColor: '#e7e7e7',
+                  borderWidth: 1,
+                  paddingVertical: 10
+                },
+                dateText: {
+                  fontSize: 15,
+                  textAlign: 'center',
+                  color: '#000000',
+
+                  fontFamily: 'Poppins-Regular',
+                },
+                placeholderText: {
+                  textAlign: 'center',
+                  fontSize: 15,
+                  color: '#989c9a',
+                  fontFamily: 'Poppins-Regular',
+                }
+              }}
+              onDateChange={(journeyTime) => { this.setState({ journeyTime: journeyTime }) }}
+            />
+
+            <View style={{ paddingHorizontal: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
+
+              <CustomButtonShort
+                title='Close'
+                style={{ backgroundColor: '#9b9b9b', justifyContent: 'center', }}
+                onPress={() => this.setState({ enterSeatInfo: null })}
               />
-               <DatePicker
-                style={{ width: Dimensions.get('window').width - 10 }}
-                date={this.state.journeyTime} //initial date from state
-                mode="time" //The enum of date, datetime and time
-                placeholder="Choose your journey time"
-                // format="DD-MM-YYYY"
-                // minDate="01-01-2016"
-                // maxDate="01-01-2030"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateIcon: {
-                    position: 'absolute',
-                    left: 0,
-                    top: 4,
-                    marginLeft: 10
-                  },
-                  dateInput: {
-                    marginLeft: 65,
-                    width: Dimensions.get('window').width - 10,
-                    borderRadius: 5,
-                    borderColor: '#e7e7e7',
-                    borderWidth: 1,
-                    paddingVertical:10
-                  },
-                  dateText: {
-                    fontSize: 15,
-                    textAlign: 'center',
-                    color: '#000000',
-
-                    fontFamily: 'Poppins-Regular',
-                  },
-                  placeholderText: {
-                    textAlign: 'center',
-                    fontSize: 15,
-                    color: '#989c9a',
-                    fontFamily: 'Poppins-Regular',
-                  }
-                }}
-                onDateChange={(journeyTime) => { this.setState({ journeyTime: journeyTime }) }}
-              />
-
-            <View style={{ paddingHorizontal: 20, alignItems: 'center' }}>
-              <CustomButton
+              <CustomButtonShort
                 title="Submit"
                 onPress={
                   () => {
                     if (this.state.seatNo != '') {
                       if (this.state.coach != '') {
-                        return (
-                          this.setState({
-                            isVisible: false,
-                            enterSeatInfo: null,
-                            enterPnr: this.state.enterPnrmodal,
-                          }),
-                          ConstantValues.seat = this.state.seatNo,
-                          ConstantValues.coach = this.state.coach,
-                          ConstantValues.deliveryDate = moment(this.state.journeyDate,'DD-MM-YYYY').format('YYYY-MM-DD'),
-                          ConstantValues.deliveryTime = this.state.journeyTime
-                          // ConstantValues.customerName = this.state.name,
-                          // ConstantValues.customeralternateMobile = this.state.altMobileNo,
-                          // ConstantValues.customerEmailId = this.state.emailId,
-                          // ConstantValues.customerPhoneNo = this.state.customerPhoneNo
-                        )
+                        if (this.state.journeyDate != '') {
+                          if (this.state.journeyTime != '') {
+                            return (
+                              this.setState({
+                                isVisible: false,
+                                enterSeatInfo: null,
+                                enterPnr: this.state.enterPnrmodal,
+                              }),
+                              ConstantValues.seat = this.state.seatNo,
+                              ConstantValues.coach = this.state.coach,
+                              ConstantValues.deliveryDate = moment(this.state.journeyDate, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+                              ConstantValues.deliveryTime = this.state.journeyTime
+                            )
+                          } else {
+                            console.log('this.state.journeyDate [error]::::::' + this.state.journeyDate + '\n' + this.state.journeyDate.length + '\n' + this.state.journeyTime + '\n' + this.state.journeyTime.length)
+                            return (
+                              ToastAndroid.show('Please Enter Valid Time', ToastAndroid.CENTER)
+
+                            )
+                          }
+                        } else {
+                          console.log('this.state.journeyDate [error]::::::' + this.state.journeyDate + '\n' + this.state.journeyDate.length + '\n' + this.state.journeyTime + '\n' + this.state.journeyTime.length)
+                          return (
+                            ToastAndroid.show('Please Enter Valid Date', ToastAndroid.CENTER)
+                          )
+                        }
                       } else {
                         return (
-                          ToastAndroid.show('Please Enter Valid Coach', ToastAndroid.CENTER),
-                          console.log(' invalid coach')
+                          ToastAndroid.show('Please Enter Valid Coach', ToastAndroid.CENTER)
                         )
                       }
                     }
                     else {
                       return (
-                        ToastAndroid.show('Please Enter Valid Seat No.', ToastAndroid.CENTER),
-                        console.log(' invalid seatNo')
+                        ToastAndroid.show('Please Enter Valid Seat No.', ToastAndroid.CENTER)
                       )
                     }
                   }
@@ -814,11 +829,6 @@ export default class passengerDetail extends Component {
                 style={{ backgroundColor: '#FF5819', justifyContent: 'center', }}
 
 
-              />
-              <CustomButton
-              title='Close'
-              style={{backgroundColor:'#9b9b9b',justifyContent: 'center',}}
-              onPress={() => this.setState({ enterSeatInfo : null })}
               />
             </View>
           </View>

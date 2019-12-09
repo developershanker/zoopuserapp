@@ -184,8 +184,28 @@ export default class PaymentPage extends Component {
             'paymentTypeId': ConstantValues.paymentTypeId
           }
         if (ConstantValues.pnr != '' && ConstantValues.pnr.length === 10) {
-          this.orderBooking(ConstantValues.paymentTypeId)
+          if (ConstantValues.deliveryDate !== '' && ConstantValues.deliveryTime !== '') {
+            console.log('going for order ---->' + '\n' + ConstantValues.pnr + '\n' + "::::" + ConstantValues.deliveryDate + '\n' + "::::" + ConstantValues.deliveryTime)
+            this.orderBooking(ConstantValues.paymentTypeId)
+            console.log('//////////////Order Booked/////////////////')
+          } else {
+            console.log('going for order :error in date and time:' + ConstantValues.pnr + '\n' + "::::" + ConstantValues.deliveryDate + '\n' + "::::" + ConstantValues.deliveryTime)
+            return (
+              Alert.alert(
+                'Mandatory Field Alert!!',
+                'Oops !! Mandatory Field missing. Please try again.',
+                [
+                  {
+                    text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
+                    style: 'cancel'
+                  },
+                ],
+                { cancelable: false },
+              )
+            )
+          }
         } else {
+          console.log('going for order :error in pnr:' + ConstantValues.pnr + '\n' + "::::" + ConstantValues.deliveryDate + '\n' + "::::" + ConstantValues.deliveryTime)
           return (
             Alert.alert(
               'Mandatory Field Alert!!',
@@ -200,7 +220,6 @@ export default class PaymentPage extends Component {
             )
           )
         }
-        //console.log('//////////////Order Booked/////////////////')
       } else {
         return (
           ToastAndroid.show('Please select any payment method!!', ToastAndroid.LONG)
@@ -380,10 +399,10 @@ export default class PaymentPage extends Component {
             <View style={styles.modalView}>
               <View style={{ flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                 <Text style={styles.tiletextH}>Confirm!!</Text>
-                <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', paddingTop:5, textAlign:'center' }}>No discount will be applicable on </Text>
-                <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', textAlign:'center'}}>Cash On Delivery.</Text>
-                <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000',paddingTop:5, textAlign: 'center' }}>Press "OK" to proceed.</Text>
-                
+                <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', paddingTop: 5, textAlign: 'center' }}>No discount will be applicable on </Text>
+                <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', textAlign: 'center' }}>Cash On Delivery.</Text>
+                <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', paddingTop: 5, textAlign: 'center' }}>Press "OK" to proceed.</Text>
+
               </View>
 
               <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
