@@ -50,7 +50,7 @@ export default class loginApi {
 
             //calling api for response
             const response = await this.apiCall(apiUrl, 'GET', {}, headers)
-            console.log(response)
+            //console.log(response)
 
             return Promise.resolve(response)
 
@@ -72,7 +72,7 @@ export default class loginApi {
 
             //calling api for response
             const response = await this.apiCall(apiUrl, 'GET', {}, headers)
-            console.log(response)
+            //console.log(response)
 
             return Promise.resolve(response)
 
