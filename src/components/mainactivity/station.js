@@ -183,7 +183,7 @@ export default class station extends Component {
 
   gotoMenu = (stationId, outletId, stationName, stationCode, arrivalTime, schArrivalTime, haltTime, arrDate, arrival, outletName, outletRating, minimumOrderValue, cutOffTime, zoopCustomerDeliveryCharge, zoopCustomerDeliveryChargeGstRate, zoopCustomerDeliveryChargeGst, eta, openTime, closeTime, weeklyOff,gstin,fssaiNo,offer,items) => {
     const momemtHaltTime = moment(haltTime, 'HHmmss').format('mm')
-    const checkedArrival = ((arrival === '--' ||arrival === null) ? schArrivalTime : arrival)
+    const checkedArrival = ((arrival === '--' || arrival === null) ? schArrivalTime : arrival)
     ConstantValues.stationId = stationId,
     ConstantValues.outletId = outletId,
     ConstantValues.stationName = stationName,
@@ -335,7 +335,7 @@ export default class station extends Component {
                       <Image style={styles.roundImage} source={item.stationImage == null ? require('../images/1.png') : { uri: item.stationImage }} />
                       <View style={styles.name}>
                         <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf: 'center' }}>{item.stationName}</Text>
-                        <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf: 'center' }}>{moment(item.arrivalTime, 'HHmmss').format('hh:mm A')}</Text>
+                        <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf: 'center' }}>{item.arrival === null || item.arrival === '--' ?  moment(item.arrivalTime, 'HHmmss').format('hh:mm A') : item.arrival}</Text>
                       </View>
                     </TouchableOpacity>
                   </View>
