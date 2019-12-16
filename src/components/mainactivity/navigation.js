@@ -17,7 +17,8 @@ import Station from '../mainactivity/station.js';
 import Notifications from '../services/notifications.js';
 import Menu from '../menu/menu.js';
 import Cart from '../cart/cart.js';
-import CouponPage from '../cart/couponPage.js';
+import ReduxMenu from '../menu/reduxMenu.js';
+import ReduxCart from '../cart/reduxCart.js'
 import PassengerDetail from '../customer/passengerDetail.js';
 ///////------Payment Process Files-------//////
 import PaymentPage from '../payment/paymentPage.js';
@@ -413,6 +414,19 @@ const AppNavigator = createStackNavigator({
     navigationOptions: {
       header: null,
     }
+  },
+  ReduxMenu: {
+    screen: ReduxMenu,
+    navigationOptions: {
+      header: null,
+    }
+
+  },
+  ReduxCart: {
+    screen: ReduxCart,
+    navigationOptions: {
+      header: null,
+    }
 
   },
   Profile: {
@@ -424,12 +438,6 @@ const AppNavigator = createStackNavigator({
   },
   Cart: {
     screen: Cart,
-    navigationOptions: {
-      header: null,
-    }
-  },
-  CouponPage: {
-    screen: CouponPage,
     navigationOptions: {
       header: null,
     }

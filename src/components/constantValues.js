@@ -12,7 +12,7 @@ export const calcWidth = x => PixelRatio.roundToNearestPixel((deviceWidth * x) /
 export default class ConstantValues {
 static apiUrl = 'https://appapi.zoopindia.in/'
 //static apiUrl = 'http://10.5.51.106:3000/'
-// static apiUrl = 'http://192.168.1.7:3000/'
+// static apiUrl = 'http://192.168.1.11:3000/'
 
 
 
@@ -176,6 +176,8 @@ static MID = 'FIjIdu58691666399235'
   static arrayCoupon = []
   static inCart = []
   static finalCart = []
+  static reduxInCart = []
+  static reduxFinalCart = []
   static billDetail = []
 
   //zoopsocials
