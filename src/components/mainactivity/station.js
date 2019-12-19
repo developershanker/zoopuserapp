@@ -181,21 +181,21 @@ export default class station extends Component {
     }
   }
 
-  gotoMenu = (stationId, outletId, stationName, stationCode, arrivalTime, schArrivalTime, haltTime, arrDate, arrival, outletName, outletRating, minimumOrderValue, cutOffTime, zoopCustomerDeliveryCharge, zoopCustomerDeliveryChargeGstRate, zoopCustomerDeliveryChargeGst, eta, openTime, closeTime, weeklyOff,gstin,fssaiNo,offer,items) => {
+  gotoMenu = (stationId, outletId, stationName, stationCode, arrivalTime, schArrivalTime, haltTime, arrDate, arrival, outletName, outletRating, minimumOrderValue, cutOffTime, zoopCustomerDeliveryCharge, zoopCustomerDeliveryChargeGstRate, zoopCustomerDeliveryChargeGst, eta, openTime, closeTime, weeklyOff, gstin, fssaiNo, offer, items) => {
     const momemtHaltTime = moment(haltTime, 'HHmmss').format('mm')
-    const checkedArrival = ((arrival === '--' ||arrival === null) ? schArrivalTime : arrival)
+    const checkedArrival = ((arrival === '--' || arrival === null) ? schArrivalTime : arrival)
     ConstantValues.stationId = stationId,
-    ConstantValues.outletId = outletId,
-    ConstantValues.stationName = stationName,
-    ConstantValues.stationCode = stationCode
+      ConstantValues.outletId = outletId,
+      ConstantValues.stationName = stationName,
+      ConstantValues.stationCode = stationCode
     // ConstantValues.ata = '07:50'
     ConstantValues.ata = (schArrivalTime === null ? arrivalTime : schArrivalTime)
     ConstantValues.outletName = outletName,
-    ConstantValues.haltTime = momemtHaltTime,
-    ConstantValues.deliveryDate = (ConstantValues.searchString.length === 10 ? arrDate : this.state.date), //actual date of arraival
-    ConstantValues.deliveryTime = (ConstantValues.searchString.length === 10 ? checkedArrival : arrivalTime), //expected date of arraival
-    ConstantValues.outletRating = outletRating,
-    ConstantValues.minimumOrderValue = minimumOrderValue
+      ConstantValues.haltTime = momemtHaltTime,
+      ConstantValues.deliveryDate = (ConstantValues.searchString.length === 10 ? arrDate : this.state.date), //actual date of arraival
+      ConstantValues.deliveryTime = (ConstantValues.searchString.length === 10 ? checkedArrival : arrivalTime), //expected date of arraival
+      ConstantValues.outletRating = outletRating,
+      ConstantValues.minimumOrderValue = minimumOrderValue
     ConstantValues.cuttoff = cutOffTime
     ConstantValues.deliveryCharge = (zoopCustomerDeliveryCharge == null ? 0 : zoopCustomerDeliveryCharge)
     ConstantValues.zoopdeliveryCharge = (zoopCustomerDeliveryCharge == null ? 0 : zoopCustomerDeliveryCharge)
@@ -215,9 +215,10 @@ export default class station extends Component {
     ConstantValues.deliveryCharge = (zoopCustomerDeliveryCharge == null ? 0 : zoopCustomerDeliveryCharge + ConstantValues.deliveryChargegst)
     console.log('ConstantValues.stationId : ' + ConstantValues.stationId),
       console.log('ConstantValues.outletId : ' + ConstantValues.outletId),
-    console.log('ConstantValues.deliveryCharge : ' + ConstantValues.deliveryCharge + '\n' + 'ConstantValues.deliveryChargegst : ' + ConstantValues.deliveryChargegst + '\n' + 'ConstantValues.deliveryChargegstRate : ' + ConstantValues.deliveryChargegstRate)
+      console.log('ConstantValues.deliveryCharge : ' + ConstantValues.deliveryCharge + '\n' + 'ConstantValues.deliveryChargegst : ' + ConstantValues.deliveryChargegst + '\n' + 'ConstantValues.deliveryChargegstRate : ' + ConstantValues.deliveryChargegstRate)
     if (ConstantValues.OutletMenuInfo && ConstantValues.OutletMenuInfo.length) {
       this.props.navigation.navigate('Menu')
+      // this.props.navigation.navigate('ReduxMenu')
     } else {
       return (
         Alert.alert(
@@ -234,7 +235,7 @@ export default class station extends Component {
       )
     }
   }
-  
+
   selectedStation = (item, index) => {
     this.setState({
       stationOpacity: 1
@@ -246,7 +247,7 @@ export default class station extends Component {
   render() {
     const width = Dimensions.get('window').width
     let temp = ''
-    return ( this.state.isVisible === true ? <StationLoader visible = {this.state.isVisible}/> :
+    return (this.state.isVisible === true ? <StationLoader visible={this.state.isVisible} /> :
       <SafeAreaView style={styles.slide}>
         {/* <View style={{flexDirection:'column',alignItems:'center'}}>
         <Spinner size={100} type={'FadingCircleAlt'} color={'#FF5819'} isVisible={this.state.loading}/>
@@ -335,7 +336,7 @@ export default class station extends Component {
                       <Image style={styles.roundImage} source={item.stationImage == null ? require('../images/1.png') : { uri: item.stationImage }} />
                       <View style={styles.name}>
                         <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf: 'center' }}>{item.stationName}</Text>
-                        <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf: 'center' }}>{moment(item.arrivalTime, 'HHmmss').format('hh:mm A')}</Text>
+                        <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', alignSelf: 'center' }}>{item.arrival === null || item.arrival === '--' ? moment(item.arrivalTime, 'HHmmss').format('hh:mm A') : item.arrival}</Text>
                       </View>
                     </TouchableOpacity>
                   </View>
@@ -363,8 +364,8 @@ export default class station extends Component {
                     <Text style={styles.stext}> S.T.A : {moment(item.arrivalTime, 'HHmmss').format('hh:mm A')} | </Text>
                     <Text style={styles.stext}> E.T.A : {moment(item.expectedTime, 'HHmmss').format('hh:mm A')}</Text> */}
                     <Text style={styles.stext}>Halt : {item.halt === null ? moment(item.haltTime, 'HH:mm:ss').format('mm') : moment(item.halt, 'mm:ss').format('mm')} mins | </Text>
-                    <Text style={styles.stext}> S.T.A : {item.schArrivalTime === null || item.arrival === '--' ?  moment(item.expectedTime, 'HHmmss').format('hh:mm A') : item.schArrivalTime}  | </Text>
-                    <Text style={styles.stext}> E.T.A : {item.arrival === null || item.arrival === '--' ?  moment(item.arrivalTime, 'HHmmss').format('hh:mm A') : item.arrival}</Text>
+                    <Text style={styles.stext}> S.T.A : {item.schArrivalTime === null || item.arrival === '--' ? moment(item.expectedTime, 'HHmmss').format('hh:mm A') : item.schArrivalTime}  | </Text>
+                    <Text style={styles.stext}> E.T.A : {item.arrival === null || item.arrival === '--' ? moment(item.arrivalTime, 'HHmmss').format('hh:mm A') : item.arrival}</Text>
                   </View>
 
                   {/* OutletView starts */}
@@ -482,7 +483,7 @@ export default class station extends Component {
         </View> */}
         {/* Floating FAB ends */}
 
-        
+
 
         {/* <Overlay
           isVisible={this.state.isVisible}
