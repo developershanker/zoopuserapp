@@ -14,8 +14,8 @@ import cartApi from '../cart/cartApi.js';
 import { ZoopLoader } from '../assests/zoopLoader.js';
 import { Overlay } from 'react-native-elements';
 import { Switch } from 'react-native-paper';
-import { connect } from 'react-redux';
-import { addToCart } from '../../actions/actions';
+// import { connect } from 'react-redux';
+// import { addToCart } from '../../actions/actions';
 
 
 /////-----------Redux Imports-----------///////////
@@ -602,4 +602,4 @@ export class Menu extends Component {
   }
 }
 
-export default connect(null, { addToCart })(Menu);
+export default Menu;
