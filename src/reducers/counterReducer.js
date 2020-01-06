@@ -1,4 +1,4 @@
-import { ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART, LOAD_ITEMS_START, LOAD_ITEMS_SUCCESS, LOAD_ITEMS_FAILURE, VEG_MENU } from '../actions/types';
+import { ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART, LOAD_ITEMS_START, LOAD_ITEMS_SUCCESS, LOAD_ITEMS_FAILURE, VEG_MENU, CHECK_DISCOUNT, GET_USER } from '../actions/types';
 
 const initialState = {
     itemCount: 0,
@@ -10,7 +10,11 @@ const initialState = {
     cartLength: 0,
     totalBasePrice: 0,
     error: '',
-    total: 0
+    total: 0,
+    inCartlength: 0,
+    counterLoading: false,
+    removeDiscount: false,
+    response: {}
 }
 
 export const counterReducer = (state = initialState, action) => {
@@ -22,6 +26,8 @@ export const counterReducer = (state = initialState, action) => {
                 cart: action.payload.inCart,
                 cartLength: action.payload.cartLength,
                 totalBasePrice: action.payload.totalBasePrice,
+                inCartlength: action.payload.inCartlength,
+                removeDiscount: action.payload.removeDiscount,
                 showFooter: true,
             };
         case REMOVE_FROM_CART:
@@ -29,6 +35,8 @@ export const counterReducer = (state = initialState, action) => {
                 ...state,
                 cart: action.payload.inCart,
                 cartLength: action.payload.cartLength,
+                inCartlength: action.payload.inCartlength,
+                removeDiscount: action.payload.removeDiscount,
                 totalBasePrice: action.payload.totalBasePrice,
             };
         case CLEAR_CART:
@@ -36,8 +44,9 @@ export const counterReducer = (state = initialState, action) => {
                 ...state,
                 total: 0,
                 cart: [],
-                menuResponse:[],
+                menuResponse: action.payload,
                 cartLength: 0,
+                removeDiscount: false,
                 totalBasePrice: 0,
             };
         case LOAD_ITEMS_START:
@@ -63,6 +72,15 @@ export const counterReducer = (state = initialState, action) => {
             return {
                 ...state,
                 menuResponse: action.payload
+            }
+        case CHECK_DISCOUNT:
+            return {
+                ...state,
+            }
+        case GET_USER:
+            return {
+                ...state,
+                response: action.payload
             }
         default:
             return state;

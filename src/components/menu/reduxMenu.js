@@ -26,13 +26,17 @@ import BillCard from '../cart/billCard.js';
 import { CouponPage } from '../cart/couponPage.js';
 import walletApi from '../customer/walletApi.js';
 import moment from 'moment';
-
+import CountDown from 'react-native-countdown-component';
 
 export class ReduxMenu extends Component {
     componentDidMount() {
         this.props.getMenu()
-        this.getCoupons()
-        this.getWalletInfo()
+        if (ConstantValues.customerId === '') {
+            console.log('User is Not logged in')
+        } else {
+            this.getCoupons()
+            this.getWalletInfo()
+        }
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
             // return (
             //     // ToastAndroid.show(response.error, ToastAndroid.LONG),
@@ -98,6 +102,8 @@ export class ReduxMenu extends Component {
             CouponDetail: [],
             couponCode: '',
             walletBalance: 0,
+            proceedDisabled: false,
+            proceedLabel: 'Add Passenger Details',
         }
     }
 
@@ -146,6 +152,18 @@ export class ReduxMenu extends Component {
         this.props.navigation.navigate('ReduxMenu')
     }
 
+    goingBack = () => {
+        ConstantValues.inCart = []
+        ConstantValues.finalCart = []
+        this.setState({
+            revisedInCart: [],
+            inCart: []
+        })
+        this.props.clearCart()
+        this.props.navigation.navigate('Station')
+        console.log('going back....')
+    }
+
     walletUsed = (walletUsed) => {
         // this.setState({
         //   walletUsed: !this.state.walletUsed
@@ -185,7 +203,9 @@ export class ReduxMenu extends Component {
                         'Minimum Order Value to use wallet is Rs. 150. Just add a few more items to use.',
                         [
                             {
-                                text: 'OK', onPress: () => this.props.navigation.navigate('Menu'),
+                                text: 'OK', onPress: () => {
+                                    console.log('wallet validation is failed')
+                                },
                                 style: 'cancel'
                             },
                         ],
@@ -250,7 +270,7 @@ export class ReduxMenu extends Component {
 
     applyCoupons = (couponDetail) => {
         console.log('couponCode : ' + couponDetail)
-        if (ConstantValues.totalPayableAmount >= couponDetail.minimumOrderValue) {
+        if (ConstantValues.totalBasePrice >= couponDetail.minimumOrderValue) {
             if (couponDetail.type == 'RATE') {
                 ConstantValues.rateDiscount = ((ConstantValues.totalBasePrice / 100) * couponDetail.couponValue).toFixed(2)
                 ConstantValues.couponCode = couponDetail.couponCode
@@ -258,9 +278,10 @@ export class ReduxMenu extends Component {
                 ConstantValues.discount = ConstantValues.rateDiscount
                 ConstantValues.couponType = couponDetail.type
                 ConstantValues.couponId = couponDetail.couponId
+                ConstantValues.minimumPriceRequired = couponDetail.minimumOrderValue
                 ConstantValues.isCouponApplied = true
                 console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
-                console.log('ConstantValues.rateDiscount : ' + ConstantValues.rateDiscount)
+                console.log('ConstantValues.rateDiscount : ' + ConstantValues.rateDiscount + 'ConstantValues.minimumPriceRequired :' + ConstantValues.minimumPriceRequired)
                 cartApi.changeCode(couponDetail.couponCode)
                 cartApi.billDetail()
                 this.setState({
@@ -273,8 +294,9 @@ export class ReduxMenu extends Component {
                 ConstantValues.discount = couponDetail.couponValue
                 ConstantValues.couponType = couponDetail.type
                 ConstantValues.couponId = couponDetail.couponId
+                ConstantValues.minimumPriceRequired = couponDetail.minimumOrderValue
                 ConstantValues.isCouponApplied = true
-                console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
+                console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType + 'ConstantValues.minimumPriceRequired :' + ConstantValues.minimumPriceRequired)
                 // Cart.changeCode(ConstantValues.couponCode)
                 cartApi.changeCode(couponDetail.couponCode)
                 cartApi.billDetail()
@@ -312,7 +334,7 @@ export class ReduxMenu extends Component {
             if (coupon.length != 0) {
                 coupon.map((coupon) => {
                     console.log('coupon matched//////////////////////' + JSON.stringify(coupon) + 'coupon length : ' + coupon.length)
-                    if (ConstantValues.totalPayableAmount >= coupon.minimumOrderValue) {
+                    if (ConstantValues.totalBasePrice >= coupon.minimumOrderValue) {
                         if (coupon.type === 'RATE') {
                             ConstantValues.rateDiscount = ((ConstantValues.totalBasePrice / 100) * coupon.couponValue).toFixed(2)
                             ConstantValues.couponCode = coupon.couponCode
@@ -320,9 +342,10 @@ export class ReduxMenu extends Component {
                             ConstantValues.discount = ConstantValues.rateDiscount
                             ConstantValues.couponType = coupon.type
                             ConstantValues.couponId = coupon.couponId
+                            ConstantValues.minimumPriceRequired = coupon.minimumOrderValue
                             ConstantValues.isCouponApplied = true
                             console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
-                            console.log('ConstantValues.rateDiscount : ' + ConstantValues.rateDiscount)
+                            console.log('ConstantValues.rateDiscount : ' + ConstantValues.rateDiscount + 'ConstantValues.minimumPriceRequired :' + ConstantValues.minimumPriceRequired)
                             cartApi.changeCode(coupon.couponCode)
                             cartApi.billDetail()
                             this.setState({
@@ -335,8 +358,9 @@ export class ReduxMenu extends Component {
                             ConstantValues.discount = coupon.couponValue
                             ConstantValues.couponType = coupon.type
                             ConstantValues.couponId = coupon.couponId
+                            ConstantValues.minimumPriceRequired = coupon.minimumOrderValue
                             ConstantValues.isCouponApplied = true
-                            console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType)
+                            console.log('couponCode : ' + ConstantValues.couponCode + ' couponValue : ' + ConstantValues.couponValue + ' type : ' + ConstantValues.couponType + 'ConstantValues.minimumPriceRequired :' + ConstantValues.minimumPriceRequired)
                             // Cart.changeCode(ConstantValues.couponCode)
                             cartApi.changeCode(coupon.couponCode)
                             cartApi.billDetail()
@@ -384,6 +408,7 @@ export class ReduxMenu extends Component {
         ConstantValues.discount = 0
         ConstantValues.rateDiscount = 0
         ConstantValues.isCouponApplied = false
+        ConstantValues.minimumPriceRequired = 0
         this.setState({
             textPromoCode: 'Apply Coupon Code'
         })
@@ -415,6 +440,10 @@ export class ReduxMenu extends Component {
     }
 
     confirmCart = () => {
+        this.setState({
+            proceedDisabled: true,
+            proceedLabel: 'Proceeding...'
+        })
         if (ConstantValues.totalBasePrice >= ConstantValues.minimumOrderValue) {
             return (
                 Alert.alert(
@@ -423,7 +452,13 @@ export class ReduxMenu extends Component {
                     [
                         {
                             text: 'NO',
-                            onPress: () => console.log('Cancel Pressed'),
+                            onPress: () => {
+                                console.log('Cancel Pressed')
+                                this.setState({
+                                    proceedDisabled: false,
+                                    proceedLabel: 'Add Passenger Details'
+                                })
+                            },
                             style: 'cancel',
                         },
                         {
@@ -441,6 +476,10 @@ export class ReduxMenu extends Component {
             )
         }
         else {
+            this.setState({
+                proceedDisabled: false,
+                proceedLabel: 'Add Passenger Details'
+            })
             return (
                 // ToastAndroid.show(response.error, ToastAndroid.LONG),
 
@@ -460,13 +499,36 @@ export class ReduxMenu extends Component {
         }
     }
 
+    needLogin = () => {
+        ConstantValues.navigationChannel = 'ReduxMenu'
+        return (
+            // ToastAndroid.show(response.error, ToastAndroid.LONG),
+
+            Alert.alert(
+                'Alert!!',
+                'Please LOGIN to Proceed.',
+                [
+                    {
+                        text: 'OK', onPress: () => this.props.navigation.navigate('Welcome'),
+                        style: 'cancel'
+                    },
+                ],
+                { cancelable: false },
+            )
+        ),
+            console.log('Login issue')
+    }
+
     viewCart() {
         if (this.props.totalBasePrice >= ConstantValues.minimumOrderValue) {
             if (ConstantValues.customerId != '') {
                 ConstantValues.totalBasePrice = this.props.totalBasePrice
                 ConstantValues.walletBalanceUsed = 0
                 ConstantValues.couponValue = 0
+                this.getCoupons()
+                this.getWalletInfo()
                 cartApi.removeCoupon()
+                this.setState({ walletUsed: false })
                 this.setState({ visibleModal: 'bottom' })
                 console.log('neither minimumorder issue nor login issue')
             } else {
@@ -516,12 +578,48 @@ export class ReduxMenu extends Component {
                 ToastAndroid.show('Added to Cart', ToastAndroid.SHORT)
                 this.setState({ visibleModal: null })
                 this.props.navigation.navigate('PassengerDetail')
+                this.setState({
+                    proceedDisabled: false,
+                    proceedLabel: 'Add Passenger Details'
+                })
             } else {
+                this.setState({
+                    proceedDisabled: false,
+                    proceedLabel: 'Add Passenger Details'
+                })
                 ToastAndroid.show('Something went wrong', ToastAndroid.LONG)
             }
         } catch (error) {
+            this.setState({
+                proceedDisabled: false,
+                proceedLabel: 'Add Passenger Details'
+            })
             console.log('Data received in cart.js catch: ' + error)
         }
+    }
+
+    walletOff = () => {
+        this.setState({ walletUsed: false })
+    }
+
+    expireCart() {
+        return (
+            Alert.alert(
+                'Alert!!',
+                'Your cart session is expired. Please try again!!',
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => {
+                            this.setState({ visibleModal: null })
+                            this.props.navigation.navigate('Search')
+                        },
+                        style: 'cancel'
+                    },
+                ],
+                { cancelable: false },
+            )
+        )
     }
     items = () => {
         ConstantValues.reduxFinalCart = []
@@ -569,7 +667,7 @@ export class ReduxMenu extends Component {
                 <View style={{ width: Dimensions.get('window').width, alignItems: 'center', justifyContent: 'center', backgroundColor: '#ffffff' }}>
                     <View style={{ flexDirection: 'row', width: Dimensions.get('screen').width }}>
                         <View style={{ justifyContent: 'flex-start', alignContent: 'flex-start', padding: 20 }}>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Station')}>
+                            <TouchableOpacity onPress={() => this.goingBack()}>
                                 <Icon name={'chevron-left'} size={20} color={'#000000'} />
                             </TouchableOpacity>
                         </View>
@@ -594,9 +692,11 @@ export class ReduxMenu extends Component {
                                     this.setState({ vegOnly })
                                     if (vegOnly === true) {
                                         this.props.vegMenu()
+                                        this.props.clearCart()
                                         console.log("vegOnly === true : ", vegOnly)
                                     } else {
                                         this.props.getMenu()
+                                        this.props.clearCart()
                                         console.log("else : ", vegOnly)
                                     }
                                     console.log("normal", vegOnly)
@@ -616,7 +716,7 @@ export class ReduxMenu extends Component {
                                     {/* <Image style={{ width: 30, height: 15 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.fssai }} /> */}
                                     <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular' }}> fssai Lic No. {ConstantValues.fssaiNo} </Text>
                                 </View>
-                                <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', marginRight: 10 }}>GST No. {ConstantValues.gstin}</Text>
+                                <Text style={{ fontSize: 10, fontFamily: 'Poppins-Regular', marginRight: 10 }}>GST No. {ConstantValues.gstIn}</Text>
                             </View>
 
 
@@ -697,10 +797,10 @@ export class ReduxMenu extends Component {
                                                     <Image style={styles.itemImage} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.menu }} />
                                                 </Fade> */}
                                                 <Counter
-                                                    disabledAdd = {item.itemCount == 0 ? false : true}
-                                                    disabledRemove = {item.itemCount == 0 ? true : false}
+                                                    disabledAdd={item.itemCount == 0 ? false : true}
+                                                    disabledRemove={item.itemCount == 0 ? true : false}
                                                     itemCount={item.itemCount}
-                                                    onPressAdd={() => { this.props.addItemToCart(item, index) }}
+                                                    onPressAdd={() => ConstantValues.customerId != '' ? this.props.addItemToCart(item, index) : this.needLogin()}
                                                     onPressRemove={() => { this.props.removeItemFromCart(item, index) }}
                                                 />
                                             </View>
@@ -763,121 +863,116 @@ export class ReduxMenu extends Component {
                     // swipeDirection={['down']}
                     style={styles.bottomModal}
                 >
-                    { this.props.cartLength == 0 ?
-                        <View style={styles.modalEmptyView}>
-                            <Image style={{ width: '100%', height: 300, }} source={require('../images/empty_cart_png.png')} />
-                            {/* <Text style={{ alignSelf: 'center', fontSize: 20, color: '#000000', fontFamily: 'Poppins-Medium',textAlign:'center' }}>Cart is Empty</Text> */}
-                            <CustomButton
-                                title="Go back to Menu"
-                                onPress={() => this.setState({ visibleModal: null })}
-                                style={{ alignSelf: 'center', backgroundColor: '#fff' ,}}
-                                textStyle={{ color: '#F15926' }}
-                            />
-                        </View>
-                    :
-                        <View style={styles.modalView}>
-                        {/* header view */}
-                        {/* <View style={{ flexDirection: 'row', width: ConstantValues.deviceWidth, }}>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('ReduxMenu')}>
-                                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
-                            </TouchableOpacity>
-                            <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 25, color: '#000000' }}> Cart </Text>
+                    {
+                        this.props.inCartlength === 0 ?
+                            <View style={styles.modalEmptyView}>
+                                <Image style={{ width: '100%', height: 300, }} source={require('../images/empty_cart_png.png')} />
+                                {/* <Text style={{ alignSelf: 'center', fontSize: 20, color: '#000000', fontFamily: 'Poppins-Medium',textAlign:'center' }}>Cart is Empty</Text> */}
+                                <CustomButton
+                                    title="Go back to Menu"
+                                    onPress={() => this.setState({ visibleModal: null })}
+                                    // onPress={() => this.setState({ visibleModal: null })}
+                                    style={{ alignSelf: 'center', backgroundColor: '#fff', }}
+                                    textStyle={{ color: '#F15926' }}
+                                />
                             </View>
-                        </View> */}
-                        {/* header view ends */}
-                        <View style={{ flexDirection: 'column', width: ConstantValues.deviceWidth, justifyContent: 'center', width: Dimensions.get('window').width, alignItems: 'center', marginVertical: 5 }}>
-                            <Text style={{ alignSelf: 'center', fontSize: 20, color: '#000000', fontFamily: 'Poppins-Medium', }}>{ConstantValues.outletName}</Text>
-                            <Text style={{ alignSelf: 'center', fontSize: 15, color: '#000000', fontFamily: 'Poppins-Medium', }}>{ConstantValues.stationName}</Text>
-                        </View>
-
-                        {/* Selected Items list */}
-                        {/* <View style={{ width: ConstantValues.deviceWidth}}> */}
-                        <ScrollView
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={{ width: ConstantValues.deviceWidth, alignContent: 'center' }}>
-                            <View style={styles.cartCard}>
-                                {/* <Fade visible={this.props.cart.length == 0 ? true : false}>
-                                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ alignSelf: 'center', fontSize: 15, color: '#000000', fontFamily: 'Poppins-Regular', }}>Cart Is Empty</Text>
-                                        <CustomButton
-                                            title='Add Items'
-                                            onPress={() => this.gobackToMenu()
-                                            }
+                            :
+                            <View style={styles.modalView}>
+                                <View style={{ flexDirection: 'row', width: ConstantValues.deviceWidth - 20, marginVertical: 5, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ flexDirection: 'column', width: '60%', justifyContent: 'center', alignItems: 'center', }}>
+                                        <Text style={{ alignSelf: 'center', fontSize: 20, color: '#000000', fontFamily: 'Poppins-Medium', textAlign: 'center' }}>{ConstantValues.outletName}</Text>
+                                        <Text style={{ alignSelf: 'center', fontSize: 15, color: '#000000', fontFamily: 'Poppins-Medium', textAlign: 'center' }}>{ConstantValues.stationName}</Text>
+                                    </View>
+                                </View>
+                                <View style={styles.fab}>
+                                    <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
+                                        <Text style={{ alignSelf: 'center', fontSize: 8, color: '#000000', fontFamily: 'Poppins-Medium', }}>Cart Expires in</Text>
+                                        <CountDown
+                                            until={300}
+                                            size={8}
+                                            onFinish={() => this.expireCart()}
+                                            digitStyle={{ backgroundColor: '#fff', alignSelf: 'center', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}
+                                            digitTxtStyle={{ color: '#000', fontFamily: 'Poppins-Medium' }}
+                                            timeToShow={['M', 'S']}
+                                        // timeLabels={{ m: '', s: '' }}
                                         />
                                     </View>
-                                </Fade> */}
-                                {/* list is here */}
-
-                                <FlatList
-                                    style={{ width: ConstantValues.deviceWidth, paddingVertical: 5 }}
-                                    scrollEnabled={true}
-                                    data={this.props.menuResponse}
-                                    extraData={this.props}
-                                    renderItem={({ item, index }) =>
-                                        <Fade visible={item.itemCount > 0}>
-                                            <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5, width: ConstantValues.deviceWidth - 25, justifyContent: 'space-between', alignContent: "center" }}>
-                                                <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-                                                    <View style={{ width: 30, alignItems: 'flex-start' }}>
-                                                        <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryId === 1 ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
+                                </View>
+                                {/* Selected Items list */}
+                                {/* <View style={{ width: ConstantValues.deviceWidth}}> */}
+                                <ScrollView
+                                    showsVerticalScrollIndicator={false}
+                                    contentContainerStyle={{ width: ConstantValues.deviceWidth, alignContent: 'center' }}>
+                                    <View style={styles.cartCard}>
+                                        <FlatList
+                                            style={{ width: ConstantValues.deviceWidth, paddingVertical: 5 }}
+                                            scrollEnabled={true}
+                                            data={this.props.menuResponse}
+                                            extraData={this.props}
+                                            renderItem={({ item, index }) =>
+                                                <Fade visible={item.itemCount > 0}>
+                                                    <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5, width: ConstantValues.deviceWidth - 25, justifyContent: 'space-between', alignContent: "center" }}>
+                                                        <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                                                            <View style={{ width: 30, alignItems: 'flex-start' }}>
+                                                                <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryId === 1 ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
+                                                            </View>
+                                                            <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', width: 130, color: '#000' }}>{item.itemName}</Text>
+                                                        </View>
+                                                        <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignContent: 'flex-end' }}>
+                                                            <Counter
+                                                                style={{ alignItems: 'center', width: 100, height: 32, }}
+                                                                itemCount={item.itemCount}
+                                                                disabledAdd={item.itemCount == 0 ? false : true}
+                                                                disabledRemove={item.itemCount == 0 ? true : false}
+                                                                onPressAdd={() => { this.props.addItemToCart(item, index) }}
+                                                                onPressRemove={() => { this.props.removeItemFromCart(item, index) }}
+                                                            />
+                                                            <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Regular', textAlign: 'right', marginRight: 5 }}>{ConstantValues.rupee} {item.basePrice}</Text>
+                                                        </View>
                                                     </View>
-                                                    <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', width: 130, color: '#000' }}>{item.itemName}</Text>
-                                                </View>
-                                                <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignContent: 'flex-end' }}>
-                                                    <Counter
-                                                        style={{ alignItems: 'center', width: 90, height: 32, borderColor: '#d4d4d4', borderRadius: 6, borderWidth: 1 }}
-                                                        itemCount={item.itemCount}
-                                                        disabledAdd={item.itemCount == 0 ? false : true}
-                                                        disabledRemove={item.itemCount == 0 ? true : false}
-                                                        onPressAdd={() => { this.props.addItemToCart(item, index) }}
-                                                        onPressRemove={() => { this.props.removeItemFromCart(item, index) }}
-                                                    />
-                                                    <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Regular', textAlign: 'right', marginRight: 5 }}>{ConstantValues.rupee} {item.basePrice}</Text>
-                                                </View>
-                                            </View>
-                                        </Fade>
-                                    }
-                                    keyExtractor={(item) => item.itemId.toString()}
-                                />
+                                                </Fade>
+                                            }
+                                            keyExtractor={(item) => item.itemId.toString()}
+                                        />
 
-                            </View>
-                            {/* itemCard ends here */}
-                            <View style={{ marginTop: 10 }}>
-                                <CouponPanel
-                                    walletBalance={this.state.walletBalance}
-                                    disabledWallet={this.state.textPromoCode == ConstantValues.couponCode ? true : false}
-                                    disabledCoupon={this.state.walletUsed == true ? true : false}
-                                    textStyle={{ fontFamily: 'Poppins-Regular' }}
-                                    checked={this.state.walletUsed}
-                                    appliedCode={ConstantValues.appliedCode}
-                                    couponColor={this.state.walletUsed == true ? '#636666' : '#149db5'}
-                                    onPressCoupon={() => { this.changeCode(ConstantValues.couponCode) }}
-                                    onPressRemove={() => this.removeCoupon()}
-                                    onPressCheckBox={() => {
-                                        this.setState({ walletUsed: !this.state.walletUsed }),
-                                            this.walletUsed(this.state.walletUsed)
-                                    }}
-                                    removeVisible={ConstantValues.appliedCode == ConstantValues.couponCode ? true : false}
-                                />
-                            </View>
+                                    </View>
+                                    {/* itemCard ends here */}
+                                    <View style={{ marginTop: 10 }}>
+                                        <CouponPanel
+                                            walletBalance={this.state.walletBalance}
+                                            disabledWallet={this.state.textPromoCode == ConstantValues.couponCode ? true : false}
+                                            disabledCoupon={ConstantValues.walletBalanceUsed !== 0 ? true : false}
+                                            textStyle={{ fontFamily: 'Poppins-Regular' }}
+                                            checked={ConstantValues.walletBalanceUsed === 0 ? false : this.state.walletUsed}
+                                            appliedCode={ConstantValues.appliedCode}
+                                            couponColor={this.state.walletUsed == true || ConstantValues.walletBalanceUsed !== 0 ? '#636666' : '#149db5'}
+                                            onPressCoupon={() => { this.changeCode(ConstantValues.couponCode) }}
+                                            onPressRemove={() => this.removeCoupon()}
+                                            onPressCheckBox={() => {
+                                                this.setState({ walletUsed: !this.state.walletUsed }),
+                                                    this.walletUsed(this.state.walletUsed)
+                                            }}
+                                            removeVisible={ConstantValues.appliedCode == ConstantValues.couponCode ? true : false}
+                                        />
+                                    </View>
 
-                            <BillCard
-                                totalBasePrice={ConstantValues.totalBasePrice}
-                                gst={(ConstantValues.gst).toFixed(2)}
-                                deliveryCharge={ConstantValues.deliveryCharge}
-                                discount={ConstantValues.discount}
-                                totalPayableAmount={(ConstantValues.totalPayableAmount).toFixed(2)}
-                            />
-                            {/* <View style={{ justifyContent: 'center', width: ConstantValues.deviceWidth, alignContent: 'center',backgroundColor:'#e7e7e7'}}> */}
-                            <CustomButton
-                                disabled={false}
-                                style={{ backgroundColor: '#60b246', marginBottom: 20, width: ConstantValues.deviceWidth - 30 }}
-                                onPress={() => this.confirmCart()}
-                                title='Add Passenger Details'
-                            />
-                            {/* </View> */}
-                        </ScrollView>
-                    </View>
+                                    <BillCard
+                                        totalBasePrice={ConstantValues.totalBasePrice}
+                                        gst={(ConstantValues.gst).toFixed(2)}
+                                        deliveryCharge={ConstantValues.deliveryCharge}
+                                        discount={ConstantValues.discount}
+                                        totalPayableAmount={(ConstantValues.totalPayableAmount).toFixed(2)}
+                                    />
+                                    {/* <View style={{ justifyContent: 'center', width: ConstantValues.deviceWidth, alignContent: 'center',backgroundColor:'#e7e7e7'}}> */}
+                                    <CustomButton
+                                        disabled={this.state.proceedDisabled}
+                                        style={{ backgroundColor: this.state.proceedDisabled === true ? '#9b9b9b' : '#60b246', marginBottom: 20, width: ConstantValues.deviceWidth - 30 }}
+                                        onPress={() => this.confirmCart()}
+                                        title={this.state.proceedLabel}
+                                    />
+                                    {/* </View> */}
+                                </ScrollView>
+                            </View>
                     }
                     {/* </View> */}
                 </Modal>
@@ -970,6 +1065,8 @@ const mapStateToProp = state => {
         loading: state.loading,
         error: state.error,
         cart: state.cart,
+        inCartlength: state.inCartlength,
+        removeDiscount: state.removeDiscount,
         cartLength: state.cartLength,
         totalBasePrice: state.totalBasePrice,
         showFooter: state.showFooter

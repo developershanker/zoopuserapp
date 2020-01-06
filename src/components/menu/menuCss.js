@@ -232,16 +232,17 @@ const styles = StyleSheet.create({
     justifyContent:'center'
   },
   fab: {
+    alignSelf:'flex-start',
     flexDirection: 'row',
     position: 'absolute',
-    width: 100,
-    height: 40,
+    width: 70,
+    height: 60,
     alignItems: 'center',
     justifyContent: 'center',
-    right: 20,
-    bottom: 20,
-    backgroundColor: '#03A9F4',
-    borderRadius: 100,
+    right: 10,
+    top: 10,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
     elevation: 8
   },
   fabIcon: {

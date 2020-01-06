@@ -17,6 +17,7 @@ import loginApi from '../login/loginApi.js';
 import otpVerify from '../login/otpVerify';
 import trainData from './trainData';
 import styles from '../assests/css';
+import { Header } from 'react-native-elements';
 
 
 const { width } = Dimensions.get('window');
@@ -29,6 +30,7 @@ export default class Search extends Component {
   componentDidMount() {
     SplashScreen.hide();
     // this.getRecentItem()
+    this.checkCopiedtext()
     this.showTrain()
     this.onRegister()
   }
@@ -40,8 +42,10 @@ export default class Search extends Component {
       placeholder: '',
       email: '',
       query: '',
-      isVisible:false,
+      isVisible: false,
       visibleModal: null,
+      visibleModalDrawer: null,
+      visibleModalProfile: null,
       recentSearchArray: [],
       trains: [],
 
@@ -75,6 +79,44 @@ export default class Search extends Component {
     }
   }
 
+  async checkCopiedtext() {
+    try {
+      let reg = /^[0-9]+$/;
+      let copiedText = await Clipboard.getString();
+      if (copiedText.length === 10 && reg.test(copiedText)) {
+        console.log('Copied text after validation ::::  >>' + copiedText)
+        this.changePnrText(copiedText)
+        // return (
+        //   Alert.alert(
+        //     'Confirm!!',
+        //     'Do you want to paste the copied content ' + copiedText + ' as PNR ?',
+        //     [
+        //       {
+        //         text: 'Cancel', onPress: () => console.log('Copied text but not pasted :::' + copiedText + "Pressed Cancel"),
+        //         style: 'cancel'
+        //       },
+        //       {
+        //         text: 'OK', onPress: () => this.changePnrText(copiedText),
+        //         style: 'cancel'
+        //       },
+        //     ],
+        //     { cancelable: false },
+        //   )
+        // )
+      } else {
+        console.log('Copied text in else part :::' + copiedText)
+      }
+    } catch (error) {
+      console.log('Data received in checkCopiedtext catch: ' + error)
+    }
+  }
+
+
+  changePnrText = (copiedText) => {
+    this.setState({
+      text: copiedText
+    })
+  }
 
   //function to render dropdown while search by train no.
   findTrain(query) {
@@ -83,15 +125,17 @@ export default class Search extends Component {
     }
     const { trains } = this.state;
     //making a case insensitive regular expression to get similar value from the train json
-    const regex = new RegExp(`${query.trim()}`, 'i');
+    // const regex = new RegExp(`${query.trim()}`, 'i');
     //return the filtered train array according the query from the input
-    return trains.filter(train => train.trainNumberAndName.search(regex) >= 0);
+    // return trains.filter(train => train.trainNumberAndName.search(regex) >= 0);
+    return trains.filter(train => train.trainNumberAndName.toLowerCase().includes(query.toLowerCase().trim()));
   }
 
 
   trainList = (value) => {
 
     if (value == 'Enter PNR') {
+      // console.log('value of radio button pnr is::::' + value)
       return (
         <View style={styles.inputView}>
           <TextInput
@@ -102,13 +146,15 @@ export default class Search extends Component {
             enablesReturnKeyAutomatically={true}
             keyboardType='number-pad'
             maxLength={10}
+            value={this.state.text}
             onValueChange={placeholder => this.setState({ placeholder })}
             onChangeText={text => this.setState({ text })}
           />
         </View>
       )
     }
-    else if (value == 'Enter Train No.') {
+    else if (value == 'Enter Train Name/No.') {
+      // console.log('value of radio button train is::::' + value)
       const { query } = this.state;
       const trains = this.findTrain(query);
       // console.log('trains are' + trains)
@@ -117,21 +163,21 @@ export default class Search extends Component {
       return (
         <TouchableNativeFeedback onPress={() => this.setState({ visibleModal: 'bottom' })}>
           <View style={{ width: Dimensions.get('window').width - 20, marginLeft: 5, borderRadius: 10, borderColor: '#cfc7c4', borderWidth: 1, paddingVertical: 5 }}>
-            <Text style={{margin: 5,fontSize: 15,color: '#9b9b9b', width: Dimensions.get('window').width - 20,fontFamily: 'Poppins-Regular',}}>Enter Train Name/No.</Text>
+            <Text style={{ margin: 5, fontSize: 15, color: '#9b9b9b', width: Dimensions.get('window').width - 20, fontFamily: 'Poppins-Regular', }}>Enter Train Name/No.</Text>
           </View>
         </TouchableNativeFeedback>
-        
-          // {/* <TextInput
-          //   // ref={component => this._textInput = component}
-          //   style={styles.input}
-          //   clearButtonMode={'always'}
-          //   // onTouchStart={() => this.handleModalOpen(ConstantValues.getRecentSearch) }
-          //   onTouchStart={() => this.setState({ visibleModal: 'bottom' })}
-          //   enablesReturnKeyAutomatically={true}
-          //   placeholder="Enter Train Name/No."
-          //   onChangeText={text => this.setState({ query: text })}
-          // /> */}
-          
+
+        // {/* <TextInput
+        //   // ref={component => this._textInput = component}
+        //   style={styles.input}
+        //   clearButtonMode={'always'}
+        //   // onTouchStart={() => this.handleModalOpen(ConstantValues.getRecentSearch) }
+        //   onTouchStart={() => this.setState({ visibleModal: 'bottom' })}
+        //   enablesReturnKeyAutomatically={true}
+        //   placeholder="Enter Train Name/No."
+        //   onChangeText={text => this.setState({ query: text })}
+        // /> */}
+
         // </View>
         // <View style={styles.mainD}>
         // <Autocomplete
@@ -203,18 +249,37 @@ export default class Search extends Component {
 
 
 
-  searchBy(text, query) {
+  searchBy(text, query, value) {
     let reg = /^[0-9]+$/;
     if (text != '' && reg.test(text)) {
       if (text.length == 10 || text.length == 5) {
-        console.log('query.length : ' + query.length + '\n' + 'query : ' + query)
-        ConstantValues.searchString = text
-        if (text.length === 5) {
-          this.pushingItem(text, query)
+        if (value == 'Enter PNR' && text.length == 10 || value == 'Enter Train Name/No.' && text.length == 5) {
+          console.log('query.length in success: ' + query.length + '\n' + 'query : ' + query + '\n' + 'text : ' + text + '\n' + 'text.length' + text.length)
+          ConstantValues.searchString = text
+          if (text.length === 5) {
+            this.pushingItem(text, query)
+          }
+          console.log('ConstantValues.searchString is ....' + ConstantValues.searchString)
+          this.props.navigation.navigate('Station')
+        } else {
+          /////pnr length issue
+          console.log('query.length in error: ' + query.length + '\n' + 'query : ' + query + '\n' + 'text : ' + text + '\n' + 'text.length:' + text.length + '\n' + 'value:::::' + value)
+          return (
+            Alert.alert(
+              'Alert!!',
+              'Incorrect Input length!!',
+              [
+                {
+                  text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
+                  style: 'cancel'
+                },
+              ],
+              { cancelable: false },
+            )
+          )
         }
-        console.log('ConstantValues.searchString is ....' + ConstantValues.searchString)
-        this.props.navigation.navigate('Station')
       } else {
+        console.log('query.length in error: ' + query.length + '\n' + 'query : ' + query + '\n' + 'text : ' + text + '\n' + 'text.length' + text.length + '\n' + 'value:::::' + value)
         return (
           Alert.alert(
             'Alert!!',
@@ -230,6 +295,7 @@ export default class Search extends Component {
         )
       }
     } else {
+      console.log('query.length in error: ' + query.length + '\n' + 'query : ' + query + '\n' + 'text : ' + text + '\n' + 'text.length' + text.length + '\n' + 'value:::::' + value)
       return (
         Alert.alert(
           'Alert!!',
@@ -290,6 +356,42 @@ export default class Search extends Component {
     Linking.openURL(phoneNumber);
   };
 
+  rightComponentView() {
+    return (
+      <TouchableOpacity onPress={() => this.setState({ visibleModalProfile: 'bottom' })}>
+        <View style={{ width: 50, height: 50, justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
+          <Icon
+            name='user-circle'
+            size={25}
+          />
+        </View>
+      </TouchableOpacity>
+    )
+  }
+
+  centerComponentView() {
+    return (
+      <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 15 }}>
+        <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
+          style={{ width: 80, height: 50 }}
+        />
+      </View>
+    )
+  }
+
+  leftComponentView() {
+    return (
+      <TouchableOpacity onPress={() => this.setState({ visibleModalDrawer: 'right' })}>
+        <View style={{ width: 50, height: 50, justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
+          <Icon
+            name='bars'
+            size={25}
+          />
+        </View>
+      </TouchableOpacity>
+    )
+  }
+
   render() {
     let position = Animated.divide(this.scrollX, width);
     let { query } = this.state;
@@ -302,9 +404,39 @@ export default class Search extends Component {
       <SafeAreaView >
         <ScrollView keyboardShouldPersistTaps='handled'>
           <KeyboardAvoidingView enabled style={styles.slide}>
+            {/* <Header
+              placement='left'
+              barStyle="light-content" // or directly
+              leftComponent={this.leftComponentView()}
+              centerComponent={this.centerComponentView()}
+              // rightComponent={this.rightComponentView()}
+              // rightContainerStyle={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignSelf: 'center' }}
+              leftContainerStyle={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignSelf: 'center' }}
+              centerContainerStyle={{ justifyContent: 'center', alignContent: 'center' }}
+              containerStyle={{
+                width: ConstantValues.deviceWidth,
+                height: '8%',
+                backgroundColor: '#fff',
+              }}
+            /> */}
+            <View style={styles.header}>
+              <TouchableOpacity onPress={() => this.setState({ visibleModalDrawer: 'right' })}>
+                <View style={{ width: 60, height: 50, justifyContent: 'center', alignItems: 'center'}}>
+                  <Icon
+                    name='bars'
+                    size={20}
+                  />
+                </View>
+              </TouchableOpacity>
+              <View style={{ justifyContent: 'center', alignItems: 'center',}}>
+                <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
+                  style={{ width: 60, height: 30 }}
+                />
+              </View>
+            </View>
 
             <View style={{ width: deviceWidth, height: '20%' }}>
-                <Image style={styles.imageTop} source={require('../images/Home.jpg')} />
+              <Image style={styles.imageTop} source={require('../images/Home.jpg')} />
             </View>
 
             <View style={{ alignItems: 'center', width: deviceWidth, height: '5%', justifyContent: 'center' }}>
@@ -328,7 +460,7 @@ export default class Search extends Component {
 
                 <View style={styles.radioView}>
                   <RadioButton
-                    value="Enter Train No."
+                    value="Enter Train Name/No."
                     color='#757271'
                   // onPress={this.showTrain()}     
                   />
@@ -337,9 +469,9 @@ export default class Search extends Component {
 
               </View>
             </RadioButton.Group>
-            <View style={styles.input}>
+            {/* <View style={styles.input}>
 
-            </View>
+            </View> */}
             <View style={styles.main}>
               {this.trainList(this.state.value)}
             </View>
@@ -348,7 +480,7 @@ export default class Search extends Component {
                 style={{ alignSelf: 'center' }}
                 onPress={() => {
 
-                  this.searchBy(this.state.text, this.state.query)
+                  this.searchBy(this.state.text, this.state.query, this.state.value)
                 }}
                 title='Search Restaurants'
               />
@@ -473,7 +605,8 @@ export default class Search extends Component {
                   defaultValue={query}
                   style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#635c5a', }}
                   onChangeText={text => this.setState({ query: text })}
-                  placeholder="Enter Train Name/No."
+                  // placeholder="Enter Train Name/No."
+                  placeholder={this.state.value}
                   renderItem={({ item }) => (
                     <View>
                       <ScrollView contentContainerStyle={styles.dropdown}>
@@ -512,7 +645,7 @@ export default class Search extends Component {
                     <FlatList
                       data={this.state.recentSearchArray}
                       extraData={this.state}
-                      renderItem={({ item , i }) => (
+                      renderItem={({ item, i }) => (
                         <View>
                           <TouchableNativeFeedback key={i} onPress={() => this.setState({
                             query: item.trainNumberAndName,
@@ -551,12 +684,166 @@ export default class Search extends Component {
                   style={{ alignSelf: 'center' }}
                   onPress={() => {
                     this.setState({ visibleModal: null })
-                    this.searchBy(this.state.text, this.state.query)
+                    this.searchBy(this.state.text, this.state.query, this.state.value)
                   }}
                   title='Search Restaurants'
                 />
               </View>
             </View>
+          </Modal>
+        </KeyboardAvoidingView>
+        {/* drawerModal */}
+        <KeyboardAvoidingView>
+          <Modal
+            isVisible={this.state.visibleModalDrawer === 'right'}
+            onBackButtonPress={() => this.setState({ visibleModalDrawer: null })}
+            onSwipeComplete={() => this.setState({ visibleModalDrawer: null })}
+            swipeDirection={['left']}
+            style={styles.bottomModal}
+          >
+            <SafeAreaView style={{ flex: 1, flexDirection: 'column' }}>
+              <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
+                <View style={styles.modalViewDrawer}>
+
+                  <View style={{ backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center', paddingVertical: 10 }}>
+                    <Image
+                      style={{ width: 150, height: 80 }}
+                      source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
+                    ></Image>
+                  </View>
+
+                  <TouchableOpacity onPress={() => {
+                    this.setState({ visibleModalDrawer: null })
+                    this.props.navigation.navigate('Search')
+                  }}>
+                    <View style={{ justifyContent: 'flex-start', flexDirection: 'row', paddingLeft: 20, paddingVertical: 10, backgroundColor: '#ffffff' }}>
+                      <Image style={{ width: 25, height: 25 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.homeScreen }} />
+                      <View style={{ width: 100, height: 25, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 15 }}>
+                        <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 14, color: '#000000' }}>Home</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => {
+                    this.setState({ visibleModalDrawer: null })
+                    this.props.navigation.navigate('Register')
+                  }
+                  }>
+                    <View style={{ justifyContent: 'flex-start', flexDirection: 'row', paddingLeft: 20, paddingVertical: 10, backgroundColor: '#ffffff' }}>
+                      <Image style={{ width: 25, height: 25 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.myProfile }} />
+                      <View style={{ width: 100, height: 25, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 15 }}>
+                        <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 14, color: '#000000' }}>Profile</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => {
+                    this.setState({ visibleModalDrawer: null })
+                    this.props.navigation.navigate('MyOrders')
+                  }
+                  }>
+                    <View style={{ justifyContent: 'flex-start', flexDirection: 'row', paddingLeft: 20, paddingVertical: 10, backgroundColor: '#ffffff' }}>
+                      <Image style={{ width: 25, height: 25 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.myorders }} />
+                      <View style={{ width: 100, height: 25, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 15 }}>
+                        <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 14, color: '#000000' }}>My Orders</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => {
+                    this.setState({ visibleModalDrawer: null })
+                    this.props.navigation.navigate('MyWallet')
+                  }
+                  }>
+                    <View style={{ justifyContent: 'flex-start', flexDirection: 'row', paddingLeft: 20, paddingVertical: 10, backgroundColor: '#ffffff' }}>
+                      <Image style={{ width: 25, height: 25 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.myWallet }} />
+                      <View style={{ width: 100, height: 25, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 15 }}>
+                        <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 14, color: '#000000' }}>My Wallet</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => {
+                    this.setState({ visibleModalDrawer: null })
+                    this.props.navigation.navigate('Contact')
+                  }
+                  }>
+                    <View style={{ justifyContent: 'flex-start', flexDirection: 'row', paddingLeft: 20, paddingVertical: 10, backgroundColor: '#ffffff' }}>
+                      <Image style={{ width: 25, height: 25 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.contactus }} />
+                      <View style={{ width: 100, height: 25, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 15 }}>
+                        <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 14, color: '#000000' }}>Contact Us</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => {
+                    this.setState({ visibleModalDrawer: null })
+                    this.props.navigation.navigate('Invite')
+                  }
+                  }>
+                    <View style={{ justifyContent: 'flex-start', flexDirection: 'row', paddingLeft: 20, paddingVertical: 10, backgroundColor: '#ffffff' }}>
+                      <Image style={{ width: 25, height: 25 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.invite }} />
+                      <View style={{ width: 150, height: 25, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 15 }}>
+                        <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 14, color: '#000000' }}>Invite & Earn</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => {
+                    this.setState({ visibleModalDrawer: null })
+                    this.props.navigation.navigate('FAQ')
+                  }
+                  }>
+                    <View style={{ justifyContent: 'flex-start', flexDirection: 'row', paddingLeft: 20, paddingVertical: 10, backgroundColor: '#ffffff' }}>
+                      <Image style={{ width: 25, height: 25 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.faq }} />
+                      <View style={{ width: 100, height: 25, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 15 }}>
+                        <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 14, color: '#000000' }}>FAQ</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => {
+                    this.setState({ visibleModalDrawer: null })
+                    this.props.navigation.navigate('Feedback')
+                  }
+                  }>
+                    <View style={{ justifyContent: 'flex-start', flexDirection: 'row', paddingLeft: 20, paddingVertical: 10, backgroundColor: '#ffffff' }}>
+                      <Image style={{ width: 25, height: 25 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.feedback }} />
+                      <View style={{ width: 100, height: 25, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 15 }}>
+                        <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 14, color: '#000000' }}>Feedback</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => {
+                    this.setState({ visibleModalDrawer: null })
+                    this.props.navigation.navigate('RateUs')
+                  }
+                  }>
+                    <View style={{ justifyContent: 'flex-start', flexDirection: 'row', paddingLeft: 20, paddingVertical: 10, backgroundColor: '#ffffff' }}>
+                      <Image style={{ width: 25, height: 25 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.rate }} />
+                      <View style={{ width: 100, height: 25, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 15 }}>
+                        <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 14, color: '#000000' }}>Rate Us</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => {
+                    this.setState({ visibleModalDrawer: null })
+                    this.props.navigation.navigate('TermsActivity')
+                  }
+                  }>
+                    <View style={{ justifyContent: 'flex-start', flexDirection: 'row', paddingLeft: 20, paddingVertical: 10, backgroundColor: '#ffffff' }}>
+                      <Image style={{ width: 25, height: 25 }} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.tnc }} />
+                      <View style={{ width: 160, height: 25, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 15 }}>
+                        <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 14, color: '#000000' }}>Terms & Conditions</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+
+                </View>
+              </ScrollView>
+            </SafeAreaView>
           </Modal>
         </KeyboardAvoidingView>
         {/* <DeliveryMark/> */}
@@ -565,6 +852,7 @@ export default class Search extends Component {
   }
 
 }
+
 const photos = [
   { uri: ConstantValues.IconUrl + ConstantValues.imgurl.banner3 },
   { uri: ConstantValues.IconUrl + ConstantValues.imgurl.banner4 },
