@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
     card: {
       backgroundColor: '#ffffff',//can change as we move to various pages
-      marginBottom: 10,//can change as we move to various pages
+      marginBottom: 5,//can change as we move to various pages
       marginLeft: '2%', //can change as we move to various pages
       width: '96%', //can change as we move to various pages
       // borderColor: '#e4e4e4',
@@ -113,7 +113,9 @@ const styles = StyleSheet.create({
       // justifyContent:'center'
     },
     detail: {
-      width: Dimensions.get('screen').width - 100,
+      // backgroundColor:'#e7e7e7',
+      justifyContent:'flex-start',
+      width: '70%',
       height: 120,
       flexDirection: 'row'
     },
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
     },
     ratingView: {
       backgroundColor: '#a5ce39',
-      marginLeft: 20,
+      marginLeft: 35,
       marginTop: 5,
       width: 35,
       height: 20,   //#0e8341
@@ -156,7 +158,8 @@ const styles = StyleSheet.create({
       alignItems: 'center'
     },
     cuisine: {
-      width: 150,
+      width: 200,
+      // backgroundColor:'#e7e7e7',
       // flexDirection:'row',
       fontSize: 10,
       fontFamily: 'Poppins-Regular',

@@ -166,7 +166,7 @@ export default class myOrderDetail extends Component {
                             scrollEnabled={true}
                             renderItem={({ item }) =>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
-                                    <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', }}>{item.itemName}</Text>
+                                    <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', width:200}}>{item.itemName}</Text>
                                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: 100, alignContent: 'center', }}>
                                         <Text style={{ fontFamily: 'Poppins-Regular', color: '#6dcc5a', width: 40, textAlign: 'right' }}> {item.quantity} </Text>
                                         <Text style={{ fontFamily: 'Poppins-Regular', color: '#000', fontSize: 10, }}> X </Text>

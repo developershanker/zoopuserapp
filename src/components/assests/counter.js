@@ -15,7 +15,7 @@ export const Counter = (props) => {
 
                 {/* Adding item to cart button */}
                 <View
-                    style={[style,{ alignItems: 'center', width: 90, borderColor: '#d4d4d4', borderRadius: 6, borderWidth: 1 }]} >
+                    style={[style,{ alignItems: 'center', width: 100,}]} >
                     <TouchableOpacity onPress={onPressAdd} disabled={disabledAdd}>
                         <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center', justifyContent: 'space-around' }}>
                             <TouchableOpacity onPress={onPressRemove} disabled={disabledRemove}>
@@ -26,7 +26,7 @@ export const Counter = (props) => {
 
                             </TouchableOpacity>
 
-                            <Text style={{ fontFamily: 'Poppins-Medium', color: '#60b246', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{itemCount == 0 ? 'ADD' : itemCount}</Text>
+                            <Text style={{ fontFamily: 'Poppins-Medium', color: itemCount == 0 ? '#60b246' : '#000', margin: 5, paddingLeft: 5, paddingRight: 5 }}>{itemCount == 0 ? 'ADD +' : itemCount}</Text>
 
 
                             <TouchableOpacity onPress={onPressAdd}>

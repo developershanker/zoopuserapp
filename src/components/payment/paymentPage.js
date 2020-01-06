@@ -164,6 +164,7 @@ export default class PaymentPage extends Component {
     ConstantValues.couponId = 0
     ConstantValues.discount = 0
     ConstantValues.rateDiscount = 0
+    ConstantValues.minimumPriceRequired = 0
     ConstantValues.isCouponApplied = false
     ConstantValues.appliedCode = 'Apply Coupon Code'
     cartApi.billDetail()
@@ -185,9 +186,26 @@ export default class PaymentPage extends Component {
           }
         if (ConstantValues.pnr != '' && ConstantValues.pnr.length === 10) {
           if (ConstantValues.deliveryDate !== '' && ConstantValues.deliveryTime !== '') {
-            console.log('going for order ---->' + '\n' + ConstantValues.pnr + '\n' + "::::" + ConstantValues.deliveryDate + '\n' + "::::" + ConstantValues.deliveryTime)
-            this.orderBooking(ConstantValues.paymentTypeId)
-            console.log('//////////////Order Booked/////////////////')
+            if (ConstantValues.customerPhoneNo !== '' && ConstantValues.customerPhoneNo.length === 10) {
+              console.log('going for order ---->' + '\n' + ConstantValues.pnr + '\n' + "::::" + ConstantValues.deliveryDate + '\n' + "::::" + ConstantValues.deliveryTime)
+              this.orderBooking(ConstantValues.paymentTypeId)
+              console.log('//////////////Order Booked/////////////////')
+            } else {
+              console.log('going for order :error in date and time:' + ConstantValues.pnr + '\n' + "::::" + ConstantValues.deliveryDate + '\n' + "::::" + ConstantValues.deliveryTime)
+              return (
+                Alert.alert(
+                  'Mandatory Field Alert!!',
+                  'Oops !! Mandatory Field missing. Please try again.',
+                  [
+                    {
+                      text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
+                      style: 'cancel'
+                    },
+                  ],
+                  { cancelable: false },
+                )
+              )
+            }
           } else {
             console.log('going for order :error in date and time:' + ConstantValues.pnr + '\n' + "::::" + ConstantValues.deliveryDate + '\n' + "::::" + ConstantValues.deliveryTime)
             return (

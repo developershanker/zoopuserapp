@@ -9,6 +9,7 @@ import SignUp from '../login/signUp.js';
 import Register from '../login/register.js';
 import OtpVerify from '../login/otpVerify.js';
 import DeviceInfo from '../assests/deviceInfo.js';
+import SidePanel from '../mainactivity/SidePanel.js'
 
 //////-------INITIAL SEARCH RELATED VIEWS-----------//////
 import Search from './search.js';
@@ -36,10 +37,10 @@ import RatingView from '../postOrderActivity/ratingView.js';
 import Contact from '../services/contact';
 import FAQ from '../services/faq';
 import Feedback from '../services/feedback';
-import MyOrders from '../customer/myOrders';
+import MyOrders from '../customer/MyOrders';
 import MyOrderDetail from '../customer/myOrderDetail';
 import Invite from '../services/invite.js';
-import MyWallet from '../customer/myWallet';
+import MyWallet from '../customer/MyWallet';
 import Profile from '../customer/profile';
 import RateUs from '../services/rateUs';
 import LogOut from '../login/logout';
@@ -109,7 +110,8 @@ const AuthStack = createStackNavigator({
       <SafeAreaView style={{ flexDirection: 'row' }}>
         <View>
 
-          <TouchableOpacity onPress={()=>this.props.navigationProps.toggleDrawer()}>
+          <TouchableOpacity onPress={() => this.props.navigationProps.toggleDrawer()}>
+          {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('SidePanel')}> */}
             {/*Donute Button Image */}
             <View style={{ width: 50, height: 50, justifyContent: 'center', alignItems: 'center' }}>
               <Icon
@@ -138,6 +140,29 @@ class NotificationSection extends Component {
           <View style={{ width: 50, height: 50, justifyContent: 'center', alignItems: 'center' }}>
           <Icon
           name='bell'
+          size={20}
+          style={{ marginRight: 15 }}
+        />
+          </View>
+        
+      </TouchableOpacity>
+    )
+  }
+
+}
+
+class ProfileSection extends Component {
+  openProfileSection = () => {
+    this.props.navigationProps.navigate('SidePanel')
+  }
+  render() {
+    return (
+      <TouchableOpacity 
+      onPress={this.openProfileSection.bind(this)}
+      >
+          <View style={{ width: 50, height: 50, justifyContent: 'center', alignItems: 'center' }}>
+          <Icon
+          name='user-circle'
           size={20}
           style={{ marginRight: 15 }}
         />
@@ -202,137 +227,137 @@ const CustomDrawerComponent = (props) => (
   </SafeAreaView>
 
 )
-const DrawerNavigator = createDrawerNavigator({
-  Search: {
-    screen: Search,
-    navigationOptions: {
-      drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.homeScreen}}/>
-         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Home</Text>
-         </View>
-      </View>
+// const DrawerNavigator = createDrawerNavigator({
+//   Search: {
+//     screen: Search,
+//     navigationOptions: {
+//       drawerLabel:
+//       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+//          <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.homeScreen}}/>
+//          <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
+//          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Home</Text>
+//          </View>
+//       </View>
      
-    }
-  },
-  Profile: {
-    screen: Register,
-    navigationOptions: {
-      drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myProfile}}/>
-         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Profile</Text>
-         </View>
-      </View>
-    }
-  },
-  MyOrders: {
-    screen: MyOrders,
-    navigationOptions: {
-      drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myorders}}/>
-         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>My Orders</Text>
-         </View>
-      </View>
-    }
-  },
-  MyWallet: {
-    screen: MyWallet,
-    navigationOptions: {
-      drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myWallet}}/>
-         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>My Wallet</Text>
-         </View>
-      </View>
-    }
-  },
-  Contact: {
-    screen: Contact,
-    navigationOptions: {
-      drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.contactus}}/>
-         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Contact Us</Text>
-         </View>
-      </View>
-    },
-  },
-  Invite: {
-    screen: Invite,
-    navigationOptions: {
-      drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.invite}}/>
-         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Invite & Earn</Text>
-         </View>
-      </View>
+//     }
+//   },
+//   Profile: {
+//     screen: Register,
+//     navigationOptions: {
+//       drawerLabel:
+//       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+//          <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myProfile}}/>
+//          <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
+//          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Profile</Text>
+//          </View>
+//       </View>
+//     }
+//   },
+//   MyOrders: {
+//     screen: MyOrders,
+//     navigationOptions: {
+//       drawerLabel:
+//       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+//          <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myorders}}/>
+//          <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
+//          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>My Orders</Text>
+//          </View>
+//       </View>
+//     }
+//   },
+//   MyWallet: {
+//     screen: MyWallet,
+//     navigationOptions: {
+//       drawerLabel:
+//       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+//          <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.myWallet}}/>
+//          <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
+//          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>My Wallet</Text>
+//          </View>
+//       </View>
+//     }
+//   },
+//   Contact: {
+//     screen: Contact,
+//     navigationOptions: {
+//       drawerLabel:
+//       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+//          <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.contactus}}/>
+//          <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
+//          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Contact Us</Text>
+//          </View>
+//       </View>
+//     },
+//   },
+//   Invite: {
+//     screen: Invite,
+//     navigationOptions: {
+//       drawerLabel:
+//       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+//          <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.invite}}/>
+//          <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
+//          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Invite & Earn</Text>
+//          </View>
+//       </View>
 
      
-    },
-  },
-  FAQ: {
-    screen: FAQ,
-    navigationOptions: {
-      drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.faq}}/>
-         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>FAQ</Text>
-         </View>
-      </View>
-    }
-  },
-  Feedback: {
-    screen: Feedback,
-    navigationOptions: {
-      drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+//     },
+//   },
+//   FAQ: {
+//     screen: FAQ,
+//     navigationOptions: {
+//       drawerLabel:
+//       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+//          <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.faq}}/>
+//          <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
+//          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>FAQ</Text>
+//          </View>
+//       </View>
+//     }
+//   },
+//   Feedback: {
+//     screen: Feedback,
+//     navigationOptions: {
+//       drawerLabel:
+//       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
         
-        <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.feedback}}/>
-      <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Feedback</Text>
-         </View>
-      </View>
-    }
-  },
-  RateUs: {
-    screen: RateUs,
-    navigationOptions: {
-      drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.rate}}/>
-         <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Rate Us</Text>
-         </View>
-      </View>
-    }
-  },
-  TermsActivity: {
-    screen: TermsActivity,
-    navigationOptions: {
-      drawerLabel:
-      <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
-         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.tnc}}/>
-         <View style={{width:120,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
-         <Text style={{fontFamily:'Poppins-Medium',fontSize:13,color:'#000000'}}>Terms & Conditions</Text>
-         </View>
-      </View>
-    }
-  },
+//         <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.feedback}}/>
+//       <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
+//          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Feedback</Text>
+//          </View>
+//       </View>
+//     }
+//   },
+//   RateUs: {
+//     screen: RateUs,
+//     navigationOptions: {
+//       drawerLabel:
+//       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+//          <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.rate}}/>
+//          <View style={{width:100,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
+//          <Text style={{fontFamily:'Poppins-Medium',fontSize:14,color:'#000000'}}>Rate Us</Text>
+//          </View>
+//       </View>
+//     }
+//   },
+//   TermsActivity: {
+//     screen: TermsActivity,
+//     navigationOptions: {
+//       drawerLabel:
+//       <View style={{width: Dimensions.get('window').width - 120,justifyContent:'flex-start',flexDirection:'row',paddingLeft:20,paddingVertical:10,backgroundColor:'#ffffff'}}>
+//          <Image style={{width:25,height:25}} source={{uri:ConstantValues.IconUrl+ConstantValues.imgurl.tnc}}/>
+//          <View style={{width:120,height:25,backgroundColor:'#ffffff',justifyContent:'center',alignItems:'flex-start',paddingLeft:15}}>
+//          <Text style={{fontFamily:'Poppins-Medium',fontSize:13,color:'#000000'}}>Terms & Conditions</Text>
+//          </View>
+//       </View>
+//     }
+//   },
 
-}, {
-  contentComponent: CustomDrawerComponent,
-  drawerWidth: Dimensions.get('window').width - 140,
-}
-);
+// }, {
+//   contentComponent: CustomDrawerComponent,
+//   drawerWidth: Dimensions.get('window').width - 140,
+// }
+// );
 const AppNavigator = createStackNavigator({
   SignUp: {
     screen: SignUp,
@@ -345,7 +370,6 @@ const AppNavigator = createStackNavigator({
     navigationOptions: {
       header: null,
     }
-
   },
   Welcome: {
     screen: Welcome,
@@ -371,6 +395,31 @@ const AppNavigator = createStackNavigator({
       header: null,
     }
   },
+  SidePanel: {
+    screen: SidePanel,
+    navigationOptions: {
+      header:null,
+    }
+  },
+  MyOrders: {
+    screen: MyOrders,
+    navigationOptions: {
+      header:null,
+    }
+  },
+  MyWallet: {
+    screen: MyWallet,
+    navigationOptions: {
+      header:null,
+    }
+  },
+
+  Invite: {
+    screen: Invite,
+    navigationOptions: {
+      header:null,
+    }
+  },
   BulkOrder: {
     screen: BulkOrder,
     navigationOptions: {
@@ -383,19 +432,33 @@ const AppNavigator = createStackNavigator({
       header: null,
     }
   },
-
   Search: {
-    screen: DrawerNavigator,
-    navigationOptions: ({ navigation }) => ({
-      headerTitle: <HeaderIcon navigationProps={navigation}/>,
-      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
-      // headerRight: <NotificationSection navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: '#ffffff',
-      },
-      headerTintColor: '#ffffff',
-    }),
+    screen: Search,
+    navigationOptions: {
+      header: null,
+    }
+    // navigationOptions: ({ navigation }) => ({
+    //   headerTitle: <HeaderIcon navigationProps={navigation}/>,
+    //   headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+    //   headerRight: <ProfileSection navigationProps={navigation} />,
+    //   headerStyle: {
+    //     backgroundColor: '#ffffff',
+    //   },
+    //   headerTintColor: '#ffffff',
+    // }),
   },
+  // Search: {
+  //   screen: DrawerNavigator,
+  //   navigationOptions: ({ navigation }) => ({
+  //     headerTitle: <HeaderIcon navigationProps={navigation}/>,
+  //     headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+  //     // headerRight: <ProfileSection navigationProps={navigation} />,
+  //     headerStyle: {
+  //       backgroundColor: '#ffffff',
+  //     },
+  //     headerTintColor: '#ffffff',
+  //   }),
+  // },
   Register: {
     screen: Register,
     navigationOptions: {
@@ -462,6 +525,36 @@ const AppNavigator = createStackNavigator({
   },
   OrderConfirm: {
     screen: OrderConfirm,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  Contact: {
+    screen: Contact,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  FAQ: {
+    screen: FAQ,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  Feedback: {
+    screen: Feedback,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  RateUs: {
+    screen: RateUs,
+    navigationOptions: {
+      header: null,
+    }
+  },
+  TermsActivity: {
+    screen: TermsActivity,
     navigationOptions: {
       header: null,
     }

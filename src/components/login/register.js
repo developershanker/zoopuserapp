@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Picker, View, Text, StyleSheet, TextInput, ToastAndroid, PermissionsAndroid, Alert, TouchableOpacity } from 'react-native';
+import { Picker, View, Text, StyleSheet, Dimensions, TextInput, ToastAndroid, PermissionsAndroid, Alert, TouchableOpacity } from 'react-native';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -9,9 +9,14 @@ import loginApi from '../login/loginApi.js';
 import { Fade } from '../assests/fade.js';
 import ConstantValues from '../constantValues.js';
 import Modal from "react-native-modal";
+import Spinner from 'react-native-spinkit';
+import { Overlay } from 'react-native-elements';
+import * as menuAction from '../../actions/menuAction'
+import { connect } from 'react-redux';
+import { ZoopLoader } from '../assests/zoopLoader.js';
 
 
-export default class Register extends Component {
+export class Register extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.checkLogin()
@@ -24,24 +29,31 @@ export default class Register extends Component {
       emailId: '',
       referredBy: '',
       altmobile: '',
+      isVisible: true,
       loginCount: null,
-      clicked:false,
-      buttonColor:'#9b9b9b',
-      buttonText:'Submit',
-      visibleModal: 'center'
+      clicked: false,
+      buttonColor: '#9b9b9b',
+      buttonText: 'Submit',
+      visibleModal: 'center',
     };
   }
 
 
   checkLogin() {
     if (ConstantValues.customerId == '') {
+      this.setState({
+        isVisible: false
+      })
       return (
         Alert.alert(
           'Need Login!!',
           'Please Login',
           [
             {
-              text: 'OK', onPress: () => this.props.navigation.navigate('Welcome'),
+              text: 'OK', onPress: () => {
+                ConstantValues.navigationChannel = 'Search'
+                this.props.navigation.navigate('Welcome')
+              },
               style: 'cancel'
             },
           ],
@@ -49,6 +61,7 @@ export default class Register extends Component {
         )
       )
     } else {
+      // this.props.getUserInfo()
       this.onRegister();
     }
   }
@@ -150,41 +163,68 @@ export default class Register extends Component {
     }
   }
 
-  //getting User register
   async onRegister() {
-    try {
-      let response = await loginApi.getUserRegister();
-      console.log('data received in register.js : ' + JSON.stringify(response))
-      ConstantValues.loginCount = response.data.loginCount
-      this.state.loginCount = response.data.loginCount
-
-      ConstantValues.customerName = response.data.fullName
-      this.setState({
-        name: ConstantValues.customerName
-      })
-      console.log('ConstantValues.customerName :' + ConstantValues.customerName)
-      ConstantValues.customerEmailId = response.data.email
-      this.setState({
-        emailId: ConstantValues.customerEmailId
-      })
-      ConstantValues.customeralternateMobile = response.data.alternateMobile
-      this.setState({
-        altmobile: ConstantValues.customeralternateMobile
-      })
-
-
-    } catch (error) {
-      console.log('Data received in register.js catch: ' + error)
-    }
+    const response = await this.props.getUserInfo()
+    ConstantValues.loginCount = this.props.response.data.loginCount
+    this.state.loginCount = this.props.response.data.loginCount
+    ConstantValues.customerName = this.props.response.data.fullName
+    this.setState({
+      name: (ConstantValues.customerName == '' ? this.props.response.data.fullName : ConstantValues.customerName)
+    })
+    console.log('this.props.response :' + this.props.response);
+    console.log('ConstantValues.customerName :' + ConstantValues.customerName)
+    ConstantValues.customerEmailId = this.props.response.data.email
+    this.setState({
+      emailId: (ConstantValues.customerEmailId == '' ? this.props.response.data.email : ConstantValues.customerEmailId)
+    })
+    ConstantValues.customeralternateMobile = this.props.response.data.alternateMobile
+    this.setState({
+      altmobile: (ConstantValues.customeralternateMobile == '' ? this.props.response.data.alternateMobile : ConstantValues.customeralternateMobile)
+    })
+    //agent config
+    ConstantValues.isAgent = this.props.response.data.isAgent
+    this.setState({
+      isVisible: false
+    })
   }
+
+  //getting User register
+  // async onRegister() {
+  //   try {
+  //     let response = await loginApi.getUserRegister();
+  //     console.log('data received in register.js : ' + JSON.stringify(response))
+  //     ConstantValues.loginCount = response.data.loginCount
+  //     this.state.loginCount = response.data.loginCount
+
+  //     ConstantValues.customerName = response.data.fullName
+  //     this.setState({
+  //       name: ConstantValues.customerName
+  //     })
+  //     console.log('ConstantValues.customerName :' + ConstantValues.customerName)
+  //     ConstantValues.customerEmailId = response.data.email
+  //     this.setState({
+  //       emailId: ConstantValues.customerEmailId
+  //     })
+  //     ConstantValues.customeralternateMobile = response.data.alternateMobile
+  //     this.setState({
+  //       altmobile: ConstantValues.customeralternateMobile
+  //     })
+
+
+  //   } catch (error) {
+  //     console.log('Data received in register.js catch: ' + error)
+  //   }
+  // }
+
+
   //submitting edited profile info
   async editUserInfo(name, emailId, altMobile, referredBy) {
-    this.setState({buttonText: 'Submitting..', clicked: true ,buttonColor:'#9b9b9b'})
+    this.setState({ buttonText: 'Submitting..', clicked: true, buttonColor: '#9b9b9b' })
     try {
       let response = await loginApi.editUserInfo(name, emailId, altMobile, referredBy)
       console.log('data received in profile.js : ' + JSON.stringify(response))
       if (response.status == true) {
-        this.setState({buttonText: 'Profile Updated Successfully', clicked: true ,buttonColor:'#9b9b9b'})
+        this.setState({ buttonText: 'Profile Updated Successfully', clicked: true, buttonColor: '#9b9b9b' })
         // this.setState({
         //   name:ConstantValues.customerName,
         //   altmobile:ConstantValues.customeralternateMobile,
@@ -199,14 +239,14 @@ export default class Register extends Component {
         )
       }
       else {
-        this.setState({buttonText: 'Submit', clicked: false ,buttonColor:'#60b246'})
+        this.setState({ buttonText: 'Submit', clicked: false, buttonColor: '#60b246' })
         return (
           ToastAndroid.show(response.error, ToastAndroid.LONG)
         )
       }
 
     } catch (error) {
-      this.setState({buttonText: 'Submit', clicked: false ,buttonColor:'#60b246'})
+      this.setState({ buttonText: 'Submit', clicked: false, buttonColor: '#60b246' })
       console.log('Data received in profile.js catch: ' + error)
     }
   }
@@ -238,30 +278,40 @@ export default class Register extends Component {
     const visible = this.state.loginCount == 1 ? true : false
     return (
       <View style={styles.slide}>
-        <Text style={styles.heading}> My Profile </Text>
-        <View style={styles.card}>
-          <TextInput style={styles.input}
-            placeholder='Full Name'
-            maxLength={25}
-            value={this.state.name}
-            // keyboardType='default'
-            onChangeText={name => this.setState({ name })}
-            autoCapitalize='words'
-          />
-          <TextInput style={styles.input}
-            placeholder='Email id'
-            value={this.state.emailId}
-            keyboardType='email-address'
-            onChangeText={emailId => this.setState({ emailId })}
-          />
-          <TextInput style={styles.input}
-            placeholder='Alternate Mobile No.'
-            value={this.state.altmobile}
-            maxLength={10}
-            keyboardType='number-pad'
-            onChangeText={altmobile => this.setState({ altmobile })}
-          />
-          {/* <Fade visible={visible} >
+        {/* header view */}
+        <View style={{ flexDirection: 'row', paddingBottom: 10, justifyContent: 'flex-start' }}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
+            <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+          </TouchableOpacity>
+          <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
+            <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 20, color: '#000000' }}> My Profile </Text>
+          </View>
+        </View>
+        {/* header view ends */}
+        <View style={{ paddingVertical: 60, justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+          <View style={styles.card}>
+            <TextInput style={styles.input}
+              placeholder='Full Name'
+              maxLength={25}
+              value={this.state.name}
+              // keyboardType='default'
+              onChangeText={name => this.setState({ name })}
+              autoCapitalize='words'
+            />
+            <TextInput style={styles.input}
+              placeholder='Email id'
+              value={this.state.emailId}
+              keyboardType='email-address'
+              onChangeText={emailId => this.setState({ emailId })}
+            />
+            <TextInput style={styles.input}
+              placeholder='Alternate Mobile No.'
+              value={this.state.altmobile}
+              maxLength={10}
+              keyboardType='number-pad'
+              onChangeText={altmobile => this.setState({ altmobile })}
+            />
+            {/* <Fade visible={visible} >
           <TextInput style={styles.input}
             placeholder='Referral Code (if any)'
             keyboardType='default'
@@ -270,26 +320,38 @@ export default class Register extends Component {
           />
         </Fade> */}
 
-        </View>
-        <CustomButton
-          title="Submit"
-          disabled={this.state.name == '' ? true : false}
-          style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
-          onPress={() => {
-            this.isEmpty(this.state.name, this.state.emailId, this.state.altmobile, this.state.referredBy)
-            // this.props.navigation.navigate('Search')
-          }}
-        />
-        <Fade visible={ConstantValues.customerId != ''}>
-          <CustomTouchableOpacity
-            onPress={() => this.props.navigation.navigate('LogOut')}
-            text="LOGOUT"
-
+          </View>
+          <CustomButton
+            title="Submit"
+            disabled={this.state.name == '' ? true : false}
+            style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
+            onPress={() => {
+              this.isEmpty(this.state.name, this.state.emailId, this.state.altmobile, this.state.referredBy)
+              // this.props.navigation.navigate('Search')
+            }}
           />
+        </View>
+        <Fade visible={ConstantValues.customerId != ''}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('LogOut')}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center', alignSelf: 'stretch' }}>
+              <Icon name={'power-off'} size={20} color={'#000000'} style={{ margin: 5 }} />
+              <Text style={{ fontSize: 20, color: '#000000', textAlign: 'center', fontFamily: 'Poppins-Medium', }}>LOGOUT</Text>
+            </View>
+          </TouchableOpacity>
         </Fade>
+        <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 10, color: '#9b9b9b', textAlign: 'center' }}>App Version : {ConstantValues.device.appVersion}</Text>
+        <Overlay
+          isVisible={this.state.isVisible}
+          width="auto"
+          height="auto"
+          // windowBackgroundColor='rgba(255, 255, 255, .5)'
+          // overlayBackgroundColor='#ffffff'
+          onBackdropPress={() => this.setState({ isVisible: false })}
+        >
+          <ZoopLoader isVisible={true} />
 
 
-
+        </Overlay>
       </View>
     );
   }
@@ -297,9 +359,11 @@ export default class Register extends Component {
 const styles = StyleSheet.create({
   slide: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#ffffff'
+    height: ConstantValues.deviceHeight,
+    alignItems: 'stretch',
+    // alignContent: 'stretch',
+    // justifyContent: 'flex-start',
+    backgroundColor: '#fff'
   },
   radioButton: {
 
@@ -336,4 +400,15 @@ const styles = StyleSheet.create({
   },
 })
 
+const mapStateToProp = state => {
+  return {
+    response: state.response
+  }
+}
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUserInfo: () => dispatch(menuAction.getUserInfo())
+  }
+}
+export default connect(mapStateToProp, mapDispatchToProps)(Register);

@@ -39,7 +39,7 @@ export const CouponPanel = (props) => {
                             />
                             <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: 180 }}>
                                 <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Use Wallet Balance</Text>
-                                <Text style={{ fontSize: 10, fontFamily: 'Poppins-Light', color: '#000000', alignSelf: 'center' }}>(Rs.50 per order can be used)</Text>
+                                <Text style={{ fontSize: 10, fontFamily: 'Poppins-Light', color: '#000000', alignSelf: 'center' }}>(Rs.50/- per order can be used)</Text>
                             </View>
                         </View>
                         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>

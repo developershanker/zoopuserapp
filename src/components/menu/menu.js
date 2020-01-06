@@ -572,19 +572,28 @@ export class Menu extends Component {
         {/* Floating FAB ends */}
         {/*  Footer  */}
         <Fade visible={visible}>
-          <TouchableOpacity onPress={() => this.checkCart()}
-            disabled={false}>
-            <View style={[styles.footer]}>
+          <View style={{ width: ConstantValues.deviceWidth, justifyContent: 'center', height: 65, alignContent: 'center', alignItems: 'center' }}>
+            <TouchableOpacity onPress={() => this.checkCart()}
+              disabled={false}>
+              <View style={[styles.reduxFooter]}>
 
-              <View style={styles.itemCountShow}>
-                <Text style={{ marginLeft: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>{this.state.totalCartCount} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.bigrupee} {this.state.totalPrice}</Text>
+                <View style={styles.itemCountShow}>
+                  {/* <Text style={{ marginLeft: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>{this.state.totalCartCount} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.bigrupee} {this.state.totalPrice}</Text> */}
+                  <Text style={{ marginLeft: 5, fontSize: 14, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>{this.state.totalCartCount} {this.state.inCart.length == 1 ? 'Item' : 'Items'}</Text>
+                  <View style={{ flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
+                    <Text style={{ marginLeft: 5, fontSize: 15, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>{ConstantValues.bigrupee} {this.state.totalPrice}</Text>
+                    <Text style={{ marginLeft: 5, fontSize: 12, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>plus taxes</Text>
+                  </View>
+                </View>
+                <View style={styles.viewcart}>
+                  <Text style={{ marginRight: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>View Cart</Text>
+                  <Icon style={{ alignSelf: 'center' }} name={'caret-right'} color={'#ffffff'} size={20} />
+                  {/* <Text style={{ marginRight: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>VIEW CART</Text>
+                <Icon name={'shopping-bag'} color={'#ffffff'} size={20} /> */}
+                </View>
               </View>
-              <View style={styles.viewcart}>
-                <Text style={{ marginRight: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>VIEW CART</Text>
-                <Icon name={'shopping-bag'} color={'#ffffff'} size={20} />
-              </View>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
         </Fade>
         {/* <Overlay
           isVisible={this.state.isVisible}
