@@ -9,12 +9,12 @@ import ConstantValues from '../constantValues.js';
 import BillCardDetail from '../cart/billDetailCard.js';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import { Fade } from '../assests/fade.js';
-import walletApi from '../customer/walletApi.js'
+import walletApi from './walletApi.js'
 import { Overlay } from 'react-native-elements';
 import loginApi from '../login/loginApi.js';
 import moment from 'moment';
 
-export default class myWallet extends Component {
+export default class MyWallet extends Component {
   componentDidMount() {
     SplashScreen.hide();
     // this.checkRegister()
@@ -55,6 +55,7 @@ export default class myWallet extends Component {
                 {
                   text: 'OK', onPress: () => {
                     this.setState({ isVisible: false })
+                    ConstantValues.navigationChannel = 'Search'
                     this.props.navigation.navigate('Welcome')
                   },
                   style: 'cancel'

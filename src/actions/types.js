@@ -5,3 +5,5 @@ export const LOAD_ITEMS_START = 'LOAD_ITEMS_START';
 export const LOAD_ITEMS_SUCCESS = 'LOAD_ITEMS_SUCCESS';
 export const LOAD_ITEMS_FAILURE = 'LOAD_ITEMS_FAILURE';
 export const VEG_MENU = 'VEG_MENU';
+export const CHECK_DISCOUNT = 'CHECK_DISCOUNT';
+export const GET_USER = 'GET_USER';

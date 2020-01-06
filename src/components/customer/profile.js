@@ -134,7 +134,7 @@ export default class Profile extends Component {
   async onRegister() {
     try {
       let response = await loginApi.getUserRegister();
-      console.log('data received in register.js : ' + JSON.stringify(response))
+      console.log('data received in profile.js : ' + JSON.stringify(response))
       ConstantValues.loginCount = response.data.loginCount
       this.state.loginCount = response.data.loginCount
 
@@ -151,8 +151,7 @@ export default class Profile extends Component {
       this.setState({
         altmobile: ConstantValues.customeralternateMobile
       })
-
-
+      ConstantValues.isAgent = response.data.isAgent
     } catch (error) {
       console.log('Data received in register.js catch: ' + error)
     }

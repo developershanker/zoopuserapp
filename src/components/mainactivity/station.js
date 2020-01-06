@@ -217,8 +217,8 @@ export default class station extends Component {
       console.log('ConstantValues.outletId : ' + ConstantValues.outletId),
       console.log('ConstantValues.deliveryCharge : ' + ConstantValues.deliveryCharge + '\n' + 'ConstantValues.deliveryChargegst : ' + ConstantValues.deliveryChargegst + '\n' + 'ConstantValues.deliveryChargegstRate : ' + ConstantValues.deliveryChargegstRate)
     if (ConstantValues.OutletMenuInfo && ConstantValues.OutletMenuInfo.length) {
-      this.props.navigation.navigate('Menu')
-      // this.props.navigation.navigate('ReduxMenu')
+      // this.props.navigation.navigate('Menu')
+      this.props.navigation.navigate('ReduxMenu')
     } else {
       return (
         Alert.alert(
@@ -364,8 +364,8 @@ export default class station extends Component {
                     <Text style={styles.stext}> S.T.A : {moment(item.arrivalTime, 'HHmmss').format('hh:mm A')} | </Text>
                     <Text style={styles.stext}> E.T.A : {moment(item.expectedTime, 'HHmmss').format('hh:mm A')}</Text> */}
                     <Text style={styles.stext}>Halt : {item.halt === null ? moment(item.haltTime, 'HH:mm:ss').format('mm') : moment(item.halt, 'mm:ss').format('mm')} mins | </Text>
-                    <Text style={styles.stext}> S.T.A : {item.schArrivalTime === null || item.arrival === '--' ? moment(item.expectedTime, 'HHmmss').format('hh:mm A') : item.schArrivalTime}  | </Text>
-                    <Text style={styles.stext}> E.T.A : {item.arrival === null || item.arrival === '--' ? moment(item.arrivalTime, 'HHmmss').format('hh:mm A') : item.arrival}</Text>
+                    <Text style={styles.stext}> S.T.A : {item.schArrivalTime === null || item.arrival === '--' ? moment(item.expectedTime, 'HHmmss').format('hh:mm A') : moment(item.schArrivalTime, 'HHmmss').format('hh:mm A')}  | </Text>
+                    <Text style={styles.stext}> E.T.A : {item.arrival === null || item.arrival === '--' ? moment(item.arrivalTime, 'HHmmss').format('hh:mm A') : moment(item.arrival,'HHmmss').format('hh:mm A')}</Text>
                   </View>
 
                   {/* OutletView starts */}
@@ -413,7 +413,7 @@ export default class station extends Component {
                               <Image source={{ uri: outlets.outletImage }} style={styles.outletimage} />
                               <View style={styles.detail}>
                                 <View style={{ flexDirection: 'column' }}>
-                                  <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+                                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',}}>
                                     <Text style={styles.outletname}>
                                       {outlets.outletName}
                                     </Text>
@@ -434,7 +434,7 @@ export default class station extends Component {
                                     )
                                   }
 
-                                  {/* <View style={{flexDirection:'row'}}> */}
+                                  {/* <View style={{width:'60%',}}> */}
                                   <Text style={styles.cuisine}>
                                     {temp.slice(0, -2)}
                                   </Text>

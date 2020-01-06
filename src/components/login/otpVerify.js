@@ -65,6 +65,7 @@ export default class otpVerify extends Component {
           ConstantValues.customer.token = response.data.token,
           // console.log('Info: ' + JSON.stringify(ConstantValues.customer)),
           console.log('Stored Mobile No. is:' + ConstantValues.customerPhoneNo),
+          console.log('Stored customerId  is:' + ConstantValues.customerId),
 
           this.storeData(),
           // this.props.navigation.navigate('Register', { mobile: mobile }),
@@ -186,7 +187,7 @@ export default class otpVerify extends Component {
               />
               <CustomButtonShort
                 style={[styles.button, { backgroundColor: this.state.backgroundColor }]}
-                title="Register"
+                title="Submit"
                 activeOpacity={.5}
                 disabled={this.state.ButtonStateHolder}
                 color="#1abc9c"

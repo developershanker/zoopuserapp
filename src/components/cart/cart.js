@@ -40,6 +40,33 @@ export default class Cart extends Component {
       date: year + '-' + month + '-' + date,
       time: hours + ':' + min + ':' + sec
     })
+
+    // countdown for session cart expire
+    // 5 minutes from now
+    var time_in_minutes = ConstantValues.expireCartMin;
+    var current_time = Date.parse(new Date());
+    var deadline = new Date(current_time + time_in_minutes * 60 * 1000);
+
+    function time_remaining(endtime) {
+      var t = Date.parse(endtime) - Date.parse(new Date());
+      var seconds = Math.floor((t / 1000) % 60);
+      var minutes = Math.floor((t / 1000 / 60) % 60);
+      var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+      var days = Math.floor(t / (1000 * 60 * 60 * 24));
+      return { 'total': t, 'days': days, 'hours': hours, 'minutes': minutes, 'seconds': seconds };
+    }
+    function run_clock(id, endtime) {
+      // var clock = document.getElementById(id);
+      function update_clock() {
+        var t = time_remaining(endtime);
+        that.setState({ timer: t.minutes +':'+ t.seconds })
+        if (t.total <= 0) { clearInterval(timeinterval); }
+      }
+      update_clock(); // run function once at first to avoid delay
+      var timeinterval = setInterval(update_clock, 1000);
+    }
+    run_clock('clockdiv', deadline);
+
   }
 
 
@@ -62,9 +89,46 @@ export default class Cart extends Component {
       CouponDetail: [],
       arrayCoupon: [],
       itemFromCart: [],
-      OutletMenuInfo: []
+      OutletMenuInfo: [],
+      submitButtonId: 0,
+      submitButtonColor: '',
+      submitButtonText: 'Checkout Cart',
+      submitButtonDisable: true,
+      timer: ''
     };
+    timeLeft = 300;
+    // timer = moment(timeLeft).format('hh:mm:ss')
+    timerId = setInterval(() => {
+      this.checkOutCountdown()
+    }, 1000);
   }
+
+
+  checkOutCountdown() {
+    if (this.state.timer === '0:0' || this.state.timer === '-1:-1') {
+      // clearTimeout(timerId);
+      this.deactivateButton()
+    } else {
+      this.setState({
+        submitButtonId: 0,
+        submitButtonText: "Checkout Cart within  " + this.state.timer,
+        submitButtonDisable: false,
+        submitButtonColor: '#60b246',
+      })
+      // timeLeft--;
+    }
+  }
+
+  deactivateButton = () => {
+    ConstantValues.expireCartMin = 0
+    this.setState({
+      submitButtonText: "Session Expired. Try Again !!",
+      // submitButtonDisable: true,
+      submitButtonId: 1,
+      submitButtonColor: '#9b9b9b',
+    })
+  }
+
   getCartItems = (inCart) => {
     this.setState({
       revisedInCart: inCart,
@@ -75,79 +139,6 @@ export default class Cart extends Component {
     ConstantValues.appliedCode = 'Apply Coupon Code'
     console.log('revisedInCart is' + JSON.stringify(this.state.revisedInCart))
   }
-  // addItemToCart = (item, index) => {
-  //   let itemId = item.itemId
-  //   let inCart = ConstantValues.inCart
-
-  //   //item.itemCount = item.itemCount + 1
-  //   this.setState({
-  //     count: item.itemCount
-  //   }
-  //   )
-  //   // this.state.totalCartCount += item.itemCount 
-  //   this.state.totalPrice += item.basePrice  //price adding calculation
-  //   ConstantValues.totalBasePrice = this.state.totalPrice
-  //   let idx = inCart.findIndex(i => { return i.itemId == item.itemId })
-  //   console.log('idx items are  : ' + idx)
-  //   if (idx > -1) {
-  //     inCart[idx].itemCount = inCart[idx].itemCount + 1;
-  //   } else {
-  //     inCart.push(Object.assign({}, item))
-  //   }
-  //   console.log('itemFromCart items are [when added] : ' + JSON.stringify(inCart))
-  //   // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
-  //   ConstantValues.inCart = inCart
-
-  //   // this.cartCalculate(item)
-  //   cartApi.billDetail()
-
-  //   //console.log('ConstantValues.itemFromCart items are [when added] : ' + JSON.stringify(ConstantValues.itemFromCart))
-  // }
-
-
-
-
-  // removeItemFromCart = (item, index) => {
-  //   let itemId = item.itemId
-  //   let inCart = ConstantValues.inCart
-
-  //   //item.itemCount = item.itemCount - 1
-  //   this.setState({
-  //     count: item.itemCount
-  //   }
-  //   )
-
-  //   this.state.totalPrice -= item.basePrice //price calculation
-  //   ConstantValues.totalBasePrice = this.state.totalPrice
-  //   let idx = inCart.findIndex(i => { return i.itemId == item.itemId })
-  //   console.log('idx items are  : ' + idx)
-  //   if (idx > -1) {
-  //     if (inCart[idx].itemCount == 1) {
-  //       inCart.splice(idx)
-  //     } else {
-  //       inCart[idx].itemCount = inCart[idx].itemCount - 1;
-  //       this.state.totalCartCount -= item.itemCount
-  //     }
-  //   }
-  //   console.log('incart items are [when removed] : ' + JSON.stringify(inCart))
-  //   // console.log('incart item.itemCount when ++++ : ' + item.itemCount)
-  //   ConstantValues.InCart = inCart
-  //   // this.cartCalculate(item)
-  //   this.setState({
-  //     revisedInCart : inCart
-  //   })
-  //   cartApi.billDetail()
-  //   //console.log('ConstantValues.incart items are [when added] : ' + JSON.stringify(ConstantValues.inCart))
-  // }
-
-  // cartCalculate = (item) => {
-  //   let totalCartCount = 0
-  //   inCart.forEach(i => {
-  //     totalCartCount = totalCartCount + i.itemCount
-  //   })
-  //   this.state.totalCartCount = totalCartCount
-  //   console.log('totalCartCount is :  ' + totalCartCount)
-  // }
 
 
   changeCode = (couponCode) => {
@@ -443,48 +434,66 @@ export default class Cart extends Component {
   }
 
   confirmCart = () => {
-    if (ConstantValues.totalBasePrice >= ConstantValues.minimumOrderValue) {
+    if (this.state.submitButtonId === 0) {
+      if (ConstantValues.totalBasePrice >= ConstantValues.minimumOrderValue) {
+        return (
+          Alert.alert(
+            'Confirm!!',
+            'Are you sure you want to place this order? No further changes can be made once order is placed.',
+            [
+              {
+                text: 'NO',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {
+                text: 'YES', onPress: () => {
+                  this.savePassengerDetail(),
+                    this.items(),
+                    this.submitCart()
+                }
+              },
+            ],
+            { cancelable: false },
+          )
+        )
+      }
+      else {
+        return (
+          // ToastAndroid.show(response.error, ToastAndroid.LONG),
+
+          Alert.alert(
+            'Add more items!!',
+            'Order should be atleast Rs.' + ConstantValues.minimumOrderValue,
+            [
+              {
+                text: 'OK',
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
+        ),
+          console.log('minimumorder issue')
+      }
+    } else {
       return (
         Alert.alert(
-          'Confirm!!',
-          'Are you sure you want to place this order? No further changes can be made once order is placed.',
+          'Alert!!',
+          'Your cart session is expired. Please try again!!',
           [
             {
-              text: 'NO',
-              onPress: () => console.log('Cancel Pressed'),
-              style: 'cancel',
-            },
-            {
-              text: 'YES', onPress: () => {
-                this.savePassengerDetail(),
-                  this.items(),
-                  this.submitCart()
-              }
+              text: 'OK',
+              onPress: () => this.props.navigation.navigate('Search'),
+              style: 'cancel'
             },
           ],
           { cancelable: false },
         )
       )
     }
-    else {
-      return (
-        // ToastAndroid.show(response.error, ToastAndroid.LONG),
-
-        Alert.alert(
-          'Add more items!!',
-          'Order should be atleast Rs.' + ConstantValues.minimumOrderValue,
-          [
-            {
-              text: 'OK',
-              style: 'cancel'
-            },
-          ],
-          { cancelable: false },
-        )
-      ),
-        console.log('minimumorder issue')
-    }
   }
+
   async submitCart() {
     try {
       let response = await cartApi.inCart();
@@ -632,11 +641,11 @@ export default class Cart extends Component {
                   </View>
                 </Fade>
                 <FlatList
-                  style={{  width: ConstantValues.deviceWidth - 20,paddingVertical:5 }}
+                  style={{ width: ConstantValues.deviceWidth - 20, paddingVertical: 5 }}
                   data={this.state.revisedInCart}
                   extraData={this.state}
                   renderItem={({ item, index }) =>
-                    <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5,}}>
+                    <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5, }}>
                       <View style={{ width: 30, alignItems: 'center' }}>
                         <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryId === 1 ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
                       </View>
@@ -882,10 +891,13 @@ export default class Cart extends Component {
         </KeyboardAvoidingView>
 
         <CustomButton
-          disabled={this.state.revisedInCart.length == 0 ? true : false}
-          style={{ backgroundColor: this.state.revisedInCart.length == 0 ? '#9b9b9b' : '#60b246', alignSelf: 'center', marginBottom: 20, }}
+          // disabled={this.state.revisedInCart.length == 0 ? true : false}
+          // style={{ backgroundColor: this.state.revisedInCart.length == 0 ? '#9b9b9b' : '#60b246', alignSelf: 'center', marginBottom: 20, }}
+          disabled={this.state.submitButtonDisable}
+          style={{ backgroundColor: this.state.submitButtonColor, alignSelf: 'center', marginBottom: 20, }}
           onPress={() => this.confirmCart()}
-          title='Add Passenger Details'
+          title={this.state.submitButtonText}
+        // title='Add Passenger Details'
         />
       </SafeAreaView>
     );

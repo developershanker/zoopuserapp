@@ -459,11 +459,12 @@ export default class passengerDetail extends Component {
         <ScrollView>
           <View>
             {/* header view */}
-            <View style={{ flexDirection: 'row', paddingBottom: 10 }}>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Menu')}>
+            <View style={{ flexDirection: 'row', paddingBottom: 10 ,paddingTop:10}}>
+              {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('Menu')}> */}
+              {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('ReduxMenu')}>
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
-              </TouchableOpacity>
-              <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
+              </TouchableOpacity> */}
+              <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 10, alignItems: 'center' }}>
                 <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 20, color: '#000000' }}> Add Passenger Detail </Text>
               </View>
             </View>
@@ -508,9 +509,9 @@ export default class passengerDetail extends Component {
                   style={styles.input}
                   placeholder='Passenger name *'
                   editable={true}
-                  keyboardType='default'
+                  // keyboardType='default'
                   value={this.state.name}
-                  autoCapitalize='characters'
+                  autoCapitalize='words'
                   onChangeText={name => this.setState({ name })}
                 />
               </View>

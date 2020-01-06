@@ -173,16 +173,16 @@ export default class Invite extends Component {
         <ScrollView>
           <View style={styles.slide}>
             {/* header view */}
-            <View style={{ flexDirection: 'row' }}>
+             <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-                {/* <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} /> */}
+                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
                 <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 25, color: '#000000' }}> Refer & Earn </Text>
               </View>
             </View>
             {/* header view ends */}
-            <View style={{ paddingVertical: 20, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ paddingVertical: 20, justifyContent: 'center', alignItems: 'center' , alignContent:'center' }}>
 
               <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Regular', fontSize: 15, color: '#000000', paddingVertical: 10 }}>
                 Refer friends and earn.
@@ -245,6 +245,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     justifyContent: 'center',
     alignItems: 'center',
+    alignContent:'center',
     backgroundColor: '#ffffff',
   },
   cardS: {

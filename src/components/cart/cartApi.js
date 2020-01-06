@@ -1,5 +1,6 @@
 import ConstantValues from '../constantValues.js';
 import qs from 'qs';
+import { ToastAndroid } from 'react-native';
 
 const baseURL = ConstantValues.apiUrl
 
@@ -39,7 +40,7 @@ export default class cartApi {
 
             const response = await fetch(uri, option)
             const json = await response.json();
-            console.log(json)
+            // console.log(json)
             return Promise.resolve(json)
         }
         catch (error) {
@@ -98,12 +99,21 @@ export default class cartApi {
             return Promise.reject(error)
         }
     }
+    static calculateCoupon = () => {
+        if (ConstantValues.couponType == 'RATE') {
+            ConstantValues.rateDiscount = ((ConstantValues.totalBasePrice / 100) * ConstantValues.couponValue).toFixed(2)
+            ConstantValues.discount = ConstantValues.rateDiscount
+            console.log(' ConstantValues.rateDiscount : ' + ConstantValues.rateDiscount + 'ConstantValues.discount ::' + ConstantValues.discount)
+        } else {
+            console.log(' I am in calculateCoupon else part::: ConstantValues.rateDiscount : ' + ConstantValues.rateDiscount)
+        }
+    }
 
     static billDetail = () => {
 
         ConstantValues.gst = (ConstantValues.totalBasePrice / 100) * 5,
             ConstantValues.deliveryCharge = Math.round(ConstantValues.deliveryCharge)
-        console.log('deliveryCharge : ' + ConstantValues.deliveryCharge)
+        // console.log('deliveryCharge : ' + ConstantValues.deliveryCharge)
         ConstantValues.totalPayableAmount = ConstantValues.totalBasePrice + ConstantValues.deliveryCharge - ConstantValues.discount + ConstantValues.gst,
             ConstantValues.billDetail = {
                 'totalAmount': ConstantValues.totalBasePrice,
@@ -141,6 +151,102 @@ export default class cartApi {
             //   })
             ConstantValues.appliedCode = couponCode
             console.log('couponCode is : ' + couponCode + '\n' + 'ConstantValues.appliedCode : ' + ConstantValues.appliedCode)
+        }
+    }
+
+    static checkDiscount = (totalBasePrice, totalZoopPrice) => {
+        
+        if (ConstantValues.walletBalanceUsed !== 0) {
+            console.log('////////-------W.A.L.L.E.T------//////')
+            ConstantValues.totalBasePrice = totalBasePrice
+            ConstantValues.totalZoopPrice = totalZoopPrice
+            cartApi.billDetail()
+            if (ConstantValues.totalBasePrice >= 150) {
+                console.log('ConstantValues.totalBasePrice [onstantValues.totalBasePrice >= 150:::::]' + ConstantValues.totalBasePrice)
+                ConstantValues.totalBasePrice = totalBasePrice
+                ConstantValues.totalZoopPrice = totalZoopPrice
+                cartApi.billDetail()
+            } else {
+                //total value
+                // console.log('incartlength::::[when added]:' + JSON.stringify(inCart))
+                ConstantValues.totalBasePrice = totalBasePrice
+                ConstantValues.totalZoopPrice = totalZoopPrice
+                //remove discount
+                ConstantValues.walletBalanceUsed = 0
+                ConstantValues.couponCode = ''
+                ConstantValues.couponValue = 0
+                ConstantValues.couponType = ''
+                ConstantValues.couponId = 0
+                ConstantValues.discount = 0
+                ConstantValues.rateDiscount = 0
+                ConstantValues.minimumPriceRequired = 0
+                ConstantValues.isCouponApplied = false
+                ConstantValues.appliedCode = 'Apply Coupon Code'
+                cartApi.billDetail()
+                console.log('offer removed')
+                ToastAndroid.show('!!!Offer Removed!!!', ToastAndroid.LONG)
+            }
+        } else if (ConstantValues.couponType == 'RATE') {
+            console.log('/////////-----R.A.T.E------/////')
+            if (ConstantValues.totalBasePrice >= ConstantValues.minimumPriceRequired) {
+                // console.log('incartlength::::[when added]:' + JSON.stringify(inCart))
+                ConstantValues.totalBasePrice = totalBasePrice
+                ConstantValues.totalZoopPrice = totalZoopPrice
+                cartApi.calculateCoupon()
+                cartApi.billDetail()
+            } else {
+                //total value
+                // console.log('incartlength::::[when added]:' + JSON.stringify(inCart))
+                ConstantValues.totalBasePrice = totalBasePrice
+                ConstantValues.totalZoopPrice = totalZoopPrice
+                //remove discount
+                ConstantValues.walletBalanceUsed = 0
+                ConstantValues.couponCode = ''
+                ConstantValues.couponValue = 0
+                ConstantValues.couponType = ''
+                ConstantValues.couponId = 0
+                ConstantValues.discount = 0
+                ConstantValues.rateDiscount = 0
+                ConstantValues.minimumPriceRequired = 0
+                ConstantValues.isCouponApplied = false
+                ConstantValues.appliedCode = 'Apply Coupon Code'
+                cartApi.billDetail()
+                console.log('offer removed')
+                console.log('ConstantValues.minimumPriceRequired :::' + ConstantValues.minimumPriceRequired)
+                ToastAndroid.show('!!!Offer Removed!!!', ToastAndroid.LONG)
+            }
+        } else if (ConstantValues.couponType == 'FLAT') {
+            console.log('/////////-----F.L.A.T------/////')
+            if (ConstantValues.totalBasePrice >= ConstantValues.minimumPriceRequired) {
+                // console.log('incartlength::::[when added]:' + JSON.stringify(inCart))
+                ConstantValues.totalBasePrice = totalBasePrice
+                ConstantValues.totalZoopPrice = totalZoopPrice
+                cartApi.billDetail()
+            } else {
+                //total value
+                // console.log('incartlength::::[when added]:' + JSON.stringify(inCart))
+                ConstantValues.totalBasePrice = totalBasePrice
+                ConstantValues.totalZoopPrice = totalZoopPrice
+                //remove discount
+                ConstantValues.walletBalanceUsed = 0
+                ConstantValues.couponCode = ''
+                ConstantValues.couponValue = 0
+                ConstantValues.couponType = ''
+                ConstantValues.couponId = 0
+                ConstantValues.discount = 0
+                ConstantValues.rateDiscount = 0
+                ConstantValues.minimumPriceRequired = 0
+                ConstantValues.isCouponApplied = false
+                ConstantValues.appliedCode = 'Apply Coupon Code'
+                cartApi.billDetail()
+                console.log('offer removed')
+                console.log('ConstantValues.minimumPriceRequired :::' + ConstantValues.minimumPriceRequired)
+                ToastAndroid.show('!!!Offer Removed!!!', ToastAndroid.LONG)
+            }
+        } else {
+            ConstantValues.totalBasePrice = totalBasePrice
+            ConstantValues.totalZoopPrice = totalZoopPrice
+            cartApi.billDetail()
         }
     }
 

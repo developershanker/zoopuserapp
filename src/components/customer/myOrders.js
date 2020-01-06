@@ -14,7 +14,7 @@ import OrderDetailConstants from '../orderDetailConstants.js';
 
 
 
-export default class myOrders extends Component {
+export default class MyOrders extends Component {
   componentDidMount() {
     SplashScreen.hide();
     // this.checkRegister()
@@ -57,6 +57,7 @@ export default class myOrders extends Component {
               {
                 text: 'OK', onPress: () => {
                   this.setState({ isVisible: false })
+                  ConstantValues.navigationChannel = 'Search'
                   this.props.navigation.navigate('Welcome')
                 },
                 style: 'cancel'
