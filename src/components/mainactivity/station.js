@@ -24,6 +24,8 @@ export default class station extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.showStation(ConstantValues.searchString);
+    ConstantValues.inCart = []
+    ConstantValues.finalCart = []
     var that = this;
 
     var date = new Date().getDate(); //Current Date
