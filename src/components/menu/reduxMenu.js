@@ -86,9 +86,9 @@ export class ReduxMenu extends Component {
         })
     }
 
-    componentWillUnmount() {
-        this.backHandler.remove()
-    }
+    // componentWillUnmount() {
+    //     this.backHandler.remove()
+    // }
     constructor(props) {
         super(props);
         this.state = {
