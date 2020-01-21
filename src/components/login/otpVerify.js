@@ -8,6 +8,7 @@ import CustomTouchableOpacity from '../assests/customTouchableOpacity.js';
 import ConstantValues from '../constantValues.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import loginApi from './loginApi.js';
+import Colors from '../colors';
 
 export default class otpVerify extends Component {
   componentDidMount() {
@@ -47,7 +48,7 @@ export default class otpVerify extends Component {
     this.setState({
       // On State false it will enable the button.
       ButtonStateHolder: false,
-      backgroundColor: '#FF5819'
+      backgroundColor: Colors.newOrange
     })
   }
   ///this fuction will send OTP to Zoop Server for matching

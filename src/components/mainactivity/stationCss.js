@@ -1,6 +1,7 @@
 import {
     StyleSheet,
     Dimensions} from 'react-native';
+import Colors from '../colors';
 
 const styles = StyleSheet.create({
     slide: {
@@ -12,7 +13,7 @@ const styles = StyleSheet.create({
     topContainer: {
       flexDirection: 'row',
       justifyContent: 'flex-start',
-      backgroundColor: '#ffffff',
+      // backgroundColor: '#ffffff',
     },
     stationContainer: {
       margin: 5,
@@ -44,7 +45,8 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-around',
-      marginHorizontal: 5
+      marginHorizontal: 5,
+      elevation:10
     },
     card: {
       backgroundColor: '#ffffff',//can change as we move to various pages
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
       height: 70,
       borderRadius: 100 / 2,
       marginLeft: 20,
-      backgroundColor: '#ff5819'
+      backgroundColor: Colors.newOrange
     },
     ratingView: {
       backgroundColor: '#a5ce39',

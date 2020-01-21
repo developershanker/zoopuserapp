@@ -8,6 +8,7 @@ import { FadeInView } from '../assests/fadeInView.js';
 import Device from 'react-native-device-info';
 import ConstantValues from '../constantValues.js'
 import loginApi from './loginApi.js';
+import Colors from '../colors.js';
 
 
 
@@ -59,14 +60,14 @@ export default class Welcome extends Component {
           )
         )
       } else {
-        this.setState({buttonColor:'#FF5819',buttonText:'Submit',clicked:false})
+        this.setState({buttonColor:Colors.newOrange,buttonText:'Submit',clicked:false})
         return (
           ToastAndroid.show(response.error, ToastAndroid.LONG),
           console.log(response.error)
         )
       }
     } catch (error) {
-      this.setState({buttonColor:'#FF5819',buttonText:'Submit',clicked:false})
+      this.setState({buttonColor:Colors.newOrange,buttonText:'Submit',clicked:false})
       console.log('Data received in welcome.js catch: ' + error)
     }
   }
@@ -106,7 +107,7 @@ export default class Welcome extends Component {
               placeholder="Enter Mobile No."
               keyboardType='number-pad'
               maxLength={10}
-              onChangeText={mobile => this.setState({ mobile,buttonColor:'#FF5819' })}
+              onChangeText={mobile => this.setState({ mobile,buttonColor:Colors.newOrange })}
               value={this.state.mobile}
             />
           </View>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet, Clipboard, Platform, TouchableNativeFeedback, Linking, Alert, KeyboardAvoidingView, PixelRatio, Button, Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList } from 'react-native';
+import { View, Dimensions, StyleSheet, Clipboard, Platform, TouchableNativeFeedback, Linking, Alert, KeyboardAvoidingView, PixelRatio, Button, Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList , BackHandler } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { RadioButton, Text } from 'react-native-paper';
 import Modal from "react-native-modal";
@@ -20,7 +20,7 @@ import styles from '../assests/css';
 import { Header } from 'react-native-elements';
 
 
-const { width } = Dimensions.get('window');
+const { width , height} = Dimensions.get('window');
 export const deviceWidth = Dimensions.get('window').width
 export const deviceHeight = Dimensions.get('window').height
 export const calcHeight = x => PixelRatio.roundToNearestPixel((deviceHeight * x) / 100)
@@ -30,18 +30,22 @@ export default class Search extends Component {
   componentDidMount() {
     SplashScreen.hide();
     // this.getRecentItem()
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     this.checkCopiedtext()
     this.showTrain()
     this.onRegister()
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
   constructor(props) {
     super(props);
+    this.springValue = new Animated.Value(100);
     this.state = {
       text: '',
       value: 'Enter PNR',
       placeholder: '',
       email: '',
       query: '',
+      backClickCount: 0,
       isVisible: false,
       visibleModal: null,
       visibleModalDrawer: null,
@@ -51,6 +55,51 @@ export default class Search extends Component {
 
     };
   }
+  //double tap to exit
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+}
+
+componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+}
+
+_spring() {
+    this.setState({backClickCount: 1}, () => {
+        Animated.sequence([
+            Animated.spring(
+                this.springValue,
+                {
+                    toValue: -.15 * height,
+                    friction: 5,
+                    duration: 300,
+                    useNativeDriver: true,
+                }
+            ),
+            Animated.timing(
+                this.springValue,
+                {
+                    toValue: 100,
+                    duration: 300,
+                    useNativeDriver: true,
+                }
+            ),
+
+        ]).start(() => {
+            this.setState({backClickCount: 0});
+        });
+    });
+
+}
+
+
+handleBackButton = () => {
+  console.log('I am back on Search')
+    this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
+
+    return true;
+};
+
   scrollX = new Animated.Value(0)
   async onRegister() {
     try {
@@ -475,7 +524,7 @@ export default class Search extends Component {
             <View style={styles.main}>
               {this.trainList(this.state.value)}
             </View>
-            <View style={{ justifyContent: 'center', alignContent: 'center', width: deviceWidth, height: '10%' }}>
+            <View style={{ justifyContent: 'center', alignContent: 'center', width: deviceWidth, height: '8%' }}>
               <CustomButton
                 style={{ alignSelf: 'center' }}
                 onPress={() => {
@@ -847,6 +896,17 @@ export default class Search extends Component {
           </Modal>
         </KeyboardAvoidingView>
         {/* <DeliveryMark/> */}
+        <Animated.View style={[styles.animatedView, {transform: [{translateY: this.springValue}]}]}>
+                    <Text style={styles.exitTitleText}>Press back again to exit the app</Text>
+
+                    {/* <TouchableOpacity
+                        activeOpacity={0.9}
+                        onPress={() => BackHandler.exitApp()}
+                    >
+                        <Text style={styles.exitText}>Exit</Text>
+                    </TouchableOpacity> */}
+
+                </Animated.View>
       </SafeAreaView>
     );
   }

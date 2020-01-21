@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, Dimensions, KeyboardAvoidingView, Tex
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import CustomMenuFAB from '../assests/customMenuFAB.js';
 import ToggleSwitch from 'toggle-switch-react-native'
@@ -27,6 +28,7 @@ import { CouponPage } from '../cart/couponPage.js';
 import walletApi from '../customer/walletApi.js';
 import moment from 'moment';
 import CountDown from 'react-native-countdown-component';
+import Colors from '../colors.js';
 
 export class ReduxMenu extends Component {
     componentDidMount() {
@@ -86,9 +88,9 @@ export class ReduxMenu extends Component {
         })
     }
 
-    // componentWillUnmount() {
-    //     this.backHandler.remove()
-    // }
+    componentWillUnmount() {
+        this.backHandler.remove()
+    }
     constructor(props) {
         super(props);
         this.state = {
@@ -664,22 +666,28 @@ export class ReduxMenu extends Component {
         return (
             <SafeAreaView style={styles.slide}>
                 {/* <ZoopLoader show={this.state.loading}/> */}
-                <View style={{ width: Dimensions.get('window').width, alignItems: 'center', justifyContent: 'center', backgroundColor: '#ffffff' }}>
-                    <View style={{ flexDirection: 'row', width: Dimensions.get('screen').width }}>
-                        <View style={{ justifyContent: 'flex-start', alignContent: 'flex-start', padding: 20 }}>
-                            <TouchableOpacity onPress={() => this.goingBack()}>
-                                <Icon name={'chevron-left'} size={20} color={'#000000'} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: Dimensions.get('screen').width - 80, paddingTop: 10 }}>
-                            <Text style={styles.outletName}> {ConstantValues.outletName} </Text>
-                            <Text style={{ fontFamily: 'Poppins-Medium', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
-                        </View>
+                {/* <Image source={{uri:ConstantValues.outletImage}} style={{width:'50%',height:'50%'}}/> */}
+                <ImageBackground source={{ uri: ConstantValues.outletImage }} style={{ width: '100%',shadowColor:Colors.black,shadowOpacity:1,shadowRadius:100/10,shadowOffset:{width:'100%',height:50}}}>
+                    <View style={{alignItems:'flex-start', margin: 10}}>
+                        <TouchableOpacity onPress={() => this.goingBack()}>
+                            <IconA name={'arrowleft'} size={25} color={Colors.white} />
+                        </TouchableOpacity>
                     </View>
+                    <View style={styles.menuHeader}>
+                        <View style={{ flexDirection: 'row', width: Dimensions.get('screen').width }}>
+                            {/* <View style={{ justifyContent: 'flex-start', alignContent: 'flex-start', padding: 20 }}>
+                                <TouchableOpacity onPress={() => this.goingBack()}>
+                                    <Icon name={'chevron-left'} size={20} color={'#000000'} />
+                                </TouchableOpacity>
+                            </View> */}
+                            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%',  }}>
+                                <Text style={styles.outletName}> {ConstantValues.outletName} </Text>
+                                <Text style={{ fontFamily: 'Poppins-Medium', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
+                            </View>
+                        </View>
 
 
-                    <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
-                        {/* <Text style={{ fontFamily: 'Poppins-Regular' }}>Veg. Only</Text> */}
+                        {/* <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
                         <ToggleSwitch
                             isOn={this.state.vegOnly}
                             onColor="green"
@@ -703,13 +711,38 @@ export class ReduxMenu extends Component {
                                 }
                             }
                         />
+                    </View> */}
                     </View>
-                </View>
-
+                </ImageBackground>
                 <ScrollView>
                     <View>
 
                         <View style={styles.topContainer}>
+                            <View style={{ flexDirection: 'row', paddingVertical: 5 }}>
+                                <ToggleSwitch
+                                    isOn={this.state.vegOnly}
+                                    onColor="green"
+                                    offColor="grey"
+                                    label="Veg. Only"
+                                    labelStyle={{ fontFamily: 'Poppins-Regular' }}
+                                    size="medium"
+                                    onToggle={
+                                        vegOnly => {
+                                            this.setState({ vegOnly })
+                                            if (vegOnly === true) {
+                                                this.props.vegMenu()
+                                                this.props.clearCart()
+                                                console.log("vegOnly === true : ", vegOnly)
+                                            } else {
+                                                this.props.getMenu()
+                                                this.props.clearCart()
+                                                console.log("else : ", vegOnly)
+                                            }
+                                            console.log("normal", vegOnly)
+                                        }
+                                    }
+                                />
+                            </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
                                 <View style={{ flexDirection: 'row' }}>
@@ -757,7 +790,7 @@ export class ReduxMenu extends Component {
             </View> */}
 
                         <FlatList
-                            style={{ width: Dimensions.get('window').width }}
+                            style={{ width: Dimensions.get('window').width, backgroundColor: Colors.white }}
                             data={this.props.menuResponse}
                             // this.state.vegOnly == true ? this.state.onlyVegMenu : this.state.OutletMenuInfo
                             extraData={this.props}

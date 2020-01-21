@@ -3,13 +3,25 @@ import {
   Dimensions
 } from 'react-native';
 import ConstantValues from '../constantValues';
+import Colors from '../colors';
 
 const styles = StyleSheet.create({
   slide: {
     flex: 1,
     // alignItems: 'stretch',
     // justifyContent: 'flex-start',
+    // backgroundColor: Colors.newOrange,
+  },
+  menuHeader: {
+    width: Dimensions.get('window').width,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop:'8%',
     backgroundColor: '#ffffff',
+    borderTopStartRadius:100/5,
+    borderTopEndRadius:100/5,
+    // borderColor:Colors.darkGreen,
+    // borderTopWidth:1
   },
   topContainer: {
     width: Dimensions.get('window').width,
@@ -43,22 +55,22 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e4e4e4',
     borderBottomWidth: 2,
   },
-  cartCard:{
-      // backgroundColor: '#e7e7e7',//can change as we move to various pages
-      // marginBottom: 10,//can change as we move to various pages
-      // marginLeft: '2%', //can change as we move to various pages
-      // width: '96%', //can change as we move to various pages
-      // borderColor: '#e4e4e4',
-      // borderRadius: 100 / 9,
-      // borderWidth: 1,
-      // shadowOpacity: 0.4,
-      // borderBottomColor: '#e4e4e4',
-      // borderBottomWidth: 2,
-      alignContent:'center',
-      // height: 100,
-      width: Dimensions.get('screen').width,
-      paddingHorizontal: 5,
-      paddingVertical: 5
+  cartCard: {
+    // backgroundColor: '#e7e7e7',//can change as we move to various pages
+    // marginBottom: 10,//can change as we move to various pages
+    // marginLeft: '2%', //can change as we move to various pages
+    // width: '96%', //can change as we move to various pages
+    // borderColor: '#e4e4e4',
+    // borderRadius: 100 / 9,
+    // borderWidth: 1,
+    // shadowOpacity: 0.4,
+    // borderBottomColor: '#e4e4e4',
+    // borderBottomWidth: 2,
+    alignContent: 'center',
+    // height: 100,
+    width: Dimensions.get('screen').width,
+    paddingHorizontal: 5,
+    paddingVertical: 5
   },
   // OFFER BOARD STYLES
   offerText: {
@@ -216,7 +228,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // borderTopStartRadius: 100 / 5,
     // borderTopEndRadius: 100 / 5,
-    borderRadius:10,
+    borderRadius: 10,
   },
   viewcart: {
     flexDirection: 'row',
@@ -224,15 +236,15 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   itemCountShow: {
-    marginTop:5,
+    marginTop: 5,
     flexDirection: 'column',
     marginRight: 15,
-    marginLeft:5,
+    marginLeft: 5,
     alignSelf: 'flex-start',
-    justifyContent:'center'
+    justifyContent: 'center'
   },
   fab: {
-    alignSelf:'flex-start',
+    alignSelf: 'flex-start',
     flexDirection: 'row',
     position: 'absolute',
     width: 70,

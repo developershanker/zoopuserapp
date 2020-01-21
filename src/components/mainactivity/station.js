@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Dimensions, View, ScrollView, StyleSheet, Alert, ToastAndroid, Image, SectionList, TouchableOpacity, TouchableWithoutFeedback, FlatList, TextInput, CheckBox, ActivityIndicator } from 'react-native';
+import { Text, Dimensions, View, ScrollView, StyleSheet, Alert, ToastAndroid, Image, SectionList, TouchableOpacity, TouchableWithoutFeedback, FlatList, TextInput, CheckBox, ActivityIndicator, BackHandler } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 // import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
@@ -60,7 +60,20 @@ export default class station extends Component {
     };
   }
 
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+}
 
+componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+}
+
+handleBackButton = () => {
+  console.log('I am back on Station.js')
+    this.props.navigation.navigate('Search')
+
+    return true;
+};
   handleChange = (index, cuisine) => {
     let checked = [...this.state.checked];
     checked[index] = !checked[index];
@@ -183,11 +196,12 @@ export default class station extends Component {
     }
   }
 
-  gotoMenu = (stationId, outletId, stationName, stationCode, arrivalTime, schArrivalTime, haltTime, arrDate, arrival, outletName, outletRating, minimumOrderValue, cutOffTime, zoopCustomerDeliveryCharge, zoopCustomerDeliveryChargeGstRate, zoopCustomerDeliveryChargeGst, eta, openTime, closeTime, weeklyOff, gstin, fssaiNo, offer, items) => {
+  gotoMenu = (stationId, outletId, stationName, stationCode, arrivalTime, schArrivalTime, haltTime, arrDate, arrival, outletName, outletRating, minimumOrderValue, cutOffTime, zoopCustomerDeliveryCharge, zoopCustomerDeliveryChargeGstRate, zoopCustomerDeliveryChargeGst, eta, openTime, closeTime, weeklyOff, gstin, fssaiNo, offer, items,outletImage) => {
     const momemtHaltTime = moment(haltTime, 'HHmmss').format('mm')
     const checkedArrival = ((arrival === '--' || arrival === null) ? schArrivalTime : arrival)
     ConstantValues.stationId = stationId,
       ConstantValues.outletId = outletId,
+      ConstantValues.outletImage = outletImage
       ConstantValues.stationName = stationName,
       ConstantValues.stationCode = stationCode
     // ConstantValues.ata = '07:50'
@@ -409,6 +423,7 @@ export default class station extends Component {
                                 outlets.fssaiNo,
                                 outlets.offer,
                                 outlets.items,
+                                outlets.outletImage
                               )
                             }}>
                             <View style={styles.card}>
