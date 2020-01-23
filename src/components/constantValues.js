@@ -60,6 +60,7 @@ static apiUrl = 'https://appapi.zoopindia.in/'
   static stationCode = ''
   static outletId = ''
   static outletName = ''
+  static outletImage = ''
   static cuttoff = ''
   static haltTime = ''
   static outletRating = null
