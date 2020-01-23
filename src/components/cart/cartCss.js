@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     },
     plusminus: {
       width: 30,
-      backgroundColor: '#f0f0f0',
+      // backgroundColor: '#f0f0f0',
       justifyContent: 'center',
       alignItems: 'center',
       height: 30,

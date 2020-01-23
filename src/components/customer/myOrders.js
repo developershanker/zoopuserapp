@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Alert, StyleSheet, ScrollView, Dimensions, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, Alert,Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen';
@@ -11,6 +11,8 @@ import { ZoopLoader } from '../assests/zoopLoader.js';
 import { Overlay } from 'react-native-elements';
 import moment from "moment";
 import OrderDetailConstants from '../orderDetailConstants.js';
+import Colors from '../colors.js';
+import {Separator} from '../../components/separator'
 
 
 
@@ -28,9 +30,9 @@ export default class MyOrders extends Component {
       isVisible: true,
       detailViewModal: null,
       detailItem: [],
-      isRefreshing:false,
-      page:1,
-      seed:1
+      isRefreshing: false,
+      page: 1,
+      seed: 1
     };
   }
 
@@ -171,7 +173,7 @@ export default class MyOrders extends Component {
     OrderDetailConstants.irctcOrderId = (item.irctcOrderId === null ? 'N/A' : item.irctcOrderId)
     OrderDetailConstants.orderType = item.paymentTypeName
     OrderDetailConstants.bookingDate = (item.bookingDate === null ? 'Date not available' : moment(item.bookingDate).format('DD-MM-YYYY'))
-    OrderDetailConstants.bookingTime = (item.bookingDate === null ? 'Time not available' : moment(item.bookingDate).format('HH:mm')) 
+    OrderDetailConstants.bookingTime = (item.bookingDate === null ? 'Time not available' : moment(item.bookingDate).format('HH:mm'))
 
     //passenger detail
     OrderDetailConstants.passengerName = item.passengerName
@@ -203,15 +205,16 @@ export default class MyOrders extends Component {
 
     OrderDetailConstants.seat = item.berth
     OrderDetailConstants.coach = item.coach
-    
+
     OrderDetailConstants.paidAmount = (item.paidAmount === null ? 0 : item.paidAmount)
-    
+
     this.setState({
       detailItem: item.items,
     })
     this.props.navigation.navigate('MyOrderDetail')
   }
   render() {
+    let img = require('../images/roundimg1.jpg')
     return (
       <SafeAreaView style={styles.slide}>
         <ScrollView>
@@ -237,11 +240,18 @@ export default class MyOrders extends Component {
                   <View>
                     <View>
                       <View style={styles.card}>
-
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                        <View style={{flexDirection: 'row',width:'100%'}}>
+                          <Image source={img} style={styles.img} />
+                          <View style={styles.titleArea}>
+                            <Text style={styles.tiletextH}>{item.outletName}</Text>
+                            <Text style={styles.tiletext}>({item.stationCode}) {item.stationName}</Text>
+                          </View>
+                        </View>
+                          <Separator/>
+                        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                           <Text style={styles.tiletext}>Station</Text>
                           <Text style={styles.tiletext}>({item.stationCode}) {item.stationName}</Text>
-                        </View>
+                        </View> */}
 
                         {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                           <View style={{ width: 100, alignItems: 'flex-end' }}>
@@ -249,14 +259,14 @@ export default class MyOrders extends Component {
                           </View>
                           <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.bookingDate).format('DD-MM-YYYY HH:mm')}</Text>
                         </View> */}
-
+{/* 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
-                            <Text style={styles.tiletext}>Delivery Date </Text>
+                          <Text style={styles.tiletext}>Delivery Date </Text>
                           <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.eta).format('DD-MM-YYYY')}</Text>
                         </View>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
-                            <Text style={styles.tiletext}>Delivery Time </Text>
+                          <Text style={styles.tiletext}>Delivery Time </Text>
                           <Text style={styles.tiletext}>{item.bookingDate == null ? 'Time not available' : moment(item.eta).format('HH:mm')}</Text>
                         </View>
 
@@ -266,18 +276,47 @@ export default class MyOrders extends Component {
                           <Text style={styles.tiletext}>Total Amount</Text>
                           <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
                         </View>
-                        
+
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
-                            <Text style={[styles.tiletext, { color: '#000000' }]}>Status </Text>
-                            <Text style={{ fontFamily: 'Poppins-Medium', color: ConstantValues.orderStatus[item.status] }}>{item.orderStatus}</Text>
+                          <Text style={[styles.tiletext, { color: '#000000' }]}>Status </Text>
+                          <Text style={{ fontFamily: 'Poppins-Medium', color: ConstantValues.orderStatus[item.status] }}>{item.orderStatus}</Text>
+                        </View> */}
+                        <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
+                          <Text style={[styles.tiletext,{color:Colors.darkGrey}]}>Delivery Date and Time</Text>
+                          <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.eta).format('DD MMM YYYY')} at {item.bookingDate == null ? 'Time not available' : moment(item.eta).format('hh:mm a')}</Text>
+                        </View>
+                        {/* <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
+                          <Text style={[styles.tiletext,{color:Colors.darkGrey}]}>Delivery Date </Text>
+                          <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.eta).format('DD MMM YYYY')}</Text>
                         </View>
 
+                        <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
+                          <Text style={[styles.tiletext,{color:Colors.darkGrey}]}>Delivery Time </Text>
+                          <Text style={styles.tiletext}>{item.bookingDate == null ? 'Time not available' : moment(item.eta).format('hh:mm a')}</Text>
+                        </View> */}
+
+
+
+                        <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
+                          <Text style={[styles.tiletext,{color:Colors.darkGrey}]}>Total Amount</Text>
+                          <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
+                        </View>
+                        <Separator/>
+                        <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                          <CustomButtonShort
+                            disabled={true}
+                            // onPress={() => this.renderOrderDetail(item)}
+                            title={item.orderStatus}
+                            style={{backgroundColor: Colors.white,width: 150,height:0,paddingVertical:10}}
+                            textStyle={{ color: ConstantValues.orderStatus[item.status] , fontFamily:'Poppins-Medium',fontSize:15}}
+                          />
                         <CustomButtonShort
                           onPress={() => this.renderOrderDetail(item)}
                           title='View Details'
-                          style={{ alignSelf: 'center', backgroundColor: '#fff' }}
-                          textStyle={{ color: '#F15926' }}
+                          style={{ backgroundColor: Colors.white,width: 150,height:0,paddingVertical:10}}
+                          textStyle={{ color: Colors.newOrange }}
                         />
+                        </View>
                       </View>
 
                     </View>
@@ -311,6 +350,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#ffffff',
   },
+  img: {
+    margin: 10,
+    width: 50,
+    height: 50,
+    borderRadius: 100 / 10,
+    // backgroundColor: Colors.darkGreen,
+  },
   bottomModal: {
     justifyContent: 'flex-end',
     margin: 0,
@@ -342,15 +388,32 @@ const styles = StyleSheet.create({
   //   borderWidth: 2,
   //   marginTop: 10
   // },
+  titleArea: {
+    // justifyContent: 'space-between',
+    // alignContent:'space-around',
+    // alignSelf: 'center',
+    // backgroundColor: '#9b9b9b',//can change as we move to various pages
+    // marginBottom: 10,//can change as we move to various pages
+    // marginLeft: '2%', //can change as we move to various pages
+    // width: '96%', //can change as we move to various pages
+    flexDirection: 'column',
+    borderColor: Colors.lightGrey,
+    // borderRadius: 10,
+    // borderWidth: 0.5,
+    width: '80%',
+    // elevation: 1,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+  },
   tileM: {
     width: Dimensions.get('screen').width - 20,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
   card: {
-    backgroundColor: '#ffffff',//can change as we move to various pages
-    marginBottom: 10,//can change as we move to various pages
-    paddingVertical:5,
+    backgroundColor: Colors.white,//can change as we move to various pages
+    marginBottom: 5,//can change as we move to various pages
+    paddingVertical: 5,
     marginLeft: '2%', //can change as we move to various pages
     width: '96%', //can change as we move to various pages
     borderColor: '#e4e4e4',

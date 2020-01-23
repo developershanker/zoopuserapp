@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import Colors from '../colors';
 
 
 export const CustomButtonShort = (props) => {
@@ -21,8 +22,8 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         paddingVertical: 20,
         alignItems: 'center',
-        backgroundColor: '#00c74f',
-        shadowColor: '#00c74f',
+        backgroundColor: Colors.newGreen1,
+        shadowColor: Colors.newGreen1,
         shadowOpacity: 0.4,
         shadowOffset: { height: 10, width: 10 },
         shadowRadius: 20,

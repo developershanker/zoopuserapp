@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, Dimensions } from 'react-native'
 import ConstantValues from '../constantValues';
+import Colors from '../colors';
 
 
 const styles = StyleSheet.create({
@@ -12,6 +13,35 @@ const styles = StyleSheet.create({
     alignContent: 'stretch',
     backgroundColor: '#fff',
     flexDirection: 'column',
+  },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  animatedView: {
+    alignSelf:'center',
+    width: Dimensions.get('window').width - 100,
+    backgroundColor: Colors.newgGreen1,
+    elevation: 2,
+    position: "absolute",
+    bottom: 0,
+    padding: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  exitTitleText: {
+    textAlign: "center",
+    color: "#ffffff",
+    fontFamily:'Poppins-SemiBold',
+    marginRight: 10,
+  },
+  exitText: {
+    color: "#fff",
+    paddingHorizontal: 10,
+    fontFamily:'Poppins-Medium',
+    paddingVertical: 3
   },
   main: {
     alignItems: 'center',

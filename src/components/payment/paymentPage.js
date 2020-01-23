@@ -66,7 +66,7 @@ export default class PaymentPage extends Component {
         return (
           Alert.alert(
             'Alert!!',
-            'Something went wrong... Please try again later.',
+            response.error,
             [
               {
                 text: 'OK', onPress: () => {
@@ -81,6 +81,21 @@ export default class PaymentPage extends Component {
       }
     } catch (error) {
       console.log('Data received in paymentPage.js catch: ' + error)
+      return (
+        Alert.alert(
+          'Alert!!',
+          'Something went wrong... Please try again later.',
+          [
+            {
+              text: 'OK', onPress: () => {
+                this.props.navigation.navigate('Search')
+              },
+              style: 'cancel'
+            },
+          ],
+          { cancelable: false },
+        )
+      )
     }
   }
   async getPaymentInfo() {
