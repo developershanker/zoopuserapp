@@ -4,6 +4,7 @@ import SplashScreen from 'react-native-splash-screen';
 import ConstantValues from '../constantValues';
 import Modal from 'react-native-modal';
 import { CustomButtonShort } from '../assests/customButtonShort';
+import Colors from '../colors';
 
 
 
@@ -39,23 +40,23 @@ export default class rateUs extends Component {
 
   render() {
     return (
-      <View style={{  justifyContent: 'center', alignContent: 'flex-start', alignItems: 'center' ,}}>
+      <View style={{ flex:1, justifyContent: 'center', alignContent: 'flex-start', alignItems: 'center' }}>
         <View style={{ width: ConstantValues.deviceWidth - 20, height: '30%' ,justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
           <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
             style={{ width: 150, height: 100 }}
           />
         </View>
 
-        <Text style={{ fontSize: 20, color: '#F15926', fontFamily: 'Poppins-Medium', }}>Enjoying Zoop?</Text>
-        <Text style={{ fontSize: 15, color: '#696b6a', fontFamily: 'Poppins-Regular', textAlign: 'center', alignSelf: 'center' }}>Please rate us if you like our services it will help us to serve better.</Text>
+        <Text style={{ fontSize: 18, color: '#F15926', fontFamily: 'Poppins-Medium', }}>Enjoying Zoop?</Text>
+        <Text style={{ fontSize: 14, color: '#696b6a', fontFamily: 'Poppins-Regular', textAlign: 'center', alignSelf: 'center' }}>Please rate us if you like our services it will help us to serve better.</Text>
         <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
           <CustomButtonShort
-            style={{ backgroundColor: '#60b246' }}
+            style={{ backgroundColor: Colors.newgGreen3 }}
             title='Rate Us'
             onPress={() => this.gotoLink()}
           />
           <CustomButtonShort
-            style={{ backgroundColor: '#696b6a' }}
+            style={{ backgroundColor: Colors.darkGrey }}
             title='Not Now'
             onPress={() => this.dismiss()}
           />
@@ -72,7 +73,7 @@ export default class rateUs extends Component {
             <Text style={{ fontSize: 15, color: '#696b6a', fontFamily: 'Poppins-Regular', textAlign: 'center', alignSelf: 'center' }}>Please rate us if you like our services it will help us to serve better.</Text>
             <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
               <CustomButtonShort
-                style={{ backgroundColor: '#60b246' }}
+                style={{ backgroundColor: Colors.newOrange }}
                 title='Rate Us'
                 onPress={() => this.gotoLink()}
               />

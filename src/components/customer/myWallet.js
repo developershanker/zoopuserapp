@@ -13,6 +13,7 @@ import walletApi from './walletApi.js'
 import { Overlay } from 'react-native-elements';
 import loginApi from '../login/loginApi.js';
 import moment from 'moment';
+import Colors from '../colors.js';
 
 export default class MyWallet extends Component {
   componentDidMount() {
@@ -182,20 +183,20 @@ export default class MyWallet extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 20, color: '#000000' }}> My Wallet Statement </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> My Wallet Statement </Text>
               </View>
             </View>
             {/* header view ends */}
             <View style={{ flexDirection: 'row', paddingVertical: 10, paddingHorizontal: 10 }}>
-              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 15 }}>ZOOP WALLET : </Text>
-              <Text style={{ color: '#60b246', fontFamily: 'Poppins-Regular', fontSize: 15 }}>{ConstantValues.rupee} {this.state.walletBalance}</Text>
+              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 15 }}>Zoop Wallet Balance : </Text>
+              <Text style={{ color: Colors.newgGreen1, fontFamily: 'Poppins-Medium', fontSize: 15 }}>{ConstantValues.bigrupee} {this.state.walletBalance}</Text>
             </View>
 
             <View style={{ flexDirection: 'row', height: 50, backgroundColor: '#e4e4e4', justifyContent: 'space-around', alignItems: 'center' }}>
-              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 10 ,textAlign:'left'}}>Date</Text>
-              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 10 ,textAlign:'right'}}>Amount</Text>
-              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 10 ,textAlign:'left'}}>Particular</Text>
-              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 10 ,textAlign:'right' }}>Balance</Text>
+              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 ,textAlign:'left'}}>Date</Text>
+              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 ,textAlign:'right'}}>Amount</Text>
+              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 ,textAlign:'left'}}>Particulars</Text>
+              <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12 ,textAlign:'right' }}>Balance</Text>
             </View>
             {/* Wallet summary Card  */}
             <View>
@@ -209,8 +210,8 @@ export default class MyWallet extends Component {
                     <View style={styles.card}>
                       <View style={{ flexDirection: 'row', paddingVertical: 5, paddingHorizontal: 20, justifyContent: 'space-between', alignItems: 'center', }}>
                         <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12, textAlign: 'left' }}>{moment(item.created).format('DD-MM-YYYY')}</Text>
-                        <Text style={{ color: item.transactionType == 'CREDIT' ? '#60b246' : '#b32120', fontFamily: 'Poppins-Regular', fontSize: 12, textAlign: 'right' }}>{ConstantValues.rupee} {item.amount}</Text>
-                        <Text style={{ width: 150, color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12, textAlign: 'left' }}>{item.particulars}</Text>
+                        <Text style={{ color: item.transactionType == 'CREDIT' ? Colors.newgGreen1 : '#b32120', fontFamily: 'Poppins-Regular', fontSize: 12, textAlign: 'right' }}>{ConstantValues.rupee} {item.amount}</Text>
+                        <Text style={{ width: 150, color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 10, textAlign: 'left' }}>{item.particulars}</Text>
                         <Text style={{ color: '#000000', fontFamily: 'Poppins-Regular', fontSize: 12, textAlign: 'right' }}> {ConstantValues.rupee} {item.balance}</Text>
                       </View>
 

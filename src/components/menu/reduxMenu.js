@@ -105,7 +105,7 @@ export class ReduxMenu extends Component {
             couponCode: '',
             walletBalance: 0,
             proceedDisabled: false,
-            proceedLabel: 'Add Passenger Details',
+            proceedLabel: 'ADD PASSENGER DETAILS',
         }
     }
 
@@ -675,57 +675,35 @@ export class ReduxMenu extends Component {
                     </View>
                     <View style={styles.menuHeader}>
                         <View style={{ flexDirection: 'row', width: Dimensions.get('screen').width }}>
-                            {/* <View style={{ justifyContent: 'flex-start', alignContent: 'flex-start', padding: 20 }}>
-                                <TouchableOpacity onPress={() => this.goingBack()}>
-                                    <Icon name={'chevron-left'} size={20} color={'#000000'} />
-                                </TouchableOpacity>
-                            </View> */}
-                            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%',  }}>
+                            <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', width: '50%', paddingHorizontal: 10 }}>
                                 <Text style={styles.outletName}> {ConstantValues.outletName} </Text>
-                                <Text style={{ fontFamily: 'Poppins-Medium', paddingBottom: 10, fontSize: 15 }}>{ConstantValues.stationName}</Text>
+                                <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 12, textAlign: 'center' }}>  {ConstantValues.stationName}</Text>
+                            </View>
+                            <View style={{ flexDirection: 'column', width: '45%', alignItems: 'flex-end', justifyContent: 'flex-end', alignSelf: 'flex-end',}}>
+                                <View style={{ flexDirection: 'column', borderColor: Colors.darkGrey, borderWidth: 1, borderRadius: 100 / 10, paddingHorizontal: 5 }}>
+                                    <View style={{ flexDirection: 'row'}}>
+                                        <Icon name='star' size={12} color={Colors.newgGreen1} />
+                                        <Text style={{ fontFamily: 'Poppins-Regular' ,fontSize:12}}> {ConstantValues.outletRating} </Text>
+                                    </View>
+
+                                    <Text style={{ fontFamily: 'Poppins-Regular',fontSize:12 }}>Rating</Text>
+                                </View>
                             </View>
                         </View>
-
-
-                        {/* <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
-                        <ToggleSwitch
-                            isOn={this.state.vegOnly}
-                            onColor="green"
-                            offColor="grey"
-                            label="Veg. Only"
-                            labelStyle={{ fontFamily: 'Poppins-Regular' }}
-                            size="medium"
-                            onToggle={
-                                vegOnly => {
-                                    this.setState({ vegOnly })
-                                    if (vegOnly === true) {
-                                        this.props.vegMenu()
-                                        this.props.clearCart()
-                                        console.log("vegOnly === true : ", vegOnly)
-                                    } else {
-                                        this.props.getMenu()
-                                        this.props.clearCart()
-                                        console.log("else : ", vegOnly)
-                                    }
-                                    console.log("normal", vegOnly)
-                                }
-                            }
-                        />
-                    </View> */}
                     </View>
                 </ImageBackground>
                 <ScrollView>
                     <View>
 
                         <View style={styles.topContainer}>
-                            <View style={{ flexDirection: 'row', paddingVertical: 5 }}>
-                                <ToggleSwitch
+                            <View style={{ flexDirection: 'row',padding:5,}}>
+                                <ToggleSwitch                                    
                                     isOn={this.state.vegOnly}
-                                    onColor="green"
-                                    offColor="grey"
+                                    onColor={Colors.newgGreen2}
+                                    offColor={Colors.lightGrey}
                                     label="Veg. Only"
-                                    labelStyle={{ fontFamily: 'Poppins-Regular' }}
-                                    size="medium"
+                                    labelStyle={{ fontFamily: 'Poppins-Regular' ,fontSize:12}}
+                                    size="small"
                                     onToggle={
                                         vegOnly => {
                                             this.setState({ vegOnly })
@@ -742,6 +720,10 @@ export class ReduxMenu extends Component {
                                         }
                                     }
                                 />
+                                <View style={{ flexDirection: 'row',justifyContent:'flex-end', alignItems: 'flex-end',alignContent:'flex-end',alignSelf:'flex-end',width:'50%'}}>
+                                        <Text style={{ fontFamily: 'Poppins-Regular' ,fontSize:12}}>Min. Order : </Text>
+                                        <Text style={{ fontFamily: 'Poppins-Regular' ,fontSize:12,color:Colors.newOrange}}> {ConstantValues.rupee} {ConstantValues.minimumOrderValue}</Text>
+                                    </View>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
@@ -753,7 +735,7 @@ export class ReduxMenu extends Component {
                             </View>
 
 
-                            <View
+                            {/* <View
                                 style={styles.card}
                             >
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: Dimensions.get('window').width }}>
@@ -774,7 +756,7 @@ export class ReduxMenu extends Component {
                                     </View>
 
                                 </View>
-                            </View>
+                            </View> */}
                             {/* Offer text label */}
                             {/* <Fade visible={this.state.offer.length != 0}>
                 <View style={styles.offerboard}>
@@ -801,7 +783,7 @@ export class ReduxMenu extends Component {
                                     <Fade visible={index == 0 ? true : index > 0 && (item.typeName != this.props.menuResponse[index - 1].typeName)}>
                                         <View style={{ width: Dimensions.get('window').width - 10, backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 15 }} >
                                             {/* <View style={{ height: 0.5, width: '100%', backgroundColor: '#C8C8C8' }} /> */}
-                                            <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>{item.typeName}</Text>
+                                            <Text style={{ fontSize: 18, fontFamily: 'Poppins-Medium', color: '#000000' }}>{item.typeName}</Text>
                                         </View>
                                     </Fade>
 
@@ -817,7 +799,7 @@ export class ReduxMenu extends Component {
 
                                                     <View style={{ flexDirection: 'column', paddingHorizontal: 5, paddingVertical: 5 }}>
                                                         <Text style={styles.itemName}>{item.itemName}</Text>
-                                                        <Text style={{ width: 200, fontSize: 10, color: '#898c8b', fontFamily: 'Poppins-Regular', paddingHorizontal: 5, }}>{item.itemDescription}</Text>
+                                                        <Text style={{ width: 200, fontSize: 10, color: Colors.darkGrey, fontFamily: 'Poppins-Regular', paddingHorizontal: 5, }}>{item.itemDescription}</Text>
                                                         <Text style={styles.itemName}>{ConstantValues.rupee} {item.basePrice}</Text>
                                                     </View>
 
@@ -868,7 +850,7 @@ export class ReduxMenu extends Component {
                                     {/* {this.state.totalCartCount} {this.state.inCart.length == 1 ? 'Item' : 'Items'} |  {ConstantValues.bigrupee} {this.state.totalPrice} */}
                                 </View>
                                 <View style={styles.viewcart}>
-                                    <Text style={{ marginRight: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>View Cart</Text>
+                                    <Text style={{ marginRight: 5, fontSize: 18, fontFamily: 'Poppins-Regular', color: '#ffffff' }}>View Order</Text>
                                     <Icon style={{ alignSelf: 'center' }} name={'caret-right'} color={'#ffffff'} size={20} />
                                     {/* <Icon name={'shopping-bag'} color={'#ffffff'} size={20} /> */}
                                 </View>
@@ -913,8 +895,8 @@ export class ReduxMenu extends Component {
                             <View style={styles.modalView}>
                                 <View style={{ flexDirection: 'row', width: ConstantValues.deviceWidth - 20, marginVertical: 5, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                                     <View style={{ flexDirection: 'column', width: '60%', justifyContent: 'center', alignItems: 'center', }}>
-                                        <Text style={{ alignSelf: 'center', fontSize: 20, color: '#000000', fontFamily: 'Poppins-Medium', textAlign: 'center' }}>{ConstantValues.outletName}</Text>
-                                        <Text style={{ alignSelf: 'center', fontSize: 15, color: '#000000', fontFamily: 'Poppins-Medium', textAlign: 'center' }}>{ConstantValues.stationName}</Text>
+                                        <Text style={{ alignSelf: 'center', fontSize: 18, color: '#000000', fontFamily: 'Poppins-Medium', textAlign: 'center' }}>{ConstantValues.outletName}</Text>
+                                        <Text style={{ alignSelf: 'center', fontSize: 14, color: '#000000', fontFamily: 'Poppins-Medium', textAlign: 'center' }}>{ConstantValues.stationName}</Text>
                                     </View>
                                 </View>
                                 <View style={styles.fab}>
@@ -949,7 +931,7 @@ export class ReduxMenu extends Component {
                                                             <View style={{ width: 30, alignItems: 'flex-start' }}>
                                                                 <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryId === 1 ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
                                                             </View>
-                                                            <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', width: 130, color: '#000' }}>{item.itemName}</Text>
+                                                            <Text style={{ fontSize: 12, fontFamily: 'Poppins-Regular', width: 130, color: '#000' }}>{item.itemName}</Text>
                                                         </View>
                                                         <View style={{ flexDirection: 'column', justifyContent: 'flex-end', alignContent: 'flex-end' }}>
                                                             <Counter
@@ -960,7 +942,7 @@ export class ReduxMenu extends Component {
                                                                 onPressAdd={() => { this.props.addItemToCart(item, index) }}
                                                                 onPressRemove={() => { this.props.removeItemFromCart(item, index) }}
                                                             />
-                                                            <Text style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Regular', textAlign: 'right', marginRight: 5 }}>{ConstantValues.rupee} {item.basePrice}</Text>
+                                                            <Text style={{ fontSize: 12, color: '#000000', fontFamily: 'Poppins-Regular', textAlign: 'right', marginRight: 5 }}>{ConstantValues.rupee} {item.basePrice}</Text>
                                                         </View>
                                                     </View>
                                                 </Fade>
@@ -978,7 +960,7 @@ export class ReduxMenu extends Component {
                                             textStyle={{ fontFamily: 'Poppins-Regular' }}
                                             checked={ConstantValues.walletBalanceUsed === 0 ? false : this.state.walletUsed}
                                             appliedCode={ConstantValues.appliedCode}
-                                            couponColor={this.state.walletUsed == true || ConstantValues.walletBalanceUsed !== 0 ? '#636666' : '#149db5'}
+                                            couponColor={this.state.walletUsed == true || ConstantValues.walletBalanceUsed !== 0 ? '#636666' : Colors.newOrange}
                                             onPressCoupon={() => { this.changeCode(ConstantValues.couponCode) }}
                                             onPressRemove={() => this.removeCoupon()}
                                             onPressCheckBox={() => {
@@ -999,7 +981,7 @@ export class ReduxMenu extends Component {
                                     {/* <View style={{ justifyContent: 'center', width: ConstantValues.deviceWidth, alignContent: 'center',backgroundColor:'#e7e7e7'}}> */}
                                     <CustomButton
                                         disabled={this.state.proceedDisabled}
-                                        style={{ backgroundColor: this.state.proceedDisabled === true ? '#9b9b9b' : '#60b246', marginBottom: 20, width: ConstantValues.deviceWidth - 30 }}
+                                        style={{ backgroundColor: this.state.proceedDisabled === true ? '#9b9b9b' : Colors.newgGreen3, marginBottom: 20, width: ConstantValues.deviceWidth - 30 }}
                                         onPress={() => this.confirmCart()}
                                         title={this.state.proceedLabel}
                                     />
@@ -1031,14 +1013,14 @@ export class ReduxMenu extends Component {
                         <View style={styles.modalView}>
                             <View style={styles.promocodeInput}>
                                 <TextInput
-                                    style={{ fontSize: 15, textTransform: 'uppercase', fontFamily: 'Poppins-Medium', width: 200 }}
+                                    style={{ fontSize: 15, textTransform: 'uppercase', fontFamily: 'Poppins-Medium', width: '80%' }}
                                     placeholder='Enter Promo Code'
                                     // keyboardType='default'
                                     autoCapitalize='characters'
                                     onChangeText={couponCode => this.setState({ couponCode })}
                                 />
                                 <TouchableOpacity onPress={() => { this.applyCouponsFromInput(this.state.couponCode, this.state.CouponDetail) }}>
-                                    <Text style={{ color: '#60b246', fontSize: 15, fontFamily: 'Poppins-Medium', }}>APPLY</Text>
+                                    <Text style={{ color: Colors.newgGreen1, fontSize: 15, fontFamily: 'Poppins-Medium', }}>APPLY</Text>
                                 </TouchableOpacity>
                             </View>
 
@@ -1071,7 +1053,7 @@ export class ReduxMenu extends Component {
                                             <TouchableOpacity
                                                 onPress={() => this.applyCoupons(item)}
                                             >
-                                                <Text style={{ color: '#60b246', fontSize: 15, fontFamily: 'Poppins-Medium', alignSelf: 'flex-end', marginRight: 25 }}>APPLY</Text>
+                                                <Text style={{ color: Colors.newgGreen1, fontSize: 15, fontFamily: 'Poppins-Medium', alignSelf: 'flex-end', marginRight: 25 }}>APPLY</Text>
                                             </TouchableOpacity>
                                         </View>
                                     </View>

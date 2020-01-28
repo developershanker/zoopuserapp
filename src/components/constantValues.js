@@ -31,6 +31,7 @@ static apiUrl = 'https://appapi.zoopindia.in/'
   static walletBalance = null
   // static walletSummary = { }
   static rupee = <Icon name={'rupee'}/>
+  static minrupee = <Icon name={'rupee'} size={11}/>
   static bigrupee = <Icon name={'rupee'} size={15}/>
   static orderRating = ''
   static source = 'APP'

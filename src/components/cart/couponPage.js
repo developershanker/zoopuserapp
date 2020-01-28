@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, Dimensions, KeyboardAvoidingView, Tou
 import Modal from "react-native-modal";
 import styles from './cartCss';
 import moment from 'moment';
+import Colors from '../colors';
 
 
 export const CouponPage = (props) => {
@@ -62,7 +63,7 @@ export const CouponPage = (props) => {
                       <TouchableOpacity
                         onPress={applyCoupons(item)}
                       >
-                        <Text style={{ color: '#60b246', fontSize: 15, fontFamily: 'Poppins-Medium', alignSelf: 'flex-end', marginRight: 25 }}>APPLY</Text>
+                        <Text style={{ color: Colors.newgGreen1, fontSize: 15, fontFamily: 'Poppins-Medium', alignSelf: 'flex-end', marginRight: 25 }}>APPLY</Text>
                       </TouchableOpacity>
                     </View>
                   </View>

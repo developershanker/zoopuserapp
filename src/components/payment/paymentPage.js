@@ -18,6 +18,7 @@ import { ZoopLoader } from '../assests/zoopLoader.js';
 import cartApi from '../cart/cartApi.js';
 import Modal from "react-native-modal";
 import { CustomButtonShort } from '../assests/customButtonShort.js';
+import Colors from '../colors.js';
 
 export default class PaymentPage extends Component {
   componentDidMount() {
@@ -386,7 +387,7 @@ export default class PaymentPage extends Component {
                         <Icons name={this.state.indexChecked === item.paymentTypeId.toString() ? 'check-square' : 'square'} size={20} color={'#000000'} style={{ width: 50, alignSelf: 'center' }} />
                         {/* <Text style={{ color: this.state.paymentBorderColor, fontSize: 15, fontFamily: 'Poppins-Regular' }}>{item.paymentTypeName == 'Prepaid' ? 'Pay through Paytm' : 'Cash On Delivery'}</Text> */}
                         {
-                          item.paymentTypeId == 2 ? <Image source={require('../images/paytmnew.png')} /> : <Text style={{ color: '#000000', fontSize: 15, fontFamily: 'Poppins-Regular', textAlign: 'center' }}>Cash On Delivery</Text>
+                          item.paymentTypeId == 2 ? <Image source={require('../images/paytmImg.png')} style={{width:'80%',height:50}}/> : <Text style={{ color: Colors.darkGrey, fontSize: 14, fontFamily: 'Poppins-Regular', textAlign: 'center' }}>Cash On Delivery</Text>
                         }
 
                       </View>

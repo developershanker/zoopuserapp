@@ -18,6 +18,7 @@ import { ZoopLoader } from '../assests/zoopLoader.js';
 import moment from "moment";
 import styles from './stationCss.js';
 import { StationLoader } from './stationLoader.js';
+import Colors from '../colors.js';
 
 
 export default class station extends Component {
@@ -279,7 +280,7 @@ handleBackButton = () => {
           {/* Searchbar begins */}
 
           <View style={styles.searchBarView}>
-            <Text style={{ fontSize: 18, fontFamily: 'Poppins-Medium', }}>Pick Station & Restaurant</Text>
+            <Text style={{ fontSize: 18, fontFamily: 'Poppins-Medium',textAlign:'center',color:Colors.black}}>Pick Station & Restaurant</Text>
           </View>
 
           {/* Searchbar ends */}
@@ -379,9 +380,9 @@ handleBackButton = () => {
                     {/* <Text style={styles.stext}>Halt : {moment(item.haltTime, 'HHmmss').format('mm')} mins | </Text>
                     <Text style={styles.stext}> S.T.A : {moment(item.arrivalTime, 'HHmmss').format('hh:mm A')} | </Text>
                     <Text style={styles.stext}> E.T.A : {moment(item.expectedTime, 'HHmmss').format('hh:mm A')}</Text> */}
-                    <Text style={styles.stext}>Halt : {item.halt === null ? moment(item.haltTime, 'HH:mm:ss').format('mm') : moment(item.halt, 'mm:ss').format('mm')} mins | </Text>
-                    <Text style={styles.stext}> S.T.A : {item.schArrivalTime === null || item.arrival === '--' ? moment(item.expectedTime, 'HHmmss').format('hh:mm A') : moment(item.schArrivalTime, 'HHmmss').format('hh:mm A')}  | </Text>
-                    <Text style={styles.stext}> E.T.A : {item.arrival === null || item.arrival === '--' ? moment(item.arrivalTime, 'HHmmss').format('hh:mm A') : moment(item.arrival,'HHmmss').format('hh:mm A')}</Text>
+                    <Text style={styles.stext}>Halt: {item.halt === null ? moment(item.haltTime, 'HH:mm:ss').format('mm') : moment(item.halt, 'mm:ss').format('mm')} mins | </Text>
+                    <Text style={styles.stext}>S.T.A: {item.schArrivalTime === null || item.arrival === '--' ? moment(item.expectedTime, 'HHmmss').format('hh:mm A') : moment(item.schArrivalTime, 'HHmmss').format('hh:mm A')} | </Text>
+                    <Text style={styles.stext}>E.T.A: {item.arrival === null || item.arrival === '--' ? moment(item.arrivalTime, 'HHmmss').format('hh:mm A') : moment(item.arrival,'HHmmss').format('hh:mm A')}</Text>
                   </View>
 
                   {/* OutletView starts */}
@@ -434,7 +435,7 @@ handleBackButton = () => {
                                     <Text style={styles.outletname}>
                                       {outlets.outletName}
                                     </Text>
-                                    <View style={styles.ratingView}>
+                                    <View style={[styles.ratingView, { backgroundColor: outlets.outletRating >= 4.5 ? Colors.darkGreen : Colors.newgGreen2 }]}>
                                       <Text style={styles.rating}>
                                         {outlets.outletRating}
                                       </Text>
@@ -458,7 +459,7 @@ handleBackButton = () => {
                                   {/* </View> */}
                                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <Text style={styles.minorder}>
-                                      Min. Order : {ConstantValues.rupee} {outlets.minimumOrderValue}
+                                      Min. Order : {ConstantValues.minrupee} {outlets.minimumOrderValue}
                                     </Text>
                                     <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignContent: 'flex-end', paddingLeft: 30 }}>
                                       <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.veg }} style={{ width: 15, height: 15, alignSelf: 'center' }} />

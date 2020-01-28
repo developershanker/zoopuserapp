@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-navigation';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import {CustomAlert} from '../assests/customAlert';
 import ConstantValues from '../constantValues';
+import Colors from '../colors';
 export default class feedback extends Component {
   componentDidMount() {
     this.setState({
@@ -105,7 +106,7 @@ export default class feedback extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 25, color: '#000000' }}> FeedBack </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> FeedBack </Text>
               </View>
             </View>
             {/* header view ends */}
@@ -130,7 +131,7 @@ export default class feedback extends Component {
                   <TextInput
                     style={styles.inputD}
                     multiline={true}
-                    numberOfLines={3}
+                    numberOfLines={5}
                     keyboardType='default'
                     onChangeText={message => this.setState({ message })}
                   />
@@ -143,9 +144,9 @@ export default class feedback extends Component {
         <View style={{ justifyContent: 'center', alignItems: 'center', width: ConstantValues.deviceWidth - 10, height: '10%', backgroundColor: '#fff' }}>
           <CustomButton
             disabled={this.state.clicked}
-            style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : '#60b246', alignSelf: 'center', marginBottom: 20, }}
+            style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : Colors.newgGreen3 , alignSelf: 'center', marginBottom: 20, }}
             onPress={() => { this.sendFeedback(this.state.name, this.state.email, this.state.message) }}
-            title={this.state.clicked === false ? 'Submit' : 'Feedback Sent'}
+            title={this.state.clicked === false ? 'SUBMIT' : 'Feedback Sent'}
           />
         </View>
       </SafeAreaView>
@@ -165,16 +166,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     width: '90%',
     fontSize: 15,
-    marginVertical: 40
+    marginVertical: 20
   },
   inputD: {
     fontFamily: 'Poppins-Regular',
     width: '85%',
-    fontSize: 15,
+    fontSize: 14,
   },
   textS: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 20,
+    fontSize: 14,
     // color: '#000000'
   },
   messagebox: {
@@ -182,9 +183,9 @@ const styles = StyleSheet.create({
     borderRadius: 100 / 9,
     borderWidth: 1,
     width: '90%',
-    height: 150,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    backgroundColor: '#ffffff',
+    height: 250,
+    // alignItems: 'flex-start',
+    // justifyContent: 'flex-start',
+    // backgroundColor: Colors.darkGrey,
   }
 });
