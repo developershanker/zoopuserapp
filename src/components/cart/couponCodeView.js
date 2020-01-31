@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet,TouchableWithoutFeedback} from 'react-native';
+import Colors from '../colors';
 
 
 export const CouponCodeView = (props) =>{
@@ -21,7 +22,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical:5,
         backgroundColor: '#ffffff',
-        borderColor: '#f59120',
+        borderColor: Colors.newOrange,
         borderRadius: 100 / 8,
         borderWidth:1,
         borderStyle:'dashed'
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         width:'auto',
         textTransform: 'uppercase',
-        color: '#f59120',
+        color: Colors.newOrange,
         fontFamily:'Poppins-Medium',
         justifyContent:'center'
     },

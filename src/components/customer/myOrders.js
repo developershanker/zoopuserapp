@@ -225,7 +225,7 @@ export default class MyOrders extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 20, color: '#000000' }}> Order History </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> Order History </Text>
               </View>
             </View>
             {/* header view ends */}
@@ -282,8 +282,8 @@ export default class MyOrders extends Component {
                           <Text style={{ fontFamily: 'Poppins-Medium', color: ConstantValues.orderStatus[item.status] }}>{item.orderStatus}</Text>
                         </View> */}
                         <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
-                          <Text style={[styles.tiletext,{color:Colors.darkGrey}]}>Delivery Date and Time</Text>
-                          <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.eta).format('DD MMM YYYY')} at {item.bookingDate == null ? 'Time not available' : moment(item.eta).format('hh:mm a')}</Text>
+                          <Text style={[styles.tiletext,{color:Colors.darkGrey,fontSize:12}]}>Delivery Date and Time</Text>
+                          <Text style={[styles.tiletext,{fontSize:12}]}>{item.bookingDate == null ? 'Date not available' : moment(item.eta).format('DD MMM YYYY')} at {item.bookingDate == null ? 'Time not available' : moment(item.eta).format('hh:mm a')}</Text>
                         </View>
                         {/* <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
                           <Text style={[styles.tiletext,{color:Colors.darkGrey}]}>Delivery Date </Text>
@@ -298,8 +298,8 @@ export default class MyOrders extends Component {
 
 
                         <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
-                          <Text style={[styles.tiletext,{color:Colors.darkGrey}]}>Total Amount</Text>
-                          <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
+                          <Text style={[styles.tiletext,{color:Colors.darkGrey,fontSize:12}]}>Total Amount</Text>
+                          <Text style={[styles.tiletext, { color: Colors.newgGreen1,fontFamily:'Poppins-Medium',fontSize:12 }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
                         </View>
                         <Separator/>
                         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
@@ -308,13 +308,13 @@ export default class MyOrders extends Component {
                             // onPress={() => this.renderOrderDetail(item)}
                             title={item.orderStatus}
                             style={{backgroundColor: Colors.white,width: 150,height:0,paddingVertical:10}}
-                            textStyle={{ color: ConstantValues.orderStatus[item.status] , fontFamily:'Poppins-Medium',fontSize:15}}
+                            textStyle={{ color: ConstantValues.orderStatus[item.status] , fontFamily:'Poppins-Regular',fontSize:14}}
                           />
                         <CustomButtonShort
                           onPress={() => this.renderOrderDetail(item)}
                           title='View Details'
                           style={{ backgroundColor: Colors.white,width: 150,height:0,paddingVertical:10}}
-                          textStyle={{ color: Colors.newOrange }}
+                          textStyle={{ color: Colors.newOrange , fontFamily:'Poppins-Regular',fontSize:14}}
                         />
                         </View>
                       </View>
@@ -431,13 +431,14 @@ const styles = StyleSheet.create({
     paddingVertical: 5
   },
   tiletext: {
+    fontSize: 14,
     fontFamily: 'Poppins-Regular',
     color: '#000000'
   },
   tiletextH: {
     fontFamily: 'Poppins-Medium',
     color: '#000000',
-    fontSize: 18
+    fontSize: 16
   },
   tiletextM: {
     fontFamily: 'Poppins-Regular',

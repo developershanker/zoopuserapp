@@ -7,6 +7,7 @@ import Icons from 'react-native-vector-icons/FontAwesome5';
 import { SafeAreaView } from 'react-navigation';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import ConstantValues from '../constantValues';
+import Colors from '../colors';
 // import Image from 'react-native-remote-svg';
 
 export default class contact extends Component {
@@ -119,7 +120,7 @@ export default class contact extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 25, color: '#000000' }}> Contact Us </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> Contact Us </Text>
               </View>
             </View>
             {/* header view ends */}
@@ -148,28 +149,28 @@ export default class contact extends Component {
               />
               <CustomButton
                 disabled={this.state.clicked}
-                style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : '#60b246', alignSelf: 'center', marginBottom: 20, width: 300 }}
+                style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : Colors.newgGreen3, alignSelf: 'center', marginBottom: 20, width: 300 }}
                 onPress={() => { this.sendContent(this.state.name, this.state.mobile, this.state.description) }}
-                title={this.state.clicked === false ? 'Submit' : 'Message Sent'}
+                title={this.state.clicked === false ? 'SUBMIT' : 'Message Sent'}
               />
             </View>
 
             <View>
               <View style={styles.detailview}>
                 <Image style={styles.image} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.location }} />
-                <Text style={[styles.detailText, { width: 200, textAlign: 'center' }]}> {this.state.zoopAddress} </Text>
+                <Text style={[styles.detailText, { width: 200,  }]}> {this.state.zoopAddress} </Text>
               </View>
               <View style={styles.detailview}>
                 <Image style={styles.image} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.call }} />
-                <Text style={[styles.detailText, { width: 200, textAlign: 'center' }]}> {this.state.zoopPhone} </Text>
+                <Text style={[styles.detailText, { width: 200,}]}> {this.state.zoopPhone} </Text>
               </View>
               <View style={styles.detailview}>
                 <Image style={styles.image} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.email }} />
-                <Text style={[styles.detailText, { width: 200, textAlign: 'center' }]}> {this.state.zoopEmail} </Text>
+                <Text style={[styles.detailText, { width: 200,}]}> {this.state.zoopEmail} </Text>
               </View>
             </View>
 
-            <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 20 }}>
+            {/* <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 20 }}>
               <Text style={styles.textS}>FOLLOW US ON</Text>
               <View style={styles.detailview}>
 
@@ -192,7 +193,7 @@ export default class contact extends Component {
                 </View>
 
               </View>
-            </View>
+            </View> */}
 
           </View>
         </ScrollView>
@@ -241,8 +242,8 @@ const styles = StyleSheet.create({
   inputS: {
     fontFamily: 'Poppins-Regular',
     width: '80%',
-    fontSize: 15,
-    marginVertical: 40
+    fontSize: 14,
+    marginVertical: 20
   },
   textS: {
     fontFamily: 'Poppins-Regular',
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     width: '80%',
     fontSize: 15,
-    marginVertical: 40
+    marginVertical: 20
   },
   image: {
     width: 30,
@@ -268,7 +269,8 @@ const styles = StyleSheet.create({
   detailText: {
     fontFamily: 'Poppins-Regular',
     fontSize: 12,
-    color: '#000000'
+    color: '#000000',
+    textAlign:'left'
   },
   detailview: {
     flexDirection: 'row',

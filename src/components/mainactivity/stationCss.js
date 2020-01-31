@@ -42,11 +42,13 @@ const styles = StyleSheet.create({
       // backgroundColor: '#ffffff',
     },
     searchBarView: {
+      width:'85%',
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-around',
+      justifyContent: 'center',
       marginHorizontal: 5,
-      elevation:10
+      elevation:10,
+      //  backgroundColor: Colors.darkGreen,
     },
     card: {
       backgroundColor: '#ffffff',//can change as we move to various pages
@@ -125,8 +127,8 @@ const styles = StyleSheet.create({
       width: 130,
       paddingTop: 10,
       marginLeft: 10,
-      fontSize: 15,
-      fontFamily: 'Poppins-Regular',
+      fontSize: 14,
+      fontFamily: 'Poppins-Medium',
       color: '#000000',
       justifyContent: 'center',
     },
@@ -138,7 +140,6 @@ const styles = StyleSheet.create({
       backgroundColor: Colors.newOrange
     },
     ratingView: {
-      backgroundColor: '#a5ce39',
       marginLeft: 35,
       marginTop: 5,
       width: 35,
@@ -168,8 +169,8 @@ const styles = StyleSheet.create({
       marginLeft: 10
     },
     minorder: {
-      fontFamily: 'Poppins-Light',
-      color: '#b32120',
+      fontFamily: 'Poppins-Regular',
+      color: Colors.newOrange,
       fontSize: 12,
       marginLeft: 10,
       marginTop: 5,
@@ -215,8 +216,8 @@ const styles = StyleSheet.create({
     },
     textheader: {
       marginLeft: 20,
-      fontSize: 20,
-      fontFamily: 'Poppins-Regular',
+      fontSize: 18,
+      fontFamily: 'Poppins-Medium',
       color: '#000000',
       justifyContent: 'center',
     },

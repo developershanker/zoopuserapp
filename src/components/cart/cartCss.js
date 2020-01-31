@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View ,Dimensions ,StyleSheet} from 'react-native'
+import Colors from '../colors';
 
 
 const styles = StyleSheet.create({
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
       borderRadius: 6
     },
     coupontext: {
-      fontSize: 15,
+      fontSize: 14,
       // color:'#149db5',
       fontFamily: 'Poppins-Medium',
       textDecorationLine: 'underline'
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
       paddingVertical: 5
     },
     tiletext: {
+      fontSize:14,
       fontFamily: 'Poppins-Regular',
       color: '#000000'
     },
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
       fontSize: 20,
       width: 'auto',
       textTransform: 'uppercase',
-      color: '#f59120',
+      color: Colors.newOrange,
       fontFamily: 'Poppins-Medium',
       justifyContent: 'center'
     },
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       paddingVertical: 5,
       backgroundColor: '#ffffff',
-      borderColor: '#f59120',
+      borderColor: Colors.newOrange,
       borderRadius: 100 / 8,
       borderWidth: 1,
       borderStyle: 'dashed'
