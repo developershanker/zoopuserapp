@@ -3,9 +3,11 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Dimensions
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { CustomButton } from '../assests/customButtonLarge';
+import IconA from 'react-native-vector-icons/AntDesign';
 import DatePicker from 'react-native-datepicker';
 import servicesApi from './servicesApi';
 import moment from 'moment';
+import Colors from '../colors.js';
 
 export default class bulkOrder extends Component {
   constructor(props) {
@@ -20,7 +22,7 @@ export default class bulkOrder extends Component {
       comment: '',
       buttonColor:'#9b9b9b',
       clicked: false,
-      buttonText:'Submit'
+      buttonText:'SUBMIT'
     };
   }
 
@@ -79,11 +81,6 @@ export default class bulkOrder extends Component {
     }
   }
 
-
-
-
-
-
   async sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment) {
     this.setState({ clicked: true, buttonColor: '#9b9b9b' ,buttonText:'Sending Request...'})
     try {
@@ -114,13 +111,13 @@ export default class bulkOrder extends Component {
           )
         )
       } else {
-        this.setState({ clicked: false, buttonColor: '#60b246' ,buttonText:'Submit'})
+        this.setState({ clicked: false, buttonColor: '#60b246' ,buttonText:'SUBMIT'})
         return (
           ToastAndroid.show('Something went wrong!! Try again later!!', ToastAndroid.LONG)
         )
       }
     } catch (error) {
-      this.setState({ clicked: false, buttonColor: '#60b246' ,buttonText:'Submit'})
+      this.setState({ clicked: false, buttonColor: '#60b246' ,buttonText:'SUBMIT'})
       console.log('Data received in bulkOrder.js catch: ' + error)
     }
   }
@@ -135,7 +132,7 @@ export default class bulkOrder extends Component {
             {/* header view */}
             <View style={{ flexDirection: 'row', paddingBottom: 10 }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+                <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
                 <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 20, color: '#000000' }}> Bulk Order Request </Text>
@@ -216,7 +213,7 @@ export default class bulkOrder extends Component {
                 minDate={moment().toDate()}
                 maxDate={moment().add(120, 'days').format("DD-MM-YYYY")}         //"01-01-2030"
                 confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
+                cancelBtnText="CANCEL"
                 customStyles={{
                   dateIcon: {
                     position: 'absolute',

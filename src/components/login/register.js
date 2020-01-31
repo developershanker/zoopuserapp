@@ -3,6 +3,7 @@ import { Picker, View, Text, StyleSheet, Dimensions, TextInput, ToastAndroid, Pe
 import { CustomButton } from '../assests/customButtonLarge.js';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import CustomTouchableOpacity from '../assests/customTouchableOpacity';
 import loginApi from '../login/loginApi.js';
@@ -282,7 +283,7 @@ export class Register extends Component {
         {/* header view */}
         <View style={{ flexDirection: 'row', paddingBottom: 10, justifyContent: 'flex-start' }}>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-            <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+          <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
           </TouchableOpacity>
           <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
             <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> My Profile </Text>

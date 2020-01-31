@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Alert,CheckBox, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import SplashScreen from 'react-native-splash-screen';
@@ -180,7 +181,7 @@ export default class MyWallet extends Component {
             {/* header view */}
             <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+              <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
                 <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> My Wallet Statement </Text>

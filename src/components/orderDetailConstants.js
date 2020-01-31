@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Device from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 
 
 export default class OrderDetailConstants {
     static data = []
+    static orderId = ''
     static zoopTransactionNo = ''
     static irctcOrderId = ''
     static status = ''

@@ -89,7 +89,7 @@ export default class SignUp extends Component {
           </View>
           <View style={{ paddingHorizontal: 20, alignItems: 'center' }}>
             <CustomButton
-              title="Submit"
+              title="SUBMIT"
               onPress={
                 () => {
                   // console.log(this.state.text)

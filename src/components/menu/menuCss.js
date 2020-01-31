@@ -17,22 +17,25 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     // justifyContent: 'center',
     marginTop:'5%',
-    backgroundColor: '#ffffff',
+    backgroundColor: Colors.white,
     borderTopStartRadius:100/5,
     borderTopEndRadius:100/5,
     // borderColor:Colors.darkGreen,
     // borderTopWidth:1
   },
   topContainer: {
+    paddingVertical:2,
     width: Dimensions.get('window').width,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: Colors.white,
+    borderBottomColor:Colors.lightGrey,
+    borderBottomWidth:0.2,
   },
   outletName: {
     // paddingTop: 15,
-    // textAlign: 'center',
-    alignSelf: 'flex-start',
+    textAlign: 'center',
+    alignSelf: 'center',
     fontSize: 18,
     color: Colors.black,
     fontFamily: 'Poppins-Medium',
@@ -119,7 +122,7 @@ const styles = StyleSheet.create({
     // flexDirection: 'column',
     // justifyContent: 'center',
     // alignItems: 'flex-end',
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     paddingVertical: 10,
     // borderTopStartRadius: 100 / 5,
     // borderTopEndRadius: 100 / 5
@@ -184,10 +187,10 @@ const styles = StyleSheet.create({
   menuCardContainer: {
     flexDirection: 'row',
     alignSelf: 'center',
-    width: Dimensions.get('window').width - 10,
+    width: '96%',
     borderRadius: 6,
-    backgroundColor: '#ffffff',//can change as we move to various pages
-    marginBottom: 10,//can change as we move to various pages
+    backgroundColor: Colors.white,//can change as we move to various pages
+    marginVertical: 5,//can change as we move to various pages
     marginLeft: '2%', //can change as we move to various pages
     // borderColor: '#e4e4e4',
     // borderWidth: 1,
@@ -203,7 +206,7 @@ const styles = StyleSheet.create({
   },
   itemName: {
     paddingHorizontal: 5,
-    width: 200,
+    width: '100%',
     fontFamily: 'Poppins-Regular',
     fontSize: 14,
     color: '#000000'
@@ -247,15 +250,15 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     flexDirection: 'row',
     position: 'absolute',
-    width: 70,
-    height: 60,
+    // width: 80,
+    // height: 60,
     alignItems: 'center',
     justifyContent: 'center',
     right: 10,
     top: 10,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
-    elevation: 8
+    // backgroundColor: '#f0f0f0',
+    // borderRadius: 6,
+    // elevation: 8
   },
   fabIcon: {
     marginLeft: 10,

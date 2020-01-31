@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Dimensions, Button, } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Modal from "react-native-modal";
 
@@ -18,7 +19,7 @@ export default class DeliveryMark extends Component {
       visibleModal: 'bottom'
     };
   }
-  
+
 
 
   render() {
@@ -39,11 +40,11 @@ export default class DeliveryMark extends Component {
 
 
             <TouchableOpacity onPress={() => {
-               this.setState({ visibleModal: null }),
-              this.props.navigation.navigate('OrderFeedback')
+              this.setState({ visibleModal: null }),
+                this.props.navigation.navigate('OrderFeedback')
             }}>
               <View style={styles.optionView}>
-                <Text style={{ fontFamily:'Poppins-Bold', color: '#000000' }}>Yes</Text>
+                <Text style={{ fontFamily: 'Poppins-Bold', color: '#000000' }}>Yes</Text>
               </View>
             </TouchableOpacity>
 
@@ -51,7 +52,7 @@ export default class DeliveryMark extends Component {
 
             <TouchableOpacity onPress={() => {
               this.setState({ visibleModal: null }),
-              this.props.navigation.navigate('TrackingOrder')
+                this.props.navigation.navigate('TrackingOrder')
             }}>
               <View style={styles.optionView}>
                 <Text style={styles.textO} >No</Text>
@@ -70,12 +71,12 @@ export default class DeliveryMark extends Component {
 }
 const styles = StyleSheet.create({
   textQ: {
-    fontFamily:'Poppins-Bold',
+    fontFamily: 'Poppins-Bold',
     color: '#ffffff',
     marginVertical: 10
   },
   textO: {
-    fontFamily:'Poppins-Bold',
+    fontFamily: 'Poppins-Bold',
     color: '#000000'
   },
   modalView: {

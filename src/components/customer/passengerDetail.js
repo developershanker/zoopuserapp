@@ -15,6 +15,7 @@ import Modal from "react-native-modal";
 import searchApi from '../mainactivity/searchApi.js';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
+import Colors from '../colors.js';
 
 export default class passengerDetail extends Component {
   componentDidMount() {
@@ -447,7 +448,7 @@ export default class passengerDetail extends Component {
     this.setState({
       // On State false it will enable the button.
       ButtonStateHolder: false,
-      backgroundColor: '#FF5819'
+      backgroundColor: Colors.newOrange
     })
   }
 
@@ -465,7 +466,7 @@ export default class passengerDetail extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity> */}
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 10, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 20, color: '#000000' }}> Add Passenger Detail </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> Add Passenger Detail </Text>
               </View>
             </View>
             {/* header view ends */}
@@ -487,7 +488,7 @@ export default class passengerDetail extends Component {
 
                 <TouchableOpacity onPress={() => this.setState({ enterSeatInfo: 'bottom' })}>
                   <View style={[styles.inputView, { marginTop: 10 }]}>
-                    <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#F15926', textAlign: 'center', paddingHorizontal: 10, paddingVertical: 5 }}>Change Coach and Seat Information</Text>
+                    <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: Colors.newOrange, textAlign: 'center', paddingHorizontal: 10, paddingVertical: 5 }}>Change Coach and Seat Information</Text>
                   </View>
                 </TouchableOpacity>
 
@@ -496,13 +497,13 @@ export default class passengerDetail extends Component {
 
               <View style={[styles.billcard, { marginTop: 10 }]}>
                 <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-                  <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Coach : {ConstantValues.coach}</Text>
-                  <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Seat : {ConstantValues.seat}</Text>
+                  <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Coach : {ConstantValues.coach}</Text>
+                  <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Seat : {ConstantValues.seat}</Text>
 
                 </View>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Station : {ConstantValues.stationName}</Text>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Expected Date of Delivery : {ConstantValues.deliveryDate}</Text>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Expected Time of Delivery : {ConstantValues.deliveryTime}</Text>
+                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Station : {ConstantValues.stationName}</Text>
+                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Expected Date of Delivery : {ConstantValues.deliveryDate}</Text>
+                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Expected Time of Delivery : {ConstantValues.deliveryTime}</Text>
               </View>
               <View style={styles.inputView}>
                 <TextInput
@@ -515,8 +516,8 @@ export default class passengerDetail extends Component {
                   onChangeText={name => this.setState({ name })}
                 />
               </View>
-              <View style={{ paddingVertical: 10 }}>
-                {/* <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Contact No - {ConstantValues.customerPhoneNo}</Text> */}
+              <View style={{ paddingVertical: 5 }}>
+                {/* <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000' }}>Contact No - {ConstantValues.customerPhoneNo}</Text> */}
                 <View style={styles.inputView}>
                   <TextInput
                     style={styles.input}
@@ -530,7 +531,7 @@ export default class passengerDetail extends Component {
                   />
                 </View>
               </View>
-              <View style={{ paddingVertical: 10 }}>
+              <View style={{ paddingVertical: 5 }}>
                 <View style={styles.inputView}>
                   <TextInput
                     style={styles.input}
@@ -544,7 +545,7 @@ export default class passengerDetail extends Component {
                   />
                 </View>
               </View>
-              <View style={{ paddingVertical: 10 }}>
+              <View style={{ paddingVertical: 5 }}>
                 <View style={styles.inputView}>
                   <TextInput
                     style={styles.input}
@@ -557,10 +558,10 @@ export default class passengerDetail extends Component {
                   />
                 </View>
               </View>
-              <View style={{ paddingVertical: 10 }}>
+              <View style={{ paddingVertical: 5 }}>
                 <View style={styles.inputView}>
                   <TextInput
-                    style={{ fontSize: 15, color: '#000000', fontFamily: 'Poppins-Regular', }}
+                    style={{ fontSize: 14, color: '#000000', fontFamily: 'Poppins-Regular', }}
                     placeholder='Any request for the restaurant? Please write here..'
                     editable={true}
                     //keyboardType='default'
@@ -603,9 +604,9 @@ export default class passengerDetail extends Component {
           </View>
         </ScrollView>
         <CustomButton
-          style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
+          style={{ backgroundColor: Colors.newgGreen3, alignSelf: 'center', marginBottom: 10, }}
           onPress={() => this.proceedToPay()}  //this.proceedToPay()
-          title='Proceed To Pay'
+          title='PROCEED TO PAY'
         />
 
 
@@ -618,7 +619,7 @@ export default class passengerDetail extends Component {
           style={styles.bottomModal}
         >
           <View style={styles.modalView}>
-            <Text style={{ fontSize: 20, paddingTop: 10, color: '#000000', textAlign: 'center', fontFamily: 'Poppins-Regular' }}> Enter PNR</Text>
+            <Text style={{ fontSize: 18, paddingTop: 10, color: '#000000', textAlign: 'center', fontFamily: 'Poppins-Regular' }}> Enter PNR</Text>
             <View style={styles.inputViewmodal}>
               <TextInput style={styles.inputmodal}
                 placeholder="Enter PNR"
@@ -630,12 +631,12 @@ export default class passengerDetail extends Component {
             </View>
             <View style={{ paddingHorizontal: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
               <CustomButtonShort
-                title='Search Again'
+                title='SEARCH AGAIN'
                 onPress={() => { this.props.navigation.navigate('Search') }}
-                style={{ backgroundColor: '#9b9b9b', justifyContent: 'center', }}
+                style={{ backgroundColor: Colors.darkGrey, justifyContent: 'center', }}
               />
               <CustomButtonShort
-                title="Submit"
+                title="SUBMIT"
                 onPress={
                   () => {
                     if (this.state.enterPnrmodal != '' && this.state.enterPnrmodal.length == 10) {
@@ -653,7 +654,7 @@ export default class passengerDetail extends Component {
                     }
                   }
                 }
-                style={{ backgroundColor: '#FF5819', justifyContent: 'center', }}
+                style={{ backgroundColor: Colors.newOrange, justifyContent: 'center', }}
               />
             </View>
           </View>
@@ -698,7 +699,7 @@ export default class passengerDetail extends Component {
               minDate={moment().toDate()}
               maxDate="01-01-2030"
               confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
+              cancelBtnText="CANCEL"
               customStyles={{
                 dateIcon: {
                   position: 'absolute',
@@ -714,7 +715,7 @@ export default class passengerDetail extends Component {
                   borderWidth: 1,
                 },
                 dateText: {
-                  fontSize: 15,
+                  fontSize: 14,
                   textAlign: 'center',
                   color: '#000000',
 
@@ -722,7 +723,7 @@ export default class passengerDetail extends Component {
                 },
                 placeholderText: {
                   textAlign: 'center',
-                  fontSize: 15,
+                  fontSize: 14,
                   color: '#',
                   color: '#989c9a',
                   fontFamily: 'Poppins-Regular',
@@ -739,7 +740,7 @@ export default class passengerDetail extends Component {
               // minDate="01-01-2016"
               // maxDate="01-01-2030"
               confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
+              cancelBtnText="CANCEL"
               customStyles={{
                 dateIcon: {
                   position: 'absolute',
@@ -753,10 +754,10 @@ export default class passengerDetail extends Component {
                   borderRadius: 5,
                   borderColor: '#e7e7e7',
                   borderWidth: 1,
-                  paddingVertical: 10
+                  paddingVertical: 5
                 },
                 dateText: {
-                  fontSize: 15,
+                  fontSize: 14,
                   textAlign: 'center',
                   color: '#000000',
 
@@ -764,7 +765,7 @@ export default class passengerDetail extends Component {
                 },
                 placeholderText: {
                   textAlign: 'center',
-                  fontSize: 15,
+                  fontSize: 14,
                   color: '#989c9a',
                   fontFamily: 'Poppins-Regular',
                 }
@@ -775,12 +776,12 @@ export default class passengerDetail extends Component {
             <View style={{ paddingHorizontal: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
 
               <CustomButtonShort
-                title='Close'
-                style={{ backgroundColor: '#9b9b9b', justifyContent: 'center', }}
+                title='CLOSE'
+                style={{ backgroundColor: Colors.darkGrey, justifyContent: 'center', }}
                 onPress={() => this.setState({ enterSeatInfo: null })}
               />
               <CustomButtonShort
-                title="Submit"
+                title="SUBMIT"
                 onPress={
                   () => {
                     if (this.state.seatNo != '') {
@@ -827,7 +828,7 @@ export default class passengerDetail extends Component {
 
 
 
-                style={{ backgroundColor: '#FF5819', justifyContent: 'center', }}
+                style={{ backgroundColor: Colors.newOrange, justifyContent: 'center', }}
 
 
               />
@@ -880,7 +881,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20
   },
   input: {
-    fontSize: 15,
+    fontSize: 14,
     color: '#000000',
     width: Dimensions.get('window').width - 50,
     fontFamily: 'Poppins-Regular',
@@ -893,7 +894,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
     paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingVertical: 5,
     borderTopStartRadius: 100 / 5,
     borderTopEndRadius: 100 / 5
   },
@@ -905,7 +906,7 @@ const styles = StyleSheet.create({
     marginVertical: 10
   },
   inputmodal: {
-    fontSize: 15,
+    fontSize: 14,
     width: Dimensions.get('window').width - 120,
     color: '#000000',
     fontFamily: 'Poppins-Regular',

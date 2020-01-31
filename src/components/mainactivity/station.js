@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Text, Dimensions, View, ScrollView, StyleSheet, Alert, ToastAndroid, Image, SectionList, TouchableOpacity, TouchableWithoutFeedback, FlatList, TextInput, CheckBox, ActivityIndicator, BackHandler } from 'react-native';
+import { Text, Dimensions, View, ScrollView, StyleSheet, Alert, ToastAndroid, Image, SectionList, TouchableOpacity, TouchableWithoutFeedback, FlatList, TextInput, CheckBox, ActivityIndicator, BackHandler, Animated, Easing } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 // import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
 import { StationHeader } from './stationHeader.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Modal from "react-native-modal";
 import { CustomButtonShort } from '../assests/customButtonShort.js';
@@ -45,6 +46,7 @@ export default class station extends Component {
   }
   constructor(props) {
     super(props);
+    this.animatedValue = new Animated.Value(0)
     this.state = {
       firstQuery: '',
       visibleModal: null,
@@ -63,18 +65,28 @@ export default class station extends Component {
 
   componentWillMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-}
-
-componentWillUnmount() {
+  }
+  animate() {
+    this.animatedValue.setValue(0)
+    Animated.timing(
+      this.animatedValue,
+      {
+        toValue: 1,
+        duration: 7000,
+        easing: Easing.linear
+      }
+    ).start(()=>this.animate())
+  }
+  componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-}
+  }
 
-handleBackButton = () => {
-  console.log('I am back on Station.js')
+  handleBackButton = () => {
+    console.log('I am back on Station.js')
     this.props.navigation.navigate('Search')
 
     return true;
-};
+  };
   handleChange = (index, cuisine) => {
     let checked = [...this.state.checked];
     checked[index] = !checked[index];
@@ -142,6 +154,7 @@ handleBackButton = () => {
             this.setState({
               isVisible: false
             })
+            this.animate()
             return this.state.FilteredStationList
 
           } else {
@@ -197,13 +210,13 @@ handleBackButton = () => {
     }
   }
 
-  gotoMenu = (stationId, outletId, stationName, stationCode, arrivalTime, schArrivalTime, haltTime, arrDate, arrival, outletName, outletRating, minimumOrderValue, cutOffTime, zoopCustomerDeliveryCharge, zoopCustomerDeliveryChargeGstRate, zoopCustomerDeliveryChargeGst, eta, openTime, closeTime, weeklyOff, gstin, fssaiNo, offer, items,outletImage) => {
+  gotoMenu = (stationId, outletId, stationName, stationCode, arrivalTime, schArrivalTime, haltTime, arrDate, arrival, outletName, outletRating, minimumOrderValue, cutOffTime, zoopCustomerDeliveryCharge, zoopCustomerDeliveryChargeGstRate, zoopCustomerDeliveryChargeGst, eta, openTime, closeTime, weeklyOff, gstin, fssaiNo, offer, items, outletImage) => {
     const momemtHaltTime = moment(haltTime, 'HHmmss').format('mm')
     const checkedArrival = ((arrival === '--' || arrival === null) ? schArrivalTime : arrival)
     ConstantValues.stationId = stationId,
       ConstantValues.outletId = outletId,
       ConstantValues.outletImage = outletImage
-      ConstantValues.stationName = stationName,
+    ConstantValues.stationName = stationName,
       ConstantValues.stationCode = stationCode
     // ConstantValues.ata = '07:50'
     ConstantValues.ata = (schArrivalTime === null ? arrivalTime : schArrivalTime)
@@ -264,6 +277,10 @@ handleBackButton = () => {
   render() {
     const width = Dimensions.get('window').width
     let temp = ''
+    const marginLeft = this.animatedValue.interpolate({
+      inputRange: [1, 1],
+      outputRange: [0, width]
+    })
     return (this.state.isVisible === true ? <StationLoader visible={this.state.isVisible} /> :
       <SafeAreaView style={styles.slide}>
         {/* <View style={{flexDirection:'column',alignItems:'center'}}>
@@ -274,13 +291,14 @@ handleBackButton = () => {
         <View style={styles.topContainer}>
           <View>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-              <Icon style={{ margin: 15 }} name={'chevron-left'} size={20} color={'#000000'} />
+              {/* <Icon style={{ margin: 15 }} name={'chevron-left'} size={20} color={'#000000'} /> */}
+              <IconA style={{ margin: 15 }} name={'arrowleft'} size={25} color={Colors.black} />
             </TouchableOpacity>
           </View>
           {/* Searchbar begins */}
 
           <View style={styles.searchBarView}>
-            <Text style={{ fontSize: 18, fontFamily: 'Poppins-Medium',textAlign:'center',color:Colors.black}}>Pick Station & Restaurant</Text>
+            <Text style={{ fontSize: 18, fontFamily: 'Poppins-Medium', textAlign: 'center', color: Colors.black }}>Pick Station & Restaurant</Text>
           </View>
 
           {/* Searchbar ends */}
@@ -340,7 +358,8 @@ handleBackButton = () => {
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               alwaysBounceHorizontal={true}
-              contentContainerStyle={styles.contentContainer}>
+            // contentContainerStyle={styles.contentContainer}
+            >
               <FlatList
                 data={this.state.FilteredStationList}
                 // data={this.state.data}
@@ -362,6 +381,18 @@ handleBackButton = () => {
                 keyExtractor={(item) => item.stationId.toString()}
               />
             </ScrollView>
+            <View style={{ flexDirection: 'column' }}>
+              {/* <View style={{ height: 28, width: width - 200 }}> */}
+                <Image style={styles.img} source={require('../images/halfTrainCrop.png')} />
+              {/* </View> */}
+              {/* <View style={{ flexDirection: 'row' }}>
+              <Image style={styles.img} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.sleeperCoach }} />
+              <Image style={styles.img} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.acCoach }} />
+              <Image style={styles.img} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.acCoach }} />
+              <Image style={styles.img} source={require('../images/trainengine.png')} />
+            </View> */}
+              <Image style={{ width: '100%', height: 1, margin: 2 }} source={require('../images/track.png')} />
+            </View>
           </View>
         </View>
         {/* OutletView starts */}
@@ -374,15 +405,17 @@ handleBackButton = () => {
               // ItemSeparatorComponent={this.FlatListItemSeparator}
               renderItem={({ item, index }) =>
                 // <Fade visible={item.isVisible && item.outlets.length != 0}>
-                <View style={{ borderRadius: 5, borderColor: '#e7e7e7', borderWidth: 1, marginVertical: 5, marginHorizontal: 10 }}>
+                <View style={{ borderRadius: 5, borderColor: '#e7e7e7', borderWidth: 1, marginVertical: 5, paddingVertical: 5, marginHorizontal: 10 }}>
                   <Text style={styles.textheader}>{item.stationName}</Text>
                   <View style={styles.stextview}>
                     {/* <Text style={styles.stext}>Halt : {moment(item.haltTime, 'HHmmss').format('mm')} mins | </Text>
                     <Text style={styles.stext}> S.T.A : {moment(item.arrivalTime, 'HHmmss').format('hh:mm A')} | </Text>
                     <Text style={styles.stext}> E.T.A : {moment(item.expectedTime, 'HHmmss').format('hh:mm A')}</Text> */}
-                    <Text style={styles.stext}>Halt: {item.halt === null ? moment(item.haltTime, 'HH:mm:ss').format('mm') : moment(item.halt, 'mm:ss').format('mm')} mins | </Text>
-                    <Text style={styles.stext}>S.T.A: {item.schArrivalTime === null || item.arrival === '--' ? moment(item.expectedTime, 'HHmmss').format('hh:mm A') : moment(item.schArrivalTime, 'HHmmss').format('hh:mm A')} | </Text>
-                    <Text style={styles.stext}>E.T.A: {item.arrival === null || item.arrival === '--' ? moment(item.arrivalTime, 'HHmmss').format('hh:mm A') : moment(item.arrival,'HHmmss').format('hh:mm A')}</Text>
+                    <Text style={styles.stext}>Halt: {item.halt === null ? moment(item.haltTime, 'HH:mm:ss').format('mm') : moment(item.halt, 'mm:ss').format('mm')} mins</Text>
+                    <Text style={[styles.stext, { color: Colors.black, fontFamily: 'Poppins-Medium', }]}> | </Text>
+                    <Text style={styles.stext}>S.T.A: {item.schArrivalTime === null || item.arrival === '--' ? moment(item.expectedTime, 'HHmmss').format('hh:mm A') : moment(item.schArrivalTime, 'HHmmss').format('hh:mm A')}</Text>
+                    <Text style={[styles.stext, { color: Colors.black, fontFamily: 'Poppins-Medium', }]}> | </Text>
+                    <Text style={styles.stext}>E.T.A: {item.arrival === null || item.arrival === '--' ? moment(item.arrivalTime, 'HHmmss').format('hh:mm A') : moment(item.arrival, 'HHmmss').format('hh:mm A')}</Text>
                   </View>
 
                   {/* OutletView starts */}
@@ -395,7 +428,7 @@ handleBackButton = () => {
                       temp = ''
                       return (
                         <View style={styles.outletContainer} key={index} >
-                          <TouchableWithoutFeedback style={styles.card}
+                          <TouchableWithoutFeedback
                             // disabled = {!item.isVisible} 
                             onPress={() => {
                               this.gotoMenu(
@@ -430,15 +463,17 @@ handleBackButton = () => {
                             <View style={styles.card}>
                               <Image source={{ uri: outlets.outletImage }} style={styles.outletimage} />
                               <View style={styles.detail}>
-                                <View style={{ flexDirection: 'column' }}>
-                                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',}}>
+                                <View style={{ flexDirection: 'column', width: '100%' }}>
+                                  <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: Colors.white }}>
                                     <Text style={styles.outletname}>
                                       {outlets.outletName}
                                     </Text>
-                                    <View style={[styles.ratingView, { backgroundColor: outlets.outletRating >= 4.5 ? Colors.darkGreen : Colors.newgGreen2 }]}>
-                                      <Text style={styles.rating}>
-                                        {outlets.outletRating}
-                                      </Text>
+                                    <View style={{ width: '25%', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: 'flex-end', backgroundColor: Colors.white }}>
+                                      <View style={[styles.ratingView, { backgroundColor: outlets.outletRating >= 4.5 ? Colors.darkGreen : Colors.newgGreen2 }]}>
+                                        <Text style={styles.rating}>
+                                          {outlets.outletRating}
+                                        </Text>
+                                      </View>
                                     </View>
                                   </View>
 
@@ -457,11 +492,11 @@ handleBackButton = () => {
                                     {temp.slice(0, -2)}
                                   </Text>
                                   {/* </View> */}
-                                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: Colors.white, width: '100%' }}>
                                     <Text style={styles.minorder}>
                                       Min. Order : {ConstantValues.minrupee} {outlets.minimumOrderValue}
                                     </Text>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignContent: 'flex-end', paddingLeft: 30 }}>
+                                    <View style={{ flexDirection: 'row', width: '25%', justifyContent: 'flex-end', alignContent: 'flex-end', }}>
                                       <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.veg }} style={{ width: 15, height: 15, alignSelf: 'center' }} />
 
                                       <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} style={{ width: 15, height: 15, alignSelf: 'center', opacity: outlets.isPureVeg == 0 ? 1 : 0 }} />

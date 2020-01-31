@@ -25,11 +25,11 @@ export const BillCard = (props) => {
                         <Text style={styles.tiletext}>{ConstantValues.rupee} {totalBasePrice}</Text>
                     </View>
                     <View style={styles.tile}>
-                        <Text style={styles.tiletext}>(+) GST on food</Text>
+                        <Text style={styles.tiletext}>+ GST on food</Text>
                         <Text style={styles.tiletext}>{ConstantValues.rupee} {gst}</Text>
                     </View>
                     <View style={styles.tile}>
-                        <Text style={styles.tiletext}>(+) Delivery Charge (Inc. GST)</Text>
+                        <Text style={styles.tiletext}>+ Delivery Charge (Inc. GST)</Text>
                         <Text style={styles.tiletext}>{ConstantValues.rupee} {deliveryCharge}</Text>
                     </View>
                     {/* <View style={styles.tile}>

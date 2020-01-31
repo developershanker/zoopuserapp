@@ -16,10 +16,10 @@ const styles = StyleSheet.create({
       // backgroundColor: '#ffffff',
     },
     stationContainer: {
-      margin: 5,
+      // margin: 5,
       alignItems: 'stretch',
       justifyContent: 'flex-start',
-      backgroundColor: '#ffffff',
+      // backgroundColor: Colors.lightYellow,
     },
     bottomModal: {
       justifyContent: 'flex-end',
@@ -37,31 +37,31 @@ const styles = StyleSheet.create({
       borderTopEndRadius: 100 / 5
     },
     outletContainer: {
-      alignItems: 'stretch',
-      justifyContent: 'flex-start',
-      // backgroundColor: '#ffffff',
+      // alignItems: 'stretch',
+      justifyContent: 'center',
+      backgroundColor: Colors.white,
     },
     searchBarView: {
-      width:'85%',
+      width:'80%',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       marginHorizontal: 5,
-      elevation:10,
-      //  backgroundColor: Colors.darkGreen,
+      // elevation:10,
+      // backgroundColor: Colors.darkGreen,
     },
     card: {
-      backgroundColor: '#ffffff',//can change as we move to various pages
-      marginBottom: 5,//can change as we move to various pages
+      backgroundColor: Colors.white,//can change as we move to various pages
+      // marginBottom: 1,//can change as we move to various pages
       marginLeft: '2%', //can change as we move to various pages
-      width: '96%', //can change as we move to various pages
+      width: '98%', //can change as we move to various pages
       // borderColor: '#e4e4e4',
       // borderRadius: 100 / 9,
       // borderWidth: 1,
       // shadowOpacity: 0.4,
       // borderBottomColor: '#e4e4e4',
       // borderBottomWidth: 4,
-      alignItems: 'center',
+      // alignItems: 'flex-start',
       flexDirection: 'row',
     },
     fab: {
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
       elevation: 8
     },
     scroll: {
-      height: 'auto',
+      // height: 'auto',
       flexDirection: 'column'
       // marginLeft: 10,
     },
@@ -96,6 +96,12 @@ const styles = StyleSheet.create({
       marginLeft: 5,
     },
     outletimage: {
+      marginTop: 5,
+      width: '25%',
+      height: '75%',
+      borderRadius: 100 / 8,
+    },
+    outletimageloader: {
       margin: 10,
       width: 100,
       height: 100,
@@ -109,7 +115,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
       paddingVertical: 25,
-      justifyContent: 'space-around',
+      // justifyContent: 'space-around',
     },
     text: {
       alignItems: 'center',
@@ -117,15 +123,18 @@ const styles = StyleSheet.create({
       // justifyContent:'center'
     },
     detail: {
-      // backgroundColor:'#e7e7e7',
-      justifyContent:'flex-start',
-      width: '70%',
+      backgroundColor:Colors.white,
+      // justifyContent:'flex-start',
+      // alignItems:'flex-start',
+      // alignContent:'flex-start',
+      width: '74%',
       height: 120,
       flexDirection: 'row'
     },
     outletname: {
-      width: 130,
-      paddingTop: 10,
+      backgroundColor:Colors.white,
+      width: '70%',
+      paddingTop: 5,
       marginLeft: 10,
       fontSize: 14,
       fontFamily: 'Poppins-Medium',
@@ -137,11 +146,15 @@ const styles = StyleSheet.create({
       height: 70,
       borderRadius: 100 / 2,
       marginLeft: 20,
-      backgroundColor: Colors.newOrange
+      backgroundColor: Colors.white
+    },
+    img:{
+      width:'70%',
+      height:25
     },
     ratingView: {
-      marginLeft: 35,
-      marginTop: 5,
+      // marginLeft: 35,
+      // marginTop: 5,
       width: 35,
       height: 20,   //#0e8341
       alignItems: 'center',
@@ -155,25 +168,30 @@ const styles = StyleSheet.create({
       color: '#ffffff'
     },
     stationView: {
+      // margin:5,
       width: 100,
-      justifyContent: 'center',
-      alignContent: 'center',
-      alignItems: 'center'
+      justifyContent: 'flex-start',
+      alignContent: 'flex-start',
+      alignItems: 'flex-start',
+      alignSelf:'flex-start',
+      // backgroundColor: Colors.newOrange
     },
     cuisine: {
-      width: 200,
-      // backgroundColor:'#e7e7e7',
+      width: '70%',
+      backgroundColor:Colors.white,
       // flexDirection:'row',
       fontSize: 10,
       fontFamily: 'Poppins-Regular',
       marginLeft: 10
     },
     minorder: {
+      backgroundColor:Colors.white,
       fontFamily: 'Poppins-Regular',
       color: Colors.newOrange,
       fontSize: 12,
       marginLeft: 10,
       marginTop: 5,
+      width: '70%',
     },
     modalViewHeading: {
       justifyContent: 'center',

@@ -183,12 +183,12 @@ export default class otpVerify extends Component {
             <View style={{ paddingHorizontal: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
               <CustomButtonShort
                 style={[styles.button, { backgroundColor: '#9b9b9b' }]}
-                title="Cancel"
+                title="CANCEL"
                 onPress={() => this.handleCancel()}
               />
               <CustomButtonShort
                 style={[styles.button, { backgroundColor: this.state.backgroundColor }]}
-                title="Submit"
+                title="SUBMIT"
                 activeOpacity={.5}
                 disabled={this.state.ButtonStateHolder}
                 color="#1abc9c"

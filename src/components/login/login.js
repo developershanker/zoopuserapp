@@ -28,7 +28,7 @@ export default class login extends Component {
 
           <CustomButton
             style={styles.button}
-            title="Submit"
+            title="SUBMIT"
             onPress={
               () => this.props.navigation.navigate('Search')}
 

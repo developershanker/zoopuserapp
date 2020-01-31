@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Linking, TouchableOpacity, StyleSheet, Dimensions, Image } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import ConstantValues from '../constantValues';
+import IconA from 'react-native-vector-icons/AntDesign';
 import Modal from 'react-native-modal';
 import { CustomButtonShort } from '../assests/customButtonShort';
 import Colors from '../colors';
@@ -40,8 +41,12 @@ export default class rateUs extends Component {
 
   render() {
     return (
-      <View style={{ flex:1, justifyContent: 'center', alignContent: 'flex-start', alignItems: 'center' }}>
-        <View style={{ width: ConstantValues.deviceWidth - 20, height: '30%' ,justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+      <View style={{ flex: 1, justifyContent: 'center', alignContent: 'flex-start', alignItems: 'center' }}>
+        {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}> */}
+          {/* <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} /> */}
+          {/* <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
+        </TouchableOpacity> */}
+        <View style={{ width: ConstantValues.deviceWidth - 20, height: '30%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
           <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
             style={{ width: 150, height: 100 }}
           />

@@ -35,12 +35,13 @@ const styles = StyleSheet.create({
     },
     couponcard: {
       // width: Dimensions.get('window').width - 5,
+      alignSelf:'center',
       backgroundColor: '#ffffff',//can change as we move to various pages
-      marginBottom: 10,//can change as we move to various pages
-      marginLeft: '2%', //can change as we move to various pages
+      marginBottom: 5,//can change as we move to various pages
+      // marginLeft: '2%', //can change as we move to various pages
       width: '90%', //can change as we move to various pages
       borderColor: '#e4e4e4',
-      borderRadius: 100 / 9,
+      borderRadius: 6,
       borderWidth: 1,
       shadowOpacity: 0.4,
       borderBottomColor: '#e4e4e4',
@@ -67,12 +68,13 @@ const styles = StyleSheet.create({
       // textDecorationLine: 'underline'
     },
     billcard: {
+      alignSelf:'center',
       backgroundColor: '#ffffff',//can change as we move to various pages
-      marginBottom: 10,//can change as we move to various pages
-      marginLeft: '2%', //can change as we move to various pages
+      marginBottom: 5,//can change as we move to various pages
+      // marginLeft: '2%', //can change as we move to various pages
       width: '90%', //can change as we move to various pages
       borderColor: '#e4e4e4',
-      borderRadius: 100 / 9,
+      borderRadius: 6,
       borderWidth: 1,
       shadowOpacity: 0.4,
       borderBottomColor: '#e4e4e4',
@@ -82,8 +84,8 @@ const styles = StyleSheet.create({
       // width: Dimensions.get('screen').width - 20,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      paddingHorizontal: 10,
-      paddingVertical: 5
+      paddingHorizontal: 5,
+      paddingVertical: 2
     },
     tiletext: {
       fontSize:14,

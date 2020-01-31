@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, Dimensions, SectionList, ScrollView, 
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import CustomMenuFAB from '../assests/customMenuFAB.js';
 import ToggleSwitch from 'toggle-switch-react-native'

@@ -38,19 +38,19 @@ export const CouponPanel = (props) => {
                                 onPress={onPressCheckBox}
                             />
                             <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: 180 }}>
-                                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000' }}>Use Wallet Balance</Text>
+                                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000' }}>Use Wallet Balance</Text>
                                 <Text style={{ fontSize: 10, fontFamily: 'Poppins-Light', color: '#000000', alignSelf: 'center' }}>(Rs.50/- per order can be used)</Text>
                             </View>
                         </View>
                         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ fontSize: 10, fontFamily: 'Poppins-Light' }}>Available Balance</Text>
+                            <Text style={{ fontSize: 8, fontFamily: 'Poppins-Light' }}>Available Balance</Text>
                             {/* <Text style={{ fontSize: 20, fontFamily: 'Poppins-Regular', color: '#000000' }}>{ConstantValues.rupee} {this.state.walletUsed == true ? ConstantValues.walletBalance - 50 : ConstantValues.walletBalance}</Text> */}
-                            <Text style={{ fontSize: 20, fontFamily: 'Poppins-Regular', color: '#000000' }}>{ConstantValues.rupee} {walletBalance}</Text>
+                            <Text style={{ fontSize: 16, fontFamily: 'Poppins-Regular', color: '#000000' }}>{ConstantValues.rupee} {walletBalance}</Text>
                         </View>
                     </View>
                     {/* {ConstantValues.rupee} {this.state.walletUsed == true ? ConstantValues.walletBalance - 50 : ConstantValues.walletBalance} */}
 
-                    <Text style={{ alignSelf: 'center', fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>OR</Text>
+                    <Text style={{ alignSelf: 'center', fontSize: 18, fontFamily: 'Poppins-Medium', color: '#000000' }}>OR</Text>
 
 
 

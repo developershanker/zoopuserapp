@@ -6,7 +6,7 @@ import { PlaceholderMedia } from 'rn-placeholder';
 export const OutletCard = (props) => {
     return(
     <View>
-        <PlaceholderMedia style={styles.outletimage}/>
+        <PlaceholderMedia style={styles.outletimageloader}/>
     </View>
     )
 }

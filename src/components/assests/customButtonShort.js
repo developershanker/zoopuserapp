@@ -34,6 +34,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#ffffff',
         justifyContent:'center',
-        fontFamily:'Poppins-Bold'
+        fontFamily:'Poppins-Medium'
     },
 });

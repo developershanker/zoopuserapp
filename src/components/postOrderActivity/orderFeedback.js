@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Dimensions, Button, Platform, Image, ToastAndroid } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Modal from "react-native-modal";
 // import RatingView from './ratingView';
@@ -34,7 +35,7 @@ export default class OrderFeedback extends Component {
         console.log('ConstantValues.orderRating: ' + ConstantValues.orderRating)
         //Keeping the Rating Selected in state
     }
-    
+
     showTags(bool) {
         this.setState({ tagVisible: bool });
     }
@@ -69,7 +70,7 @@ export default class OrderFeedback extends Component {
                     style={styles.bottomModal}
                 >
                     <View style={styles.modalView}>
-                        <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => {this.setState({ visibleModal: null }),this.props.navigation.navigate('Search')}}>
+                        <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => { this.setState({ visibleModal: null }), this.props.navigation.navigate('Search') }}>
                             <Icon name={'times-circle'} style={{ alignSelf: 'flex-end' }} size={20} />
                         </TouchableOpacity>
                         <View>
@@ -108,7 +109,7 @@ export default class OrderFeedback extends Component {
                                     this.props.navigation.navigate('Search')
 
                             }}
-                            title='Submit'
+                            title='SUBMIT'
                         />
 
                     </View>
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
     heading: {
         fontSize: 20,
         color: '#000000',
-        fontFamily:'Poppins-Bold'
+        fontFamily: 'Poppins-Bold'
     },
     feedbackView: {
         flexDirection: 'row',

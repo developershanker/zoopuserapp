@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Clipboard, ScrollView, Platform, Dimensions, Alert, TouchableOpacity, FlatList, Image, ToastAndroid, Linking,Share } from 'react-native';
+import { View, Text, StyleSheet, Clipboard, ScrollView, Platform, Dimensions, Alert, TouchableOpacity, FlatList, Image, ToastAndroid, Linking, Share } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icons from 'react-native-vector-icons/FontAwesome5';
+import IconA from 'react-native-vector-icons/AntDesign';
 import ConstantValues from '../constantValues';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import { CustomButtonShort } from '../assests/customButtonShort';
@@ -26,46 +27,25 @@ export default class Invite extends Component {
       phone: '123456789',
       backgroundColor: Colors.newgGreen3,
       copyMsg: 'Tap to copy',
-      referralCode:''
+      referralCode: ''
     };
   }
 
 
   tokenAsync = async () => {
     try {
-        const storedValues = await AsyncStorage.getItem('userInfo')
-        // console.log('JSON.stringify(storedValues) : ' + JSON.stringify(storedValues))
-        console.log('storedValues : ' + storedValues)
-        //  storedValues : {"userToken":"pbkdf2_sha256$55000$UxLacxq6kwQ=$GqbBXFV+Kircxzvwf14je+wWpWa8+fxNnvcTaItB2xY=","customerId":2}
-        let userInfo = JSON.parse(storedValues)
-        let userToken = userInfo.userToken
-        let customerId = userInfo.customerId
-        console.log('Getting token from localstorage : ' + userToken)
-        console.log('Getting CustomerId from localstorage : ' + customerId)
-        if (userToken != '') {
-          this.onRegister(userToken,customerId)
-        } else {
-          return (
-            Alert.alert(
-              'Need Login!!',
-              'Please LOGIN to Proceed.',
-              [
-                {
-                  text: 'OK', onPress: () => {
-                    this.setState({ isVisible: false })
-                    this.props.navigation.navigate('Welcome')
-                  },
-                  style: 'cancel'
-                },
-              ],
-              { cancelable: false },
-            )
-          )
-        }
-
-    } catch (error) {
-        // this.props.navigation.navigate('App')
-        console.log('Error in getting stored value from asyncstorage: ' + error)
+      const storedValues = await AsyncStorage.getItem('userInfo')
+      // console.log('JSON.stringify(storedValues) : ' + JSON.stringify(storedValues))
+      console.log('storedValues : ' + storedValues)
+      //  storedValues : {"userToken":"pbkdf2_sha256$55000$UxLacxq6kwQ=$GqbBXFV+Kircxzvwf14je+wWpWa8+fxNnvcTaItB2xY=","customerId":2}
+      let userInfo = JSON.parse(storedValues)
+      let userToken = userInfo.userToken
+      let customerId = userInfo.customerId
+      console.log('Getting token from localstorage : ' + userToken)
+      console.log('Getting CustomerId from localstorage : ' + customerId)
+      if (userToken != '') {
+        this.onRegister(userToken, customerId)
+      } else {
         return (
           Alert.alert(
             'Need Login!!',
@@ -82,9 +62,30 @@ export default class Invite extends Component {
             { cancelable: false },
           )
         )
+      }
+
+    } catch (error) {
+      // this.props.navigation.navigate('App')
+      console.log('Error in getting stored value from asyncstorage: ' + error)
+      return (
+        Alert.alert(
+          'Need Login!!',
+          'Please LOGIN to Proceed.',
+          [
+            {
+              text: 'OK', onPress: () => {
+                this.setState({ isVisible: false })
+                this.props.navigation.navigate('Welcome')
+              },
+              style: 'cancel'
+            },
+          ],
+          { cancelable: false },
+        )
+      )
     }
 
-};
+  };
 
   // checkRegister(){
   //   if ( ConstantValues.customerId == '') {
@@ -105,18 +106,18 @@ export default class Invite extends Component {
   //     this.onRegister()
   //   }
   // }
-  async onRegister(userToken,customerId) {
+  async onRegister(userToken, customerId) {
     try {
-      let response = await loginApi.getUserRegisterParams(userToken,customerId);
+      let response = await loginApi.getUserRegisterParams(userToken, customerId);
       console.log('data received in register.js : ' + JSON.stringify(response))
       ConstantValues.loginCount = response.data.loginCount
       ConstantValues.customerPhoneNo = response.data.mobile
       ConstantValues.customerName = response.data.fullName
       ConstantValues.customerRefferalCode = response.data.referralCode,
-      this.setState({
-        referralCode:response.data.referralCode
-      })
-      
+        this.setState({
+          referralCode: response.data.referralCode
+        })
+
     } catch (error) {
       console.log('Data received in register.js catch: ' + error)
     }
@@ -149,7 +150,7 @@ export default class Invite extends Component {
     try {
       const result = await Share.share({
         message:
-        'Hi, upgrade your train food experience by using my code ' + '\'' + ConstantValues.customerRefferalCode + '\'' + ' and get benefits worth Rs 150 when you sign-up at Zoop APP. Download: goo.gl/fGC622',
+          'Hi, upgrade your train food experience by using my code ' + '\'' + ConstantValues.customerRefferalCode + '\'' + ' and get benefits worth Rs 150 when you sign-up at Zoop APP. Download: goo.gl/fGC622',
       });
 
       if (result.action === Share.sharedAction) {
@@ -174,33 +175,34 @@ export default class Invite extends Component {
         <ScrollView>
           <View style={styles.slide}>
             {/* header view */}
-             <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+                {/* <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} /> */}
+                <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
                 <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> Refer & Earn </Text>
               </View>
             </View>
             {/* header view ends */}
-            <View style={{ paddingVertical: 20, justifyContent: 'center', alignItems: 'center' , alignContent:'center' }}>
+            <View style={{ paddingVertical: 20, justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
 
               <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Regular', fontSize: 15, color: '#000000', paddingVertical: 10 }}>
                 Refer friends and earn.
                 </Text>
 
-              <Text style={{ width:300, alignItems: 'center', fontFamily: 'Poppins-Regular', fontSize: 15, color: '#000000', paddingVertical: 10 }}>
+              <Text style={{ width: 300, alignItems: 'center', fontFamily: 'Poppins-Regular', fontSize: 15, color: '#000000', paddingVertical: 10 }}>
                 Invite your friends on Zoop and Earn promo balance worth {ConstantValues.rupee}50 per referral.
                 </Text>
 
               <View style={{ width: width, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                <TouchableOpacity  onPress={()=>this.onShare()}>
+                <TouchableOpacity onPress={() => this.onShare()}>
                   <View style={styles.cardS}>
                     <Icon style={{ paddingHorizontal: 5 }} name={'facebook'} size={25} color={'#3b5998'} />
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity  onPress={()=>this.onShare()}>
+                <TouchableOpacity onPress={() => this.onShare()}>
                   <View style={styles.cardS}>
                     <Icon name={'twitter'} size={25} color={'#00acee'} />
                   </View>
@@ -212,7 +214,7 @@ export default class Invite extends Component {
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={()=>this.onShare()}>
+                <TouchableOpacity onPress={() => this.onShare()}>
                   <View style={styles.cardS}>
                     <Icon name={'share-alt'} size={25} color={'#000000'} />
                   </View>
@@ -246,7 +248,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     justifyContent: 'center',
     alignItems: 'center',
-    alignContent:'center',
+    alignContent: 'center',
     backgroundColor: '#ffffff',
   },
   cardS: {

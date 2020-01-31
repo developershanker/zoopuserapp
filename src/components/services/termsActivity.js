@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView,WebView } from 'react-native';
-
+import { View, Text, StyleSheet, ScrollView, WebView ,TouchableOpacity,Dimensions} from 'react-native';
+import IconA from 'react-native-vector-icons/AntDesign';
+import Colors from '../colors';
 
 export default class TermsActivity extends Component {
     constructor(props) {
@@ -11,11 +12,23 @@ export default class TermsActivity extends Component {
 
     render() {
         return (
-     
-            <WebView
-            originWhitelist={['*']}
-            source={{html: htmlContent}}
-            />
+            <View style={{ flex: 1,}}>
+                {/* header view */}
+                <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
+                        {/* <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} /> */}
+                        <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
+                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
+                        <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> Terms & Conditions </Text>
+                    </View>
+                </View>
+                {/* header view ends */}
+                <WebView
+                    originWhitelist={['*']}
+                    source={{ html: htmlContent }}
+                />
+            </View>
         );
     }
 }

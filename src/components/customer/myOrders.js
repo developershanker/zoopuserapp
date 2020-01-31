@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, Alert,Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, Alert, Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
@@ -12,7 +13,7 @@ import { Overlay } from 'react-native-elements';
 import moment from "moment";
 import OrderDetailConstants from '../orderDetailConstants.js';
 import Colors from '../colors.js';
-import {Separator} from '../../components/separator'
+import { Separator } from '../../components/separator'
 
 
 
@@ -166,6 +167,11 @@ export default class MyOrders extends Component {
     }
   }
 
+  viewOrderDetail = (item) =>{
+    OrderDetailConstants.orderId = item.orderId
+    this.props.navigation.navigate('MyOrderDetail')
+  }
+
   renderOrderDetail = (item) => {
 
     OrderDetailConstants.data = item
@@ -188,30 +194,30 @@ export default class MyOrders extends Component {
     OrderDetailConstants.couponCode = item.couponCode
     OrderDetailConstants.couponId = item.couponId
     OrderDetailConstants.totalAmount = item.totalAmount
-    OrderDetailConstants.deliveryCharge = item.deliveryCharge + item.deliveryChargeGst
-    OrderDetailConstants.gst = item.gst
+    // OrderDetailConstants.deliveryCharge = item.deliveryCharge + item.deliveryChargeGst
+    // OrderDetailConstants.gst = item.gst
     OrderDetailConstants.discount = item.discount
-    OrderDetailConstants.eta = item.eta
-    OrderDetailConstants.status = item.status
-    OrderDetailConstants.orderStatus = item.orderStatus
-    OrderDetailConstants.items = item.items
+    // OrderDetailConstants.eta = item.eta
+    // OrderDetailConstants.status = item.status
+    // OrderDetailConstants.orderStatus = item.orderStatus
+    // OrderDetailConstants.items = item.items
 
-    OrderDetailConstants.pnr = item.pnr
-    OrderDetailConstants.trainName = item.trainName
-    OrderDetailConstants.trainNumber = item.trainNumber
-    OrderDetailConstants.stationName = item.stationName
-    OrderDetailConstants.stationCode = item.stationCode
-    OrderDetailConstants.outletName = item.outletName
+    // OrderDetailConstants.pnr = item.pnr
+    // OrderDetailConstants.trainName = item.trainName
+    // OrderDetailConstants.trainNumber = item.trainNumber
+    // OrderDetailConstants.stationName = item.stationName
+    // OrderDetailConstants.stationCode = item.stationCode
+    // OrderDetailConstants.outletName = item.outletName
 
-    OrderDetailConstants.seat = item.berth
-    OrderDetailConstants.coach = item.coach
+    // OrderDetailConstants.seat = item.berth
+    // OrderDetailConstants.coach = item.coach
 
     OrderDetailConstants.paidAmount = (item.paidAmount === null ? 0 : item.paidAmount)
 
     this.setState({
       detailItem: item.items,
     })
-    this.props.navigation.navigate('MyOrderDetail')
+    // this.props.navigation.navigate('MyOrderDetail')
   }
   render() {
     let img = require('../images/roundimg1.jpg')
@@ -222,7 +228,7 @@ export default class MyOrders extends Component {
             {/* header view */}
             <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+                <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
                 <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> Order History </Text>
@@ -240,50 +246,51 @@ export default class MyOrders extends Component {
                   <View>
                     <View>
                       <View style={styles.card}>
-                        <View style={{flexDirection: 'row',width:'100%'}}>
+                        <View style={{ flexDirection: 'row', width: '100%' }}>
                           <Image source={img} style={styles.img} />
                           <View style={styles.titleArea}>
                             <Text style={styles.tiletextH}>{item.outletName}</Text>
+                            <View style={{flexDirection: 'row',backgroundColor:Colors.white,justifyContent:'space-between'}}>
                             <Text style={styles.tiletext}>({item.stationCode}) {item.stationName}</Text>
+                            <Text style={[styles.tiletext, { color: Colors.newgGreen1, fontFamily: 'Poppins-Medium', fontSize: 12 }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
+                            </View>
                           </View>
                         </View>
-                          <Separator/>
+                        <Separator />
                         {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                           <Text style={styles.tiletext}>Station</Text>
                           <Text style={styles.tiletext}>({item.stationCode}) {item.stationName}</Text>
                         </View> */}
 
+                        <View style={{ flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5 }}>
+                          <Text style={[styles.tiletext, { color: Colors.darkGrey, fontSize: 12 }]}>Booking Date :</Text>
+                          <Text style={[styles.tiletext, { fontSize: 12 }]}> {item.bookingDate == null ? 'Date not available' : moment(item.bookingDate).format('DD MMM YYYY')} at {item.bookingDate == null ? 'Time not available' : moment(item.bookingDate).format('hh:mm A')}</Text>
+                        </View>
+                        
                         {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
-                          <View style={{ width: 100, alignItems: 'flex-end' }}>
-                            <Text style={styles.tiletext}>Ordered On :</Text>
-                          </View>
-                          <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.bookingDate).format('DD-MM-YYYY HH:mm')}</Text>
-                        </View> */}
-{/* 
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                           <Text style={styles.tiletext}>Delivery Date </Text>
                           <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.eta).format('DD-MM-YYYY')}</Text>
-                        </View>
-
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                        </View> */}
+{/* 
+                        <View style={{ flexDirection: 'row', paddingHorizontal: 10,paddingVertical:5 }}>
                           <Text style={styles.tiletext}>Delivery Time </Text>
                           <Text style={styles.tiletext}>{item.bookingDate == null ? 'Time not available' : moment(item.eta).format('HH:mm')}</Text>
-                        </View>
+                        </View> */}
 
 
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                           <Text style={styles.tiletext}>Total Amount</Text>
                           <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
-                        </View>
+                        </View> */}
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                           <Text style={[styles.tiletext, { color: '#000000' }]}>Status </Text>
                           <Text style={{ fontFamily: 'Poppins-Medium', color: ConstantValues.orderStatus[item.status] }}>{item.orderStatus}</Text>
                         </View> */}
-                        <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
-                          <Text style={[styles.tiletext,{color:Colors.darkGrey,fontSize:12}]}>Delivery Date and Time</Text>
-                          <Text style={[styles.tiletext,{fontSize:12}]}>{item.bookingDate == null ? 'Date not available' : moment(item.eta).format('DD MMM YYYY')} at {item.bookingDate == null ? 'Time not available' : moment(item.eta).format('hh:mm a')}</Text>
+                        <View style={{ flexDirection: 'row', paddingHorizontal: 10,paddingVertical:5 }}>
+                          <Text style={[styles.tiletext, { color: Colors.darkGrey, fontSize: 12 }]}>Delivery Date :</Text>
+                          <Text style={[styles.tiletext, { fontSize: 12 }]}> {item.eta == null ? 'Date not available' : moment(item.eta).format('DD MMM YYYY')} at {item.eta == null ? 'Time not available' : moment(item.eta).format('hh:mm A')}</Text>
                         </View>
                         {/* <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
                           <Text style={[styles.tiletext,{color:Colors.darkGrey}]}>Delivery Date </Text>
@@ -297,25 +304,28 @@ export default class MyOrders extends Component {
 
 
 
-                        <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
-                          <Text style={[styles.tiletext,{color:Colors.darkGrey,fontSize:12}]}>Total Amount</Text>
-                          <Text style={[styles.tiletext, { color: Colors.newgGreen1,fontFamily:'Poppins-Medium',fontSize:12 }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
-                        </View>
-                        <Separator/>
-                        <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                        {/* <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
+                          <Text style={[styles.tiletext, { color: Colors.darkGrey, fontSize: 12 }]}>Total Amount</Text>
+                          <Text style={[styles.tiletext, { color: Colors.newgGreen1, fontFamily: 'Poppins-Medium', fontSize: 12 }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
+                        </View> */}
+                        <Separator />
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                           <CustomButtonShort
                             disabled={true}
                             // onPress={() => this.renderOrderDetail(item)}
                             title={item.orderStatus}
-                            style={{backgroundColor: Colors.white,width: 150,height:0,paddingVertical:10}}
-                            textStyle={{ color: ConstantValues.orderStatus[item.status] , fontFamily:'Poppins-Regular',fontSize:14}}
+                            style={{ backgroundColor: Colors.white, width: 150, height: 0, paddingVertical: 10 }}
+                            textStyle={{ color: ConstantValues.orderStatus[item.status], fontFamily: 'Poppins-Regular', fontSize: 14 }}
                           />
-                        <CustomButtonShort
-                          onPress={() => this.renderOrderDetail(item)}
-                          title='View Details'
-                          style={{ backgroundColor: Colors.white,width: 150,height:0,paddingVertical:10}}
-                          textStyle={{ color: Colors.newOrange , fontFamily:'Poppins-Regular',fontSize:14}}
-                        />
+                          <CustomButtonShort
+                            // onPress={() => this.renderOrderDetail(item)}
+                            onPress={() => {
+                              // this.renderOrderDetail(item),
+                              this.viewOrderDetail(item)}}
+                            title='View Details'
+                            style={{ backgroundColor: Colors.white, width: 150, height: 0, paddingVertical: 10 }}
+                            textStyle={{ color: Colors.newOrange, fontFamily: 'Poppins-Regular', fontSize: 14 }}
+                          />
                         </View>
                       </View>
 
@@ -348,7 +358,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Dimensions.get('window').width,
     justifyContent: 'center',
-    backgroundColor: '#ffffff',
+    // backgroundColor: Colors.newOrange,
   },
   img: {
     margin: 10,

@@ -10,6 +10,7 @@ import { Fade } from '../assests/fade.js';
 import ConstantValues from '../constantValues.js';
 import Modal from "react-native-modal";
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Colors from '../colors.js';
 
 
 export default class Profile extends Component {
@@ -26,9 +27,9 @@ export default class Profile extends Component {
       referredBy: '',
       altmobile: '',
       loginCount: null,
-      clicked:false,
-      buttonColor:'#9b9b9b',
-      buttonText:'Submit',
+      clicked: false,
+      buttonColor: '#9b9b9b',
+      buttonText: 'SUBMIT',
       visibleModal: 'center'
     };
   }
@@ -151,6 +152,11 @@ export default class Profile extends Component {
       this.setState({
         altmobile: ConstantValues.customeralternateMobile
       })
+      if (ConstantValues.customerName.length != 0) {
+        this.setState({
+          buttonColor: Colors.newgGreen3
+        })
+      }
       ConstantValues.isAgent = response.data.isAgent
     } catch (error) {
       console.log('Data received in register.js catch: ' + error)
@@ -158,12 +164,12 @@ export default class Profile extends Component {
   }
   //submitting edited profile info
   async editUserInfo(name, emailId, altMobile, referredBy) {
-    this.setState({buttonText: 'Submitting..', clicked: true ,buttonColor:'#9b9b9b'})
+    this.setState({ buttonText: 'Submitting..', clicked: true, buttonColor: '#9b9b9b' })
     try {
       let response = await loginApi.editUserInfo(name, emailId, altMobile, referredBy)
       console.log('data received in profile.js : ' + JSON.stringify(response))
       if (response.status == true) {
-        this.setState({buttonText: 'Profile Updated Successfully', clicked: true ,buttonColor:'#9b9b9b'})
+        this.setState({ buttonText: 'Profile Updated Successfully', clicked: true, buttonColor: '#9b9b9b' })
         // this.setState({
         //   name:ConstantValues.customerName,
         //   altmobile:ConstantValues.customeralternateMobile,
@@ -178,14 +184,14 @@ export default class Profile extends Component {
         )
       }
       else {
-        this.setState({buttonText: 'Submit', clicked: false ,buttonColor:'#60b246'})
+        this.setState({ buttonText: 'SUBMIT', clicked: false, buttonColor: '#60b246' })
         return (
           ToastAndroid.show(response.error, ToastAndroid.LONG)
         )
       }
 
     } catch (error) {
-      this.setState({buttonText: 'Submit', clicked: false ,buttonColor:'#60b246'})
+      this.setState({ buttonText: 'SUBMIT', clicked: false, buttonColor: '#60b246' })
       console.log('Data received in profile.js catch: ' + error)
     }
   }
@@ -231,7 +237,7 @@ export default class Profile extends Component {
             placeholder='Email id'
             value={this.state.emailId}
             keyboardType='email-address'
-            onChangeText={emailId => this.setState({ emailId , buttonColor:'#60b246'})}
+            onChangeText={emailId => this.setState({ emailId, buttonColor: '#60b246' })}
           />
           <TextInput style={styles.input}
             placeholder='Alternate Mobile No.'

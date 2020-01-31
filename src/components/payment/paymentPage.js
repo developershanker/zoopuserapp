@@ -3,6 +3,7 @@ import { View, Picker, ToastAndroid, Text, Image, StyleSheet, ScrollView, Dimens
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import IconZ from 'react-native-vector-icons/Entypo'
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import { CustomButton } from '../assests/customButtonLarge.js';
@@ -31,7 +32,7 @@ export default class PaymentPage extends Component {
     this.state = {
       value: 0,
       codActive: false,
-      checked: true,
+      checked: false,
       clicked: false,
       paymentTypes: [],
       revisedPaymentTypes: [],
@@ -40,7 +41,7 @@ export default class PaymentPage extends Component {
       paymentTypeId: '',
       paymentBorderColor: '#000000',
       isVisible: true,
-      indexChecked: '0'
+      indexChecked: '2'
       // backgroundColor : ''
     };
   }
@@ -291,19 +292,19 @@ export default class PaymentPage extends Component {
         <ScrollView>
           <View>
             {/* header view */}
-            <View style={{ flexDirection: 'row', paddingBottom: 5 }}>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('PassengerDetail')}>
-                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+            <View style={{ flexDirection: 'row',width:ConstantValues.deviceWidth, backgroundColor:Colors.white,paddingVertical:10}}>
+              <TouchableOpacity style={{width:'10%',backgroundColor:Colors.white,justifyContent:'center',alignContent:'center',alignItems:'center'}} onPress={() => this.props.navigation.navigate('PassengerDetail')}>
+                <IconA name={'arrowleft'} size={25} color={Colors.black} />
               </TouchableOpacity>
-              <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Regular', fontSize: 25, color: '#000000' }}> Payment Details </Text>
+              <View style={{ flexDirection: 'column', justifyContent: 'center',width:'90%',backgroundColor:Colors.white, alignItems: 'center' }}>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Regular', fontSize: 18, color: Colors.newOrange }}> Payment Details </Text>
               </View>
             </View>
             {/* header view ends */}
             <View>
               <View>
-                <View style={{ backgroundColor: '#ffffff', flexDirection: 'row' }}>
-                  <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>Bill Details</Text>
+                <View style={{ backgroundColor: '#ffffff', flexDirection: 'row',width:ConstantValues.deviceWidth }}>
+                  <Text style={{ fontSize: 16, fontFamily: 'Poppins-Medium', color: '#000000' ,marginLeft:'2%',width:'96%'}}>Bill Details</Text>
                   {/* <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} /> */}
                 </View>
                 <View
@@ -316,11 +317,11 @@ export default class PaymentPage extends Component {
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.totalBasePrice}</Text>
                     </View>
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>(+) GST on food</Text>
+                      <Text style={styles.tiletext}>+ GST on food</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {(ConstantValues.gst).toFixed(2)}</Text>
                     </View>
                     <View style={styles.tile}>
-                      <Text style={styles.tiletext}>(+) Delivery Charge (Inc. GST)</Text>
+                      <Text style={styles.tiletext}>+ Delivery Charge (Inc. GST)</Text>
                       <Text style={styles.tiletext}>{ConstantValues.rupee} {ConstantValues.deliveryCharge}</Text>
                     </View>
                     {/* <View style={styles.tile}>
@@ -355,24 +356,24 @@ export default class PaymentPage extends Component {
             </View>
             {/* passengerDetail view begin here */}
             <View style={{ width: Dimensions.get('window').width - 10, flexDirection: 'row', }}>
-              <Text style={{ fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}>Passenger Details</Text>
+              <Text style={{ fontSize: 16, fontFamily: 'Poppins-Medium', color: '#000000',marginLeft:'2%',width:'96%' }}>Passenger Details</Text>
               {/* <Image style={{ height: 15, alignSelf: 'center' }} source={require('../images/line.png')} /> */}
             </View>
             <View style={styles.billcard}>
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Coach no. {ConstantValues.coach}</Text>
-                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Seat no. {ConstantValues.seat}</Text>
+                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Coach no. {ConstantValues.coach}</Text>
+                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Seat no. {ConstantValues.seat}</Text>
 
               </View>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Name : {ConstantValues.customerName}</Text>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
-              <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 10, paddingVertical: 5 }}>Alternate No. - {ConstantValues.customeralternateMobile}</Text>
+              <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Name : {ConstantValues.customerName}</Text>
+              <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
+              <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Alternate No. - {ConstantValues.customeralternateMobile}</Text>
             </View>
             {/* passengerDetail view ends here */}
             {/* Payment Mode View Starts */}
             <View>
               <View style={{ width: Dimensions.get('window').width - 10, alignItems: 'center', paddingVertical: 10 }}>
-                <Text style={{ fontSize: 17, fontFamily: 'Poppins-Regular' }}>Choose Payment Mode</Text>
+                <Text style={{ fontSize: 16, fontFamily: 'Poppins-Regular' }}>Choose Payment Mode</Text>
               </View>
 
 
@@ -416,9 +417,9 @@ export default class PaymentPage extends Component {
           </View>
           <CustomButton
             disabled={this.state.clicked}
-            style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : '#60b246', alignSelf: 'center', }}
+            style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : Colors.newgGreen3, alignSelf: 'center', }}
             onPress={() => this.checkValidation()}
-            title={this.state.clicked === false ? 'Proceed To Pay' : 'Please wait...'}
+            title={this.state.clicked === false ? 'PROCEED TO PAY' : 'Please wait...'}
           />
         </ScrollView>
         {/* cod action view modal */}
@@ -449,7 +450,7 @@ export default class PaymentPage extends Component {
                   onPress={() => this.removeOffer()}
                   title='OK'
                   style={{ alignSelf: 'center', backgroundColor: '#fff' }}
-                  textStyle={{ color: '#F15926' }} />
+                  textStyle={{ color: Colors.newOrange }} />
               </View>
             </View>
 
@@ -476,8 +477,9 @@ export default class PaymentPage extends Component {
 
 const styles = StyleSheet.create({
   slide: {
-    width: Dimensions.get('window').width - 5,
-    marginLeft: 5,
+    width: Dimensions.get('window').width,
+    // height: Dimensions.get('window').height,
+    // marginLeft: 5,
 
   },
   radioButton: {
@@ -512,7 +514,7 @@ const styles = StyleSheet.create({
     marginLeft: '2%', //can change as we move to various pages
     width: '96%', //can change as we move to various pages
     borderColor: '#e4e4e4',
-    borderRadius: 100 / 9,
+    borderRadius: 6,
     borderWidth: 1,
     shadowOpacity: 0.4,
     borderBottomColor: '#e4e4e4',
@@ -522,8 +524,8 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width - 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    paddingVertical: 5
+    paddingHorizontal: 5,
+    paddingVertical: 2
   },
   tiletext: {
     fontFamily: 'Poppins-Regular',

@@ -9,6 +9,8 @@ import ConstantValues from "../constantValues.js";
 import paymentApi from '../payment/paymentApi.js';
 import { Fade } from "../assests/fade.js";
 import Spinner from 'react-native-spinkit';
+import Colors from "../colors.js";
+import OrderDetailConstants from "../orderDetailConstants.js";
 
 export default class irctcConfirmationCod extends Component {
     componentDidMount() {
@@ -69,6 +71,11 @@ export default class irctcConfirmationCod extends Component {
     }
   }
 
+  viewDetails(){
+    OrderDetailConstants.orderId = ConstantValues.zoopOrderId, // insert orderid
+    this.props.navigation.navigate('MyOrderDetail')
+  }
+
 
   render() {
     return (
@@ -77,14 +84,14 @@ export default class irctcConfirmationCod extends Component {
         <View style={{ flexDirection: "row", paddingBottom: 10 }}>
           <View style={{ flexDirection: "column", justifyContent: "center", width: Dimensions.get("window").width, alignItems: "center" }}>
             <Image style={{ width: 150, height: 150 ,alignSelf:'center'}} source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }} />
-            <Spinner size={100} type={'FadingCircleAlt'} color={'#FF5819'} isVisible={this.state.processingirctc} />
+            <Spinner size={100} type={'FadingCircleAlt'} color={Colors.newOrange} isVisible={this.state.processingirctc} />
             <Fade visible={this.state.processingirctc == false}>
               <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                 <Image style={styles.image} source={require('../images/placed.png')} />
               </View>
             </Fade>
             <View style={{alignItems:'center',justifyContent:'center',width:Dimensions.get('screen').width}}>
-            <Text style={{ fontSize: 18, color: '#000000', fontFamily: 'Poppins-Medium', paddingVertical: 20, alignSelf:'center' }}>{this.state.overallStatus}</Text>
+            <Text style={{ fontSize: 14, color: '#000000', fontFamily: 'Poppins-Medium', paddingVertical: 20, alignSelf:'center' }}>{this.state.overallStatus}</Text>
             </View>
           </View>
         </View>
@@ -95,35 +102,36 @@ export default class irctcConfirmationCod extends Component {
           {/* <View style={styles.statusView}>
             <Text style={styles.statusText} >{this.state.payment_text}</Text>
             <Fade visible={this.state.processingpayment}>
-              <ActivityIndicator color={'#FF5819'} size={20} animating={this.state.processingpayment} />
+              <ActivityIndicator color={Colors.newOrange} size={20} animating={this.state.processingpayment} />
             </Fade>
 
             <Fade visible={this.state.processingpayment == false}>
-              <Icons name={this.state.payment_result_icon} size={20} color={'#FF5819'} />
+              <Icons name={this.state.payment_result_icon} size={20} color={Colors.newOrange} />
             </Fade>
           </View> */}
 
           <View style={styles.statusView}>
             <Text style={styles.statusText} >{this.state.irctc_text}</Text>
             <Fade visible={this.state.processingirctc}>
-              <ActivityIndicator color={'#FF5819'} size={20} animating={this.state.processingirctc} />
+              <ActivityIndicator color={Colors.newOrange} size={20} animating={this.state.processingirctc} />
             </Fade>
             <Fade visible={this.state.processingirctc == false}>
-              <Icons name={this.state.irctc_result_icon} size={20} color={'#FF5819'} />
+              <Icons name={this.state.irctc_result_icon} size={20} color={Colors.newOrange} />
             </Fade>
           </View>
 
         </View>
         <Fade visible={this.state.processingirctc == false}>
           <CustomButton
-            style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
-            onPress={()=>{this.props.navigation.navigate('OrderDetail')}}
-            title='View Details'
+            style={{ backgroundColor: Colors.newgGreen3, alignSelf: 'center', marginBottom: 20, }}
+            // onPress={()=>{this.props.navigation.navigate('OrderDetail')}}
+            onPress={()=>this.viewDetails()}
+            title='VIEW DETAILS'
           />
            <CustomButton
             style={{ backgroundColor: '#fff', alignSelf: 'center', marginBottom: 20, }}
             onPress={() => { this.props.navigation.navigate('Search') }}
-            textStyle = {{color:'#9b9b9b'}}
+            textStyle = {{color:Colors.darkGrey}}
             title='Go To Home'
           />
         </Fade>
@@ -136,7 +144,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
-        marginLeft: 5,
+        // marginLeft: 5,
         justifyContent: 'space-evenly',
         alignContent: 'center',
         alignItems: 'center'

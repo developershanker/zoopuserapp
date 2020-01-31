@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text,StyleSheet,TouchableOpacity,Dimensions } from 'react-native';
 import { Container, Header, Content, Accordion } from "native-base";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
@@ -44,7 +45,9 @@ export default class faq extends Component {
          {/* header view */}
          <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+                {/* <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} /> */}
+                <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
+                
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
                 <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> FAQs </Text>

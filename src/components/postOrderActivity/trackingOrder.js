@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, Dimensions, Platform, Linking, Scroll
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import { CustomButton } from '../assests/customButtonLarge.js';
 
 export default class TrackingOrder extends Component {
@@ -56,28 +57,28 @@ export default class TrackingOrder extends Component {
             {/* header view */}
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+                <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', paddingTop: 20 }}>
-                <Text style={{ fontFamily:'Poppins-Bold', fontSize: 20, color: '#000000' }}> ORDER ID </Text>
-                <Text style={{ fontFamily:'Poppins-Bold', fontSize: 20, color: '#000000' }}> 242559 </Text>
+                <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 20, color: '#000000' }}> ORDER ID </Text>
+                <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 20, color: '#000000' }}> 242559 </Text>
               </View>
               <TouchableOpacity>
                 <View style={styles.call}>
                   <Icon name={'phone'} color={'#16a8b5'} size={15} />
-                  <Text style={{ fontFamily:'Poppins-Bold', color: '#16a8b5' }}>Resturent</Text>
+                  <Text style={{ fontFamily: 'Poppins-Bold', color: '#16a8b5' }}>Resturent</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity>
                 <View style={styles.call}>
                   <Icon name={'phone'} color={'#16a8b5'} size={15} />
-                  <Text style={{ fontFamily:'Poppins-Bold', color: '#16a8b5' }}>Delivery Boy</Text>
+                  <Text style={{ fontFamily: 'Poppins-Bold', color: '#16a8b5' }}>Delivery Boy</Text>
                 </View>
               </TouchableOpacity>
             </View>
             {/* header view ends */}
             <View style={styles.statusView}>
-              <Text style={{ fontFamily:'Poppins-Bold', color: '#000000', fontSize: 15 }}>Status</Text>
+              <Text style={{ fontFamily: 'Poppins-Bold', color: '#000000', fontSize: 15 }}>Status</Text>
               <FlatList
                 contentContainerStyle={styles.status}
                 horizontal={true}
@@ -87,7 +88,7 @@ export default class TrackingOrder extends Component {
                 renderItem={({ item }) =>
                   <View style={{ flexDirection: 'column', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 20 }}>
                     <Icon name={'check-square'} size={20} color={item.value == this.state.updateValue ? '#16b538' : '#abb8ad'} />
-                    <Text style={{ fontFamily:'Poppins-Bold', color: '#000000', fontSize: 15 }}>{item.status}</Text>
+                    <Text style={{ fontFamily: 'Poppins-Bold', color: '#000000', fontSize: 15 }}>{item.status}</Text>
                   </View>
                 }
 
@@ -103,7 +104,7 @@ export default class TrackingOrder extends Component {
                   <View style={styles.detailStatus}>
                     <Icon style={{ alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 10 }} name={item.iconName} size={25} color={item.id == 1 ? '#147d2e' : '#747875'} />
                     <View style={styles.statusContentView}>
-                      <Text style={{ fontFamily:'Poppins-Bold', color: item.id == 1 ? '#000000' : '#b6bab7', fontSize: 15 }}>{item.status}</Text>
+                      <Text style={{ fontFamily: 'Poppins-Bold', color: item.id == 1 ? '#000000' : '#b6bab7', fontSize: 15 }}>{item.status}</Text>
                       <Text style={{ opacity: item.id == 1 ? 100 : 0 }}>{item.statusDescription}</Text>
                     </View>
                   </View>
@@ -118,11 +119,11 @@ export default class TrackingOrder extends Component {
               title='View Order Details'
             />
             <View style={styles.ZoopCallView}>
-              <Text style={{ fontFamily:'Poppins-Bold', color: '#000000', fontSize: 15 }}>Call ZOOP for more support</Text>
+              <Text style={{ fontFamily: 'Poppins-Bold', color: '#000000', fontSize: 15 }}>Call ZOOP for more support</Text>
               <TouchableOpacity onPress={this.dialCall}>
                 <View style={styles.zoopCall}>
                   <Icon name={'phone'} size={15} color={'#ffffff'} />
-                  <Text style={{ color: '#ffffff', fontFamily:'Poppins-Bold', margin: 5 }}>Call</Text>
+                  <Text style={{ color: '#ffffff', fontFamily: 'Poppins-Bold', margin: 5 }}>Call</Text>
                 </View>
               </TouchableOpacity>
             </View>

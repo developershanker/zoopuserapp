@@ -3,6 +3,7 @@ import { View, TextInput, Linking, Text, Alert, StyleSheet, ScrollView, Dimensio
 import servicesApi from './servicesApi';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import { SafeAreaView } from 'react-navigation';
 import { CustomButton } from '../assests/customButtonLarge.js';
@@ -103,7 +104,8 @@ export default class feedback extends Component {
             {/* header view */}
             <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+                {/* <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} /> */}
+                <IconA name={'arrowleft'} style={{ margin: 20 }} size={25} color={Colors.black} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
                 <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> FeedBack </Text>

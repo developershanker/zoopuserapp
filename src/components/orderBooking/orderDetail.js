@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, Dimensions, Image, ScrollView, Toucha
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import ConstantValues from '../constantValues';
 import BillDetailCard from '../cart/billDetailCard.js';
 
@@ -42,7 +43,7 @@ export default class OrderDetail extends Component {
             {/* header view */}
             <View style={{ flexDirection: 'row', paddingVertical: 15 }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+              <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'flex-start', width: Dimensions.get('window').width - 100, alignItems: 'flex-start' }}>
                 <Text style={{ fontFamily:'Poppins-Medium', fontSize: 15, color: '#000000' }}> ORDER ID </Text>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet, Clipboard, Platform, TouchableNativeFeedback, Linking, Alert, KeyboardAvoidingView, PixelRatio, Button, Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList , BackHandler } from 'react-native';
+import { View, Dimensions, StyleSheet, Clipboard, Platform, TouchableNativeFeedback, Linking, Alert, KeyboardAvoidingView, PixelRatio, Button, Animated, Image, ScrollView, TextInput, TouchableOpacity, ToastAndroid, FlatList, BackHandler } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { RadioButton, Text } from 'react-native-paper';
 import Modal from "react-native-modal";
@@ -13,14 +13,17 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { Fade } from '../assests/fade';
 import Autocomplete from 'react-native-autocomplete-input';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import loginApi from '../login/loginApi.js';
 import otpVerify from '../login/otpVerify';
 import trainData from './trainData';
 import styles from '../assests/css';
 import { Header } from 'react-native-elements';
+import { SliderBox } from "react-native-image-slider-box";
+import Colors from '../colors';
 
 
-const { width , height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 export const deviceWidth = Dimensions.get('window').width
 export const deviceHeight = Dimensions.get('window').height
 export const calcHeight = x => PixelRatio.roundToNearestPixel((deviceHeight * x) / 100)
@@ -58,47 +61,47 @@ export default class Search extends Component {
   //double tap to exit
   componentWillMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-}
+  }
 
-componentWillUnmount() {
+  componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-}
+  }
 
-_spring() {
-    this.setState({backClickCount: 1}, () => {
-        Animated.sequence([
-            Animated.spring(
-                this.springValue,
-                {
-                    toValue: -.15 * height,
-                    friction: 5,
-                    duration: 300,
-                    useNativeDriver: true,
-                }
-            ),
-            Animated.timing(
-                this.springValue,
-                {
-                    toValue: 100,
-                    duration: 300,
-                    useNativeDriver: true,
-                }
-            ),
+  _spring() {
+    this.setState({ backClickCount: 1 }, () => {
+      Animated.sequence([
+        Animated.spring(
+          this.springValue,
+          {
+            toValue: -.15 * height,
+            friction: 5,
+            duration: 300,
+            useNativeDriver: true,
+          }
+        ),
+        Animated.timing(
+          this.springValue,
+          {
+            toValue: 100,
+            duration: 300,
+            useNativeDriver: true,
+          }
+        ),
 
-        ]).start(() => {
-            this.setState({backClickCount: 0});
-        });
+      ]).start(() => {
+        this.setState({ backClickCount: 0 });
+      });
     });
 
-}
+  }
 
 
-handleBackButton = () => {
-  console.log('I am back on Search')
+  handleBackButton = () => {
+    console.log('I am back on Search')
     this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
 
     return true;
-};
+  };
 
   scrollX = new Animated.Value(0)
   async onRegister() {
@@ -470,14 +473,14 @@ handleBackButton = () => {
             /> */}
             <View style={styles.header}>
               <TouchableOpacity onPress={() => this.setState({ visibleModalDrawer: 'right' })}>
-                <View style={{ width: 60, height: 50, justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{ width: 60, height: 50, justifyContent: 'center', alignItems: 'center' }}>
                   <Icon
                     name='bars'
                     size={20}
                   />
                 </View>
               </TouchableOpacity>
-              <View style={{ justifyContent: 'center', alignItems: 'center',}}>
+              <View style={{ justifyContent: 'center', alignItems: 'center', }}>
                 <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
                   style={{ width: 60, height: 30 }}
                 />
@@ -488,7 +491,7 @@ handleBackButton = () => {
               <Image style={styles.imageTop} source={require('../images/Home.jpg')} />
             </View>
 
-            <View style={{ alignItems: 'center', width: deviceWidth, height: '5%', justifyContent: 'center' }}>
+            <View style={{ alignItems: 'center', width: deviceWidth, height: '5%', justifyContent: 'center'}}>
               <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 18, }}>Search By</Text>
             </View>
 
@@ -586,7 +589,27 @@ handleBackButton = () => {
             </View> */}
             {/* extra services view starts */}
             <View style={styles.scroll}>
-              <ScrollView
+              <SliderBox
+                images={photos}
+                autoplay
+                circleLoop
+                sliderBoxHeight={120}
+                dotColor={Colors.darkGrey}
+                inactiveDotColor={Colors.lightGrey}
+                ImageComponentStyle={{borderRadius: 15, width: '97%', marginTop: 5}}
+                imageLoadingColor={Colors.newOrange}
+                dotStyle={{
+                  width: 5,
+                  height: 5,
+                  borderRadius: 15,
+                  marginHorizontal: 5,
+                  padding: 0,
+                  margin: 0
+                }}
+              // onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
+              // currentImageEmitter={index => console.warn(`current pos is: ${index}`)}
+              />
+              {/* <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 pagingEnabled={true}
@@ -605,10 +628,10 @@ handleBackButton = () => {
                     />
                   );
                 })}
-              </ScrollView>
+              </ScrollView> */}
             </View>
-            <View
-              style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }} // this will layout our dots horizontally (row) instead of vertically (column)
+            {/* <View
+              style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center',height:'2%', backgroundColor: Colors.white}} // this will layout our dots horizontally (row) instead of vertically (column)
             >
               {photos.map((_, i) => { // the _ just means we won't use that parameter
                 let opacity = position.interpolate({
@@ -625,7 +648,7 @@ handleBackButton = () => {
                   />
                 );
               })}
-            </View>
+            </View> */}
 
           </KeyboardAvoidingView>
         </ScrollView>
@@ -643,11 +666,11 @@ handleBackButton = () => {
                 <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 18, }}>Search By</Text>
               </View>
 
-              <View style={styles.autocompleteContainer}>
+              <View style={[styles.autocompleteContainer,{flexDirection:'row'}]}>
                 <Autocomplete
                   autoCapitalize="none"
                   autoCorrect={false}
-                  clearButtonMode={'always'}
+                  clearButtonMode={'while-editing'}
                   enablesReturnKeyAutomatically={true}
                   listContainerStyle={{ height: '80%' }}
                   data={trains.length === 1 && comp(query, trains[0].trainNumberAndName) ? [] : trains}
@@ -735,7 +758,7 @@ handleBackButton = () => {
                     this.setState({ visibleModal: null })
                     this.searchBy(this.state.text, this.state.query, this.state.value)
                   }}
-                  title='Search Restaurants'
+                  title='SEARCH RESTAURANTS'
                 />
               </View>
             </View>
@@ -896,17 +919,17 @@ handleBackButton = () => {
           </Modal>
         </KeyboardAvoidingView>
         {/* <DeliveryMark/> */}
-        <Animated.View style={[styles.animatedView, {transform: [{translateY: this.springValue}]}]}>
-                    <Text style={styles.exitTitleText}>Press back again to exit the app</Text>
+        <Animated.View style={[styles.animatedView, { transform: [{ translateY: this.springValue }] }]}>
+          <Text style={styles.exitTitleText}>Press back again to exit the app</Text>
 
-                    {/* <TouchableOpacity
+          {/* <TouchableOpacity
                         activeOpacity={0.9}
                         onPress={() => BackHandler.exitApp()}
                     >
                         <Text style={styles.exitText}>Exit</Text>
                     </TouchableOpacity> */}
 
-                </Animated.View>
+        </Animated.View>
       </SafeAreaView>
     );
   }

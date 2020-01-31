@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, StyleSheet, ScrollView, Dimensions, TouchableOpacity , Alert} from 'react-native';
+import { View, Text, FlatList, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase'
 
 export default class notifications extends Component {
- 
+
   constructor(props) {
     super(props);
     this.state = {
@@ -35,10 +36,10 @@ export default class notifications extends Component {
             {/* header view */}
             <View style={{ flexDirection: 'row', paddingBottom: 10 }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+                <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily:'Poppins-Bold', fontSize: 25, color: '#000000' }}> Notifications </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Bold', fontSize: 25, color: '#000000' }}> Notifications </Text>
               </View>
             </View>
             {/* header view ends */}

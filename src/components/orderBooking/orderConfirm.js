@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconA from 'react-native-vector-icons/AntDesign';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import ConstantValues from '../constantValues.js';
 
@@ -47,7 +48,7 @@ export default class OrderConfirm extends Component {
             {/* header view */}
             <View style={{ justifyContent: 'flex-start', paddingBottom: 10 }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-                <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
+              <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
               </TouchableOpacity>
             </View>
             {/* header view ends */}

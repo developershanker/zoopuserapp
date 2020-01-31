@@ -109,4 +109,26 @@ export default class orderApi extends Component {
         }
     }
 
+    static async orderHistoryDetail(orderId,customerId) {
+        try {
+            //url
+            const apiUrl = 'orders/' + customerId + '/' + orderId
+
+            //headers
+            const headers = {}
+            headers['x-auth-token'] = ConstantValues.token
+
+            //calling api for response
+            const response = await this.apiCall(apiUrl, 'GET', {}, headers)
+            // console.log(response)
+
+            return Promise.resolve(response)
+
+
+        } catch (error) {
+            console.log('Data received in orderApi.js catch: ' + error)
+            return Promise.reject(error)
+        }
+    }
+
 }

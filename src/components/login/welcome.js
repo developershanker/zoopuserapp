@@ -21,7 +21,7 @@ export default class Welcome extends Component {
     this.state = {
       mobile: '',
       buttonColor:'#9b9b9b',
-      buttonText:'Submit',
+      buttonText:'SUBMIT',
       clicked:false
     };
   }
@@ -60,14 +60,14 @@ export default class Welcome extends Component {
           )
         )
       } else {
-        this.setState({buttonColor:Colors.newOrange,buttonText:'Submit',clicked:false})
+        this.setState({buttonColor:Colors.newOrange,buttonText:'SUBMIT',clicked:false})
         return (
           ToastAndroid.show(response.error, ToastAndroid.LONG),
           console.log(response.error)
         )
       }
     } catch (error) {
-      this.setState({buttonColor:Colors.newOrange,buttonText:'Submit',clicked:false})
+      this.setState({buttonColor:Colors.newOrange,buttonText:'SUBMIT',clicked:false})
       console.log('Data received in welcome.js catch: ' + error)
     }
   }
