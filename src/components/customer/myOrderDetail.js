@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-navigation';
 import ConstantValues from '../constantValues.js';
 import { Fade } from '../assests/fade.js';
 import OrderDetailConstants from '../orderDetailConstants.js';
+import Colors from '../colors.js';
 
 export default class myOrderDetail extends Component {
     componentDidMount() {
@@ -64,7 +65,7 @@ export default class myOrderDetail extends Component {
                             <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
                         </TouchableOpacity>
                         <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                            <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 20, color: '#000000' }}> Order Details </Text>
+                            <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> Order Details </Text>
                         </View>
                     </View>
                     {/* header view ends */}
@@ -88,7 +89,7 @@ export default class myOrderDetail extends Component {
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                             <Text style={styles.tiletext}>Order Type</Text>
-                            <Text style={[styles.tiletext], { fontFamily: 'Poppins-Bold', color: '#000' }}>{OrderDetailConstants.orderType}</Text>
+                            <Text style={[styles.tiletext], { fontFamily: 'Poppins-Bold', color: Colors.newgGreen1 }}>{OrderDetailConstants.orderType}</Text>
                         </View>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
@@ -166,11 +167,11 @@ export default class myOrderDetail extends Component {
                             scrollEnabled={true}
                             renderItem={({ item }) =>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
-                                    <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', width:200}}>{item.itemName}</Text>
+                                    <Text style={{ fontFamily: 'Poppins-Regular',fontSize:12,color: '#000000', width:200}}>{item.itemName}</Text>
                                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: 100, alignContent: 'center', }}>
-                                        <Text style={{ fontFamily: 'Poppins-Regular', color: '#6dcc5a', width: 40, textAlign: 'right' }}> {item.quantity} </Text>
+                                        <Text style={{ fontFamily: 'Poppins-Regular', color: Colors.newgGreen1, width: 40, textAlign: 'right' }}> {item.quantity} </Text>
                                         <Text style={{ fontFamily: 'Poppins-Regular', color: '#000', fontSize: 10, }}> X </Text>
-                                        <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', width: 50, textAlign: 'right' }}> {OrderDetailConstants.rupee} {item.basePrice}</Text>
+                                        <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', width: 50, textAlign: 'right',fontSize:12, }}> {OrderDetailConstants.rupee} {item.basePrice}</Text>
                                     </View>
                                 </View>
                             }
@@ -196,11 +197,11 @@ export default class myOrderDetail extends Component {
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                             <Text style={styles.tiletext}>(-) {this.state.discountLabel}</Text>
-                            <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {OrderDetailConstants.discount}</Text>
+                            <Text style={[styles.tiletext, { color: Colors.newgGreen1 }]}>  {ConstantValues.rupee} {OrderDetailConstants.discount}</Text>
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                             <Text style={styles.tiletext}>Order Total </Text>
-                            <Text style={[styles.tiletext, { color: '#60b246' }]}>  {ConstantValues.rupee} {OrderDetailConstants.totalPayableAmount}</Text>
+                            <Text style={[styles.tiletext, { color: Colors.newgGreen1 }]}>  {ConstantValues.rupee} {OrderDetailConstants.totalPayableAmount}</Text>
                         </View>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
@@ -261,6 +262,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5
     },
     tiletext: {
+        fontSize: 12,
         fontFamily: 'Poppins-Regular',
         color: '#000000'
     },

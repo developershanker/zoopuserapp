@@ -12,7 +12,7 @@ export const BillCard = (props) => {
     return (
         <View>
             <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 5 }}>
-                <Text style={{ fontSize: 20, fontFamily: 'Poppins-Regular', color: '#000000' }}>Bill Details</Text>
+                <Text style={{ fontSize: 16, fontFamily: 'Poppins-Regular', color: '#000000' }}>Bill Details</Text>
                 {/* <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} /> */}
             </View>
             <View
@@ -51,10 +51,10 @@ export const BillCard = (props) => {
 
 
                     <View style={styles.tile}>
-                        <Text style={[styles.tiletext, { fontFamily: 'Poppins-Medium', fontSize: 16 }]}>Order Total</Text>
+                        <Text style={[styles.tiletext, { fontFamily: 'Poppins-Medium', fontSize: 14 }]}>Order Total</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <Icon name={'rupee'} size={20} color={'#000000'} />
-                            <Text style={[styles.tiletext, { fontFamily: 'Poppins-Medium', fontSize: 16 }]}> {totalPayableAmount}</Text>
+                            <Text style={[styles.tiletext, { fontFamily: 'Poppins-Medium', fontSize: 14 }]}> {totalPayableAmount}</Text>
                         </View>
                     </View>
 

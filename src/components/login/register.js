@@ -14,6 +14,7 @@ import { Overlay } from 'react-native-elements';
 import * as menuAction from '../../actions/menuAction'
 import { connect } from 'react-redux';
 import { ZoopLoader } from '../assests/zoopLoader.js';
+import Colors from '../colors.js';
 
 
 export class Register extends Component {
@@ -33,7 +34,7 @@ export class Register extends Component {
       loginCount: null,
       clicked: false,
       buttonColor: '#9b9b9b',
-      buttonText: 'Submit',
+      buttonText: 'SUBMIT',
       visibleModal: 'center',
     };
   }
@@ -239,14 +240,14 @@ export class Register extends Component {
         )
       }
       else {
-        this.setState({ buttonText: 'Submit', clicked: false, buttonColor: '#60b246' })
+        this.setState({ buttonText: 'SUBMIT', clicked: false, buttonColor: Colors.newgGreen3 })
         return (
           ToastAndroid.show(response.error, ToastAndroid.LONG)
         )
       }
 
     } catch (error) {
-      this.setState({ buttonText: 'Submit', clicked: false, buttonColor: '#60b246' })
+      this.setState({ buttonText: 'SUBMIT', clicked: false, buttonColor: Colors.newgGreen3 })
       console.log('Data received in profile.js catch: ' + error)
     }
   }
@@ -284,7 +285,7 @@ export class Register extends Component {
             <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
           </TouchableOpacity>
           <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-            <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 20, color: '#000000' }}> My Profile </Text>
+            <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> My Profile </Text>
           </View>
         </View>
         {/* header view ends */}
@@ -322,9 +323,9 @@ export class Register extends Component {
 
           </View>
           <CustomButton
-            title="Submit"
+            title="SUBMIT"
             disabled={this.state.name == '' ? true : false}
-            style={{ backgroundColor: '#60b246', alignSelf: 'center', marginBottom: 20, }}
+            style={{ backgroundColor: Colors.newgGreen3, alignSelf: 'center', marginBottom: 20, }}
             onPress={() => {
               this.isEmpty(this.state.name, this.state.emailId, this.state.altmobile, this.state.referredBy)
               // this.props.navigation.navigate('Search')
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     marginBottom: 5,
-    fontSize: 15,
+    fontSize: 14,
     paddingHorizontal: 10,
     fontFamily: 'Poppins-Regular'
   },

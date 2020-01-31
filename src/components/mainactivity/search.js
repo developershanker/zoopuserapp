@@ -41,7 +41,7 @@ export default class Search extends Component {
     this.springValue = new Animated.Value(100);
     this.state = {
       text: '',
-      value: 'Enter PNR',
+      value: 'Enter PNR Number',
       placeholder: '',
       email: '',
       query: '',
@@ -183,7 +183,7 @@ handleBackButton = () => {
 
   trainList = (value) => {
 
-    if (value == 'Enter PNR') {
+    if (value == 'Enter PNR Number') {
       // console.log('value of radio button pnr is::::' + value)
       return (
         <View style={styles.inputView}>
@@ -302,7 +302,7 @@ handleBackButton = () => {
     let reg = /^[0-9]+$/;
     if (text != '' && reg.test(text)) {
       if (text.length == 10 || text.length == 5) {
-        if (value == 'Enter PNR' && text.length == 10 || value == 'Enter Train Name/No.' && text.length == 5) {
+        if (value == 'Enter PNR Number' && text.length == 10 || value == 'Enter Train Name/No.' && text.length == 5) {
           console.log('query.length in success: ' + query.length + '\n' + 'query : ' + query + '\n' + 'text : ' + text + '\n' + 'text.length' + text.length)
           ConstantValues.searchString = text
           if (text.length === 5) {
@@ -499,11 +499,11 @@ handleBackButton = () => {
               <View style={styles.radioButton}>
                 <View style={styles.radioView}>
                   <RadioButton
-                    value="Enter PNR"
+                    value="Enter PNR Number"
                     color='#757271'
 
                   />
-                  <Text style={styles.text}>PNR on Ticket</Text>
+                  <Text style={styles.text}>PNR Number</Text>
                 </View>
 
 
@@ -531,7 +531,7 @@ handleBackButton = () => {
 
                   this.searchBy(this.state.text, this.state.query, this.state.value)
                 }}
-                title='Search Restaurants'
+                title='SEARCH RESTAURANTS'
               />
             </View>
 

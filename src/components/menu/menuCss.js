@@ -14,9 +14,9 @@ const styles = StyleSheet.create({
   },
   menuHeader: {
     width: Dimensions.get('window').width,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop:'8%',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    marginTop:'5%',
     backgroundColor: '#ffffff',
     borderTopStartRadius:100/5,
     borderTopEndRadius:100/5,
@@ -31,10 +31,10 @@ const styles = StyleSheet.create({
   },
   outletName: {
     // paddingTop: 15,
-    textAlign: 'center',
-    alignSelf: 'center',
-    fontSize: 20,
-    color: '#000000',
+    // textAlign: 'center',
+    alignSelf: 'flex-start',
+    fontSize: 18,
+    color: Colors.black,
     fontFamily: 'Poppins-Medium',
   },
   card: {
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     borderWidth: 1,
-    width: '96%',
+    width: '99%',
     borderColor: '#626663',
   },
   couponcard: {
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     width: 'auto',
     textTransform: 'uppercase',
-    color: '#f59120',
+    color: Colors.newOrange,
     fontFamily: 'Poppins-Medium',
     justifyContent: 'center'
   },
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 5,
     backgroundColor: '#ffffff',
-    borderColor: '#f59120',
+    borderColor: Colors.newOrange,
     borderRadius: 100 / 8,
     borderWidth: 1,
     borderStyle: 'dashed'
@@ -204,8 +204,8 @@ const styles = StyleSheet.create({
   itemName: {
     paddingHorizontal: 5,
     width: 200,
-    fontFamily: 'Poppins-Light',
-    fontSize: 15,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 14,
     color: '#000000'
   },
   footer: {
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: Dimensions.get('window').width - 10,
     height: 50,
-    backgroundColor: '#60b246',
+    backgroundColor: Colors.newgGreen3,
     alignContent: 'center',
     alignItems: 'center',
     // borderTopStartRadius: 100 / 5,

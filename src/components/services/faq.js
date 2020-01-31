@@ -9,6 +9,7 @@ import ConstantValues from '../constantValues.js';
 import BillCardDetail from '../cart/billDetailCard.js';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import { Fade } from '../assests/fade.js';
+import Colors from '../colors.js';
 
 
 
@@ -46,7 +47,7 @@ export default class faq extends Component {
                 <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 25, color: '#000000' }}> FAQ </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> FAQs </Text>
               </View>
             </View>
             {/* header view ends */}
