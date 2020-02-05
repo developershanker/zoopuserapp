@@ -29,10 +29,13 @@ import walletApi from '../customer/walletApi.js';
 import moment from 'moment';
 import CountDown from 'react-native-countdown-component';
 import Colors from '../colors.js';
+import { Separator } from '../separator.js';
 
 export class ReduxMenu extends Component {
     componentDidMount() {
-        this.props.getMenu()
+        this.props.getMenu();
+        this.props.clearCart();
+        cartApi.resetBillDetail();
         if (ConstantValues.customerId === '') {
             console.log('User is Not logged in')
         } else {
@@ -600,6 +603,55 @@ export class ReduxMenu extends Component {
         }
     }
 
+    renderCart = (menuResponseData) => {
+        if (menuResponseData && menuResponseData.length) {
+            let menuResponse = new Array()
+        menuResponse = menuResponseData.filter((item, index) => {
+           return item.itemCount > 0
+        })
+        console.log('Data in MenuResponse::::' + menuResponse)
+            return (
+                <FlatList
+                    style={{ width: ConstantValues.deviceWidth, paddingVertical: 5 }}
+                    scrollEnabled={true}
+                    data={menuResponse}
+                    extraData={this.props}
+                    renderItem={({ item, index }) =>(
+                        
+                        <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5, width: '100%', backgroundColor: Colors.white, justifyContent: 'space-between', alignContent: "center" }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'flex-start', width: '70%', backgroundColor: Colors.white }}>
+                                <View style={{ width: 30, alignItems: 'flex-start' }}>
+                                    <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryId === 1 ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
+                                </View>
+                                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', width: '80%', color: '#000' }}>{item.itemName}</Text>
+                            </View>
+                            <View style={{ width: '30%', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', backgroundColor: Colors.white }}>
+                                <Counter
+                                    style={{ alignItems: 'center', width: 100, height: 32, }}
+                                    itemCount={item.itemCount}
+                                    disabledAdd={item.itemCount == 0 ? false : true}
+                                    disabledRemove={item.itemCount == 0 ? true : false}
+                                    onPressAdd={() => { this.props.addItemToCart(item, index) }}
+                                    onPressRemove={() => { this.props.removeItemFromCart(item, index) }}
+                                />
+                                <View style={{ width: '100%', justifyContent: 'center', alignContent: 'center', alignItems: 'center', backgroundColor: Colors.white }}>
+                                    <Text style={{ fontSize: 14, color: '#000000', fontFamily: 'Poppins-Regular', }}>{ConstantValues.rupee} {item.basePrice}</Text>
+                                </View>
+                            </View>
+                        </View>
+                        
+            )}
+                    keyExtractor={(item) => item.itemId.toString()}
+                />
+            )
+
+        } else {
+            console.log('No data Found')
+            // return (
+            //     ToastAndroid.show('No data Found', ToastAndroid.LONG)
+            // )
+        }
+    }
     walletOff = () => {
         this.setState({ walletUsed: false })
     }
@@ -614,6 +666,7 @@ export class ReduxMenu extends Component {
                         text: 'OK',
                         onPress: () => {
                             this.setState({ visibleModal: null })
+                            this.props.clearCart()
                             this.props.navigation.navigate('Search')
                         },
                         style: 'cancel'
@@ -884,7 +937,7 @@ export class ReduxMenu extends Component {
                     {
                         this.props.inCartlength === 0 ?
                             <View style={styles.modalEmptyView}>
-                                <Image style={{ width: '100%', height: 300, }} source={require('../images/empty_cart_png.png')} />
+                                <Image style={{ width: '100%', height: '70%', }} source={require('../images/empty_cart_png.png')} />
                                 {/* <Text style={{ alignSelf: 'center', fontSize: 20, color: '#000000', fontFamily: 'Poppins-Medium',textAlign:'center' }}>Cart is Empty</Text> */}
                                 <CustomButton
                                     title="Go back to Menu"
@@ -907,9 +960,11 @@ export class ReduxMenu extends Component {
                                         <Text style={{ alignSelf: 'center', fontSize: 10, color: '#000000', fontFamily: 'Poppins-Medium', }}>Cart Expires in</Text>
                                         <CountDown
                                             until={300}
-                                            size={15}
+                                            size={12}
                                             onFinish={() => this.expireCart()}
-                                            digitStyle={{ backgroundColor: '#fff', alignSelf: 'center', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}
+                                            // showSeparator={true}
+                                            // separatorStyle={{ color: '#000',fontSize:10, fontFamily: 'Poppins-Medium' }}
+                                            digitStyle={{ backgroundColor: Colors.lightGrey1 }}
                                             digitTxtStyle={{ color: '#000', fontFamily: 'Poppins-Medium' }}
                                             timeToShow={['M', 'S']}
                                             timeLabels={{ m: 'Min.', s: 'Sec.' }}
@@ -922,14 +977,15 @@ export class ReduxMenu extends Component {
                                     showsVerticalScrollIndicator={false}
                                     contentContainerStyle={{ width: ConstantValues.deviceWidth, justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
                                     <View style={styles.cartCard}>
-                                        <FlatList
+                                        {this.renderCart(this.props.menuResponse)}
+                                        {/* <FlatList
                                             style={{ width: ConstantValues.deviceWidth, paddingVertical: 5 }}
                                             scrollEnabled={true}
                                             data={this.props.menuResponse}
                                             extraData={this.props}
                                             renderItem={({ item, index }) =>
                                                 <Fade visible={item.itemCount > 0}>
-                                                    <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5, width: '100%', backgroundColor: Colors.white, justifyContent: 'space-between', alignContent: "center" }}>
+                                                     <View style={{ flexDirection: 'row', marginTop: 5, marginBottom: 5, width: '100%', backgroundColor: Colors.white, justifyContent: 'space-between', alignContent: "center" }}>
                                                         <View style={{ flexDirection: 'row', alignItems: 'flex-start', width: '70%', backgroundColor: Colors.white }}>
                                                             <View style={{ width: 30, alignItems: 'flex-start' }}>
                                                                 <Image style={{ width: 15, height: 15 }} source={{ uri: item.categoryId === 1 ? ConstantValues.IconUrl + ConstantValues.imgurl.veg : ConstantValues.IconUrl + ConstantValues.imgurl.nonveg }} />
@@ -953,7 +1009,7 @@ export class ReduxMenu extends Component {
                                                 </Fade>
                                             }
                                             keyExtractor={(item) => item.itemId.toString()}
-                                        />
+                                        /> */}
 
                                     </View>
                                     {/* itemCard ends here */}
@@ -984,16 +1040,15 @@ export class ReduxMenu extends Component {
                                             totalPayableAmount={(ConstantValues.totalPayableAmount).toFixed(2)}
                                         />
                                     </View>
-                                </ScrollView>
-                                
-                                <View style={[styles.cartCard,{justifyContent: 'center',alignContent:'center',alignItems:'center',alignSelf:'center'}]}>
+                                    <View style={[styles.cartCard, { justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignSelf: 'center' }]}>
                                         <CustomButton
                                             disabled={this.state.proceedDisabled}
-                                            style={{ width: '100%',justifyContent: 'center', backgroundColor: this.state.proceedDisabled === true ? '#9b9b9b' : Colors.newgGreen3, width: ConstantValues.deviceWidth - 30 }}
+                                            style={{ width: '100%', justifyContent: 'center', backgroundColor: this.state.proceedDisabled === true ? '#9b9b9b' : Colors.newgGreen3, width: ConstantValues.deviceWidth - 30 }}
                                             onPress={() => this.confirmCart()}
                                             title={this.state.proceedLabel}
                                         />
                                     </View>
+                                </ScrollView>
                             </View>
                     }
                     {/* </View> */}
@@ -1017,22 +1072,22 @@ export class ReduxMenu extends Component {
                         style={styles.bottomModal}
                     >
 
-                        <View style={styles.modalView}>
+                        <View style={[styles.modalView,{height: ConstantValues.deviceHeight/2,alignItems:'center'}]}>
                             <View style={styles.promocodeInput}>
                                 <TextInput
-                                    style={{ fontSize: 15, textTransform: 'uppercase', fontFamily: 'Poppins-Medium', width: '80%' }}
+                                    style={{ fontSize: 14, textTransform: 'uppercase', fontFamily: 'Poppins-Regular', width: '80%' }}
                                     placeholder='Enter Promo Code'
                                     // keyboardType='default'
                                     autoCapitalize='characters'
                                     onChangeText={couponCode => this.setState({ couponCode })}
                                 />
                                 <TouchableOpacity onPress={() => { this.applyCouponsFromInput(this.state.couponCode, this.state.CouponDetail) }}>
-                                    <Text style={{ color: Colors.newgGreen1, fontSize: 15, fontFamily: 'Poppins-Medium', }}>APPLY</Text>
+                                    <Text style={{ color: Colors.newgGreen1, fontSize: 14, fontFamily: 'Poppins-Regular', }}>APPLY</Text>
                                 </TouchableOpacity>
                             </View>
 
-                            <View style={{ width: Dimensions.get('window').width - 10, flexDirection: 'row', paddingTop: 10 }}>
-                                <Text style={{ fontSize: 15, fontFamily: 'Poppins-Medium', paddingHorizontal: 10 }}>Available Coupons</Text>
+                            <View style={{ width: Dimensions.get('window').width - 10, flexDirection: 'row', paddingTop: 5,borderBottomColor:Colors.lightGrey1,borderBottomWidth:0.3 }}>
+                                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', paddingHorizontal: 10 }}>Available Coupons</Text>
                                 {/* <Image style={{ height: 10, alignSelf: 'center' }} source={require('../images/line.png')} /> */}
                             </View>
 
@@ -1044,24 +1099,29 @@ export class ReduxMenu extends Component {
                                 data={this.state.CouponDetail}
                                 renderItem={({ item }) =>
 
-                                    <View>
+                                    <View style={{width: Dimensions.get('screen').width,justifyContent:'center',alignItems:'center'}}>
                                         <View style={styles.cardCoupon}>
                                             <View>
-                                                <TouchableWithoutFeedback onPress={() => this.applyCoupons(item)}>
-                                                    <View style={styles.codeView}>
-                                                        <Text style={styles.text}>{item.couponCode}</Text>
-                                                    </View>
-                                                </TouchableWithoutFeedback>
-
-                                                <Text style={{ paddingTop: 5, color: '#000000', fontFamily: 'Poppins-Regular', }}>{item.discription}</Text>
-                                                <Text style={{ paddingTop: 5, fontFamily: 'Poppins-Regular', }}>Validity of this coupon is: {moment(item.validityEndDate).format('DD-MM-YYYY HH:mm A')}</Text>
+                                                <Text style={{ paddingTop: 2,fontSize:12,color: '#000000', fontFamily: 'Poppins-Regular', }}>{item.discription}</Text>
+                                                <Text style={{ paddingTop: 2,fontSize:12,fontFamily: 'Poppins-Regular', }}>Validity of this coupon is {moment(item.validityEndDate).format('DD MMM YYYY')}</Text>
+                                                <Separator style={{backgroundColor:'#f7f7f7',width:'100%'}}/>
+                                                <View style={{flexDirection:'row',justifyContent:'space-between',width:'98%',marginVertical:5,alignItems:'center',alignContent:'center'}}>
+                                                    <TouchableWithoutFeedback onPress={() => this.applyCoupons(item)}>
+                                                        <View style={styles.codeView}>
+                                                            <Text style={styles.text}>{item.couponCode}</Text>
+                                                        </View>
+                                                    </TouchableWithoutFeedback>
+                                                    <TouchableOpacity onPress={() => this.applyCoupons(item)}>
+                                                        <Text style={{ color: Colors.newgGreen1, fontSize: 14, fontFamily: 'Poppins-Regular',}}>APPLY</Text>
+                                                    </TouchableOpacity>
+                                                </View>
                                             </View>
 
-                                            <TouchableOpacity
+                                            {/* <TouchableOpacity
                                                 onPress={() => this.applyCoupons(item)}
                                             >
                                                 <Text style={{ color: Colors.newgGreen1, fontSize: 15, fontFamily: 'Poppins-Medium', alignSelf: 'flex-end', marginRight: 25 }}>APPLY</Text>
-                                            </TouchableOpacity>
+                                            </TouchableOpacity> */}
                                         </View>
                                     </View>
 

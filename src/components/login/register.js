@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Picker, View, Text, StyleSheet, Dimensions, TextInput, ToastAndroid, PermissionsAndroid, Alert, TouchableOpacity } from 'react-native';
+import { Picker, View, Text, StyleSheet, Dimensions, TextInput, ToastAndroid, PermissionsAndroid, Alert, TouchableOpacity , BackHandler} from 'react-native';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -39,6 +39,20 @@ export class Register extends Component {
       visibleModal: 'center',
     };
   }
+
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+  handleBackButton = () => {
+    console.log('I am back on Register.js')
+    // this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
+    this.props.navigation.navigate('Search')
+    return true;
+  };
 
 
   checkLogin() {

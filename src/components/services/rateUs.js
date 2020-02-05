@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Linking, TouchableOpacity, StyleSheet, Dimensions, Image } from 'react-native';
+import { View, Text, Linking, TouchableOpacity, StyleSheet, Dimensions, Image,BackHandler } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import ConstantValues from '../constantValues';
 import IconA from 'react-native-vector-icons/AntDesign';
@@ -21,6 +21,19 @@ export default class rateUs extends Component {
       showVersionUpdateModal: 'center'
     };
   }
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+  handleBackButton = () => {
+    console.log('I am back on RateUs.js')
+    // this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
+    this.props.navigation.navigate('Search')
+    return true;
+  };
 
 
   gotoLink = () => {
@@ -41,30 +54,42 @@ export default class rateUs extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignContent: 'flex-start', alignItems: 'center' }}>
+      <View style={styles.slide}>
+        {/* header view */}
+        <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
+                {/* <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} /> */}
+                <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
+              </TouchableOpacity>
+              <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> Rate Us </Text>
+              </View>
+            </View>
+            {/* header view ends */}
         {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}> */}
           {/* <Icon style={{ margin: 20 }} name={'chevron-left'} size={20} color={'#000000'} /> */}
           {/* <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
         </TouchableOpacity> */}
-        <View style={{ width: ConstantValues.deviceWidth - 20, height: '30%', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+        <View style={{ width: ConstantValues.deviceWidth, height: '20%',opacity:0.7, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
           <Image source={{ uri: ConstantValues.IconUrl + ConstantValues.imgurl.zooporange }}
-            style={{ width: 150, height: 100 }}
+            style={{ width: '80%', height: '100%' }}
           />
         </View>
-
-        <Text style={{ fontSize: 18, color: '#F15926', fontFamily: 'Poppins-Medium', }}>Enjoying Zoop?</Text>
-        <Text style={{ fontSize: 14, color: '#696b6a', fontFamily: 'Poppins-Regular', textAlign: 'center', alignSelf: 'center' }}>Please rate us if you like our services it will help us to serve better.</Text>
-        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-          <CustomButtonShort
-            style={{ backgroundColor: Colors.newgGreen3 }}
-            title='Rate Us'
-            onPress={() => this.gotoLink()}
-          />
-          <CustomButtonShort
-            style={{ backgroundColor: Colors.darkGrey }}
-            title='Not Now'
-            onPress={() => this.dismiss()}
-          />
+        <View style={{justifyContent:'center'}}>
+          <Text style={{ fontSize: 18, color: Colors.newOrange, fontFamily: 'Poppins-Medium', textAlign: 'center' }}>Enjoying Zoop?</Text>
+          <Text style={{ fontSize: 14, color: '#696b6a', fontFamily: 'Poppins-Regular', textAlign: 'center', alignSelf: 'center' }}>Please rate us if you like our services it will help us to serve better.</Text>
+          <View style={{ flexDirection: 'row',justifyContent:'center' }}>
+            <CustomButtonShort
+              style={{ backgroundColor: Colors.darkGrey1 }}
+              title='NOT NOW'
+              onPress={() => this.dismiss()}
+            />
+            <CustomButtonShort
+              style={{ backgroundColor: Colors.newgGreen3 }}
+              title='RATE US'
+              onPress={() => this.gotoLink()}
+            />
+          </View>
         </View>
         {/* <Modal
           isVisible={this.state.showVersionUpdateModal === 'center'}
@@ -97,10 +122,11 @@ export default class rateUs extends Component {
 const styles = StyleSheet.create({
   slide: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: Dimensions.get('window').width,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // alignContent: 'center',
     backgroundColor: '#ffffff',
-    flexDirection: 'column',
   },
   text: {
     fontFamily: 'Poppins-Regular',

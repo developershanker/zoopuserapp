@@ -1,130 +1,305 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, Image, ScrollView, TouchableOpacity,TouchableWithoutFeedback,BackHandler } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, Image, ScrollView, TouchableOpacity, TouchableWithoutFeedback, BackHandler } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconA from 'react-native-vector-icons/AntDesign';
 import ConstantValues from '../constantValues';
 import BillDetailCard from '../cart/billDetailCard.js';
+import { ZoopLoader } from '../assests/zoopLoader';
+import { Overlay } from 'react-native-elements';
+import OrderDetailConstants from '../orderDetailConstants';
+import { Fade } from '../assests/fade.js';
+import Colors from '../colors';
+import moment from "moment";
+import orderApi from '../orderBooking/orderApi.js';
+import { ErrorView } from '../assests/errorView';
 
 export default class OrderDetail extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    this.getOrderDetails()
-  }
-  componentWillMount() {
-    BackHandler.addEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
-    console.log('Back Pressed')
-  }
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', () => this.props.navigation.navigate('Search'));
-    console.log('Back Pressed Unmount')
+    this.orderHistoryDetail(OrderDetailConstants.orderId, ConstantValues.customerId)
   }
   constructor(props) {
     super(props);
     this.state = {
-      orderedItem: [
-        // { id: '1', itemName: 'Special Thali', itemPrice: '175', itemQuantity: 0 },
-        // { id: '2', itemName: 'Special Non Veg Thali', itemPrice: '175', itemQuantity: 0 },
-      ]
+      data: {},
+      detailItem: [],
+      discountLabel: '',
+      balanceToPay: 0,
+      errorVisible: false,
+      isVisible: true,
+      paidAmount: 0,
+      balanceToPay: 0,
     };
   }
 
-  getOrderDetails(){
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+  handleBackButton = () => {
+    console.log('I am back on OrderDetail')
+    // this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
+    this.props.navigation.navigate('Search')
+    return true;
+  };
+  async orderHistoryDetail(orderId, customerId) {
+    try {
+      let response = await orderApi.orderHistoryDetail(orderId, customerId);
+      // console.log('Data in order history Detail:::' + JSON.stringify(response.data))
+      if (response.status == true) {
+        this.setState({
+          data: response.data,
+          detailItem: response.data.items,
+          paidAmount: response.data.paidAmount,
+        })
+        this.handleDiscountLabel()
+        this.handleBalanceToPay()
+        this.setState({ isVisible: false })
+      }
+      else {
+        this.setState({
+          isVisible: false,
+          errorVisible: true,
+        })
+      }
+    } catch (error) {
+      this.setState({
+        isVisible: false,
+        errorVisible: true,
+      })
+      console.log('Data received in myOrderDetail.js catch: ' + error)
+    }
+  }
+
+  handleDiscountLabel() {
+    if (this.state.data.couponId != null && this.state.data.couponId > 0) {
+      this.setState({
+        discountLabel: 'Discount (' + this.state.data.couponCode + ')'
+      })
+    } else if (this.state.data.walletAmount != null && this.state.data.walletAmount > 0) {
+      this.setState({
+        discountLabel: 'Discount (Wallet)'
+      })
+    } else {
+      this.setState({
+        discountLabel: 'Discount'
+      })
+    }
+
+  }
+
+  handleBalanceToPay() {
+    // this.state.paidAmount = this.state.data.paidAmount === null ? 0 : this.state.data.paidAmount
     this.setState({
-      orderedItem:ConstantValues.finalCart
+      paidAmount: this.state.data.paidAmount === null ? 0 : this.state.data.paidAmount
     })
+    console.log('this.state.paidAmount:::' + this.state.paidAmount)
+    if (this.state.data.paymentTypeId == 1) {
+      this.state.balanceToPay = this.state.data.totalPayableAmount - (this.state.paidAmount ? this.state.paidAmount : 0);
+    } else if (this.state.data.paymentTypeId == 2) {
+      // zero for Prepaid order
+      this.state.balanceToPay = 0;
+    } else {
+      this.state.balanceToPay = this.state.data.totalPayableAmount - (this.state.paidAmount ? this.state.paidAmount : 0);
+    }
+    console.log('this.state.balanceToPay:::' + this.state.balanceToPay)
   }
   render() {
     return (
       <SafeAreaView style={styles.slide}>
-        <ScrollView>
-          <View>
+        {this.state.errorVisible === true ?
+          <ErrorView onPress={() => this.props.navigation.navigate('Search')} />
+          : <ScrollView>
             {/* header view */}
-            <View style={{ flexDirection: 'row', paddingVertical: 15 }}>
+            <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-              <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
+                <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
               </TouchableOpacity>
-              <View style={{ flexDirection: 'column', justifyContent: 'flex-start', width: Dimensions.get('window').width - 100, alignItems: 'flex-start' }}>
-                <Text style={{ fontFamily:'Poppins-Medium', fontSize: 15, color: '#000000' }}> ORDER ID </Text>
-                <Text style={{ fontFamily:'Poppins-Medium', fontSize: 15, color: '#000000' }}> {ConstantValues.irctcId}</Text>
-                <View style={{ flexDirection: 'row', width: Dimensions.get('screen').width, paddingTop: 10 }}>
-                  <Text style={styles.infoView}> {ConstantValues.orderDate} </Text>
-                  <Text style={styles.infoView}> {ConstantValues.orderTime} </Text>
-                </View>
-                <View style={{ flexDirection: 'column', width: Dimensions.get('screen').width, paddingTop: 10 }}>
-                  <Text style={[styles.infoView,{color:'#000000'}]}>Station :  {ConstantValues.stationName} </Text>
-                  <Text style={[styles.infoView,{color:'#000000'}]}>Restaurant : {ConstantValues.outletName} </Text>
-                </View>
-                {/* <Text style={{ fontSize: 15, color: '#000000' }}>Order will reach in 20 minutes</Text> */}
+              <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> Order Details </Text>
               </View>
             </View>
             {/* header view ends */}
-            <View>
-              <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10 }}>
-                <Text style={{fontSize: 20, fontFamily: 'Poppins-Medium', color: '#000000' }}> Order Details </Text>
-                <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} />
+
+            <View style={styles.card}>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Order Id</Text>
+                <Text style={styles.tiletext}>{this.state.data.irctcOrderId === null ? 'N/A' : this.state.data.irctcOrderId}</Text>
               </View>
-              <View
-                style={styles.card}>
-                <FlatList
-                  data={this.state.orderedItem}
-                  renderItem={({ item }) =>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 10 }}>
-                      <Text style={{ fontFamily:'Poppins-Regular', color: '#000000', fontSize: 15 }}>{item.itemName}</Text>
-                      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        {/* <Icon name={'rupee-sign'} size={15}/> */}
-                        <Text style={{ fontFamily:'Poppins-Regular', color: '#000000', fontSize: 15 }}>{ConstantValues.rupee} {item.basePrice}</Text>
-                      </View>
-                    </View>
-                  }
-                  keyExtractor={(item) => item.itemId.toString()}
-                />
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>ZOOP Txn. No.</Text>
+                <Text style={styles.tiletext}>{this.state.data.zoopTransactionNo === null ? 'N/A' : this.state.data.zoopTransactionNo}</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Status</Text>
+                <Text style={{ fontFamily: 'Poppins-Medium', color: ConstantValues.orderStatus[this.state.data.status] }}>{this.state.data.orderStatus === null ? 'N/A' : this.state.data.orderStatus}</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Order Type</Text>
+                <Text style={[styles.tiletext], { fontFamily: 'Poppins-Bold', color: Colors.newgGreen1 }}>{this.state.data.paymentTypeName === null ? 'N/A' : this.state.data.paymentTypeName}</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Booking Date</Text>
+                <Text style={styles.tiletext}>{this.state.data.bookingDate == null ? 'Date not available' : moment(this.state.data.bookingDate).format('DD MMM YYYY')} at {this.state.data.bookingDate == null ? 'Time not available' : moment(this.state.data.bookingDate).format('HH:mm ')}</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Delivery Date</Text>
+                <Text style={styles.tiletext}>{this.state.data.eta == null ? 'Date not available' : moment(this.state.data.eta).format('DD MMM YYYY')} at {this.state.data.eta == null ? 'Time not available' : moment(this.state.data.eta).format('HH:mm ')}</Text>
               </View>
 
             </View>
-            <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10 }}>
-            <BillDetailCard/>
-            </View>
-          
-            {/* <View>
-             
-              <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', paddingHorizontal: 10 }}>
-                <Text style={{ fontSize: 20, fontFamily:'Poppins-Regular', color: '#000000' }}> Bill Details </Text>
-                <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} />
-              </View>
-              <View
-                style={styles.card}
-              >
-                <View>
-                
-                  <View style={styles.tile}>
-                    <Text style={styles.tiletext}>ITEM TOTAL</Text>
-                    <Text style={styles.tiletext}>Rs. 200</Text>
-                  </View>
-                  <View style={styles.tile}>
-                    <Text style={styles.tiletext}>TOTAL DISCOUNT</Text>
-                    <Text style={styles.tiletext}>Rs. 200</Text>
-                  </View>
-                  <View style={styles.tile}>
-                    <Text style={styles.tiletext}>DELIVERY FEE</Text>
-                    <Text style={styles.tiletext}>Rs. 200</Text>
-                  </View>
-                  <View style={styles.tile}>
-                    <Text style={styles.tiletext}>TOTAL</Text>
-                    <Text style={styles.tiletext}>Rs. 200</Text>
-                  </View>
-                  <View style={styles.tile}>
-                    <Text style={{fontFamily:'Poppins-Regular',color: '#4ce065',fontSize:20}}>Total Paid</Text>
-                    <Text style={{fontFamily:'Poppins-Regular',color: '#4ce065',fontSize:20}}>Rs. 200</Text>
-                  </View>
 
+            <View style={styles.card}>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Passenger Name</Text>
+                <Text style={styles.tiletext}>{this.state.data.passengerName === '' ? 'N/A' : this.state.data.passengerName}</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Passenger Mobile No.</Text>
+                <Text style={styles.tiletext}>{this.state.data.passengerMobile === '' ? 'N/A' : this.state.data.passengerMobile}</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Passenger Alt. Mobile No.</Text>
+                <Text style={styles.tiletext}>{this.state.data.passengeAlternateMobile === '' ? 'N/A' : this.state.data.passengeAlternateMobile}</Text>
+              </View>
+
+              {/* <Fade visible={this.state.data.suggestions !== ''}>
+                          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                              <Text style={styles.tiletext}>Suggestions</Text>
+                              <Text style={{ width: 100, fontFamily: 'Poppins-Regular', color: '#000000', textAlign: 'right', fontSize: 12 }}>"{this.state.data.suggestions}"</Text>
+                          </View>
+                      </Fade> */}
+
+            </View>
+            <Fade visible={this.state.data.suggestions !== ''}>
+              <View style={styles.card}>
+                <View style={{ flexDirection: 'row', width: '100%', paddingHorizontal: 10 }}>
+                  <View style={{ width: '25%', backgroundColor: Colors.white }}>
+                    <Text style={styles.tiletext}>Suggestions : </Text>
+                  </View>
+                  <View style={{ width: '75%', backgroundColor: Colors.white }}>
+                    <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', textAlign: 'left', fontSize: 12, }}>{this.state.data.suggestions}</Text>
+                  </View>
                 </View>
               </View>
-            </View> */}
+            </Fade>
 
-          </View>
-        </ScrollView>
+
+            <View style={styles.card}>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>PNR</Text>
+                <Text style={styles.tiletext}>{this.state.data.pnr === '' ? 'N/A' : this.state.data.pnr}</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Station Name</Text>
+                <Text style={styles.tiletext}>({this.state.data.stationCode === '' ? 'N/A' : this.state.data.stationCode}) {this.state.data.stationName === '' ? 'N/A' : this.state.data.stationName}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Outlet Name</Text>
+                <Text style={styles.tiletext}>{this.state.data.outletName === '' ? 'N/A' : this.state.data.outletName}</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Train Name/No.</Text>
+                <Text style={styles.tiletext}>{this.state.data.trainName === '' ? 'N/A' : this.state.data.trainName}/ {this.state.data.trainNumber === '' ? 'N/A' : this.state.data.trainNumber}</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Coach/Seat No.</Text>
+                <Text style={styles.tiletext}>{this.state.data.coach === '' ? 'N/A' : this.state.data.coach} / {this.state.data.berth === '' ? 'N/A' : this.state.data.berth}</Text>
+              </View>
+
+            </View>
+
+            {/* <View style={{ width: ConstantValues.deviceWidth - 10, marginBottom: 5, marginTop: 5, alignContent: 'center', justifyContent: 'center', alignItems: 'center' }}> */}
+            <View style={styles.card}>
+              <FlatList
+                data={this.state.detailItem}
+                extraData={this.state}
+                scrollEnabled={true}
+                renderItem={({ item }) =>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 12, color: '#000000', width: 200 }}>{item.itemName}</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: 100, alignContent: 'center', }}>
+                      <Text style={{ fontFamily: 'Poppins-Regular', color: Colors.newgGreen1, width: 40, textAlign: 'right' }}> {item.quantity} </Text>
+                      <Text style={{ fontFamily: 'Poppins-Regular', color: '#000', fontSize: 10, }}> X </Text>
+                      <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', width: 50, textAlign: 'right', fontSize: 12, }}> {this.state.data.rupee} {item.basePrice}</Text>
+                    </View>
+                  </View>
+                }
+                keyExtractor={(item) => item.itemId.toString()}
+              />
+            </View>
+            {/* </View> */}
+
+            {/* <View style={{ width: ConstantValues.deviceWidth - 10, marginTop: 5, marginBottom: 5, alignContent: 'center', justifyContent: 'center', alignItems: 'center' }}> */}
+            <View style={styles.card}>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Item Total</Text>
+                <Text style={styles.tiletext}>{ConstantValues.rupee} {this.state.data.totalAmount}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>+ GST on food</Text>
+                <Text style={styles.tiletext}>{ConstantValues.rupee} {this.state.data.gst}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>+ Delivery Charge (Inc. GST)</Text>
+                <Text style={styles.tiletext}>{ConstantValues.rupee} {this.state.data.deliveryCharge + this.state.data.deliveryChargeGst}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>(-) {this.state.discountLabel}</Text>
+                <Text style={[styles.tiletext, { color: Colors.newgGreen1 }]}>  {ConstantValues.rupee} {this.state.data.discount}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Order Total </Text>
+                <Text style={[styles.tiletext, { color: Colors.newgGreen1 }]}>  {ConstantValues.rupee} {this.state.data.totalPayableAmount}</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>(-) Paid Online </Text>
+                <Text style={styles.tiletext}>  {ConstantValues.rupee} {this.state.data.paymentTypeId === 2 ? this.state.data.totalPayableAmount : this.state.paidAmount}</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                <Text style={styles.tiletext}>Balance To Pay</Text>
+                <Text style={styles.tiletext}>  {ConstantValues.rupee} {this.state.balanceToPay}</Text>
+              </View>
+
+            </View>
+
+            {/* </View> */}
+
+
+
+          </ScrollView>}
+        <Overlay
+          isVisible={this.state.isVisible}
+          width="auto"
+          height="auto"
+          // windowBackgroundColor='rgba(255, 255, 255, .5)'
+          // overlayBackgroundColor='#ffffff'
+          onBackdropPress={() => this.setState({ isVisible: false })}
+        >
+          <ZoopLoader isVisible={true} text={'Loading...'} />
+
+        </Overlay>
       </SafeAreaView>
     );
   }
@@ -134,44 +309,55 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Dimensions.get('window').width,
     justifyContent: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#fff',
   },
-  infoView: {
-    color: '#e39494',
-    fontSize: 15,
-    fontFamily:'Poppins-Regular',
-
+  bottomModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  tileM: {
+    width: Dimensions.get('screen').width - 20,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   card: {
-    width: Dimensions.get('window').width,
-    borderRadius: 5,
-    marginLeft: 5,
-    marginRight: 10,
-    marginTop: 10,
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingVertical:5,
-    paddingHorizontal:5,
     backgroundColor: '#ffffff',//can change as we move to various pages
+    paddingVertical: 5,
     marginBottom: 10,//can change as we move to various pages
-    // marginLeft: '2%', //can change as we move to various pages
-    // width: '96%', //can change as we move to various pages
+    marginLeft: '2%', //can change as we move to various pages
+    width: '96%', //can change as we move to various pages
     borderColor: '#e4e4e4',
-    // borderRadius: 100 / 9,
+    borderRadius: 100 / 9,
     borderWidth: 1,
     shadowOpacity: 0.4,
     borderBottomColor: '#e4e4e4',
     borderBottomWidth: 2,
   },
   tile: {
-    width: Dimensions.get('screen').width - 25,
+    width: Dimensions.get('screen').width - 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    paddingVertical: 10
+    // paddingHorizontal: 10,
+    paddingVertical: 5
   },
   tiletext: {
-    fontFamily:'Poppins-Regular',
+    fontSize: 12,
+    fontFamily: 'Poppins-Regular',
     color: '#000000'
+  },
+  tiletextH: {
+    fontFamily: 'Poppins-Medium',
+    color: '#000000',
+    fontSize: 18
+  },
+  tiletextM: {
+    fontFamily: 'Poppins-Regular',
+    color: '#000000',
+    fontSize: 18
+  },
+  tiletextitem: {
+    fontFamily: 'Poppins-Regular',
+    color: '#6a6e6c',
+    fontSize: 12
   }
-})
+});

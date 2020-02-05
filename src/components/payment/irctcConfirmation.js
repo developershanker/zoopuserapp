@@ -62,7 +62,7 @@ export default class irctcConfirmation extends Component {
   }
   viewDetails(){
     OrderDetailConstants.orderId = ConstantValues.zoopOrderId, // insert orderid
-    this.props.navigation.navigate('MyOrderDetail')
+    this.props.navigation.navigate('OrderDetail')
   }
 
   async getIrctcId() {

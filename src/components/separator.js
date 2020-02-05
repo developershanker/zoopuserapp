@@ -6,9 +6,10 @@ import Colors from '../components/colors';
 
 
 export const Separator = (props) => {
+    const {style={}} = props;
 
     return (
-        <View style = {styles.view}>
+        <View style = {[styles.view,style]}>
         </View>
     );
 };

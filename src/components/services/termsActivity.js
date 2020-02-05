@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, WebView ,TouchableOpacity,Dimensions} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, WebView ,TouchableOpacity,Dimensions, BackHandler} from 'react-native';
 import IconA from 'react-native-vector-icons/AntDesign';
 import Colors from '../colors';
 
@@ -9,6 +9,19 @@ export default class TermsActivity extends Component {
         this.state = {
         };
     }
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+      }
+    
+      componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+      }
+      handleBackButton = () => {
+        console.log('I am back on TNC.js')
+        // this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
+        this.props.navigation.navigate('Search')
+        return true;
+      };
 
     render() {
         return (

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Alert,CheckBox, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
+import { View, Alert,CheckBox, Text, StyleSheet, ScrollView, Dimensions, ToastAndroid, TouchableOpacity, FlatList, RefreshControl, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconA from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -35,6 +35,19 @@ export default class MyWallet extends Component {
       
     };
   }
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+  handleBackButton = () => {
+    console.log('I am back on MyWallet.js')
+    // this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
+    this.props.navigation.navigate('Search')
+    return true;
+  };
   tokenAsync = async () => {
     try {
         const storedValues = await AsyncStorage.getItem('userInfo')

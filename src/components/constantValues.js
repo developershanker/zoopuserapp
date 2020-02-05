@@ -4,6 +4,7 @@ import Device from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Spinner from 'react-native-spinkit';
+import Colors from './colors';
 
 export const deviceWidth = Dimensions.get('window').width
 export const deviceHeight = Dimensions.get('window').height
@@ -53,7 +54,7 @@ static apiUrl = 'https://appapi.zoopindia.in/'
 
   //station and outlet
   static searchString = ''
-  static navigationChannel = ''
+  static navigationChannel = 'Search'
 
   //order constant module
   static stationId = ''
@@ -68,7 +69,7 @@ static apiUrl = 'https://appapi.zoopindia.in/'
   static minimumOrderValue = null
   static suggestions = ''
 
-  static orderStatus = ['#e95225','#cc1b1b','#f52a2a','#e95225','#71e3e3','#f52a2a','#e0e643','#27cfbb','#43d12a','#393e59','#4f4e4e','#252629','#6c7293'];
+  static orderStatus = ['#e95225','#cc1b1b','#f52a2a',Colors.newBlue,'#71e3e3','#f52a2a','#e0e643','#27cfbb','#43d12a','#393e59','#4f4e4e','#252629','#6c7293',Colors.newOrange];
 
   //passenger detail
   static pnr = ''
@@ -102,6 +103,8 @@ static apiUrl = 'https://appapi.zoopindia.in/'
   static paymentDetails = []
   static zooptransactionId = ''
 
+  //regex
+  static spaceTest = (/^\s+|\s+$/g,''); 
   //recentSearch
   static searchTrainId = ''
   static searchTrainNumber = ''
@@ -156,7 +159,6 @@ static MID = 'FIjIdu58691666399235'
   static couponType = ''
   static appliedCode = 'Apply Coupon Code'
   static isCouponApplied = false
-  static totalBasePrice = 0
   static totalBasePrice = 0
   static totalZoopPrice = 0
   static minimumPriceRequired = 0

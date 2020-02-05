@@ -16,21 +16,21 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     // alignItems: 'center',
     // justifyContent: 'center',
-    marginTop:'5%',
+    marginTop: '5%',
     backgroundColor: Colors.white,
-    borderTopStartRadius:100/5,
-    borderTopEndRadius:100/5,
+    borderTopStartRadius: 100 / 5,
+    borderTopEndRadius: 100 / 5,
     // borderColor:Colors.darkGreen,
     // borderTopWidth:1
   },
   topContainer: {
-    paddingVertical:2,
+    paddingVertical: 2,
     width: Dimensions.get('window').width,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.white,
-    borderBottomColor:Colors.lightGrey,
-    borderBottomWidth:0.2,
+    borderBottomColor: Colors.lightGrey,
+    borderBottomWidth: 0.2,
   },
   outletName: {
     // paddingTop: 15,
@@ -128,13 +128,13 @@ const styles = StyleSheet.create({
     // borderTopEndRadius: 100 / 5
   },
   promocodeInput: {
-    borderRadius: 100 / 8,
+    borderRadius: 6,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    borderWidth: 1,
-    width: '99%',
-    borderColor: '#626663',
+    borderWidth: 0.5,
+    width: '96%',
+    borderColor: Colors.lightGrey1,
   },
   couponcard: {
     // width: Dimensions.get('window').width - 5,
@@ -150,8 +150,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
   },
   text: {
-    fontSize: 20,
-    width: 'auto',
+    fontSize: 16,
+    // width: 'auto',
+    alignSelf:'center',
+    alignContent:'center',
+    alignItems:'center',
     textTransform: 'uppercase',
     color: Colors.newOrange,
     fontFamily: 'Poppins-Medium',
@@ -161,26 +164,27 @@ const styles = StyleSheet.create({
     //backgroundColor: '#9b9b9b',//can change as we move to various pages
     // marginBottom: 10,//can change as we move to various pages
     // marginLeft: '2%', //can change as we move to various pages
-    // width: '96%', //can change as we move to various pages
-    // borderColor: '#e4e4e4',
-    // borderRadius: 100 / 9,
-    // borderWidth: 1,
+    width: '96%', //can change as we move to various pages
+    borderColor: Colors.lightGrey,
+    borderRadius: 6,
+    borderWidth: 0.5,
+    marginVertical: 5,
     // shadowOpacity: 0.4,
     // borderBottomColor: '#e4e4e4',
     // borderBottomWidth: 2,
-    width: Dimensions.get('screen').width,
     paddingHorizontal: 5,
-    paddingVertical: 5
+    paddingVertical: 2
   },
   codeView: {
-    justifyContent: 'flex-start',
-    width: 150,
-    alignItems: 'center',
-    paddingVertical: 5,
+    // justifyContent: 'center',
+    // width: 150,
+    // alignItems: 'center',
+    paddingVertical: 0,
+    paddingHorizontal: 10,
     backgroundColor: '#ffffff',
     borderColor: Colors.newOrange,
-    borderRadius: 100 / 8,
-    borderWidth: 1,
+    borderRadius: 6,
+    borderWidth: 0.8,
     borderStyle: 'dashed'
   },
   //  MENU ITEM STYLES{GRID}

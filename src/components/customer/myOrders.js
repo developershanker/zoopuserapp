@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Alert, Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, Alert, Image, StyleSheet, ScrollView, ActivityIndicator, Dimensions, TouchableOpacity, FlatList, RefreshControl, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconA from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -20,23 +20,38 @@ import { Separator } from '../../components/separator'
 export default class MyOrders extends Component {
   componentDidMount() {
     SplashScreen.hide();
-    // this.checkRegister()
     this.tokenAsync()
-    // this.orderHistory()
   }
   constructor(props) {
     super(props);
+    this.page = 1;
     this.state = {
       orderHistory: [],
+      rawData: [],
       isVisible: true,
       detailViewModal: null,
       detailItem: [],
       isRefreshing: false,
-      page: 1,
-      seed: 1
+      loading: false, // user list loading
+      isRefreshing: false, //for pull to refresh
+      userToken: '',
+      customerId: ''
     };
   }
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
 
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  handleBackButton = () => {
+    console.log('I am back on My Orders')
+    // this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
+    this.props.navigation.navigate('Search')
+    return true;
+  };
   // Fetch the token from storage then navigate to our appropriate place
   tokenAsync = async () => {
     try {
@@ -50,7 +65,8 @@ export default class MyOrders extends Component {
       console.log('Getting token from localstorage : ' + userToken)
       console.log('Getting CustomerId from localstorage : ' + customerId)
       if (userToken != '') {
-        this.orderHistory(userToken, customerId)
+        this.setState({ userToken: userToken, customerId: customerId })
+        this.orderHistory(userToken, customerId, this.page)
       } else {
         return (
           Alert.alert(
@@ -94,45 +110,113 @@ export default class MyOrders extends Component {
 
   };
 
-
-  // checkRegister() {
-  //   if (ConstantValues.customerId == '') {
-  //     return (
-  //       Alert.alert(
-  //         'Need Login!!',
-  //         'Please LOGIN to Proceed.',
-  //         [
-  //           {
-  //             text: 'OK', onPress: () => {
-  //               this.setState({ isVisible: false })
-  //               this.props.navigation.navigate('Welcome')
-  //             },
-  //             style: 'cancel'
-  //           },
-  //         ],
-  //         { cancelable: false },
-  //       )
-  //     )
-  //   } else {
-  //     this.orderHistory()
-  //   }
-  // }
-
-  // onRefresh() {
-  //   this.setState({
-  //     isRefreshing: true,
-  //     page: 1,
-  //     seed: this.state.seed + 1
-  //   }, () => {
-  //     this.tokenAsync()
-  //   }
-  //   ); // true isRefreshing flag for enable pull to refresh indicator
-
-  // }
-
-  async orderHistory(userToken, customerId) {
+  async onRefresh(userToken, customerId, page) {
+    this.setState({ isRefreshing: true });
     try {
-      let response = await orderApi.orderHistory(userToken, customerId);
+      let response = await orderApi.orderHistory(userToken, customerId, page);
+      if (response.status == true) {
+        this.setState({
+          orderHistory: response.data,
+          rawData:response.data,
+          isRefreshing: false
+        })
+        if (this.state.orderHistory && this.state.orderHistory.length) {
+          this.setState({
+            orderHistory: response.data,
+            rawData:response.data,
+            isRefreshing: false
+          })
+        } else {
+          return (
+            Alert.alert(
+              'No Order Found!',
+              'Please Book Order!!',
+              [
+                {
+                  text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
+                  style: 'cancel'
+                },
+              ],
+              { cancelable: false },
+            )
+          ),
+            this.setState({
+              isRefreshing: false
+            })
+        }
+      }
+    } catch (error) {
+      this.setState({
+        isRefreshing: false
+      });
+      console.log('Data received in myOrder.js catch: ' + error)
+    }
+  }
+
+  renderFooter = () => {
+    //it will show indicator at the bottom of the list when data is loading otherwise it returns null
+    if (!this.state.loading) return null;
+    return (
+      <ActivityIndicator color={Colors.newOrange} size={20} />
+    );
+  };
+
+  async handleLoadMore() {
+    if (!this.state.loading) {
+      this.page = this.page + 1; // increase page by 1
+      // method for API call 
+      if (this.state.rawData.length !== 0) {
+        try {
+          let response = await orderApi.orderHistory(this.state.userToken, this.state.customerId, this.page);
+          if (response.status === true) {
+            if (this.state.orderHistory && this.state.orderHistory.length) {
+              let listData = this.state.orderHistory
+              let data = listData.concat(response.data)
+              this.setState({
+                orderHistory: data,
+                isVisible: false,
+                rawData: response.data
+              })
+              console.log('this.state.rawData.length::::' + this.state.rawData.length)
+              // if (this.state.rawData.length === 0) {
+              //   return 0;
+              // }
+            } else {
+              return (
+                <Text style={styles.tiletext}>
+                  List Ends
+              </Text>
+              )
+              // return (
+              //   Alert.alert(
+              //     'No Order Found!',
+              //     'Please Book Order!!',
+              //     [
+              //       {
+              //         text: 'OK', onPress: () => this.props.navigation.navigate('Search'),
+              //         style: 'cancel'
+              //       },
+              //     ],
+              //     { cancelable: false },
+              //   )
+              // ),
+              //   this.setState({
+              //     isVisible: false
+              //   })
+            }
+          }
+        } catch (error) {
+          console.log('Data received in myOrder.js catch: ' + error)
+        }
+      } else {
+        console.log('Empty Array found')
+      }
+    }
+  };
+
+  async orderHistory(userToken, customerId, page) {
+    try {
+      let response = await orderApi.orderHistory(userToken, customerId, page);
       if (response.status == true) {
         this.setState({
           orderHistory: response.data,
@@ -140,6 +224,7 @@ export default class MyOrders extends Component {
         })
         if (this.state.orderHistory && this.state.orderHistory.length) {
           this.setState({
+            rawData:response.data,
             orderHistory: response.data,
             isVisible: false
           })
@@ -167,7 +252,7 @@ export default class MyOrders extends Component {
     }
   }
 
-  viewOrderDetail = (item) =>{
+  viewOrderDetail = (item) => {
     OrderDetailConstants.orderId = item.orderId
     this.props.navigation.navigate('MyOrderDetail')
   }
@@ -219,59 +304,66 @@ export default class MyOrders extends Component {
     })
     // this.props.navigation.navigate('MyOrderDetail')
   }
+
   render() {
     let img = require('../images/roundimg1.jpg')
     return (
       <SafeAreaView style={styles.slide}>
-        <ScrollView>
-          <View>
-            {/* header view */}
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
-                <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
-              </TouchableOpacity>
-              <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> Order History </Text>
-              </View>
+        {/* header view */}
+        <View style={{ flexDirection: 'row', width: '100%', height: '8%', backgroundColor: Colors.white, justifyContent: 'center', }}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
+            <View style={{ justifyContent: 'center', width: '100%', height: '100%', alignItems: 'center', backgroundColor: Colors.white }}>
+              <IconA name={'arrowleft'} size={28} color={Colors.black} />
             </View>
-            {/* header view ends */}
-            <View style={{ width: Dimensions.get('screen').width }}>
-              <FlatList
-                style={{ width: Dimensions.get('screen').width }}
-                data={this.state.orderHistory}
-                extraData={this.state}
-                // refreshing={this.state.isRefreshing}
-                // onRefresh={() => this.onRefresh()}
-                renderItem={({ item }) =>
-                  <View>
-                    <View>
-                      <View style={styles.card}>
-                        <View style={{ flexDirection: 'row', width: '100%' }}>
-                          <Image source={img} style={styles.img} />
-                          <View style={styles.titleArea}>
-                            <Text style={styles.tiletextH}>{item.outletName}</Text>
-                            <View style={{flexDirection: 'row',backgroundColor:Colors.white,justifyContent:'space-between'}}>
-                            <Text style={styles.tiletext}>({item.stationCode}) {item.stationName}</Text>
-                            <Text style={[styles.tiletext, { color: Colors.newgGreen1, fontFamily: 'Poppins-Medium', fontSize: 12 }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
-                            </View>
-                          </View>
+          </TouchableOpacity>
+          <View style={{ justifyContent: 'center', width: '80%', alignItems: 'center' }}>
+            <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> Order History </Text>
+          </View>
+        </View>
+        {/* header view ends */}
+        {/* <ScrollView>
+          <View> */}
+        <View style={{ width: Dimensions.get('screen').width, height: '90%' }}>
+          <FlatList
+            style={{ width: Dimensions.get('screen').width }}
+            data={this.state.orderHistory}
+            extraData={this.state}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.isRefreshing}
+                onRefresh={() => this.onRefresh(this.state.userToken, this.state.customerId, this.page = 1)}
+              />
+            }
+            renderItem={({ item }) =>
+              <View>
+                <View>
+                  <View style={styles.card}>
+                    <View style={{ flexDirection: 'row', width: '100%' }}>
+                      <Image source={item.outletImage === null ? img : { uri: item.outletImage }} style={styles.img} />
+                      <View style={styles.titleArea}>
+                        <Text style={styles.tiletextH}>{item.outletName}</Text>
+                        <View style={{ flexDirection: 'row', backgroundColor: Colors.white, justifyContent: 'space-between' }}>
+                          <Text style={styles.tiletext}>({item.stationCode}) {item.stationName}</Text>
+                          <Text style={[styles.tiletext, { color: Colors.newgGreen1, fontFamily: 'Poppins-Medium', fontSize: 12 }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
                         </View>
-                        <Separator />
-                        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                      </View>
+                    </View>
+                    <Separator />
+                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                           <Text style={styles.tiletext}>Station</Text>
                           <Text style={styles.tiletext}>({item.stationCode}) {item.stationName}</Text>
                         </View> */}
 
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5 }}>
-                          <Text style={[styles.tiletext, { color: Colors.darkGrey, fontSize: 12 }]}>Booking Date :</Text>
-                          <Text style={[styles.tiletext, { fontSize: 12 }]}> {item.bookingDate == null ? 'Date not available' : moment(item.bookingDate).format('DD MMM YYYY')} at {item.bookingDate == null ? 'Time not available' : moment(item.bookingDate).format('hh:mm A')}</Text>
-                        </View>
-                        
-                        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                    <View style={{ flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5 }}>
+                      <Text style={[styles.tiletext, { color: Colors.darkGrey, fontSize: 12 }]}>Booking Date :</Text>
+                      <Text style={[styles.tiletext, { fontSize: 12 }]}> {item.bookingDate == null ? 'Date not available' : moment(item.bookingDate).format('DD MMM YYYY')} at {item.bookingDate == null ? 'Time not available' : moment(item.bookingDate).format('hh:mm A')}</Text>
+                    </View>
+
+                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                           <Text style={styles.tiletext}>Delivery Date </Text>
                           <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.eta).format('DD-MM-YYYY')}</Text>
                         </View> */}
-{/* 
+                    {/* 
                         <View style={{ flexDirection: 'row', paddingHorizontal: 10,paddingVertical:5 }}>
                           <Text style={styles.tiletext}>Delivery Time </Text>
                           <Text style={styles.tiletext}>{item.bookingDate == null ? 'Time not available' : moment(item.eta).format('HH:mm')}</Text>
@@ -279,20 +371,20 @@ export default class MyOrders extends Component {
 
 
 
-                        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                           <Text style={styles.tiletext}>Total Amount</Text>
                           <Text style={[styles.tiletext, { color: '#60b246' }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
                         </View> */}
 
-                        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                           <Text style={[styles.tiletext, { color: '#000000' }]}>Status </Text>
                           <Text style={{ fontFamily: 'Poppins-Medium', color: ConstantValues.orderStatus[item.status] }}>{item.orderStatus}</Text>
                         </View> */}
-                        <View style={{ flexDirection: 'row', paddingHorizontal: 10,paddingVertical:5 }}>
-                          <Text style={[styles.tiletext, { color: Colors.darkGrey, fontSize: 12 }]}>Delivery Date :</Text>
-                          <Text style={[styles.tiletext, { fontSize: 12 }]}> {item.eta == null ? 'Date not available' : moment(item.eta).format('DD MMM YYYY')} at {item.eta == null ? 'Time not available' : moment(item.eta).format('hh:mm A')}</Text>
-                        </View>
-                        {/* <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
+                    <View style={{ flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5 }}>
+                      <Text style={[styles.tiletext, { color: Colors.darkGrey, fontSize: 12 }]}>Delivery Date :</Text>
+                      <Text style={[styles.tiletext, { fontSize: 12 }]}> {item.eta == null ? 'Date not available' : moment(item.eta).format('DD MMM YYYY')} at {item.eta == null ? 'Time not available' : moment(item.eta).format('hh:mm A')}</Text>
+                    </View>
+                    {/* <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
                           <Text style={[styles.tiletext,{color:Colors.darkGrey}]}>Delivery Date </Text>
                           <Text style={styles.tiletext}>{item.bookingDate == null ? 'Date not available' : moment(item.eta).format('DD MMM YYYY')}</Text>
                         </View>
@@ -304,39 +396,44 @@ export default class MyOrders extends Component {
 
 
 
-                        {/* <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
+                    {/* <View style={{ flexDirection: 'column', paddingHorizontal: 10 }}>
                           <Text style={[styles.tiletext, { color: Colors.darkGrey, fontSize: 12 }]}>Total Amount</Text>
                           <Text style={[styles.tiletext, { color: Colors.newgGreen1, fontFamily: 'Poppins-Medium', fontSize: 12 }]}> {ConstantValues.rupee} {item.totalPayableAmount}</Text>
                         </View> */}
-                        <Separator />
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                          <CustomButtonShort
-                            disabled={true}
-                            // onPress={() => this.renderOrderDetail(item)}
-                            title={item.orderStatus}
-                            style={{ backgroundColor: Colors.white, width: 150, height: 0, paddingVertical: 10 }}
-                            textStyle={{ color: ConstantValues.orderStatus[item.status], fontFamily: 'Poppins-Regular', fontSize: 14 }}
-                          />
-                          <CustomButtonShort
-                            // onPress={() => this.renderOrderDetail(item)}
-                            onPress={() => {
-                              // this.renderOrderDetail(item),
-                              this.viewOrderDetail(item)}}
-                            title='View Details'
-                            style={{ backgroundColor: Colors.white, width: 150, height: 0, paddingVertical: 10 }}
-                            textStyle={{ color: Colors.newOrange, fontFamily: 'Poppins-Regular', fontSize: 14 }}
-                          />
-                        </View>
-                      </View>
-
+                    <Separator />
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <CustomButtonShort
+                        disabled={true}
+                        // onPress={() => this.renderOrderDetail(item)}
+                        title={item.orderStatus}
+                        style={{ backgroundColor: Colors.white, width: 150, height: 0, paddingVertical: 10 }}
+                        textStyle={{ color: ConstantValues.orderStatus[item.status], fontFamily: 'Poppins-Regular', fontSize: 14 }}
+                      />
+                      <CustomButtonShort
+                        // onPress={() => this.renderOrderDetail(item)}
+                        onPress={() => {
+                          // this.renderOrderDetail(item),
+                          this.viewOrderDetail(item)
+                        }}
+                        title='View Details'
+                        style={{ backgroundColor: Colors.white, width: 150, height: 0, paddingVertical: 10 }}
+                        textStyle={{ color: Colors.newOrange, fontFamily: 'Poppins-Regular', fontSize: 14 }}
+                      />
                     </View>
                   </View>
-                }
-                keyExtractor={(item) => item.orderId.toString()}
-              />
-            </View>
-          </View>
-        </ScrollView>
+
+                </View>
+              </View>
+            }
+            // keyExtractor={(item,index) => item.orderId.toString()}
+            keyExtractor={(item, index) => index.toString()}
+            ListFooterComponent={() => this.renderFooter.bind(this)}
+            onEndReachedThreshold={1}
+            onEndReached={() => this.handleLoadMore()}
+          />
+        </View>
+        {/* </View>
+        </ScrollView> */}
         {/* Order Details Modal */}
         <Overlay
           isVisible={this.state.isVisible}

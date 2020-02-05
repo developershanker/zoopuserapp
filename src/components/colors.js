@@ -19,5 +19,7 @@ export default class Colors {
   static black = '#000';
   static white = '#fff';
   static darkGrey = '#7a7a7a';
+  static darkGrey1 = '#9b9b9b';
   static lightGrey = '#e4e4e4';
+  static lightGrey1 = '#e0e0e0';
 }

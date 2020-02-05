@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text,StyleSheet,TouchableOpacity,Dimensions } from 'react-native';
+import { View, Text,StyleSheet,TouchableOpacity,Dimensions, BackHandler } from 'react-native';
 import { Container, Header, Content, Accordion } from "native-base";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconA from 'react-native-vector-icons/AntDesign';
@@ -38,6 +38,19 @@ export default class faq extends Component {
     this.state = {
     };
   }
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+  handleBackButton = () => {
+    console.log('I am back on Faq.js')
+    // this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
+    this.props.navigation.navigate('Search')
+    return true;
+  };
 
   render() {
     return (

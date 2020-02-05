@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity, FlatList, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconA from 'react-native-vector-icons/AntDesign';
 import SplashScreen from 'react-native-splash-screen';
@@ -32,11 +32,25 @@ export default class myOrderDetail extends Component {
             discountLabel: '',
             balanceToPay: 0,
             errorVisible: false,
-            isVisible:true,
-            paidAmount:0,
-            balanceToPay:0,
+            isVisible: true,
+            paidAmount: 0,
+            balanceToPay: 0,
         };
     }
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+    handleBackButton = () => {
+        console.log('I am back on My Orders Details')
+        // this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
+        this.props.navigation.navigate('MyOrders')
+        return true;
+    };
 
     async orderHistoryDetail(orderId, customerId) {
         try {
@@ -46,22 +60,22 @@ export default class myOrderDetail extends Component {
                 this.setState({
                     data: response.data,
                     detailItem: response.data.items,
-                    paidAmount:response.data.paidAmount,
-                    isVisible:false
+                    paidAmount: response.data.paidAmount,
                 })
                 this.handleDiscountLabel()
                 this.handleBalanceToPay()
+                this.setState({ isVisible: false })
             }
             else {
                 this.setState({
-                    isVisible:false,
-                    errorVisible:true,
+                    isVisible: false,
+                    errorVisible: true,
                 })
             }
         } catch (error) {
             this.setState({
-                isVisible:false,
-                errorVisible:true,
+                isVisible: false,
+                errorVisible: true,
             })
             console.log('Data received in myOrderDetail.js catch: ' + error)
         }
@@ -109,7 +123,7 @@ export default class myOrderDetail extends Component {
                     : <ScrollView>
                         {/* header view */}
                         <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('MyOrders')}>
                                 <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
                             </TouchableOpacity>
                             <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
@@ -122,32 +136,32 @@ export default class myOrderDetail extends Component {
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>Order Id</Text>
-                                <Text style={styles.tiletext}>{this.state.data.irctcOrderId}</Text>
+                                <Text style={styles.tiletext}>{this.state.data.irctcOrderId === null ? 'N/A' : this.state.data.irctcOrderId}</Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>ZOOP Txn. No.</Text>
-                                <Text style={styles.tiletext}>{this.state.data.zoopTransactionNo}</Text>
+                                <Text style={styles.tiletext}>{this.state.data.zoopTransactionNo === null ? 'N/A' : this.state.data.zoopTransactionNo}</Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>Status</Text>
-                                <Text style={{ fontFamily: 'Poppins-Medium', color: ConstantValues.orderStatus[this.state.data.status] }}>{this.state.data.orderStatus}</Text>
+                                <Text style={{ fontFamily: 'Poppins-Medium', color: ConstantValues.orderStatus[this.state.data.status] }}>{this.state.data.orderStatus === null ? 'N/A' : this.state.data.orderStatus}</Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>Order Type</Text>
-                                <Text style={[styles.tiletext], { fontFamily: 'Poppins-Bold', color: Colors.newgGreen1 }}>{this.state.data.paymentTypeName}</Text>
+                                <Text style={[styles.tiletext], { fontFamily: 'Poppins-Bold', color: Colors.newgGreen1 }}>{this.state.data.paymentTypeName === null ? 'N/A' : this.state.data.paymentTypeName}</Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>Booking Date</Text>
-                                <Text style={styles.tiletext}>{this.state.data.bookingDate === null ? 'Date not available' : moment(this.state.data.bookingDate).format('DD-MM-YYYY')}</Text>
+                                <Text style={styles.tiletext}>{this.state.data.bookingDate == null ? 'Date not available' : moment(this.state.data.bookingDate).format('DD MMM YYYY')} at {this.state.data.bookingDate == null ? 'Time not available' : moment(this.state.data.bookingDate).format('HH:mm ')}</Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
-                                <Text style={styles.tiletext}>Booking Time</Text>
-                                <Text style={styles.tiletext}>{(this.state.data.bookingDate === null ? 'Time not available' : moment(this.state.data.bookingDate).format('HH:mm'))}</Text>
+                                <Text style={styles.tiletext}>Delivery Date</Text>
+                                <Text style={styles.tiletext}>{this.state.data.eta == null ? 'Date not available' : moment(this.state.data.eta).format('DD MMM YYYY')} at {this.state.data.eta == null ? 'Time not available' : moment(this.state.data.eta).format('HH:mm ')}</Text>
                             </View>
 
                         </View>
@@ -156,53 +170,65 @@ export default class myOrderDetail extends Component {
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>Passenger Name</Text>
-                                <Text style={styles.tiletext}>{this.state.data.passengerName}</Text>
+                                <Text style={styles.tiletext}>{this.state.data.passengerName === '' ? 'N/A' : this.state.data.passengerName}</Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>Passenger Mobile No.</Text>
-                                <Text style={styles.tiletext}>{this.state.data.passengerMobile}</Text>
+                                <Text style={styles.tiletext}>{this.state.data.passengerMobile === '' ? 'N/A' : this.state.data.passengerMobile}</Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>Passenger Alt. Mobile No.</Text>
-                                <Text style={styles.tiletext}>{this.state.data.passengeAlternateMobile}</Text>
+                                <Text style={styles.tiletext}>{this.state.data.passengeAlternateMobile === '' ? 'N/A' : this.state.data.passengeAlternateMobile}</Text>
                             </View>
 
-                            <Fade visible={this.state.data.suggestions !== ''}>
+                            {/* <Fade visible={this.state.data.suggestions !== ''}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                     <Text style={styles.tiletext}>Suggestions</Text>
                                     <Text style={{ width: 100, fontFamily: 'Poppins-Regular', color: '#000000', textAlign: 'right', fontSize: 12 }}>"{this.state.data.suggestions}"</Text>
                                 </View>
-                            </Fade>
+                            </Fade> */}
 
                         </View>
+                        <Fade visible={this.state.data.suggestions !== ''}>
+                            <View style={styles.card}>
+                                <View style={{ flexDirection: 'row', width: '100%', paddingHorizontal: 10 }}>
+                                    <View style={{ width: '25%', backgroundColor: Colors.white }}>
+                                        <Text style={styles.tiletext}>Suggestions : </Text>
+                                    </View>
+                                    <View style={{ width: '75%', backgroundColor: Colors.white }}>
+                                        <Text style={{ fontFamily: 'Poppins-Regular', color: '#000000', textAlign: 'left', fontSize: 12, }}>{this.state.data.suggestions}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </Fade>
 
 
                         <View style={styles.card}>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>PNR</Text>
-                                <Text style={styles.tiletext}>{this.state.data.pnr}</Text>
+                                <Text style={styles.tiletext}>{this.state.data.pnr === '' ? 'N/A' : this.state.data.pnr}</Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>Station Name</Text>
-                                <Text style={styles.tiletext}>({this.state.data.stationCode}) {this.state.data.stationName}</Text>
+                                <Text style={styles.tiletext}>({this.state.data.stationCode === '' ? 'N/A' : this.state.data.stationCode}) {this.state.data.stationName === '' ? 'N/A' : this.state.data.stationName}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>Outlet Name</Text>
-                                <Text style={styles.tiletext}>{this.state.data.outletName}</Text>
+                                <Text style={styles.tiletext}>{this.state.data.outletName === '' ? 'N/A' : this.state.data.outletName}</Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>Train Name/No.</Text>
-                                <Text style={styles.tiletext}>{this.state.data.trainName}/ {this.state.data.trainNumber}</Text>
+                                <Text style={styles.tiletext}>{this.state.data.trainName === '' ? 'N/A' : this.state.data.trainName}/ {this.state.data.trainNumber === '' ? 'N/A' : this.state.data.trainNumber}</Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
                                 <Text style={styles.tiletext}>Coach/Seat No.</Text>
-                                <Text style={styles.tiletext}>{this.state.data.coach} / {this.state.data.berth}</Text>
+                                <Text style={styles.tiletext}>{this.state.data.coach === '' ? 'N/A' : this.state.data.coach} / {this.state.data.berth === '' ? 'N/A' : this.state.data.berth}</Text>
                             </View>
 
                         </View>
@@ -269,17 +295,17 @@ export default class myOrderDetail extends Component {
 
 
                     </ScrollView>}
-                    <Overlay
-          isVisible={this.state.isVisible}
-          width="auto"
-          height="auto"
-          // windowBackgroundColor='rgba(255, 255, 255, .5)'
-          // overlayBackgroundColor='#ffffff'
-          onBackdropPress={() => this.setState({ isVisible: false })}
-        >
-          <ZoopLoader isVisible={true} text={'Loading...'} />
+                <Overlay
+                    isVisible={this.state.isVisible}
+                    width="auto"
+                    height="auto"
+                    // windowBackgroundColor='rgba(255, 255, 255, .5)'
+                    // overlayBackgroundColor='#ffffff'
+                    onBackdropPress={() => this.setState({ isVisible: false })}
+                >
+                    <ZoopLoader isVisible={true} text={'Loading...'} />
 
-        </Overlay>
+                </Overlay>
             </SafeAreaView>
         );
     }

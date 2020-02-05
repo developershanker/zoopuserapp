@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   animatedView: {
     alignSelf:'center',
     width: Dimensions.get('window').width - 100,
-    backgroundColor: Colors.newgGreen1,
+    backgroundColor: Colors.newgGreen3,
     elevation: 2,
     position: "absolute",
     bottom: 0,

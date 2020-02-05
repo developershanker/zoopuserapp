@@ -261,4 +261,26 @@ export default class cartApi {
         ConstantValues.appliedCode = 'Apply Coupon Code'
         cartApi.billDetail()
     }
+
+    static resetBillDetail = () => {
+        couponCode = ''
+        isWalletUsed = false
+        couponValue = 0
+        couponType = ''
+        appliedCode = 'Apply Coupon Code'
+        isCouponApplied = false
+        totalBasePrice = 0
+        totalZoopPrice = 0
+        minimumPriceRequired = 0
+        couponId = 0
+        discount = 0
+        walletBalanceUsed = 0
+        gst = 0
+        deliveryCharge = 0
+        deliveryChargegst = 0
+        deliveryChargegstRate = 0
+        basePriceGstRate = 0
+        rateDiscount = 0
+        totalPayableAmount = 0
+    }
 }

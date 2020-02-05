@@ -293,6 +293,7 @@ export default class passengerDetail extends Component {
         this.setState({
           enterPnr: ConstantValues.pnr,
           name: ConstantValues.customerName,
+          // name: ConstantValues.customerName == null ? ConstantValues.customerName : ConstantValues.customerName.replace(/^\s+|\s+$/g,''),
           altMobileNo: ConstantValues.customeralternateMobile,
           emailId: ConstantValues.customerEmailId,
           customerPhoneNo: ConstantValues.customerPhoneNo,
@@ -333,7 +334,8 @@ export default class passengerDetail extends Component {
         }
       }
     } else {
-      if (this.state.name.length == 0) {
+      // console.log('this.state.name.length :::' + this.state.name)
+      if (this.state.name === null || this.state.name.replace(/^\s+|\s+$/g,'').length <= 2) {
         return (
           // ToastAndroid.show('Please fill name',ToastAndroid.LONG)
           Alert.alert(

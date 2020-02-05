@@ -29,12 +29,9 @@ export default class orderApi extends Component {
                     option.body = JSON.stringify(body);
                 }
             }
-            // else if (method == 'GET') {
-            //     apiUrl += '?' + qs.stringify(body);
-            // }
-
-
-
+            else if (method == 'GET') {
+                apiUrl += '?' + qs.stringify(body);
+            }
 
             console.log(option)
             const uri = baseURL + apiUrl;
@@ -87,17 +84,19 @@ export default class orderApi extends Component {
         }
     }
 
-    static async orderHistory(usertoken,customerId) {
+    static async orderHistory(usertoken,customerId,page) {
         try {
             //url
             const apiUrl = 'orders/history/' + customerId
-
+            //body
+            const body = {}
+            body['page'] = page;
             //headers
             const headers = {}
             headers['x-auth-token'] = usertoken
 
             //calling api for response
-            const response = await this.apiCall(apiUrl, 'GET', {}, headers)
+            const response = await this.apiCall(apiUrl, 'GET', body, headers)
             // console.log(response)
 
             return Promise.resolve(response)

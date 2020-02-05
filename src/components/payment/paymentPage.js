@@ -360,14 +360,35 @@ export default class PaymentPage extends Component {
               {/* <Image style={{ height: 15, alignSelf: 'center' }} source={require('../images/line.png')} /> */}
             </View>
             <View style={styles.billcard}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Coach no. {ConstantValues.coach}</Text>
-                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Seat no. {ConstantValues.seat}</Text>
-
+              {/* <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '98%' }}>
+                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Coach : {ConstantValues.coach}</Text>
+                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Seat : {ConstantValues.seat}</Text>
+              </View> */}
+              <View style={{ flexDirection: 'column', width: '98%' }}>
+              <View style={styles.elementView}>
+                  <Text style={styles.itemTextMedium}>Coach / Seat </Text>
+                  <Text style={styles.itemTextColon}>:</Text>
+                  <Text style={styles.itemTextRegular}>{ConstantValues.coach} / {ConstantValues.seat}</Text>
+                </View>
+                <View style={styles.elementView}>
+                  <Text style={styles.itemTextMedium}>Name </Text>
+                  <Text style={styles.itemTextColon}>:</Text>
+                  <Text style={styles.itemTextRegular}>{ConstantValues.customerName}</Text>
+                </View>
+                <View style={styles.elementView}>
+                  <Text style={styles.itemTextMedium}>Contact No. </Text>
+                  <Text style={styles.itemTextColon}>:</Text>
+                  <Text style={styles.itemTextRegular}>{ConstantValues.customerPhoneNo}</Text>
+                </View>
+                <View style={styles.elementView}>
+                  <Text style={styles.itemTextMedium}>Alternate No.</Text>
+                  <Text style={styles.itemTextColon}>:</Text>
+                  <Text style={styles.itemTextRegular}>{ConstantValues.customeralternateMobile}</Text>
+                </View>
+                {/* <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Name : {ConstantValues.customerName}</Text>
+                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Contact No : {ConstantValues.customerPhoneNo}</Text>
+                <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Alternate No. : {ConstantValues.customeralternateMobile}</Text> */}
               </View>
-              <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Name : {ConstantValues.customerName}</Text>
-              <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Contact No - {ConstantValues.customerPhoneNo}</Text>
-              <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Alternate No. - {ConstantValues.customeralternateMobile}</Text>
             </View>
             {/* passengerDetail view ends here */}
             {/* Payment Mode View Starts */}
@@ -488,6 +509,31 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     marginLeft: 25 // justifyContent: 'space-between',
   },
+  itemTextMedium: {
+    width:'30%',
+    // alignSelf: 'center',
+    color: Colors.black,
+    // backgroundColor:Colors.lightGrey,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 14,
+},
+itemTextColon: {
+    width:'4%',
+    // alignSelf: 'center',
+    color: Colors.black,
+    // backgroundColor:Colors.lightYellow,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 14,
+},
+itemTextRegular: {
+    width:'65%',
+    textAlign:'left',
+    // alignSelf: 'center',
+    color: Colors.black,
+    fontFamily: 'Poppins-Regular',
+    // backgroundColor:Colors.lightGrey,
+    fontSize: 14,
+},
   paytmView: {
     width: 300,
     // borderWidth:1,
@@ -520,6 +566,14 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e4e4e4',
     borderBottomWidth: 2,
   },
+  elementView: {
+    flexDirection: 'row',
+    width: ConstantValues.deviceWidth - 40,
+    // height: '12%',
+    // backgroundColor:'#e7e7e7',
+    alignSelf: 'center',
+    alignContent: 'flex-start',
+},
   tile: {
     width: Dimensions.get('screen').width - 20,
     flexDirection: 'row',

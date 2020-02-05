@@ -44,8 +44,8 @@ export const counterReducer = (state = initialState, action) => {
                 ...state,
                 total: 0,
                 cart: [],
-                menuResponse: action.payload,
-                cartLength: 0,
+                menuResponse: action.payload.menuResponse,
+                cartLength: action.payload.cartLength,
                 removeDiscount: false,
                 totalBasePrice: 0,
             };

@@ -115,8 +115,8 @@ android {
         applicationId "com.zoop.zoopindiaservice"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 50  //1
-        versionName "1.4.7"     //1.0
+        versionCode 52  //1
+        versionName "1.4.9"     //1.0
     }
     splits {
         abi {

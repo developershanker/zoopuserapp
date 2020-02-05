@@ -37,7 +37,6 @@ export default class Search extends Component {
     this.checkCopiedtext()
     this.showTrain()
     this.onRegister()
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
   constructor(props) {
     super(props);
@@ -474,10 +473,11 @@ export default class Search extends Component {
             <View style={styles.header}>
               <TouchableOpacity onPress={() => this.setState({ visibleModalDrawer: 'right' })}>
                 <View style={{ width: 60, height: 50, justifyContent: 'center', alignItems: 'center' }}>
-                  <Icon
+                  {/* <Icon
                     name='bars'
                     size={20}
-                  />
+                  /> */}
+                  <IconA name={this.state.visibleModalDrawer === null ? 'menufold' : 'menuunfold'} size={20} color={Colors.black} />
                 </View>
               </TouchableOpacity>
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>

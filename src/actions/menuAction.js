@@ -319,7 +319,11 @@ export const clearCart = () => {
         })
         ConstantValues.inCart = []
         ConstantValues.finalCart = []
-        dispatch({ type: CLEAR_CART, payload: menuResponse })
+        const clearCart = {
+            menuResponse:menuResponse,
+            cartLength:0,
+        }
+        dispatch({ type: CLEAR_CART, payload: clearCart })
     }
 }
 
