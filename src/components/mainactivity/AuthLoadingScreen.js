@@ -29,11 +29,12 @@ import {
     Fade,
     Loader,
     Shine
-  } from "rn-placeholder";
+} from "rn-placeholder";
 import { StationLoader } from './stationLoader';
+import Colors from '../colors';
 
 class AuthLoadingScreen extends Component {
-   async componentDidMount() {
+    async componentDidMount() {
         SplashScreen.hide();
         this.checkAppVersion();
         // this.tokenAsync();
@@ -47,10 +48,10 @@ class AuthLoadingScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showVersionUpdateModal : null,
-            loader:true
+            showVersionUpdateModal: null,
+            loader: true
         };
-      }
+    }
     //-------------------------notification management---------------------
     //1
     // async checkPermission() {
@@ -145,41 +146,41 @@ class AuthLoadingScreen extends Component {
     //     });
     // }
 
-  async checkAppVersion(){
-        const appVersion =  Device.getVersion();
+    async checkAppVersion() {
+        const appVersion = Device.getVersion();
         console.log('App Version is : ' + appVersion)
         try {
             let response = await servicesApi.checkAppVersion(appVersion)
             if (response.status == true) {
-               console.log('App Version data is :' + response.data)
-               if (response.data == true) {
-                console.log('Status of App Version data is :' + response.data + 'App version matched!!!')
+                console.log('App Version data is :' + response.data)
+                if (response.data == true) {
+                    console.log('Status of App Version data is :' + response.data + 'App version matched!!!')
                     this.getRecentItem()
                     this.tokenAsync()
-               } else if(response.data == false) {
-                   this.setState({
-                       loader:false,
-                       showVersionUpdateModal : 'center'
-                   })
-               }
+                } else if (response.data == false) {
+                    this.setState({
+                        loader: false,
+                        showVersionUpdateModal: 'center'
+                    })
+                }
             } else {
                 console.log('Error in getting app version')
                 this.setState({
-                    loader:false,
-                    showVersionUpdateModal : 'center'
+                    loader: false,
+                    showVersionUpdateModal: 'center'
                 })
             }
         } catch (error) {
             console.log('I am in catch of getversionAPI.Error in getting app version ' + error)
         }
-        
+
     }
 
 
     gotoLink = () => {
         let link = 'https://play.google.com/store/apps/details?id=com.zoop.zoopindiaservice'
         Linking.openURL(link);
-      }
+    }
 
     //  ---------------------fetchingusertoken for zoop app------------------
 
@@ -195,13 +196,13 @@ class AuthLoadingScreen extends Component {
             console.log(getRecentSearch)
             console.log('getRecentSearch::: with filter : ' + JSON.stringify(getRecentSearch))
             ConstantValues.getRecentSearch = getRecentSearch
-            console.log('ConstantValues.getRecentSearch : ' + JSON.stringify(ConstantValues.getRecentSearch))  
+            console.log('ConstantValues.getRecentSearch : ' + JSON.stringify(ConstantValues.getRecentSearch))
         } catch (error) {
             console.log('Error in fetching asyncstorage:::::getRecentItem : ' + error)
         }
     }
 
-    
+
 
     // Fetch the token from storage then navigate to our appropriate place
     tokenAsync = async () => {
@@ -263,39 +264,43 @@ class AuthLoadingScreen extends Component {
                     <PlaceholderLine width={80} style={{ margin: 10 }} />
                     <PlaceholderLine />
 
-                    <PlaceholderMedia style={{ width: ConstantValues.deviceWidth-20, height: '20%',marginTop:20,margin:10 }} />
+                    <PlaceholderMedia style={{ width: ConstantValues.deviceWidth - 20, height: '20%', marginTop: 20, margin: 10 }} />
                 </Placeholder>
                 {/* <StationLoader/> */}
-                
-               
+
+
                 {/* <Spinner size={100} type={'FadingCircleAlt'} color={'#898c8b'} isVisible={this.state.loader} /> */}
                 {/* <Text style={styles.text}>Loading...</Text> */}
                 {/* <StatusBar barStyle="default" /> */}
-               
-                   <Modal
+
+                <Modal
                     isVisible={this.state.showVersionUpdateModal === 'center'}
                     // onBackButtonPress={() => this.setState({ visibleModal: null })}
                     // onSwipeComplete={() => this.setState({ visibleModal: null })}
                     // swipeDirection={['left', 'right', 'down']}
                     style={styles.centerModal}
-                   >
-                       <View style={styles.modalView}>
-                            <Text style={{fontSize: 20,color:'#F15926',fontFamily: 'Poppins-Medium'}}>Update Available</Text>
-                            <Text style={{fontSize: 15,color:'#696b6a',fontFamily: 'Poppins-Regular',textAlign:'center',alignSelf:'center'}}>New version of Zoop available! Download and get better app experience</Text>
-                            <View style={{flexDirection:'row',paddingHorizontal:10}}>
-                               <CustomButtonShort
-                               title='Update'
+                >
+                    <View style={styles.modalView}>
+                        <Text style={{ fontSize: 20, color: Colors.newOrange, fontFamily: 'Poppins-Medium' }}>Update Available</Text>
+                        <Text style={{ fontSize: 15, color: '#696b6a', fontFamily: 'Poppins-Regular', textAlign: 'center', alignSelf: 'center' }}>New version of Zoop available! Download and get better app experience</Text>
+                        <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+                            <CustomButtonShort
+                                textStyle={{ color: Colors.darkGrey1 }}
+                                style={{ backgroundColor: Colors.white, borderColor: Colors.darkGrey1, borderWidth: 1 }}
+                                title='Exit'
+                                onPress={() => BackHandler.exitApp()}
+                            />
+                            <CustomButtonShort
+                                textStyle={{ color: Colors.white }}
+                                style={{ backgroundColor: Colors.newgGreen3 }}
+                                title='Update'
                                 onPress={() => this.gotoLink()}
-                               />
-                               <CustomButtonShort
-                               style={{backgroundColor:'#696b6a'}}
-                               title='Exit'
-                               onPress = {() => BackHandler.exitApp()}
-                               />
-                            </View>
-                       </View>
-                   </Modal>
-               
+                            />
+
+                        </View>
+                    </View>
+                </Modal>
+
             </View>
             // <ZoopLoader isVisible={true} text={'Loading...'} />
 
@@ -318,7 +323,7 @@ const styles = StyleSheet.create({
         alignContent: 'stretch',
         backgroundColor: '#fff',
         flexDirection: 'column',
-      },
+    },
     text: {
         alignSelf: 'center',
         fontSize: 20,
@@ -326,25 +331,25 @@ const styles = StyleSheet.create({
         color: '#FF5819',
         paddingVertical: 10
     },
-    centerModal:{
-        justifyContent:'center',
-        alignContent:'center',
-        alignSelf:'center',
+    centerModal: {
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignSelf: 'center',
         // margin: 0,
     },
     modalView: {
         width: Dimensions.get('screen').width - 20,
-        height:200,
+        height: 200,
         backgroundColor: '#ffffff',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius:5,
+        borderRadius: 5,
         paddingHorizontal: 10,
         paddingVertical: 10,
-        
-      },
-      gridContainer: {
+
+    },
+    gridContainer: {
         width: Dimensions.get('screen').width,
         flexDirection: 'row',
         justifyContent: 'space-around',
@@ -352,8 +357,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 5,
         height: '20%'
-      },
-      GridViewContainer: {
+    },
+    GridViewContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -369,7 +374,7 @@ const styles = StyleSheet.create({
         // borderColor: '#ebe9e8',
         // borderWidth: 1,
         // backgroundColor: '#ffffff'
-      },
+    },
 
 })
 
