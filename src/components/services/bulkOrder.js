@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Dimensions,BackHandler, TextInput, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Dimensions, BackHandler, TextInput, ToastAndroid } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { CustomButton } from '../assests/customButtonLarge';
@@ -20,9 +20,10 @@ export default class bulkOrder extends Component {
       journeyDate: '',
       pnr: '',
       comment: '',
-      buttonColor:'#9b9b9b',
+      buttonColor: Colors.white,
       clicked: false,
-      buttonText:'SUBMIT'
+      buttonTextColor: Colors.darkGrey1,
+      buttonText: 'SUBMIT'
     };
   }
   componentWillMount() {
@@ -95,28 +96,30 @@ export default class bulkOrder extends Component {
   }
 
   async sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment) {
-    this.setState({ clicked: true, buttonColor: '#9b9b9b' ,buttonText:'Sending Request...'})
+    this.setState({ clicked: true, buttonColor: Colors.white, buttonTextColor: Colors.darkGrey1, buttonText: 'Sending Request...' })
     try {
       let response = await servicesApi.sendBulkRequest(fullName, mobile, email, totalPassenger, journeyDate, pnr, comment)
       if (response.status == true) {
-        this.setState({ clicked: true, buttonColor: '#9b9b9b' ,buttonText:'Request Sent'})
+        this.setState({ clicked: true, buttonColor: Colors.white, buttonTextColor: Colors.darkGrey1, buttonText: 'Request Sent' })
         return (
           Alert.alert(
             'Request Submitted Successfully',
             'Thanks for sharing your information.' + '\n' + ' We will work on your request and contact you in next 48 hours.',
             [
               {
-                text: 'OK', onPress: () => {this.setState({
-                  fullName: '',
-                  mobile: '',
-                  email: '',
-                  totalPassenger: '',
-                  journeyDate: '',
-                  pnr: '',
-                  comment: '',
-                  clicked: true,
-                })
-                this.props.navigation.navigate('Search')},
+                text: 'OK', onPress: () => {
+                  this.setState({
+                    fullName: '',
+                    mobile: '',
+                    email: '',
+                    totalPassenger: '',
+                    journeyDate: '',
+                    pnr: '',
+                    comment: '',
+                    clicked: true,
+                  })
+                  this.props.navigation.navigate('Search')
+                },
                 style: 'cancel'
               },
             ],
@@ -124,13 +127,13 @@ export default class bulkOrder extends Component {
           )
         )
       } else {
-        this.setState({ clicked: false, buttonColor: '#60b246' ,buttonText:'SUBMIT'})
+        this.setState({ clicked: false, buttonColor: Colors.newOrange, buttonTextColor: Colors.white, buttonText: 'SUBMIT' })
         return (
           ToastAndroid.show('Something went wrong!! Try again later!!', ToastAndroid.LONG)
         )
       }
     } catch (error) {
-      this.setState({ clicked: false, buttonColor: '#60b246' ,buttonText:'SUBMIT'})
+      this.setState({ clicked: false, buttonColor: Colors.newOrange, buttonTextColor: Colors.white, buttonText: 'SUBMIT' })
       console.log('Data received in bulkOrder.js catch: ' + error)
     }
   }
@@ -148,7 +151,7 @@ export default class bulkOrder extends Component {
                 <IconA style={{ margin: 20 }} name={'arrowleft'} size={25} color={Colors.black} />
               </TouchableOpacity>
               <View style={{ flexDirection: 'column', justifyContent: 'center', width: Dimensions.get('window').width - 100, alignItems: 'center' }}>
-                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color:Colors.newOrange }}> Bulk Order Request </Text>
+                <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Medium', fontSize: 18, color: Colors.newOrange }}> Bulk Order Request </Text>
               </View>
             </View>
             {/* header view ends */}
@@ -256,7 +259,7 @@ export default class bulkOrder extends Component {
                     fontFamily: 'Poppins-Regular',
                   }
                 }}
-                onDateChange={(journeyDate) => { this.setState({ journeyDate: journeyDate , buttonColor: '#60b246'}) }}
+                onDateChange={(journeyDate) => { this.setState({ journeyDate: journeyDate, buttonColor: Colors.newOrange ,buttonTextColor:Colors.white}) }}
               />
               {/* </View> */}
             </View>
@@ -298,8 +301,9 @@ export default class bulkOrder extends Component {
           </View>
         </ScrollView>
         <CustomButton
+          textStyle={{color:this.state.buttonTextColor}}
           disabled={this.state.clicked}
-          style={{ backgroundColor: this.state.buttonColor , alignSelf: 'center', marginBottom: 10, }}
+          style={{ backgroundColor: this.state.buttonColor, alignSelf: 'center', marginBottom: 10, }}
           onPress={() => this.onSubmitBulkOrder(this.state.fullName, this.state.mobile, this.state.email, this.state.totalPassenger, this.state.journeyDate, this.state.pnr, this.state.comment)}
           title={this.state.buttonText}
         />

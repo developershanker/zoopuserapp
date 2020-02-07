@@ -1043,7 +1043,13 @@ export class ReduxMenu extends Component {
                                     <View style={[styles.cartCard, { justifyContent: 'center', alignContent: 'center', alignItems: 'center', alignSelf: 'center' }]}>
                                         <CustomButton
                                             disabled={this.state.proceedDisabled}
-                                            style={{ width: '100%', justifyContent: 'center', backgroundColor: this.state.proceedDisabled === true ? '#9b9b9b' : Colors.newgGreen3, width: ConstantValues.deviceWidth - 30 }}
+                                            textStyle={{ color: this.state.proceedDisabled === true ? Colors.darkGrey1 : Colors.white }}
+                                            style={{
+                                                width: '100%',
+                                                justifyContent: 'center',
+                                                backgroundColor: this.state.proceedDisabled === true ? Colors.white : Colors.newgGreen3,
+                                                width: ConstantValues.deviceWidth - 30
+                                            }}
                                             onPress={() => this.confirmCart()}
                                             title={this.state.proceedLabel}
                                         />

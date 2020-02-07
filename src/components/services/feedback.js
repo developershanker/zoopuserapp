@@ -160,8 +160,9 @@ export default class feedback extends Component {
 
               <View style={{ justifyContent: 'center', alignItems: 'center', width:'92%', height: '10%', backgroundColor: '#fff' }}>
                 <CustomButton
+                  textStyle={{ color: this.state.clicked == true ? Colors.darkGrey1 : Colors.white }}
                   disabled={this.state.clicked}
-                  style={{ width:'100%',backgroundColor: this.state.clicked == true ? '#9b9b9b' : Colors.newgGreen3, alignSelf: 'center', marginBottom: 20, }}
+                  style={{ width: '100%', backgroundColor: this.state.clicked == true ? Colors.white : Colors.newgGreen3, alignSelf: 'center', marginBottom: 20, }}
                   onPress={() => { this.sendFeedback(this.state.name, this.state.email, this.state.message) }}
                   title={this.state.clicked === false ? 'SUBMIT' : 'Feedback Sent'}
                 />

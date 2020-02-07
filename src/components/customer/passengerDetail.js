@@ -634,8 +634,9 @@ export default class passengerDetail extends Component {
             <View style={{ paddingHorizontal: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
               <CustomButtonShort
                 title='SEARCH AGAIN'
+                textStyle={{color:Colors.darkGrey1}}
                 onPress={() => { this.props.navigation.navigate('Search') }}
-                style={{ backgroundColor: Colors.darkGrey, justifyContent: 'center', }}
+                style={{ backgroundColor: Colors.white, justifyContent: 'center',borderColor:Colors.darkGrey1,borderWidth:1 }}
               />
               <CustomButtonShort
                 title="SUBMIT"
@@ -779,7 +780,8 @@ export default class passengerDetail extends Component {
 
               <CustomButtonShort
                 title='CLOSE'
-                style={{ backgroundColor: Colors.darkGrey, justifyContent: 'center', }}
+                textStyle={{ color: Colors.darkGrey1 }}
+                style={{ justifyContent: 'center', backgroundColor: Colors.white, borderColor: Colors.darkGrey1, borderWidth: 1 }}
                 onPress={() => this.setState({ enterSeatInfo: null })}
               />
               <CustomButtonShort

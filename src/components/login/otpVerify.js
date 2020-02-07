@@ -19,7 +19,7 @@ export default class otpVerify extends Component {
     this.state = {
       customerCode: '',
       ButtonStateHolder: true,  //on state ture it will disable the button
-      backgroundColor: '#9c9595',
+      backgroundColor: Colors.darkGrey1,
       disable: true,
       text: '',
       code: ''
@@ -182,7 +182,8 @@ export default class otpVerify extends Component {
 
             <View style={{ paddingHorizontal: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
               <CustomButtonShort
-                style={[styles.button, { backgroundColor: '#9b9b9b' }]}
+                textStyle={{color:Colors.darkGrey1}}
+                style={[styles.button, { backgroundColor: Colors.white, borderColor: Colors.darkGrey1, borderWidth: 1 }]}
                 title="CANCEL"
                 onPress={() => this.handleCancel()}
               />

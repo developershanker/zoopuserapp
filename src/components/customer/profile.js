@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Picker, View, Text, StyleSheet, TextInput, ToastAndroid, PermissionsAndroid, Alert } from 'react-native';
+import { Picker, View, Text, StyleSheet, TextInput, Dimensions, ToastAndroid, PermissionsAndroid, Alert } from 'react-native';
 import { CustomButton } from '../assests/customButtonLarge.js';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -28,9 +28,10 @@ export default class Profile extends Component {
       altmobile: '',
       loginCount: null,
       clicked: false,
-      buttonColor: '#9b9b9b',
+      buttonTextColor: Colors.white,
+      buttonColor: Colors.newgGreen3,
       buttonText: 'SUBMIT',
-      visibleModal: 'center'
+      visibleModal: 'bottom'
     };
   }
   ///checking Input Validation
@@ -41,7 +42,7 @@ export default class Profile extends Component {
       if (name != '') {
         if (emailId != '') {
           if (re.test(emailId)) {
-            if (altMobile.length > 0) {
+            if (altMobile != null && altMobile.length > 0) {
               if (altMobile.length === 10) {
                 if (reg.test(altMobile)) {
                   this.editUserInfo(name, emailId, altMobile, referredBy)
@@ -154,7 +155,8 @@ export default class Profile extends Component {
       })
       if (ConstantValues.customerName.length != 0) {
         this.setState({
-          buttonColor: Colors.newgGreen3
+          buttonColor: Colors.newgGreen3,
+          buttonTextColor:Colors.white
         })
       }
       ConstantValues.isAgent = response.data.isAgent
@@ -164,12 +166,12 @@ export default class Profile extends Component {
   }
   //submitting edited profile info
   async editUserInfo(name, emailId, altMobile, referredBy) {
-    this.setState({ buttonText: 'Submitting..', clicked: true, buttonColor: '#9b9b9b' })
+    this.setState({ buttonText: 'Submitting..', clicked: true, buttonColor: Colors.white, buttonTextColor: Colors.darkGrey1 })
     try {
       let response = await loginApi.editUserInfo(name, emailId, altMobile, referredBy)
       console.log('data received in profile.js : ' + JSON.stringify(response))
       if (response.status == true) {
-        this.setState({ buttonText: 'Profile Updated Successfully', clicked: true, buttonColor: '#9b9b9b' })
+        this.setState({ buttonText: 'Profile Updated Successfully', clicked: true, buttonColor: Colors.white, buttonTextColor: Colors.darkGrey1 })
         // this.setState({
         //   name:ConstantValues.customerName,
         //   altmobile:ConstantValues.customeralternateMobile,
@@ -179,20 +181,23 @@ export default class Profile extends Component {
         ConstantValues.customerEmailId = emailId
         ConstantValues.customeralternateMobile = altMobile
         return (
-          ToastAndroid.show('Profile Updated Successfully', ToastAndroid.LONG),
+          // ToastAndroid.show('Profile Updated Successfully', ToastAndroid.LONG),
           this.props.navigation.navigate(ConstantValues.navigationChannel)
         )
       }
       else {
-        this.setState({ buttonText: 'SUBMIT', clicked: false, buttonColor: '#60b246' })
+        this.setState({ buttonText: 'SUBMIT', clicked: false, buttonColor: Colors.newgGreen3, buttonTextColor: Colors.white })
         return (
           ToastAndroid.show(response.error, ToastAndroid.LONG)
         )
       }
 
     } catch (error) {
-      this.setState({ buttonText: 'SUBMIT', clicked: false, buttonColor: '#60b246' })
+      this.setState({ buttonText: 'SUBMIT', clicked: false, buttonColor: Colors.newgGreen3, buttonTextColor: Colors.white })
       console.log('Data received in profile.js catch: ' + error)
+      return (
+        ToastAndroid.show('Something went wrong' + error, ToastAndroid.LONG)
+      )
     }
   }
 
@@ -219,34 +224,49 @@ export default class Profile extends Component {
     }
   }
 
+  onBackButtonPress() {
+    return (
+      ToastAndroid.show('Please click on "SUBMIT" to proceed', ToastAndroid.LONG)
+    )
+  }
+
   render() {
     const visible = this.state.loginCount == 1 ? true : false
     return (
       <View style={styles.slide}>
-        <Text style={styles.heading}> My Profile </Text>
-        <View style={styles.card}>
-          <TextInput style={styles.input}
-            placeholder='Full Name'
-            maxLength={25}
-            value={this.state.name}
-            // keyboardType='default'
-            onChangeText={name => this.setState({ name })}
-            autoCapitalize='words'
-          />
-          <TextInput style={styles.input}
-            placeholder='Email id'
-            value={this.state.emailId}
-            keyboardType='email-address'
-            onChangeText={emailId => this.setState({ emailId, buttonColor: '#60b246' })}
-          />
-          <TextInput style={styles.input}
-            placeholder='Alternate Mobile No.'
-            value={this.state.altmobile}
-            maxLength={10}
-            keyboardType='number-pad'
-            onChangeText={altmobile => this.setState({ altmobile })}
-          />
-          {/* <Fade visible={visible} >
+        <Modal
+          isVisible={this.state.visibleModal === 'bottom'}
+          // onBackButtonPress={() => this.setState({ visibleModal: null })}
+          onBackButtonPress={() => this.onBackButtonPress()}
+          // onSwipeComplete={() => this.setState({ visibleModal: null })}
+          // swipeDirection={['left', 'right']}
+          style={styles.bottomModal}
+        >
+          <View style={styles.modalView}>
+            <Text style={[styles.heading, { alignSelf: 'center' }]}> My Profile </Text>
+            <View style={styles.card}>
+              <TextInput style={styles.input}
+                placeholder='Full Name'
+                maxLength={25}
+                value={this.state.name}
+                // keyboardType='default'
+                onChangeText={name => this.setState({ name })}
+                autoCapitalize='words'
+              />
+              <TextInput style={styles.input}
+                placeholder='Email id'
+                value={this.state.emailId}
+                keyboardType='email-address'
+                onChangeText={emailId => this.setState({ emailId, buttonColor: Colors.newgGreen3, buttonTextColor: Colors.white })}
+              />
+              <TextInput style={styles.input}
+                placeholder='Alternate Mobile No.'
+                value={this.state.altmobile}
+                maxLength={10}
+                keyboardType='number-pad'
+                onChangeText={altmobile => this.setState({ altmobile })}
+              />
+              {/* <Fade visible={visible} >
           <TextInput style={styles.input}
             placeholder='Referral Code (if any)'
             keyboardType='default'
@@ -255,17 +275,19 @@ export default class Profile extends Component {
           />
         </Fade> */}
 
-        </View>
-        <CustomButton
-          title={this.state.buttonText}
-          disabled={this.state.clicked}
-          style={{ backgroundColor: this.state.buttonColor, alignSelf: 'center', marginBottom: 20, }}
-          onPress={() => {
-            this.isEmpty(this.state.name, this.state.emailId, this.state.altmobile, this.state.referredBy)
-            // this.props.navigation.navigate('Search')
-          }}
-        />
-
+            </View>
+            <CustomButton
+              textStyle={{ color: this.state.buttonTextColor }}
+              title={this.state.buttonText}
+              disabled={this.state.clicked}
+              style={{ backgroundColor: this.state.buttonColor, alignSelf: 'center', marginBottom: 2, }}
+              onPress={() => {
+                this.isEmpty(this.state.name, this.state.emailId, this.state.altmobile, this.state.referredBy)
+                // this.props.navigation.navigate('Search')
+              }}
+            />
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -277,6 +299,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#ffffff'
   },
+  bottomModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  modalView: {
+    width: Dimensions.get('screen').width,
+    height: 300,
+    backgroundColor: '#fff',
+    // flexDirection: 'column',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderTopStartRadius: 100 / 5,
+    borderTopEndRadius: 100 / 5
+  },
   radioButton: {
 
     alignItems: 'center',
@@ -285,16 +323,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   heading: {
-    color: 'black',
+    color: Colors.newOrange,
     fontFamily: 'Poppins-Medium',
-    fontSize: 20,
+    fontSize: 18,
     marginBottom: 10,
     justifyContent: 'center',
   },
   input: {
     width: '100%',
     marginBottom: 5,
-    fontSize: 15,
+    fontSize: 14,
     paddingHorizontal: 10,
     fontFamily: 'Poppins-Regular'
   },

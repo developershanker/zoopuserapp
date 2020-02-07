@@ -89,7 +89,7 @@ export class Register extends Component {
       if (name != '') {
         if (emailId != '') {
           if (re.test(emailId)) {
-            if (altMobile.length > 0) {
+            if (altMobile != null && altMobile.length > 0) {
               if (altMobile.length === 10) {
                 if (reg.test(altMobile)) {
                   this.editUserInfo(name, emailId, altMobile, referredBy)

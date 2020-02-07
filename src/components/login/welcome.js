@@ -20,7 +20,8 @@ export default class Welcome extends Component {
     super(props);
     this.state = {
       mobile: '',
-      buttonColor:'#9b9b9b',
+      buttonColor:Colors.newOrange,
+      buttonTextColor:Colors.white,
       buttonText:'SUBMIT',
       clicked:false
     };
@@ -38,12 +39,12 @@ export default class Welcome extends Component {
 
   ////Sending Otp API//////
   async sendOtp(mobile) {
-    this.setState({buttonColor:'#9b9b9b',buttonText:'Sending OTP..',clicked:true})
+    this.setState({buttonColor:Colors.white,buttonTextColor:Colors.darkGrey1,buttonText:'Sending OTP..',clicked:true})
     try {
       let response = await loginApi.sendOtp(mobile);
       console.log('data received in welcome.js : ' + JSON.stringify(response))
       if (response.status == true) {
-        this.setState({buttonColor:'#9b9b9b',buttonText:'OTP Sent',clicked:true})
+        this.setState({buttonColor:Colors.white,buttonTextColor:Colors.darkGrey1,buttonText:'OTP Sent',clicked:true})
         //  let storedData = this.storeData(response.data.customerId)
         //  console.log('Stored Data: ' + storedData)
 
@@ -60,14 +61,14 @@ export default class Welcome extends Component {
           )
         )
       } else {
-        this.setState({buttonColor:Colors.newOrange,buttonText:'SUBMIT',clicked:false})
+        this.setState({buttonColor:Colors.newOrange,buttonTextColor:Colors.white,buttonText:'SUBMIT',clicked:false})
         return (
           ToastAndroid.show(response.error, ToastAndroid.LONG),
           console.log(response.error)
         )
       }
     } catch (error) {
-      this.setState({buttonColor:Colors.newOrange,buttonText:'SUBMIT',clicked:false})
+      this.setState({buttonColor:Colors.newOrange,buttonTextColor:Colors.white,buttonText:'SUBMIT',clicked:false})
       console.log('Data received in welcome.js catch: ' + error)
     }
   }
@@ -107,7 +108,7 @@ export default class Welcome extends Component {
               placeholder="Enter Mobile No."
               keyboardType='number-pad'
               maxLength={10}
-              onChangeText={mobile => this.setState({ mobile,buttonColor:Colors.newOrange })}
+              onChangeText={mobile => this.setState({ mobile,buttonColor:Colors.newOrange,buttonTextColor:Colors.white })}
               value={this.state.mobile}
             />
           </View>
@@ -140,7 +141,7 @@ export default class Welcome extends Component {
                 }
               }
               style={{ backgroundColor:this.state.buttonColor, justifyContent: 'center', }}
-              textStyle={styles.text}
+              textStyle={[styles.text,{color:this.state.buttonTextColor}]}
 
             />
             {/* <CustomTouchableOpacity
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
   },
   text1: {
-    fontSize: 25,
+    fontSize: 18,
     paddingTop: 10,
     color: '#000000',
     textAlign: 'center',

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { ActivityIndicator, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Spinner from 'react-native-spinkit';
+import Colors from '../colors';
 
 // export const ZoopLoader = (props) => {
 //     const { animating,size={} } = props;
@@ -8,18 +9,18 @@ import Spinner from 'react-native-spinkit';
 
 
 export const ZoopLoader = (props) => {
-  const { isvisible,text } = props;
+  const { isvisible, text, size = 50 } = props;
 
 
-    return (
-        
-      <View>
-        <Spinner size={50} type={'FadingCircleAlt'} color={'#FF5819'} isVisible={isvisible} />
-        {/* <Text style={styles.text}>{text}</Text> */}
-      </View>
-       
-    );
-  
+  return (
+
+    <View>
+      <Spinner size={size} type={'FadingCircleAlt'} color={Colors.newOrange} isVisible={isvisible} />
+      {/* <Text style={styles.text}>{text}</Text> */}
+    </View>
+
+  );
+
 };
 
 

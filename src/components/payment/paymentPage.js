@@ -37,8 +37,8 @@ export default class PaymentPage extends Component {
       paymentTypes: [],
       revisedPaymentTypes: [],
       visibleModal: null,
-      paymentTypeName: '',
-      paymentTypeId: '',
+      paymentTypeName: 'Prepaid',
+      paymentTypeId: 2,
       paymentBorderColor: '#000000',
       isVisible: true,
       indexChecked: '2'
@@ -206,7 +206,7 @@ export default class PaymentPage extends Component {
             if (ConstantValues.customerPhoneNo !== '' && ConstantValues.customerPhoneNo.length === 10) {
               console.log('going for order ---->' + '\n' + ConstantValues.pnr + '\n' + "::::" + ConstantValues.deliveryDate + '\n' + "::::" + ConstantValues.deliveryTime)
               this.orderBooking(ConstantValues.paymentTypeId)
-              console.log('//////////////Order Booked/////////////////')
+              console.log('//////////////Order Booked/////////////////' + 'ConstantValues.paymentTypeId::::' + ConstantValues.paymentTypeId + '\n' + 'ConstantValues.paymentType::::' + ConstantValues.paymentType)
             } else {
               console.log('going for order :error in date and time:' + ConstantValues.pnr + '\n' + "::::" + ConstantValues.deliveryDate + '\n' + "::::" + ConstantValues.deliveryTime)
               return (
@@ -292,19 +292,19 @@ export default class PaymentPage extends Component {
         <ScrollView>
           <View>
             {/* header view */}
-            <View style={{ flexDirection: 'row',width:ConstantValues.deviceWidth, backgroundColor:Colors.white,paddingVertical:10}}>
-              <TouchableOpacity style={{width:'10%',backgroundColor:Colors.white,justifyContent:'center',alignContent:'center',alignItems:'center'}} onPress={() => this.props.navigation.navigate('PassengerDetail')}>
+            <View style={{ flexDirection: 'row', width: ConstantValues.deviceWidth, backgroundColor: Colors.white, paddingVertical: 10 }}>
+              <TouchableOpacity style={{ width: '10%', backgroundColor: Colors.white, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }} onPress={() => this.props.navigation.navigate('PassengerDetail')}>
                 <IconA name={'arrowleft'} size={25} color={Colors.black} />
               </TouchableOpacity>
-              <View style={{ flexDirection: 'column', justifyContent: 'center',width:'90%',backgroundColor:Colors.white, alignItems: 'center' }}>
+              <View style={{ flexDirection: 'column', justifyContent: 'center', width: '90%', backgroundColor: Colors.white, alignItems: 'center' }}>
                 <Text style={{ alignSelf: 'center', fontFamily: 'Poppins-Regular', fontSize: 18, color: Colors.newOrange }}> Payment Details </Text>
               </View>
             </View>
             {/* header view ends */}
             <View>
               <View>
-                <View style={{ backgroundColor: '#ffffff', flexDirection: 'row',width:ConstantValues.deviceWidth }}>
-                  <Text style={{ fontSize: 16, fontFamily: 'Poppins-Medium', color: '#000000' ,marginLeft:'2%',width:'96%'}}>Bill Details</Text>
+                <View style={{ backgroundColor: '#ffffff', flexDirection: 'row', width: ConstantValues.deviceWidth }}>
+                  <Text style={{ fontSize: 16, fontFamily: 'Poppins-Medium', color: '#000000', marginLeft: '2%', width: '96%' }}>Bill Details</Text>
                   {/* <Image style={{ alignSelf: 'center', height: 15, width: Dimensions.get('screen').width - 100 }} source={require('../images/line.png')} /> */}
                 </View>
                 <View
@@ -356,7 +356,7 @@ export default class PaymentPage extends Component {
             </View>
             {/* passengerDetail view begin here */}
             <View style={{ width: Dimensions.get('window').width - 10, flexDirection: 'row', }}>
-              <Text style={{ fontSize: 16, fontFamily: 'Poppins-Medium', color: '#000000',marginLeft:'2%',width:'96%' }}>Passenger Details</Text>
+              <Text style={{ fontSize: 16, fontFamily: 'Poppins-Medium', color: '#000000', marginLeft: '2%', width: '96%' }}>Passenger Details</Text>
               {/* <Image style={{ height: 15, alignSelf: 'center' }} source={require('../images/line.png')} /> */}
             </View>
             <View style={styles.billcard}>
@@ -365,7 +365,7 @@ export default class PaymentPage extends Component {
                 <Text style={{ fontSize: 14, fontFamily: 'Poppins-Regular', color: '#000000', paddingHorizontal: 5, paddingVertical: 2 }}>Seat : {ConstantValues.seat}</Text>
               </View> */}
               <View style={{ flexDirection: 'column', width: '98%' }}>
-              <View style={styles.elementView}>
+                <View style={styles.elementView}>
                   <Text style={styles.itemTextMedium}>Coach / Seat </Text>
                   <Text style={styles.itemTextColon}>:</Text>
                   <Text style={styles.itemTextRegular}>{ConstantValues.coach} / {ConstantValues.seat}</Text>
@@ -409,7 +409,7 @@ export default class PaymentPage extends Component {
                         <Icons name={this.state.indexChecked === item.paymentTypeId.toString() ? 'check-square' : 'square'} size={20} color={'#000000'} style={{ width: 50, alignSelf: 'center' }} />
                         {/* <Text style={{ color: this.state.paymentBorderColor, fontSize: 15, fontFamily: 'Poppins-Regular' }}>{item.paymentTypeName == 'Prepaid' ? 'Pay through Paytm' : 'Cash On Delivery'}</Text> */}
                         {
-                          item.paymentTypeId == 2 ? <Image source={require('../images/paytmImg.png')} style={{width:'80%',height:50}}/> : <Text style={{ color: Colors.darkGrey, fontSize: 14, fontFamily: 'Poppins-Regular', textAlign: 'center' }}>Cash On Delivery</Text>
+                          item.paymentTypeId == 2 ? <Image source={require('../images/paytmImg.png')} style={{ width: '80%', height: 50 }} /> : <Text style={{ color: Colors.darkGrey, fontSize: 14, fontFamily: 'Poppins-Regular', textAlign: 'center' }}>Cash On Delivery</Text>
                         }
 
                       </View>
@@ -438,7 +438,8 @@ export default class PaymentPage extends Component {
           </View>
           <CustomButton
             disabled={this.state.clicked}
-            style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : Colors.newgGreen3, alignSelf: 'center', }}
+            textStyle={{ color: this.state.clicked == true ? Colors.darkGrey1 : Colors.white, }}
+            style={{ backgroundColor: this.state.clicked == true ? Colors.white : Colors.newgGreen3, alignSelf: 'center', }}
             onPress={() => this.checkValidation()}
             title={this.state.clicked === false ? 'PROCEED TO PAY' : 'Please wait...'}
           />
@@ -510,30 +511,30 @@ const styles = StyleSheet.create({
     marginLeft: 25 // justifyContent: 'space-between',
   },
   itemTextMedium: {
-    width:'30%',
+    width: '30%',
     // alignSelf: 'center',
     color: Colors.black,
     // backgroundColor:Colors.lightGrey,
     fontFamily: 'Poppins-Regular',
     fontSize: 14,
-},
-itemTextColon: {
-    width:'4%',
+  },
+  itemTextColon: {
+    width: '4%',
     // alignSelf: 'center',
     color: Colors.black,
     // backgroundColor:Colors.lightYellow,
     fontFamily: 'Poppins-Regular',
     fontSize: 14,
-},
-itemTextRegular: {
-    width:'65%',
-    textAlign:'left',
+  },
+  itemTextRegular: {
+    width: '65%',
+    textAlign: 'left',
     // alignSelf: 'center',
     color: Colors.black,
     fontFamily: 'Poppins-Regular',
     // backgroundColor:Colors.lightGrey,
     fontSize: 14,
-},
+  },
   paytmView: {
     width: 300,
     // borderWidth:1,
@@ -573,7 +574,7 @@ itemTextRegular: {
     // backgroundColor:'#e7e7e7',
     alignSelf: 'center',
     alignContent: 'flex-start',
-},
+  },
   tile: {
     width: Dimensions.get('screen').width - 20,
     flexDirection: 'row',

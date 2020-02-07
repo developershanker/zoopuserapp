@@ -164,7 +164,8 @@ export default class contact extends Component {
               />
               <CustomButton
                 disabled={this.state.clicked}
-                style={{ backgroundColor: this.state.clicked == true ? '#9b9b9b' : Colors.newgGreen3, alignSelf: 'center', marginBottom: 20, width: 300 }}
+                textStyle={{ color: this.state.clicked == true ? Colors.darkGrey1 : Colors.white }}
+                style={{ backgroundColor: this.state.clicked == true ? Colors.white : Colors.newgGreen3, alignSelf: 'center', marginBottom: 20, width: 300 }}
                 onPress={() => { this.sendContent(this.state.name, this.state.mobile, this.state.description) }}
                 title={this.state.clicked === false ? 'SUBMIT' : 'Message Sent'}
               />

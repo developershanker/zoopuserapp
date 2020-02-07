@@ -25,6 +25,7 @@ export default class Invite extends Component {
     super(props);
     this.state = {
       phone: '123456789',
+      buttonColorText: Colors.white,
       backgroundColor: Colors.newgGreen3,
       copyMsg: 'Tap to copy',
       referralCode: ''
@@ -155,7 +156,8 @@ export default class Invite extends Component {
       ToastAndroid.show('Refferal Code Copied!!', ToastAndroid.LONG)
     ),
       this.setState({
-        backgroundColor: '#9b9b9b',
+        backgroundColor:Colors.white,
+        buttonColorText: Colors.darkGrey1,
         copyMsg: 'COPIED!!'
       })
   };
@@ -236,16 +238,17 @@ export default class Invite extends Component {
               <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular', paddingVertical: 10 }}>OR</Text>
               <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular' }}>Share your personal invite code</Text>
               <Text style={{ fontSize: 40, fontFamily: 'Poppins-Regular', color: '#00acee', paddingVertical: 15 }}>{ConstantValues.customerRefferalCode == '' ? this.state.referralCode : ConstantValues.customerRefferalCode}</Text>
-
-              <CustomButtonShort
-                style={{ backgroundColor: this.state.backgroundColor }}
-                onPress={() => this.writeToClipboard()}
-                title={this.state.copyMsg}
-              />
+              
 
               <CustomButton
                 onPress={() => this.inviteSms(msg)}
                 title='Invite Using SMS'
+              />
+              <CustomButtonShort
+                textStyle={{ color: this.state.buttonColorText }}
+                style={{ backgroundColor: this.state.backgroundColor }}
+                onPress={() => this.writeToClipboard()}
+                title={this.state.copyMsg}
               />
             </View>
           </View>
