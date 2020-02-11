@@ -23,18 +23,10 @@ export default class passengerDetail extends Component {
     this.checkPassengerDetail();
     // this.getSeatInfo()
     var that = this;
-
-    var date = new Date().getDate(); //Current Date
-    var month = new Date().getMonth() + 1; //Current Month
-    var year = new Date().getFullYear(); //Current Year
-    var hours = new Date().getHours(); //Current Hours
-    var min = new Date().getMinutes(); //Current Minutes
-    var sec = new Date().getSeconds(); //Current Seconds
-
     that.setState({
       //  date : date + '/' + month + '/' + year,
-      date: year + '-' + month + '-' + date,
-      time: hours + ':' + min + ':' + sec,
+      date: moment().format('YYYY-MM-DD'),
+      time: moment().format('HH:mm:ss'),
       journeyTime: moment(ConstantValues.ata, 'HHmmss').format('HH:mm')
     })
   }
@@ -300,15 +292,11 @@ export default class passengerDetail extends Component {
           isVisible: false
         })
       }
-
-
     }
   }
   proceedToPay = () => {
-    // ConstantValues.customerName = this.state.name,
-    // ConstantValues.customeralternateMobile = this.state.altMobileNo,
-    // ConstantValues.customerEmailId = this.state.emailId,
-    // ConstantValues.customerPhoneNo = this.state.customerPhoneNo
+    console.log('Customer email:::: :' + ConstantValues.customerEmailId)
+    console.log('Customer email in state:::: :' + this.state.emailId)
     if (ConstantValues.isAgent == 1) {
       if (this.state.name.length == 0 || this.state.customerPhoneNo.length !== 10) {
         return (
@@ -325,6 +313,7 @@ export default class passengerDetail extends Component {
             { cancelable: false },
           )
         )
+
       } else {
         this.agentAction()
         this.savePassengerDetail()
@@ -334,16 +323,32 @@ export default class passengerDetail extends Component {
         }
       }
     } else {
-      // console.log('this.state.name.length :::' + this.state.name)
-      if (this.state.name === null || this.state.name.replace(/^\s+|\s+$/g,'').length <= 2) {
+      if (this.state.name === null || this.state.name.replace(/^\s+|\s+$/g, '').length <= 2) {
         return (
           // ToastAndroid.show('Please fill name',ToastAndroid.LONG)
           Alert.alert(
-            'Mandatory Field Alert!!',
+            'Profile is Incomplete!!',
             'Please fill name.',
             [
               {
                 text: 'OK', onPress: () => console.log('Mandatory'),
+                style: 'cancel'
+              },
+            ],
+            { cancelable: false },
+          )
+        )
+      } else if (this.state.emailId === null) {
+        console.log('Email missing')
+        return (
+          Alert.alert(
+            'Profile is Incomplete!!',
+            'Please fill email Id to proceed.',
+            [
+              {
+                text: 'OK', onPress: () => {
+                  this.props.navigation.navigate('Register')
+                },
                 style: 'cancel'
               },
             ],

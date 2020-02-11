@@ -29,20 +29,10 @@ export default class station extends Component {
     ConstantValues.inCart = []
     ConstantValues.finalCart = []
     var that = this;
-
-    var date = new Date().getDate(); //Current Date
-    var month = new Date().getMonth() + 1; //Current Month
-    var year = new Date().getFullYear(); //Current Year
-    var hours = new Date().getHours(); //Current Hours
-    var min = new Date().getMinutes(); //Current Minutes
-    var sec = new Date().getSeconds(); //Current Seconds
-
     that.setState({
-      //  date : date + '/' + month + '/' + year,
-      date: year + '-' + month + '-' + date,
-      time: hours + ':' + min + ':' + sec
+      date: moment().format('YYYY-MM-DD'),
+      time: moment().format('HH:mm:ss'),
     })
-    // console.log('Todays date is...............................................' + date)
   }
   constructor(props) {
     super(props);
@@ -246,6 +236,9 @@ export default class station extends Component {
     console.log('ConstantValues.stationId : ' + ConstantValues.stationId),
       console.log('ConstantValues.outletId : ' + ConstantValues.outletId),
       console.log('ConstantValues.deliveryCharge : ' + ConstantValues.deliveryCharge + '\n' + 'ConstantValues.deliveryChargegst : ' + ConstantValues.deliveryChargegst + '\n' + 'ConstantValues.deliveryChargegstRate : ' + ConstantValues.deliveryChargegstRate)
+      //delivery date and time
+    console.log('Todays date is.....by moment.............................' + this.state.date)
+    console.log('Todays time is.....by moment.............................' + this.state.time)
     if (ConstantValues.OutletMenuInfo && ConstantValues.OutletMenuInfo.length) {
       // this.props.navigation.navigate('Menu')
       this.props.navigation.navigate('ReduxMenu')

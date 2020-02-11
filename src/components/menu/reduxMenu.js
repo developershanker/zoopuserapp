@@ -76,18 +76,10 @@ export class ReduxMenu extends Component {
             return true;
         });
         var that = this;
-
-        var date = new Date().getDate(); //Current Date
-        var month = new Date().getMonth() + 1; //Current Month
-        var year = new Date().getFullYear(); //Current Year
-        var hours = new Date().getHours(); //Current Hours
-        var min = new Date().getMinutes(); //Current Minutes
-        var sec = new Date().getSeconds(); //Current Seconds
-
         that.setState({
             //  date : date + '/' + month + '/' + year,
-            date: year + '-' + month + '-' + date,
-            time: hours + ':' + min + ':' + sec
+            date: moment().format('YYYY-MM-DD'),
+            time: moment().format('HH:mm:ss'),
         })
     }
 
